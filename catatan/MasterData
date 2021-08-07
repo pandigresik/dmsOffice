@@ -1,0 +1,34 @@
+Master Data:
+- Master Vendor ( sudah ada di DMS ? )
+- Master Kota ( sudah ada di DMS ? )
+- Master Produk ( sudah ada di DMS ? )
+- Master Ekspedisi 
+- Master Kendaraan
+- Master Trip
+- Master Jenis Potongan
+- Master Depo ( sudah ada di DMS ? )
+
+Transaksi:
+- Integrasi BTB 
+- Integrasi BKB 
+    ( Source data dari DMS ? Apakah data yang ditampilkan adalah data yang belum divalidasi oleh user ? 
+    User hanya checklist aja ya, tidak ada proses entri data ?  
+    )    
+- Input OA Manual
+    ( Source data dari DMS ? Apakah data yang ditampilkan adalah data yang belum divalidasi oleh user ? 
+    User hanya checklist aja ya, tidak ada proses entri data ?  
+    )
+- Pembayaran hutang TIV dan Pembayaran Hutang OA
+    ( User hanya entri pada form header dan checklist pada tabel ? Apakah list dalam table tergantung terhadap 
+    data yang dientri di form header, misalkan tergantung vendor yang dientri / akun yang dipilih
+    )
+
+Laporan 
+- Laporan Hutang TIV dan OA
+    ( Data difilter berdasarkan entrian user pada form header )
+- Laporan Laba/Rugi dan Neraca
+    ( apakah semua datanya dari DMS, artinya di DMS sudah ada master akun dll )
+
+
+Ongkos angkut dihitung per jenis produk per kendaraan, satu kendaraan bisa memuat banyak produk 
+dengan ongkos angkut berbeda untuk tiap produk tersebut

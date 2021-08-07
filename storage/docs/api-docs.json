@@ -1,0 +1,1372 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Laravel Generator APIs",
+        "version": "1.0.0"
+    },
+    "basePath": "/api/v1",
+    "paths": {
+        "/employees": {
+            "get": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Get a listing of the Employees.",
+                "description": "Get all Employees",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Employees"
+                                    }
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Store a newly created Employees in storage",
+                "description": "Store Employees",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Employees that should be stored",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/Employees"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Employees"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "/employees/{id}": {
+            "get": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Display the specified Employees",
+                "description": "Get Employees",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Employees",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Employees"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Update the specified Employees in storage",
+                "description": "Update Employees",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Employees",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Employees that should be updated",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/Employees"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/Employees"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Remove the specified Employees from storage",
+                "description": "Delete Employees",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id of Employees",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "boolean"
+                                },
+                                "data": {
+                                    "type": "string"
+                                },
+                                "message": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "AbsentReasons": {
+            "required": [
+                "type",
+                "code",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "ActivityLog": {
+            "required": [
+                "route",
+                "send_data",
+                "comment"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "AttendanceLogfingers": {
+            "required": [
+                "employee_id",
+                "fingertime"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "AttendanceSummaries": {
+            "required": [
+                "employee_id",
+                "periode",
+                "total_workday",
+                "total_in",
+                "total_loyality",
+                "total_absent",
+                "total_overtime"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Attendances": {
+            "required": [
+                "employee_id",
+                "shiftment_id",
+                "attendance_date",
+                "early_in",
+                "early_out",
+                "late_in",
+                "late_out",
+                "absent",
+                "shift_checkin",
+                "shift_checkout"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "CareerHistories": {
+            "required": [
+                "employee_id",
+                "company_id",
+                "department_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "EmployeeShiftments": {
+            "required": [
+                "employee_id",
+                "shiftment_group_id",
+                "active"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Employees": {
+            "required": [
+                "company_id",
+                "department_id",
+                "joblevel_id",
+                "jobtitle_id",
+                "region_of_birth_id",
+                "city_of_birth_id",
+                "join_date",
+                "employee_status",
+                "code",
+                "full_name",
+                "gender",
+                "date_of_birth",
+                "identity_number",
+                "identity_type",
+                "marital_status",
+                "have_overtime_benefit",
+                "shiftment_group_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "FingerprintDevices": {
+            "required": [
+                "serial_number",
+                "ip",
+                "display_name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Holidays": {
+            "required": [
+                "holiday_date"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "JobMutations": {
+            "required": [
+                "employee_id",
+                "type"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "JobPlacements": {
+            "required": [
+                "employee_id",
+                "company_id",
+                "department_id",
+                "active"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Leaves": {
+            "required": [
+                "employee_id",
+                "leave_date",
+                "amount"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Overtimes": {
+            "required": [
+                "employee_id",
+                "shiftment_id",
+                "overtime_date",
+                "start_hour",
+                "end_hour",
+                "raw_value",
+                "calculated_value",
+                "holiday"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "PayrollDetails": {
+            "required": [
+                "payroll_id",
+                "component_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "PayrollPeriods": {
+            "required": [
+                "company_id",
+                "year",
+                "month",
+                "closed"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Payrolls": {
+            "required": [
+                "employee_id",
+                "period_id",
+                "take_home_pay",
+                "take_home_pay_key"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "SalaryAllowances": {
+            "required": [
+                "employee_id",
+                "component_id",
+                "year",
+                "month"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "SalaryBenefitHistories": {
+            "required": [
+                "employee_id",
+                "component_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "SalaryBenefits": {
+            "required": [
+                "employee_id",
+                "component_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Workshifts": {
+            "required": [
+                "employee_id",
+                "shiftment_id",
+                "work_date"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Cities": {
+            "required": [
+                "code",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Companies": {
+            "required": [
+                "code",
+                "name",
+                "birth_day"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "CompanyCosts": {
+            "required": [
+                "payroll_id",
+                "component_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "CompanyDepartments": {
+            "required": [
+                "department_id",
+                "company_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Departements": {
+            "required": [
+                "code",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "EducationTitles": {
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "EducationalInstitutes": {
+            "required": [
+                ""
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "JobLevels": {
+            "required": [
+                "code",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "JobTitles": {
+            "required": [
+                "job_level_id",
+                "code",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Menus": {
+            "required": [
+                "name",
+                "status"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Regions": {
+            "required": [
+                "code",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "SalaryComponents": {
+            "required": [
+                "code",
+                "name",
+                "fixed"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "SalaryGroupDetails": {
+            "required": [
+                "component_id",
+                "salary_group_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "SalaryGroups": {
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Settings": {
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "ShiftmentGroups": {
+            "required": [
+                "code",
+                "company_id",
+                "shiftment_id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Shiftments": {
+            "required": [
+                "code",
+                "name",
+                "start_hour",
+                "end_hour"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "SkillGroups": {
+            "required": [
+                ""
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Skills": {
+            "required": [
+                "skill_group_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "TaxGroupHistory": {
+            "required": [
+                "employee_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Taxs": {
+            "required": [
+                "period_id",
+                "employee_id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "region_id": {
+                    "description": "region_id",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "code",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                }
+            }
+        },
+        "Permission": {
+            "required": [
+                "name",
+                "guard_name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                },
+                "guard_name": {
+                    "description": "guard_name",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "created_at",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "updated_at": {
+                    "description": "updated_at",
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "Role": {
+            "required": [
+                "name",
+                "guard_name"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                },
+                "guard_name": {
+                    "description": "guard_name",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "created_at",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "updated_at": {
+                    "description": "updated_at",
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "User": {
+            "required": [
+                "name",
+                "email",
+                "password"
+            ],
+            "properties": {
+                "id": {
+                    "description": "id",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "name": {
+                    "description": "name",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "email",
+                    "type": "string"
+                },
+                "email_verified_at": {
+                    "description": "email_verified_at",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "password": {
+                    "description": "password",
+                    "type": "string"
+                },
+                "remember_token": {
+                    "description": "remember_token",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "created_at",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "updated_at": {
+                    "description": "updated_at",
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        }
+    }
+}
