@@ -1,0 +1,4 @@
+id,name,code,payment_type,sequence,create_uid,create_date,write_uid,write_date
+1,Manual,manual,inbound,10,1,2021-08-04 22:55:29.83973,1,2021-08-04 22:55:29.83973
+2,Manual,manual,outbound,10,1,2021-08-04 22:55:29.83973,1,2021-08-04 22:55:29.83973
+3,Electronic,electronic,inbound,10,1,2021-08-04 22:56:12.700319,1,2021-08-04 22:56:12.700319

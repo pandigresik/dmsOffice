@@ -1,31 +1,35 @@
 <?php
+
 namespace App\Traits;
-trait SearchModelTrait{
-    
+
+trait SearchModelTrait
+{
     public function scopeSearch($query, $keyword, $columns = [], $operator = 'like', $relativeTables = [])
     {
         $query->where(function ($query) use ($keyword, $columns, $operator) {
             foreach ($columns as $key => $column) {
-                $clause = $key == 0 ? 'where' : 'orWhere';
+                $clause = 0 == $key ? 'where' : 'orWhere';
                 $textSearch = $keyword;
-                switch($operator){
+                switch ($operator) {
                     case 'between':
-                        $clause = $key == 0 ? 'whereBetween' : 'orWhereBetween';                        
+                        $clause = 0 == $key ? 'whereBetween' : 'orWhereBetween';
+                        // no break
                     case 'like_pre':
                         $textSearch = '%'.$textSearch;
+                        // no break
                     case 'like_post':
                         $textSearch = $textSearch.'%';
+                        // no break
                     default:
-                        $textSearch = '%'.$textSearch.'%';                        
+                        $textSearch = '%'.$textSearch.'%';
                 }
 
-                if($operator == 'between'){
+                if ('between' == $operator) {
                     $query->{$clause}($column, $textSearch);
-                }else{
+                } else {
                     $query->{$clause}($column, $operator, $textSearch);
                 }
-                
-                    
+
                 if (!empty($relativeTables)) {
                     $this->filterByRelationship($query, $keyword, $operator, $relativeTables);
                 }
@@ -35,30 +39,32 @@ trait SearchModelTrait{
         return $query;
     }
 
-
     private function filterByRelationship($query, $keyword, $operator, $relativeTables)
     {
         foreach ($relativeTables as $relationship => $relativeColumns) {
-            $query->orWhereHas($relationship, function($relationQuery) use ($keyword, $relativeColumns, $operator) {
+            $query->orWhereHas($relationship, function ($relationQuery) use ($keyword, $relativeColumns, $operator) {
                 foreach ($relativeColumns as $key => $column) {
-                    $clause = $key == 0 ? 'where' : 'orWhere';
+                    $clause = 0 == $key ? 'where' : 'orWhere';
                     $textSearch = $keyword;
-                    switch($operator){
+                    switch ($operator) {
                         case 'between':
-                            $clause = $key == 0 ? 'whereBetween' : 'orWhereBetween';                        
+                            $clause = 0 == $key ? 'whereBetween' : 'orWhereBetween';
+                            // no break
                         case 'like_pre':
                             $textSearch = '%'.$textSearch;
+                            // no break
                         case 'like_post':
                             $textSearch = $textSearch.'%';
+                            // no break
                         default:
-                            $textSearch = '%'.$textSearch.'%';                        
+                            $textSearch = '%'.$textSearch.'%';
                     }
 
-                    if($operator == 'between'){
+                    if ('between' == $operator) {
                         $relationQuery->{$clause}($column, $textSearch);
-                    }else{
+                    } else {
                         $relationQuery->{$clause}($column, $operator, $textSearch);
-                    }                    
+                    }
                 }
             });
         }

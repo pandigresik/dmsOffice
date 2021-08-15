@@ -3,8 +3,8 @@
 namespace App\Widgets;
 
 use App\Charts\PopularChart;
-use Arrilot\Widgets\AbstractWidget;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Arrilot\Widgets\AbstractWidget;
 
 class PopularWidget extends AbstractWidget
 {
@@ -21,8 +21,8 @@ class PopularWidget extends AbstractWidget
      */
     public function run()
     {
-        //
-        $chart = new PopularChart(new LarapexChart()); 
+        $chart = new PopularChart(new LarapexChart());
+
         return view('widgets.popular_widget', [
             'config' => $this->config,
             'chart' => $chart->build(),

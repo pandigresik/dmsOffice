@@ -1,0 +1,1 @@
+id,product_tmpl_id,product_id,categ_id,min_quantity,applied_on,base,base_pricelist_id,pricelist_id,price_surcharge,price_discount,price_round,price_min_margin,price_max_margin,company_id,currency_id,active,date_start,date_end,compute_price,fixed_price,percent_price,create_uid,create_date,write_uid,write_date

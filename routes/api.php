@@ -18,13 +18,12 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'v1'], function () {
-    Route::resource('bookable_bookings', App\Http\Controllers\API\BookableBookingsAPIController::class);
-    Route::resource('bookable_availabilities', App\Http\Controllers\API\BookableAvailabilitiesAPIController::class);
-    Route::resource('menus', App\Http\Controllers\API\MenusAPIController::class);
-    Route::resource('menu_permissions', App\Http\Controllers\API\MenuPermissionsAPIController::class);
+Route::group(['prefix' => 'v1'], function () {    
+    Route::resource('menus', Base\MenusAPIController::class);    
+    Route::resource('vendor_expeditions', Base\VendorExpeditionAPIController::class);
+    Route::resource('cities', Base\CityAPIController::class);
+    Route::resource('route_trips', Base\RouteTripAPIController::class);
+    Route::resource('vehicle_groups', Base\VehicleGroupAPIController::class);
+    Route::resource('vendor_expedition_trips', Base\VendorExpeditionTripAPIController::class);
+    Route::resource('vehicles', Base\VehicleAPIController::class);
 });
-
-
-
-Route::resource('customers', App\Http\Controllers\API\CustomersAPIController::class);

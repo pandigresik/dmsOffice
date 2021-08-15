@@ -1,0 +1,2 @@
+id,move_id,is_reconciled,is_matched,partner_bank_id,is_internal_transfer,payment_method_id,amount,payment_type,partner_type,payment_reference,currency_id,partner_id,destination_account_id,message_main_attachment_id,create_uid,create_date,write_uid,write_date,payment_date,communication,payment_transaction_id,payment_token_id
+1,4,t,f,2,f,2,700,outbound,supplier,,12,10,52,,2,2021-08-13 14:00:01.965425,2,2021-08-13 14:00:01.965425,2021-08-13,,,

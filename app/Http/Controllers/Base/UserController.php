@@ -1,0 +1,156 @@
+<?php
+
+namespace App\Http\Controllers\Base;
+
+use App\DataTables\Base\UserDataTable;
+use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\Base\CreateUserRequest;
+use App\Http\Requests\Base\UpdateUserRequest;
+use App\Repositories\Base\RoleRepository;
+use App\Repositories\Base\UserRepository;
+use Flash;
+use Illuminate\Foundation\Http\FormRequest;
+use Response;
+
+class UserController extends AppBaseController
+{
+    /** @var UserRepository */
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepo)
+    {
+        $this->userRepository = $userRepo;
+    }
+
+    /**
+     * Display a listing of the User.
+     *
+     * @return Response
+     */
+    public function index(UserDataTable $userDataTable)
+    {
+        return $userDataTable->render('base.users.index');
+    }
+
+    /**
+     * Show the form for creating a new User.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        return view('base.users.create')->with('roles', $this->listRoles());
+    }
+
+    /**
+     * Store a newly created User in storage.
+     *
+     * @return Response
+     */
+    public function store(CreateUserRequest $request)
+    {
+        $input = $request->all();
+
+        $user = $this->userRepository->create($input);
+        
+        Flash::success('User saved successfully.');
+
+        return redirect(route('base.users.index'));
+    }
+
+    /**
+     * Display the specified User.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function show($id)
+    {
+        $user = $this->userRepository->find($id);
+
+        if (empty($user)) {
+            Flash::error('User not found');
+
+            return redirect(route('base.users.index'));
+        }
+
+        return view('base.users.show')->with(['user' => $user, 'roles' => $this->listRoles()]);
+    }
+
+    /**
+     * Show the form for editing the specified User.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function edit($id)
+    {
+        $user = $this->userRepository->find($id);
+
+        if (empty($user)) {
+            Flash::error('User not found');
+
+            return redirect(route('base.users.index'));
+        }
+
+        return view('base.users.edit')->with(['user' => $user, 'roles' => $this->listRoles()]);
+    }
+
+    /**
+     * Update the specified User in storage.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function update($id, UpdateUserRequest $request)
+    {
+        $user = $this->userRepository->find($id);
+
+        if (empty($user)) {
+            Flash::error('User not found');
+
+            return redirect(route('base.users.index'));
+        }
+
+        $user = $this->userRepository->update($request->all(), $id);
+        
+        Flash::success('User updated successfully.');
+
+        return redirect(route('base.users.index'));
+    }
+
+    /**
+     * Remove the specified User from storage.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        $user = $this->userRepository->find($id);
+
+        if (empty($user)) {
+            Flash::error('User not found');
+
+            return redirect(route('base.users.index'));
+        }
+
+        $this->userRepository->delete($id);
+
+        Flash::success('User deleted successfully.');
+
+        return redirect(route('base.users.index'));
+    }
+
+    private function listRoles()
+    {
+        $app = app();
+        $roles = new RoleRepository($app);
+
+        return $roles->all();
+    }   
+}

@@ -1,11 +1,18 @@
 <?php
+
 namespace App\DataTables\FilterClass;
-class MatchKeyword{
+
+class MatchKeyword
+{
     private $column;
-    public function __construct($name){
+
+    public function __construct($name)
+    {
         $this->column = $name;
     }
-    public function __invoke($builder, $keyword){    
-        $builder->where($this->column, $keyword);    
+
+    public function __invoke($builder, $keyword)
+    {
+        $builder->where($this->column, $keyword);
     }
 }

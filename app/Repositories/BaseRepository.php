@@ -5,7 +5,6 @@ namespace App\Repositories;
 use Illuminate\Container\Container as Application;
 use Illuminate\Database\Eloquent\Model;
 
-
 abstract class BaseRepository
 {
     /**
@@ -19,13 +18,16 @@ abstract class BaseRepository
     protected $app;
 
     /**
-     *  @var Array
+     *  @var array
+     */
+    protected $with = [];
+
+    /**
+     *  @var array
      */
     protected $lookupColumnSelect = ['id' => 'id', 'text' => 'name'];
-    
+
     /**
-     * @param Application $app
-     *
      * @throws \Exception
      */
     public function __construct(Application $app)
@@ -35,21 +37,21 @@ abstract class BaseRepository
     }
 
     /**
-     * Get searchable fields array
+     * Get searchable fields array.
      *
      * @return array
      */
     abstract public function getFieldsSearchable();
 
     /**
-     * Configure the Model
+     * Configure the Model.
      *
      * @return string
      */
     abstract public function model();
 
     /**
-     * Make Model instance
+     * Make Model instance.
      *
      * @throws \Exception
      *
@@ -69,15 +71,18 @@ abstract class BaseRepository
     /**
      * Paginate records for scaffold.
      *
-     * @param int $perPage
+     * @param int   $perPage
      * @param array $columns
+     * @param mixed $currentPage
+     * @param mixed $search
+     *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function paginate($perPage, $currentPage = 1, $columns = ['*'], $search = [])
     {
         $query = $this->allQuery();
-        if(!empty($search)){            
-            $query->search($search['keyword'],$search['column']);
+        if (!empty($search)) {
+            $query->search($search['keyword'], $search['column']);
         }
 
         return $query->simplePaginate($perPage, $columns, 'page', $currentPage);
@@ -86,9 +91,10 @@ abstract class BaseRepository
     /**
      * Build a query for retrieving all records.
      *
-     * @param array $search
-     * @param int|null $skip
-     * @param int|null $limit
+     * @param array    $search
+     * @param null|int $skip
+     * @param null|int $limit
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function allQuery($search = [], $skip = null, $limit = null)
@@ -96,9 +102,8 @@ abstract class BaseRepository
         $query = $this->model->newQuery();
 
         if (count($search)) {
-            foreach($search as $key => $value) {
+            foreach ($search as $key => $value) {
                 if (in_array($key, $this->getFieldsSearchable())) {
-                    //$query->where($key, $value);
                     $query->search($value, $key);
                 }
             }
@@ -116,24 +121,25 @@ abstract class BaseRepository
     }
 
     /**
-     * Retrieve all records with given filter criteria
+     * Retrieve all records with given filter criteria.
      *
-     * @param array $search
-     * @param int|null $skip
-     * @param int|null $limit
-     * @param array $columns
+     * @param array    $search
+     * @param null|int $skip
+     * @param null|int $limit
+     * @param array    $columns
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function all($search = [], $columns = ['*'], $skip = null, $limit = null )
+    public function all($search = [], $columns = ['*'], $skip = null, $limit = null)
     {
-        $query = $this->allQuery($search, $skip, $limit);
+        $this->eagerLoadRelations();
+        $query = $this->allQuery($search, $skip, $limit);        
 
         return $query->get($columns);
     }
 
     /**
-     * Create model record
+     * Create model record.
      *
      * @param array $input
      *
@@ -149,12 +155,12 @@ abstract class BaseRepository
     }
 
     /**
-     * Find model record for given id
+     * Find model record for given id.
      *
-     * @param int $id
+     * @param int   $id
      * @param array $columns
      *
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model|null
+     * @return null|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
     public function find($id, $columns = ['*'])
     {
@@ -164,10 +170,10 @@ abstract class BaseRepository
     }
 
     /**
-     * Update model record for given id
+     * Update model record for given id.
      *
      * @param array $input
-     * @param int $id
+     * @param int   $id
      *
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
@@ -175,10 +181,10 @@ abstract class BaseRepository
     {
         $query = $this->model->newQuery();
 
-        $model = $query->findOrFail($id);        
-        
+        $model = $query->findOrFail($id);
+
         $model->fill($input);
-        
+
         $model->save();
 
         return $model;
@@ -189,7 +195,7 @@ abstract class BaseRepository
      *
      * @throws \Exception
      *
-     * @return bool|mixed|null
+     * @return null|bool|mixed
      */
     public function delete($id)
     {
@@ -201,16 +207,18 @@ abstract class BaseRepository
     }
 
     /**
-     * Retrieve all records with given filter criteria
+     * Retrieve all records with given filter criteria.
      *
-     * @param array $search
-     * @param int|null $skip
-     * @param int|null $limit
-     * @param array $columns
+     * @param array      $search
+     * @param null|int   $skip
+     * @param null|int   $limit
+     * @param array      $columns
+     * @param null|mixed $key
+     * @param null|mixed $value
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function pluck($search = [], $skip = null, $limit = null, $key = null, $value = NULL )
+    public function pluck($search = [], $skip = null, $limit = null, $key = null, $value = null)
     {
         $key = $key ?? $this->model->getKeyName();
         $value = $value ?? $this->model->getShowColumnOption();
@@ -220,25 +228,45 @@ abstract class BaseRepository
     }
 
     /**
-     * Get the value of lookupColumnSelect
+     * Get the value of lookupColumnSelect.
      *
-     * @return  Array
-     */ 
+     * @return array
+     */
     public function getLookupColumnSelect()
     {
         return $this->lookupColumnSelect;
     }
 
     /**
-     * Set the value of lookupColumnSelect
+     * Set the value of lookupColumnSelect.
      *
-     * @param  Array  $lookupColumnSelect
-     *
-     * @return  self
-     */ 
-    public function setLookupColumnSelect(Array $lookupColumnSelect)
+     * @return self
+     */
+    public function setLookupColumnSelect(array $lookupColumnSelect)
     {
         $this->lookupColumnSelect = $lookupColumnSelect;
+
+        return $this;
+    }
+
+    public function with($relations)
+    {
+        if (is_string($relations)) {
+            $relations = func_get_args();
+        }
+
+        $this->with = $relations;
+
+        return $this;
+    }
+
+    protected function eagerLoadRelations()
+    {
+        if (!is_null($this->with)) {
+            foreach ($this->with as $relation) {
+                $this->model->with($relation);
+            }
+        }
 
         return $this;
     }

@@ -17,7 +17,7 @@ class Create$MODEL_NAME$Request extends FormRequest
      */
     public function authorize()
     {
-        $permissionName = Str::snake('$TABLE_NAME$','-').'-create';
+        $permissionName = '$TABLE_NAME$-create';
         return \Auth::user()->can($permissionName);
     }
 

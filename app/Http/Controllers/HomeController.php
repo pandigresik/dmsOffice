@@ -20,18 +20,20 @@ class HomeController extends Controller
     public function index()
     {
         $widgets = [];
-        \Widget::group('main')->position(3)->addAsyncWidget('revenueWidget',['bgcolor' => 'bg-gradient-danger']);
-        \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget',['bgcolor' => 'bg-gradient-warning']);
-        \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget',['bgcolor' => 'bg-gradient-primary']);
-        \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget',['bgcolor' => 'bg-gradient-success']);
-        array_push($widgets,'<div class="row">'. \Widget::group('main')->wrap(function ($content, $index, $total) {
-        // $total is a total number of widgets in a group.
-        $width = intval(12 / $total);                
-        $classWidth = $width <= 2 ? 'col-lg-3 col-sm-6' : 'col-lg-'.$width.' col-sm-'.($width * 2 > 12 ? 12 : $width * 2);        
+        \Widget::group('main')->position(3)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-danger']);
+        \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-warning']);
+        \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-primary']);
+        \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-success']);
+        array_push($widgets, '<div class="row">'.\Widget::group('main')->wrap(function ($content, $index, $total) {
+            // $total is a total number of widgets in a group.
+            $width = intval(12 / $total);
+            $classWidth = $width <= 2 ? 'col-lg-3 col-sm-6' : 'col-lg-'.$width.' col-sm-'.($width * 2 > 12 ? 12 : $width * 2);
+
             return "<div class='".$classWidth." widget-{$index}'>{$content}</div>";
         })->display().'</div>');
-        array_push($widgets,\AsyncWidget::run('revenueWidget',['bgcolor' => 'bg-gradient-danger']));
-        array_push($widgets,\AsyncWidget::run('popularWidget',[]));
+        array_push($widgets, \AsyncWidget::run('revenueWidget', ['bgcolor' => 'bg-gradient-danger']));
+        array_push($widgets, \AsyncWidget::run('popularWidget', []));
+
         return view('home')->with(['widgets' => $widgets]);
     }
 }

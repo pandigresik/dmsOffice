@@ -7,7 +7,7 @@ trait CacheModelTrait
     protected $rememberCacheTag;
 //    protected $rememberCachePrefix;
     protected $rememberFor = 1440; /** in minutes, 60 * 24 */
-    
+
     // Semua operasi insert dan update melalui Eloquent pada akhirnya
     // akan memanggil method 'save' di Illuminate\Database\Eloquent\Model
     // kita akan override method ini untuk melakukan invalidate sebelum
@@ -41,5 +41,5 @@ trait CacheModelTrait
     protected function getTag()
     {
         return $this->getTable();
-    }    
+    }
 }

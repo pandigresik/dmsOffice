@@ -42,6 +42,7 @@ class ScaffoldAll extends Command
         $filepath = $this->option('filepath');
         $table = $this->option('table');
         $module = $this->option('module');
+
         $jsonData = [];
         if (!empty($filepath)) {
             $this->info($filepath);
@@ -54,18 +55,22 @@ class ScaffoldAll extends Command
 
                 $jsonFile = $this->files->get($filepath);
                 $this->info($jsonFile);
-                $jsonData = json_decode($jsonFile, 1);                
+                $jsonData = json_decode($jsonFile, 1);
             } else {
                 $this->error('File not exist');
+
                 return false;
             }
         } else {
             $tmpJson = [];
             if (!empty($table)) {
-                $tmpJson['table'] = implode(',', $table);
+                $this->info('table ==>'.$table);
+                $tmpJson['tables'] = explode(',', $table);
+                $tmpJson['module'] = '';
             }
 
             if (!empty($module)) {
+                $this->info('module ==>'.$module);
                 $tmpJson['module'] = $module;
             }
 
@@ -83,10 +88,10 @@ class ScaffoldAll extends Command
 
     private function generatePermission(string $permissionName)
     {
-        \App\Models\Permission::firstOrCreate(['name' => $permissionName.'-index', 'guard_name' => 'web']);
-        \App\Models\Permission::firstOrCreate(['name' => $permissionName.'-create', 'guard_name' => 'web']);
-        \App\Models\Permission::firstOrCreate(['name' => $permissionName.'-update', 'guard_name' => 'web']);
-        \App\Models\Permission::firstOrCreate(['name' => $permissionName.'-delete', 'guard_name' => 'web']);
+        \App\Models\Base\Permission::firstOrCreate(['name' => $permissionName.'-index', 'guard_name' => 'web']);
+        \App\Models\Base\Permission::firstOrCreate(['name' => $permissionName.'-create', 'guard_name' => 'web']);
+        \App\Models\Base\Permission::firstOrCreate(['name' => $permissionName.'-update', 'guard_name' => 'web']);
+        \App\Models\Base\Permission::firstOrCreate(['name' => $permissionName.'-delete', 'guard_name' => 'web']);
     }
 
     private function processJson($jsonData)
@@ -114,8 +119,12 @@ class ScaffoldAll extends Command
                     '--skip' => 'dump-autoload,migration,model',
                 ]));
 
-                $prefixModule = ucfirst(Str::camel($json['module']));
-                $resourceClass = "App\\Http\\Resources\\{$prefixModule}\\{$model}Resource";
+                if (empty($json['module'])) {
+                    $resourceClass = "App\\Http\\Resources\\{$model}Resource";
+                } else {
+                    $prefixModule = ucfirst(Str::camel($json['module']));
+                    $resourceClass = "App\\Http\\Resources\\{$prefixModule}\\{$model}Resource";
+                }
 
                 $this->call('make:resource', [
                     'name' => $resourceClass,

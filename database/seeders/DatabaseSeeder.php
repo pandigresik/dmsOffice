@@ -12,20 +12,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $user = \App\Models\User::factory([
+        $user = \App\Models\Base\User::factory([
             'name' => 'Administrator',
             'email' => 'admin@admin.com',
             'password' => Hash::make('admin@admin.com'),
         ])->create();
 
-        $role = \App\Models\Role::create([
+        $role = \App\Models\Base\Role::create([
             'name' => 'administrator',
             'guard_name' => 'web',
         ]);
 
         $user->syncRoles($role);
         
-        \App\Models\Permission::insert([
+        \App\Models\Base\Permission::insert([
             [
                 'name' => 'menu-index',
                 'guard_name' => 'web',
@@ -91,10 +91,10 @@ class DatabaseSeeder extends Seeder
                 'guard_name' => 'web',
             ]
         ]);
-        $permissions = \App\Models\Permission::get()->pluck('id')->toArray();
+        $permissions = \App\Models\Base\Permission::get()->pluck('id')->toArray();
         $role->syncPermissions($permissions);
         
-        \App\Models\Menus::insert([
+        \App\Models\Base\Menus::insert([
             [
                 'name' => 'Master',
                 'description' => 'Header menu master',
@@ -127,7 +127,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Manage menu',
                 'status' => 1,
                 'icon' => 'cil-address-book',
-                'route' => 'menus',
+                'route' => 'base/menus',
                 'parent_id' => 1,
                 'seq_number' => 1,
             ],
@@ -136,7 +136,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Manage users',
                 'status' => 1,
                 'icon' => 'cil-address-book',
-                'route' => 'users',
+                'route' => 'base/users',
                 'parent_id' => 1,
                 'seq_number' => 2,
             ],
@@ -145,7 +145,7 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Manage role',
                 'status' => 1,
                 'icon' => 'cil-address-book',
-                'route' => 'roles',
+                'route' => 'base/roles',
                 'parent_id' => 1,
                 'seq_number' => 3,
             ],
@@ -154,14 +154,14 @@ class DatabaseSeeder extends Seeder
                 'description' => 'Manage users',
                 'status' => 1,
                 'icon' => 'cil-address-book',
-                'route' => 'permissions',
+                'route' => 'base/permissions',
                 'parent_id' => 1,
                 'seq_number' => 1,
             ],
         ]);
-        \App\Models\MenusTree::fixTree();
+        \App\Models\Base\MenusTree::fixTree();
         
-        \App\Models\MenuPermissions::insert([
+        \App\Models\Base\MenuPermissions::insert([
             ['menu_id' => 4, 'permission_id' => 1],
             ['menu_id' => 4, 'permission_id' => 2],
             ['menu_id' => 5, 'permission_id' => 5],

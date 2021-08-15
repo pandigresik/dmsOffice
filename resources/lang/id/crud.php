@@ -21,5 +21,10 @@ return [
     'action' => 'Aksi',
     'state_active' => 'Aktif',
     'state_nonactive' => 'Non Aktif',    
-
+    'option' => [
+        'vehicleGroup_placeholder' => 'Pilih group kendaraan',
+        'vendorExpedition_placeholder' => 'Pilih vendor',
+        'city_placeholder_origin' => 'Pilih kota asal',
+        'city_placeholder_destination' => 'Pilih kota tujuan',
+    ]
 ];

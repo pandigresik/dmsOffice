@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Console\Command;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 
 class ScaffoldJsonAll extends Command
@@ -22,10 +22,9 @@ class ScaffoldJsonAll extends Command
      */
     protected $description = 'Generate scaffold infyom based file json';
     private $files;
+
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -39,44 +38,47 @@ class ScaffoldJsonAll extends Command
      * @return int
      */
     public function handle()
-    {        
+    {
         $filepath = $this->option('filepath');
         $schemaFileDirector = config(
-                        'infyom.laravel_generator.path.schema_files',
-                        resource_path('model_schemas/')
-                    );
+            'infyom.laravel_generator.path.schema_files',
+            resource_path('model_schemas/')
+        );
         $listFile = [];
-        if(empty($filepath)){            
+        if (empty($filepath)) {
             $filesInFolder = File::files($schemaFileDirector);
-            if(!empty($filesInFolder)){
-                foreach($filesInFolder as $file){
+            if (!empty($filesInFolder)) {
+                foreach ($filesInFolder as $file) {
                     $filename = pathinfo($file);
-                    array_push($listFile, $filename);                    
+                    array_push($listFile, $filename);
                 }
             }
-        }else{
+        } else {
             array_push($listFile, $filepath);
-        }                
-        
-        if(!empty($listFile)){
-            foreach($listFile as $file){                    
+        }
+
+        if (!empty($listFile)) {
+            foreach ($listFile as $file) {
                 $this->info($file['dirname'].'/'.$file['basename']);
                 $this->processJson($file);
-            }            
-        }else{
+            }
+        } else {
             $this->error('File not exist');
+
             return false;
         }
+
         return 0;
     }
 
-    private function processJson($jsonSchema){
+    private function processJson($jsonSchema)
+    {
         $this->call('infyom:scaffold', [
-                    'model' => $jsonSchema['filename'], 
-                    '--fieldsFile' => $jsonSchema['basename'],                    
-                    '--ignoreFields' => 'created_at,updated_at,deleted_at,created_by,updated_by',                    
-                    '--skip' => 'dump-autoload',
-                    '--forceMigrate' => ''
-                ]);
+            'model' => $jsonSchema['filename'],
+            '--fieldsFile' => $jsonSchema['basename'],
+            '--ignoreFields' => 'created_at,updated_at,deleted_at,created_by,updated_by',
+            '--skip' => 'dump-autoload',
+            '--forceMigrate' => '',
+        ]);
     }
 }

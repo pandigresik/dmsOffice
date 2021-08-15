@@ -1,0 +1,10 @@
+id,name,complete_name,parent_id,parent_path,create_uid,create_date,write_uid,write_date,removal_strategy_id
+1,All,All,,1/,1,2021-08-04 22:55:05.627265,1,2021-08-04 22:55:05.627265,
+2,Saleable,All / Saleable,1,1/2/,1,2021-08-04 22:55:05.627265,1,2021-08-04 22:55:05.627265,
+3,Expenses,All / Expenses,1,1/3/,1,2021-08-04 22:55:05.627265,1,2021-08-04 22:55:05.627265,
+4,Internal,All / Internal,1,1/4/,1,2021-08-04 22:55:05.627265,1,2021-08-04 22:55:05.627265,
+5,Services,All / Saleable / Services,2,1/2/5/,1,2021-08-04 22:55:05.627265,1,2021-08-04 22:55:05.627265,
+6,Saleable,All / Saleable / Services / Saleable,5,1/2/5/6/,1,2021-08-04 22:55:05.627265,1,2021-08-04 22:55:05.627265,
+7,Software,All / Saleable / Software,2,1/2/7/,1,2021-08-04 22:55:05.627265,1,2021-08-04 22:55:05.627265,
+8,Office Furniture,All / Saleable / Office Furniture,2,1/2/8/,1,2021-08-04 22:55:05.627265,1,2021-08-04 22:55:05.627265,
+9,Consumable,All / Consumable,1,1/9/,1,2021-08-04 22:55:05.627265,1,2021-08-04 22:55:05.627265,

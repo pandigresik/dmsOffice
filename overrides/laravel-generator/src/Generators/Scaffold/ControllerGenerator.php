@@ -189,8 +189,8 @@ class ControllerGenerator extends BaseGenerator
                 if (!empty($relationShipText)) {                                        
                     $fieldsArr[] = $field;                                        
                     $instanceModelName = \Str::camel($modelName);
-                    $relations['REPOSITORY_REFERENCE_OPTION_ITEM'][] = 'use $NAMESPACE_REPOSITORY$\\'.\Str::plural($modelName).'Repository;';
-                    $relations['REPOSITORY_OPTION_ITEM_INSTANCE'][] = '$'.$instanceModelName.' = new '.\Str::plural($modelName).'Repository(app());';
+                    $relations['REPOSITORY_REFERENCE_OPTION_ITEM'][] = 'use $NAMESPACE_REPOSITORY$\\'.\Str::singular($modelName).'Repository;';
+                    $relations['REPOSITORY_OPTION_ITEM_INSTANCE'][] = '$'.$instanceModelName.' = new '.\Str::singular($modelName).'Repository(app());';
                     $relations['LIST_OPTION_ITEM_INSTANCE'][] = '\''.$instanceModelName.'Items\' => [\'\' => __(\'crud.option.'.$instanceModelName.'_placeholder\')] + $'.$instanceModelName.'->pluck()';
                 }
             }

@@ -1,15 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateMenusTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -24,15 +22,13 @@ class CreateMenusTable extends Migration
             $table->string('route', 100)->nullable();
             $table->integer('parent_id')->nullable();
             $table->unsignedInteger('_lft')->nullable();
-            $table->unsignedInteger('_rgt')->nullable();              
+            $table->unsignedInteger('_rgt')->nullable();
             $table->boolean('seq_number')->nullable()->default(1);
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

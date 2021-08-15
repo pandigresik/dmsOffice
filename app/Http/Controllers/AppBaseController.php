@@ -17,7 +17,7 @@ use Response;
  * Class AppBaseController
  */
 class AppBaseController extends Controller
-{    
+{
     public function sendResponse($result, $message)
     {
         return Response::json(ResponseUtil::makeResponse($message, $result));
@@ -32,7 +32,7 @@ class AppBaseController extends Controller
     {
         return Response::json([
             'success' => true,
-            'message' => $message
+            'message' => $message,
         ], 200);
     }
 }

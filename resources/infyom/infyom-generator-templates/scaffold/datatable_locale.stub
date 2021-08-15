@@ -25,7 +25,11 @@ class $MODEL_NAME$DataTable extends DataTable
     public function dataTable($query)
     {
         $dataTable = new EloquentDataTable($query);
-
+        if (!empty($this->columnFilterOperator)) {
+            foreach ($this->columnFilterOperator as $column => $operator) {
+                $dataTable->filterColumn($column, new $operator($column));
+            }
+        }
         return $dataTable->addColumn('action', '$VIEW_PREFIX$$MODEL_NAME_PLURAL_SNAKE$.datatables_actions');
     }
 
