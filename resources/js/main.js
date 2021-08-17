@@ -70,16 +70,17 @@ class Main {
   }
 
   getHtmlData (_url, _type, _data, _callback) {
+    let _ini = this;
     $.ajax({
       url: _url,
       data: _data,
       dataType: 'html',
       type: _type,
       beforeSend: function () {
-        this.showLoading(true)
+        _ini.showLoading(true)
       },
       success: function (data) {
-        this.showLoading(false)
+        _ini.showLoading(false)
       }
     }).done(function (data) {
       if (_callback !== undefined) {
@@ -93,8 +94,9 @@ class Main {
       this.bootboxInfo = bootbox.alert('Please wait ......')
     } else {
       try {
+        const _ini = this
         setTimeout(function () {
-          this.bootboxInfo.modal('hide')
+          _ini.bootboxInfo.modal('hide')
         }, 500)
       } catch (e) {
 

@@ -32,6 +32,23 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('vendorExpeditions.vehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
         Route::resource('cities', App\Http\Controllers\Base\CityController::class, ['as' => 'base']);
         Route::resource('routeTrips', App\Http\Controllers\Base\RouteTripController::class, ['as' => 'base']);
+
+        Route::resource('companies', App\Http\Controllers\Base\CompanyController::class, ['as' => 'base']);
+        Route::resource('uomCategories', App\Http\Controllers\Base\UomCategoryController::class, ['as' => 'base']);
+        Route::resource('uoms', App\Http\Controllers\Base\UomController::class, ['as' => 'base']);
+        Route::resource('settings', App\Http\Controllers\Base\SettingController::class, ['as' => 'base']);
+        Route::resource('products', App\Http\Controllers\Base\ProductController::class, ['as' => 'base']);
+    });
+
+    Route::group(['prefix' => 'inventory'], function () {
+        Route::resource('warehouses', App\Http\Controllers\Inventory\WarehouseController::class, ["as" => 'inventory']);
+        Route::resource('stockQuants', App\Http\Controllers\Inventory\StockQuantController::class, ["as" => 'inventory']);
+        Route::get('stockInventories/stockWarehouse', [App\Http\Controllers\Inventory\StockInventoryController::class, 'stockWarehouse'], ["as" => 'inventory'])->name('inventory.stockInventories.stockWarehouse');
+        Route::resource('stockInventories', App\Http\Controllers\Inventory\StockInventoryController::class, ["as" => 'inventory']);        
+        Route::resource('stockPickingTypes', App\Http\Controllers\Inventory\StockPickingTypeController::class, ["as" => 'inventory']);
+        Route::resource('stockPickings', App\Http\Controllers\Inventory\StockPickingController::class, ["as" => 'inventory']);
+        Route::resource('synchronizeInStockPickings', App\Http\Controllers\Inventory\SynchronizeInStockPickingController::class, ["as" => 'inventory']);
+        Route::resource('synchronizeOutStockPickings', App\Http\Controllers\Inventory\SynchronizeOutStockPickingController::class, ["as" => 'inventory']);
     });
 
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');

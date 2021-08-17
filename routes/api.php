@@ -23,7 +23,6 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('vendor_expeditions', Base\VendorExpeditionAPIController::class);
     Route::resource('cities', Base\CityAPIController::class);
     Route::resource('route_trips', Base\RouteTripAPIController::class);
-    Route::resource('vehicle_groups', Base\VehicleGroupAPIController::class);
-    Route::resource('vendor_expedition_trips', Base\VendorExpeditionTripAPIController::class);
+    Route::resource('vehicle_groups', Base\VehicleGroupAPIController::class);    
     Route::resource('vehicles', Base\VehicleAPIController::class);
 });

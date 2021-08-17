@@ -69,7 +69,7 @@ class VendorExpedition extends Model
 
     use HasFactory;
 
-    public $table = 'vendor_expedition';
+    public $table = 'vendor';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -83,6 +83,9 @@ class VendorExpedition extends Model
         'name',
         'address',
         'email',
+        'is_supplier',
+        'is_customer',
+        'is_expedition',
         'created_by',
         'updated_by'
     ];
@@ -97,6 +100,9 @@ class VendorExpedition extends Model
         'name' => 'string',
         'address' => 'string',
         'email' => 'string',
+        'is_supplier' => 'boolean',
+        'is_customer' => 'boolean',
+        'is_expedition' => 'boolean',
         'created_by' => 'integer',
         'updated_by' => 'integer'
     ];

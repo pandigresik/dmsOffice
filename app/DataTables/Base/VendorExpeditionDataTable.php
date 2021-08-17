@@ -27,7 +27,16 @@ class VendorExpeditionDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'base.vendor_expeditions.datatables_actions');
+        return $dataTable->editColumn('is_supplier', function($m){
+
+            return $m->is_supplier ? 'Ya' : 'Tidak';
+        })->editColumn('is_customer', function($m){
+
+            return $m->is_customer ? 'Ya' : 'Tidak';
+        })->editColumn('is_expedition', function($m){
+
+            return $m->is_expedition ? 'Ya' : 'Tidak';
+        })->addColumn('action', 'base.vendor_expeditions.datatables_actions');
     }
 
     /**
@@ -105,6 +114,10 @@ class VendorExpeditionDataTable extends DataTable
             'name' => new Column(['title' => __('models/vendorExpeditions.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
             'address' => new Column(['title' => __('models/vendorExpeditions.fields.address'), 'data' => 'address', 'searchable' => true, 'elmsearch' => 'text']),
             'email' => new Column(['title' => __('models/vendorExpeditions.fields.email'), 'data' => 'email', 'searchable' => true, 'elmsearch' => 'text']),
+            'is_supplier' => new Column(['title' => __('models/vendorExpeditions.fields.is_supplier'), 'data' => 'is_supplier', 'searchable' => true, 'elmsearch' => 'text']),
+            'is_expedition' => new Column(['title' => __('models/vendorExpeditions.fields.is_expedition'), 'data' => 'is_expedition', 'searchable' => true, 'elmsearch' => 'text']),
+            'is_customer' => new Column(['title' => __('models/vendorExpeditions.fields.is_customer'), 'data' => 'is_customer', 'searchable' => true, 'elmsearch' => 'text']),
+
         ];
     }
 

@@ -32,6 +32,10 @@ url?XDEBUG_SESSION_START=1
 
 -- generate all crud
 php artisan scaffold.all:generate filepath
+php artisan scaffold.all:generate --module=inventory --table=warehouse,stock_quant,stock_inventory,stock_picking_type,stock_picking
+
+-- generate model 
+ php artisan infyom:model StockInventoryLine --fromTable --tableName=stock_inventory_line --skip=dump-autoload,migration --ignoreFields=created_at,updated_at,deleted_at,created_by,updated_by --prefix=inventory
 
 -- clear cache model
 php artisan modelCache:clear --model=App\\Models\\User

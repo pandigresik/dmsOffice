@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Base\Menus;
+use App\Models\Base\Product;
 use App\Observers\MenusObserver;
+use App\Observers\ProductObserver;
+use App\Models\Inventory\Warehouse;
+use App\Observers\WarehouseObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -49,5 +53,7 @@ class AppServiceProvider extends ServiceProvider
 
         // register observer
         Menus::observe(MenusObserver::class);
+        Product::observe(ProductObserver::class);
+        Warehouse::observe(WarehouseObserver::class);
     }
 }
