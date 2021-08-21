@@ -1,24 +1,24 @@
 <?php namespace Tests\Repositories;
 
-use App\Models\Base\VendorExpedition;
-use App\Repositories\Base\VendorExpeditionRepository;
+use App\Models\Base\Vendor;
+use App\Repositories\Base\VendorRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\ApiTestTrait;
 
-class VendorExpeditionRepositoryTest extends TestCase
+class VendorRepositoryTest extends TestCase
 {
     use ApiTestTrait, DatabaseTransactions;
 
     /**
-     * @var VendorExpeditionRepository
+     * @var VendorRepository
      */
-    protected $vendorExpeditionRepo;
+    protected $VendorRepo;
 
     public function setUp() : void
     {
         parent::setUp();
-        $this->vendorExpeditionRepo = \App::make(VendorExpeditionRepository::class);
+        $this->VendorRepo = \App::make(VendorRepository::class);
     }
 
     /**
@@ -26,15 +26,15 @@ class VendorExpeditionRepositoryTest extends TestCase
      */
     public function test_create_vendor_expedition()
     {
-        $vendorExpedition = VendorExpedition::factory()->make()->toArray();
+        $Vendor = Vendor::factory()->make()->toArray();
 
-        $createdVendorExpedition = $this->vendorExpeditionRepo->create($vendorExpedition);
+        $createdVendor = $this->VendorRepo->create($Vendor);
 
-        $createdVendorExpedition = $createdVendorExpedition->toArray();
-        $this->assertArrayHasKey('id', $createdVendorExpedition);
-        $this->assertNotNull($createdVendorExpedition['id'], 'Created VendorExpedition must have id specified');
-        $this->assertNotNull(VendorExpedition::find($createdVendorExpedition['id']), 'VendorExpedition with given id must be in DB');
-        $this->assertModelData($vendorExpedition, $createdVendorExpedition);
+        $createdVendor = $createdVendor->toArray();
+        $this->assertArrayHasKey('id', $createdVendor);
+        $this->assertNotNull($createdVendor['id'], 'Created Vendor must have id specified');
+        $this->assertNotNull(Vendor::find($createdVendor['id']), 'Vendor with given id must be in DB');
+        $this->assertModelData($Vendor, $createdVendor);
     }
 
     /**
@@ -42,12 +42,12 @@ class VendorExpeditionRepositoryTest extends TestCase
      */
     public function test_read_vendor_expedition()
     {
-        $vendorExpedition = VendorExpedition::factory()->create();
+        $Vendor = Vendor::factory()->create();
 
-        $dbVendorExpedition = $this->vendorExpeditionRepo->find($vendorExpedition->id);
+        $dbVendor = $this->VendorRepo->find($Vendor->id);
 
-        $dbVendorExpedition = $dbVendorExpedition->toArray();
-        $this->assertModelData($vendorExpedition->toArray(), $dbVendorExpedition);
+        $dbVendor = $dbVendor->toArray();
+        $this->assertModelData($Vendor->toArray(), $dbVendor);
     }
 
     /**
@@ -55,14 +55,14 @@ class VendorExpeditionRepositoryTest extends TestCase
      */
     public function test_update_vendor_expedition()
     {
-        $vendorExpedition = VendorExpedition::factory()->create();
-        $fakeVendorExpedition = VendorExpedition::factory()->make()->toArray();
+        $Vendor = Vendor::factory()->create();
+        $fakeVendor = Vendor::factory()->make()->toArray();
 
-        $updatedVendorExpedition = $this->vendorExpeditionRepo->update($fakeVendorExpedition, $vendorExpedition->id);
+        $updatedVendor = $this->VendorRepo->update($fakeVendor, $Vendor->id);
 
-        $this->assertModelData($fakeVendorExpedition, $updatedVendorExpedition->toArray());
-        $dbVendorExpedition = $this->vendorExpeditionRepo->find($vendorExpedition->id);
-        $this->assertModelData($fakeVendorExpedition, $dbVendorExpedition->toArray());
+        $this->assertModelData($fakeVendor, $updatedVendor->toArray());
+        $dbVendor = $this->VendorRepo->find($Vendor->id);
+        $this->assertModelData($fakeVendor, $dbVendor->toArray());
     }
 
     /**
@@ -70,11 +70,11 @@ class VendorExpeditionRepositoryTest extends TestCase
      */
     public function test_delete_vendor_expedition()
     {
-        $vendorExpedition = VendorExpedition::factory()->create();
+        $Vendor = Vendor::factory()->create();
 
-        $resp = $this->vendorExpeditionRepo->delete($vendorExpedition->id);
+        $resp = $this->VendorRepo->delete($Vendor->id);
 
         $this->assertTrue($resp);
-        $this->assertNull(VendorExpedition::find($vendorExpedition->id), 'VendorExpedition should not exist in DB');
+        $this->assertNull(Vendor::find($Vendor->id), 'Vendor should not exist in DB');
     }
 }

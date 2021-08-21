@@ -41,7 +41,7 @@ class StockPickingDataTable extends DataTable
      */
     public function query(StockPicking $model)
     {
-        return $model->newQuery();
+        return $model->with(['warehouse','product','stockPickingType'])->newQuery();
     }
 
     /**
@@ -103,13 +103,12 @@ class StockPickingDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'warehouse_id' => new Column(['title' => __('models/stockPickings.fields.warehouse_id'), 'data' => 'warehouse_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'stock_picking_type_id' => new Column(['title' => __('models/stockPickings.fields.stock_picking_type_id'), 'data' => 'stock_picking_type_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'warehouse_id' => new Column(['title' => __('models/stockPickings.fields.warehouse_id'), 'data' => 'warehouse.name', 'searchable' => true, 'elmsearch' => 'text']),
+            'product_id' => new Column(['title' => __('models/stockPickings.fields.product_id'), 'data' => 'product.name', 'searchable' => true, 'elmsearch' => 'text']),
+            'stock_picking_type_id' => new Column(['title' => __('models/stockPickings.fields.stock_picking_type_id'), 'data' => 'stock_picking_type.name', 'searchable' => true, 'elmsearch' => 'text']),
             'name' => new Column(['title' => __('models/stockPickings.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
             'quantity' => new Column(['title' => __('models/stockPickings.fields.quantity'), 'data' => 'quantity', 'searchable' => true, 'elmsearch' => 'text']),
-            'state' => new Column(['title' => __('models/stockPickings.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text']),
-            'external_references' => new Column(['title' => __('models/stockPickings.fields.external_references'), 'data' => 'external_references', 'searchable' => true, 'elmsearch' => 'text']),
-            'vendor_id' => new Column(['title' => __('models/stockPickings.fields.vendor_id'), 'data' => 'vendor_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'state' => new Column(['title' => __('models/stockPickings.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text']),                        
             'note' => new Column(['title' => __('models/stockPickings.fields.note'), 'data' => 'note', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }

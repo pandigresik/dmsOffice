@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\API\Base;
 
-use App\Models\Base\VendorExpeditionTrip;
+use App\Models\Base\VendorTrip;
 use InfyOm\Generator\Request\APIRequest;
 
-class UpdateVendorExpeditionTripAPIRequest extends APIRequest
+class UpdateVendorTripAPIRequest extends APIRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +24,6 @@ class UpdateVendorExpeditionTripAPIRequest extends APIRequest
      */
     public function rules()
     {
-        return VendorExpeditionTrip::$rules;
+        return VendorTrip::$rules;
     }
 }

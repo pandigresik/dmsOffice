@@ -41,6 +41,19 @@ if (!function_exists('convertArrayStringPair')) {
     }
 }
 
+if (!function_exists('convertArrayPairValue')) {
+    function convertArrayPairValue($values, $keyPair = 'text,value')
+    {
+        $result = [];
+        foreach ($values as $value) {
+            list($key, $val) = explode(',',$keyPair);
+            array_push($result, [$key => $value, $val => $value]);
+        }
+
+        return $result;
+    }
+}
+
 if (!function_exists('generateMenu')) {
     function generateMenu(array $tree)
     {

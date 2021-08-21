@@ -4,9 +4,9 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\ApiTestTrait;
-use App\Models\Base\VendorExpedition;
+use App\Models\Base\Vendor;
 
-class VendorExpeditionApiTest extends TestCase
+class VendorApiTest extends TestCase
 {
     use ApiTestTrait, WithoutMiddleware, DatabaseTransactions;
 
@@ -15,14 +15,14 @@ class VendorExpeditionApiTest extends TestCase
      */
     public function test_create_vendor_expedition()
     {
-        $vendorExpedition = VendorExpedition::factory()->make()->toArray();
+        $Vendor = Vendor::factory()->make()->toArray();
 
         $this->response = $this->json(
             'POST',
-            '/api/base/vendor_expeditions', $vendorExpedition
+            '/api/base/vendor_expeditions', $Vendor
         );
 
-        $this->assertApiResponse($vendorExpedition);
+        $this->assertApiResponse($Vendor);
     }
 
     /**
@@ -30,14 +30,14 @@ class VendorExpeditionApiTest extends TestCase
      */
     public function test_read_vendor_expedition()
     {
-        $vendorExpedition = VendorExpedition::factory()->create();
+        $Vendor = Vendor::factory()->create();
 
         $this->response = $this->json(
             'GET',
-            '/api/base/vendor_expeditions/'.$vendorExpedition->id
+            '/api/base/vendor_expeditions/'.$Vendor->id
         );
 
-        $this->assertApiResponse($vendorExpedition->toArray());
+        $this->assertApiResponse($Vendor->toArray());
     }
 
     /**
@@ -45,16 +45,16 @@ class VendorExpeditionApiTest extends TestCase
      */
     public function test_update_vendor_expedition()
     {
-        $vendorExpedition = VendorExpedition::factory()->create();
-        $editedVendorExpedition = VendorExpedition::factory()->make()->toArray();
+        $Vendor = Vendor::factory()->create();
+        $editedVendor = Vendor::factory()->make()->toArray();
 
         $this->response = $this->json(
             'PUT',
-            '/api/base/vendor_expeditions/'.$vendorExpedition->id,
-            $editedVendorExpedition
+            '/api/base/vendor_expeditions/'.$Vendor->id,
+            $editedVendor
         );
 
-        $this->assertApiResponse($editedVendorExpedition);
+        $this->assertApiResponse($editedVendor);
     }
 
     /**
@@ -62,17 +62,17 @@ class VendorExpeditionApiTest extends TestCase
      */
     public function test_delete_vendor_expedition()
     {
-        $vendorExpedition = VendorExpedition::factory()->create();
+        $Vendor = Vendor::factory()->create();
 
         $this->response = $this->json(
             'DELETE',
-             '/api/base/vendor_expeditions/'.$vendorExpedition->id
+             '/api/base/vendor_expeditions/'.$Vendor->id
          );
 
         $this->assertApiSuccess();
         $this->response = $this->json(
             'GET',
-            '/api/base/vendor_expeditions/'.$vendorExpedition->id
+            '/api/base/vendor_expeditions/'.$Vendor->id
         );
 
         $this->response->assertStatus(404);

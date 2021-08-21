@@ -1,0 +1,114 @@
+[
+    {
+        "name": "id",
+        "dbType": "bigInteger,true,true",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "name",
+        "dbType": "string,50",
+        "htmlType": "text",
+        "validations": "required|string|max:50|string|max:50",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "code",
+        "dbType": "string,8",
+        "htmlType": "text",
+        "validations": "required|string|max:8|string|max:8",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "company_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "default_debit_account_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "default_credit_account_id",
+        "dbType": "bigInteger,false,true",
+        "htmlType": null,
+        "validations": "nullable|nullable",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "type",
+        "dbType": "string",
+        "htmlType": "text",
+        "validations": "required|string|string",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,Company,company_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,AccountAccount,default_credit_account_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,AccountAccount,default_debit_account_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,AccountInvoice,account_journal_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,AccountInvoiceLine,account_journal_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,AccountMove,account_journal_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,AccountMoveLine,account_journal_id"
+    }
+]

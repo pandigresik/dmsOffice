@@ -53,9 +53,11 @@ class StockPicking extends Model
     public $fillable = [
         'warehouse_id',
         'stock_picking_type_id',
+        'product_id',
         'name',
         'quantity',
         'state',
+        'table_references',
         'external_references',
         'vendor_id',
         'note'
@@ -108,5 +110,13 @@ class StockPicking extends Model
     public function warehouse()
     {
         return $this->belongsTo(\App\Models\Inventory\Warehouse::class, 'warehouse_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function product()
+    {
+        return $this->belongsTo(\App\Models\Base\Product::class, 'product_id');
     }
 }

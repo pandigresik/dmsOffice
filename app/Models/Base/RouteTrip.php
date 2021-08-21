@@ -111,9 +111,9 @@ class RouteTrip extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
-    public function vendorExpeditionTrips()
+    public function VendorTrips()
     {
-        return $this->hasMany(\App\Models\Base\VendorExpeditionTrip::class, 'route_trip_id');
+        return $this->hasMany(\App\Models\Base\VendorTrip::class, 'route_trip_id');
     }
 
     public function vendors()

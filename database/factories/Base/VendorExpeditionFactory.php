@@ -2,17 +2,17 @@
 
 namespace Database\Factories\Base;
 
-use App\Models\Base\VendorExpedition;
+use App\Models\Base\Vendor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class VendorExpeditionFactory extends Factory
+class VendorFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = VendorExpedition::class;
+    protected $model = Vendor::class;
 
     /**
      * Define the model's default state.

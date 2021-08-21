@@ -6,7 +6,8 @@ return array (
   'fields' => 
   array (
     'id' => 'Id',
-    'warehouse_id' => 'Warehouse Id',
+    'warehouse_id' => 'Warehouse',
+    'product_id' => 'Product',
     'stock_picking_type_id' => 'Stock Picking Type Id',
     'name' => 'Name',
     'quantity' => 'Quantity',

@@ -3,35 +3,35 @@
 namespace App\Http\Controllers\API\Base;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\API\Base\CreateVendorExpeditionAPIRequest;
-use App\Http\Requests\API\Base\UpdateVendorExpeditionAPIRequest;
-use App\Http\Resources\Base\VendorExpeditionResource;
-use App\Models\Base\VendorExpedition;
-use App\Repositories\Base\VendorExpeditionRepository;
+use App\Http\Requests\API\Base\CreateVendorAPIRequest;
+use App\Http\Requests\API\Base\UpdateVendorAPIRequest;
+use App\Http\Resources\Base\VendorResource;
+use App\Models\Base\Vendor;
+use App\Repositories\Base\VendorRepository;
 use Illuminate\Http\Request;
 use Response;
 
 /**
- * Class VendorExpeditionController.
+ * Class VendorController.
  */
-class VendorExpeditionAPIController extends AppBaseController
+class VendorAPIController extends AppBaseController
 {
-    /** @var VendorExpeditionRepository */
-    private $vendorExpeditionRepository;
+    /** @var VendorRepository */
+    private $VendorRepository;
 
-    public function __construct(VendorExpeditionRepository $vendorExpeditionRepo)
+    public function __construct(VendorRepository $VendorRepo)
     {
-        $this->vendorExpeditionRepository = $vendorExpeditionRepo;
+        $this->VendorRepository = $VendorRepo;
     }
 
     /**
      * @return Response
      *
      * @SWG\Get(
-     *      path="/vendorExpeditions",
-     *      summary="Get a listing of the VendorExpeditions.",
-     *      tags={"VendorExpedition"},
-     *      description="Get all VendorExpeditions",
+     *      path="/Vendors",
+     *      summary="Get a listing of the Vendors.",
+     *      tags={"Vendor"},
+     *      description="Get all Vendors",
      *      produces={"application/json"},
      *      @SWG\Response(
      *          response=200,
@@ -45,7 +45,7 @@ class VendorExpeditionAPIController extends AppBaseController
      *              @SWG\Property(
      *                  property="data",
      *                  type="array",
-     *                  @SWG\Items(ref="#/definitions/VendorExpedition")
+     *                  @SWG\Items(ref="#/definitions/Vendor")
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -57,30 +57,30 @@ class VendorExpeditionAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $vendorExpeditions = $this->vendorExpeditionRepository->all(
+        $Vendors = $this->VendorRepository->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
         );
 
-        return $this->sendResponse(VendorExpeditionResource::collection($vendorExpeditions), 'Vendor Expeditions retrieved successfully');
+        return $this->sendResponse(VendorResource::collection($Vendors), 'Vendor Expeditions retrieved successfully');
     }
 
     /**
      * @return Response
      *
      * @SWG\Post(
-     *      path="/vendorExpeditions",
-     *      summary="Store a newly created VendorExpedition in storage",
-     *      tags={"VendorExpedition"},
-     *      description="Store VendorExpedition",
+     *      path="/Vendors",
+     *      summary="Store a newly created Vendor in storage",
+     *      tags={"Vendor"},
+     *      description="Store Vendor",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="VendorExpedition that should be stored",
+     *          description="Vendor that should be stored",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/VendorExpedition")
+     *          @SWG\Schema(ref="#/definitions/Vendor")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -93,7 +93,7 @@ class VendorExpeditionAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/VendorExpedition"
+     *                  ref="#/definitions/Vendor"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -103,13 +103,13 @@ class VendorExpeditionAPIController extends AppBaseController
      *      )
      * )
      */
-    public function store(CreateVendorExpeditionAPIRequest $request)
+    public function store(CreateVendorAPIRequest $request)
     {
         $input = $request->all();
 
-        $vendorExpedition = $this->vendorExpeditionRepository->create($input);
+        $Vendor = $this->VendorRepository->create($input);
 
-        return $this->sendResponse(new VendorExpeditionResource($vendorExpedition), 'Vendor Expedition saved successfully');
+        return $this->sendResponse(new VendorResource($Vendor), 'Vendor Expedition saved successfully');
     }
 
     /**
@@ -118,14 +118,14 @@ class VendorExpeditionAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/vendorExpeditions/{id}",
-     *      summary="Display the specified VendorExpedition",
-     *      tags={"VendorExpedition"},
-     *      description="Get VendorExpedition",
+     *      path="/Vendors/{id}",
+     *      summary="Display the specified Vendor",
+     *      tags={"Vendor"},
+     *      description="Get Vendor",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of VendorExpedition",
+     *          description="id of Vendor",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -141,7 +141,7 @@ class VendorExpeditionAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/VendorExpedition"
+     *                  ref="#/definitions/Vendor"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -153,14 +153,14 @@ class VendorExpeditionAPIController extends AppBaseController
      */
     public function show($id)
     {
-        /** @var VendorExpedition $vendorExpedition */
-        $vendorExpedition = $this->vendorExpeditionRepository->find($id);
+        /** @var Vendor $Vendor */
+        $Vendor = $this->VendorRepository->find($id);
 
-        if (empty($vendorExpedition)) {
+        if (empty($Vendor)) {
             return $this->sendError('Vendor Expedition not found');
         }
 
-        return $this->sendResponse(new VendorExpeditionResource($vendorExpedition), 'Vendor Expedition retrieved successfully');
+        return $this->sendResponse(new VendorResource($Vendor), 'Vendor Expedition retrieved successfully');
     }
 
     /**
@@ -169,14 +169,14 @@ class VendorExpeditionAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Put(
-     *      path="/vendorExpeditions/{id}",
-     *      summary="Update the specified VendorExpedition in storage",
-     *      tags={"VendorExpedition"},
-     *      description="Update VendorExpedition",
+     *      path="/Vendors/{id}",
+     *      summary="Update the specified Vendor in storage",
+     *      tags={"Vendor"},
+     *      description="Update Vendor",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of VendorExpedition",
+     *          description="id of Vendor",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -184,9 +184,9 @@ class VendorExpeditionAPIController extends AppBaseController
      *      @SWG\Parameter(
      *          name="body",
      *          in="body",
-     *          description="VendorExpedition that should be updated",
+     *          description="Vendor that should be updated",
      *          required=false,
-     *          @SWG\Schema(ref="#/definitions/VendorExpedition")
+     *          @SWG\Schema(ref="#/definitions/Vendor")
      *      ),
      *      @SWG\Response(
      *          response=200,
@@ -199,7 +199,7 @@ class VendorExpeditionAPIController extends AppBaseController
      *              ),
      *              @SWG\Property(
      *                  property="data",
-     *                  ref="#/definitions/VendorExpedition"
+     *                  ref="#/definitions/Vendor"
      *              ),
      *              @SWG\Property(
      *                  property="message",
@@ -209,20 +209,20 @@ class VendorExpeditionAPIController extends AppBaseController
      *      )
      * )
      */
-    public function update($id, UpdateVendorExpeditionAPIRequest $request)
+    public function update($id, UpdateVendorAPIRequest $request)
     {
         $input = $request->all();
 
-        /** @var VendorExpedition $vendorExpedition */
-        $vendorExpedition = $this->vendorExpeditionRepository->find($id);
+        /** @var Vendor $Vendor */
+        $Vendor = $this->VendorRepository->find($id);
 
-        if (empty($vendorExpedition)) {
+        if (empty($Vendor)) {
             return $this->sendError('Vendor Expedition not found');
         }
 
-        $vendorExpedition = $this->vendorExpeditionRepository->update($input, $id);
+        $Vendor = $this->VendorRepository->update($input, $id);
 
-        return $this->sendResponse(new VendorExpeditionResource($vendorExpedition), 'VendorExpedition updated successfully');
+        return $this->sendResponse(new VendorResource($Vendor), 'Vendor updated successfully');
     }
 
     /**
@@ -231,14 +231,14 @@ class VendorExpeditionAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Delete(
-     *      path="/vendorExpeditions/{id}",
-     *      summary="Remove the specified VendorExpedition from storage",
-     *      tags={"VendorExpedition"},
-     *      description="Delete VendorExpedition",
+     *      path="/Vendors/{id}",
+     *      summary="Remove the specified Vendor from storage",
+     *      tags={"Vendor"},
+     *      description="Delete Vendor",
      *      produces={"application/json"},
      *      @SWG\Parameter(
      *          name="id",
-     *          description="id of VendorExpedition",
+     *          description="id of Vendor",
      *          type="integer",
      *          required=true,
      *          in="path"
@@ -266,14 +266,14 @@ class VendorExpeditionAPIController extends AppBaseController
      */
     public function destroy($id)
     {
-        /** @var VendorExpedition $vendorExpedition */
-        $vendorExpedition = $this->vendorExpeditionRepository->find($id);
+        /** @var Vendor $Vendor */
+        $Vendor = $this->VendorRepository->find($id);
 
-        if (empty($vendorExpedition)) {
+        if (empty($Vendor)) {
             return $this->sendError('Vendor Expedition not found');
         }
 
-        $vendorExpedition->delete();
+        $Vendor->delete();
 
         return $this->sendSuccess('Vendor Expedition deleted successfully');
     }

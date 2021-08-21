@@ -18,10 +18,12 @@ class StockPickingRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'warehouse_id',
+        'product_id',
         'stock_picking_type_id',
         'name',
         'quantity',
         'state',
+        'table_references',
         'external_references',
         'vendor_id',
         'note'

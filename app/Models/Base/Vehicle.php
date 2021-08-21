@@ -89,8 +89,8 @@ class Vehicle extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function vendorExpedition()
+    public function Vendor()
     {
-        return $this->belongsTo(\App\Models\Base\VendorExpedition::class, 'vendor_expedition_id');
+        return $this->belongsTo(\App\Models\Base\Vendor::class, 'vendor_expedition_id');
     }
 }

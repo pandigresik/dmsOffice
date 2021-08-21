@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\API\Base;
 
-use App\Models\Base\VendorExpedition;
+use App\Models\Base\Vendor;
 use InfyOm\Generator\Request\APIRequest;
 
-class UpdateVendorExpeditionAPIRequest extends APIRequest
+class UpdateVendorAPIRequest extends APIRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +24,6 @@ class UpdateVendorExpeditionAPIRequest extends APIRequest
      */
     public function rules()
     {
-        return VendorExpedition::$rules;
+        return Vendor::$rules;
     }
 }

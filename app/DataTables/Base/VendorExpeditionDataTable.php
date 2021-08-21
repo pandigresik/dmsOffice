@@ -2,12 +2,12 @@
 
 namespace App\DataTables\Base;
 
-use App\Models\Base\VendorExpedition;
+use App\Models\Base\Vendor;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class VendorExpeditionDataTable extends DataTable
+class VendorDataTable extends DataTable
 {
     /**
      * example mapping filter column to search by keyword, default use %keyword%.
@@ -42,11 +42,11 @@ class VendorExpeditionDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\VendorExpedition $model
+     * @param \App\Models\Vendor $model
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(VendorExpedition $model)
+    public function query(Vendor $model)
     {
         return $model->newQuery();
     }
@@ -111,12 +111,12 @@ class VendorExpeditionDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'name' => new Column(['title' => __('models/vendorExpeditions.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
-            'address' => new Column(['title' => __('models/vendorExpeditions.fields.address'), 'data' => 'address', 'searchable' => true, 'elmsearch' => 'text']),
-            'email' => new Column(['title' => __('models/vendorExpeditions.fields.email'), 'data' => 'email', 'searchable' => true, 'elmsearch' => 'text']),
-            'is_supplier' => new Column(['title' => __('models/vendorExpeditions.fields.is_supplier'), 'data' => 'is_supplier', 'searchable' => true, 'elmsearch' => 'text']),
-            'is_expedition' => new Column(['title' => __('models/vendorExpeditions.fields.is_expedition'), 'data' => 'is_expedition', 'searchable' => true, 'elmsearch' => 'text']),
-            'is_customer' => new Column(['title' => __('models/vendorExpeditions.fields.is_customer'), 'data' => 'is_customer', 'searchable' => true, 'elmsearch' => 'text']),
+            'name' => new Column(['title' => __('models/Vendors.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
+            'address' => new Column(['title' => __('models/Vendors.fields.address'), 'data' => 'address', 'searchable' => true, 'elmsearch' => 'text']),
+            'email' => new Column(['title' => __('models/Vendors.fields.email'), 'data' => 'email', 'searchable' => true, 'elmsearch' => 'text']),
+            'is_supplier' => new Column(['title' => __('models/Vendors.fields.is_supplier'), 'data' => 'is_supplier', 'searchable' => true, 'elmsearch' => 'text']),
+            'is_expedition' => new Column(['title' => __('models/Vendors.fields.is_expedition'), 'data' => 'is_expedition', 'searchable' => true, 'elmsearch' => 'text']),
+            'is_customer' => new Column(['title' => __('models/Vendors.fields.is_customer'), 'data' => 'is_customer', 'searchable' => true, 'elmsearch' => 'text']),
 
         ];
     }

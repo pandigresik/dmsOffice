@@ -30,7 +30,7 @@ class VehicleController extends AppBaseController
      */
     public function index($id, VehicleDataTable $vehicleDataTable)
     {
-        return $vehicleDataTable->setIdReferences($id)->render('base.vehicles.index', ['vendorExpeditionId' => $id]);
+        return $vehicleDataTable->setIdReferences($id)->render('base.vehicles.index', ['VendorId' => $id]);
     }
 
     /**
@@ -42,7 +42,7 @@ class VehicleController extends AppBaseController
      */
     public function create($id)
     {
-        return view('base.vehicles.create')->with('vendorExpeditionId', $id)->with($this->getOptionItems());
+        return view('base.vehicles.create')->with('VendorId', $id)->with($this->getOptionItems());
     }
 
     /**
@@ -60,7 +60,7 @@ class VehicleController extends AppBaseController
 
         Flash::success(__('messages.saved', ['model' => __('models/vehicles.singular')]));
 
-        return redirect(route('base.vendorExpeditions.vehicles.index', $id));
+        return redirect(route('base.Vendors.vehicles.index', $id));
     }
 
     /**

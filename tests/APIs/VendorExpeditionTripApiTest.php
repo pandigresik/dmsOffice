@@ -4,9 +4,9 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\ApiTestTrait;
-use App\Models\Base\VendorExpeditionTrip;
+use App\Models\Base\VendorTrip;
 
-class VendorExpeditionTripApiTest extends TestCase
+class VendorTripApiTest extends TestCase
 {
     use ApiTestTrait, WithoutMiddleware, DatabaseTransactions;
 
@@ -15,14 +15,14 @@ class VendorExpeditionTripApiTest extends TestCase
      */
     public function test_create_vendor_expedition_trip()
     {
-        $vendorExpeditionTrip = VendorExpeditionTrip::factory()->make()->toArray();
+        $VendorTrip = VendorTrip::factory()->make()->toArray();
 
         $this->response = $this->json(
             'POST',
-            '/api/base/vendor_expedition_trips', $vendorExpeditionTrip
+            '/api/base/vendor_expedition_trips', $VendorTrip
         );
 
-        $this->assertApiResponse($vendorExpeditionTrip);
+        $this->assertApiResponse($VendorTrip);
     }
 
     /**
@@ -30,14 +30,14 @@ class VendorExpeditionTripApiTest extends TestCase
      */
     public function test_read_vendor_expedition_trip()
     {
-        $vendorExpeditionTrip = VendorExpeditionTrip::factory()->create();
+        $VendorTrip = VendorTrip::factory()->create();
 
         $this->response = $this->json(
             'GET',
-            '/api/base/vendor_expedition_trips/'.$vendorExpeditionTrip->id
+            '/api/base/vendor_expedition_trips/'.$VendorTrip->id
         );
 
-        $this->assertApiResponse($vendorExpeditionTrip->toArray());
+        $this->assertApiResponse($VendorTrip->toArray());
     }
 
     /**
@@ -45,16 +45,16 @@ class VendorExpeditionTripApiTest extends TestCase
      */
     public function test_update_vendor_expedition_trip()
     {
-        $vendorExpeditionTrip = VendorExpeditionTrip::factory()->create();
-        $editedVendorExpeditionTrip = VendorExpeditionTrip::factory()->make()->toArray();
+        $VendorTrip = VendorTrip::factory()->create();
+        $editedVendorTrip = VendorTrip::factory()->make()->toArray();
 
         $this->response = $this->json(
             'PUT',
-            '/api/base/vendor_expedition_trips/'.$vendorExpeditionTrip->id,
-            $editedVendorExpeditionTrip
+            '/api/base/vendor_expedition_trips/'.$VendorTrip->id,
+            $editedVendorTrip
         );
 
-        $this->assertApiResponse($editedVendorExpeditionTrip);
+        $this->assertApiResponse($editedVendorTrip);
     }
 
     /**
@@ -62,17 +62,17 @@ class VendorExpeditionTripApiTest extends TestCase
      */
     public function test_delete_vendor_expedition_trip()
     {
-        $vendorExpeditionTrip = VendorExpeditionTrip::factory()->create();
+        $VendorTrip = VendorTrip::factory()->create();
 
         $this->response = $this->json(
             'DELETE',
-             '/api/base/vendor_expedition_trips/'.$vendorExpeditionTrip->id
+             '/api/base/vendor_expedition_trips/'.$VendorTrip->id
          );
 
         $this->assertApiSuccess();
         $this->response = $this->json(
             'GET',
-            '/api/base/vendor_expedition_trips/'.$vendorExpeditionTrip->id
+            '/api/base/vendor_expedition_trips/'.$VendorTrip->id
         );
 
         $this->response->assertStatus(404);

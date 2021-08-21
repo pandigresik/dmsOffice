@@ -4,7 +4,7 @@
     @push('breadcrumb')
     <ol class="breadcrumb border-0 m-0">
       <li class="breadcrumb-item">
-         <a href="{!! route('base.vendorExpeditions.index') !!}">@lang('models/vendorExpeditions.singular')</a>
+         <a href="{!! route('base.Vendors.index') !!}">@lang('models/Vendors.singular')</a>
       </li>
       <li class="breadcrumb-item active">@lang('crud.add_new')</li>
     </ol>
@@ -14,11 +14,11 @@
                 @include('coreui-templates::common.errors')
                 <div class="row">
                     <div class="col-lg-12">
-                        {!! Form::open(['route' => 'base.vendorExpeditions.store']) !!}
+                        {!! Form::open(['route' => 'base.Vendors.store']) !!}
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
-                                <strong>Create @lang('models/vendorExpeditions.singular')</strong>
+                                <strong>Create @lang('models/Vendors.singular')</strong>
                             </div>
                             <div class="card-body">                                
 
@@ -30,7 +30,7 @@
                                 <!-- Submit Field -->
                                 <div class="form-group col-sm-12">
                                     {!! Form::submit(__('crud.save'), ['class' => 'btn btn-primary']) !!}
-                                    <a href="{{ route('base.vendorExpeditions.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
+                                    <a href="{{ route('base.Vendors.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
                                 </div>
                             </div>
                         </div>

@@ -1,24 +1,24 @@
 <?php namespace Tests\Repositories;
 
-use App\Models\Base\VendorExpeditionTrip;
-use App\Repositories\Base\VendorExpeditionTripRepository;
+use App\Models\Base\VendorTrip;
+use App\Repositories\Base\VendorTripRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\ApiTestTrait;
 
-class VendorExpeditionTripRepositoryTest extends TestCase
+class VendorTripRepositoryTest extends TestCase
 {
     use ApiTestTrait, DatabaseTransactions;
 
     /**
-     * @var VendorExpeditionTripRepository
+     * @var VendorTripRepository
      */
-    protected $vendorExpeditionTripRepo;
+    protected $VendorTripRepo;
 
     public function setUp() : void
     {
         parent::setUp();
-        $this->vendorExpeditionTripRepo = \App::make(VendorExpeditionTripRepository::class);
+        $this->VendorTripRepo = \App::make(VendorTripRepository::class);
     }
 
     /**
@@ -26,15 +26,15 @@ class VendorExpeditionTripRepositoryTest extends TestCase
      */
     public function test_create_vendor_expedition_trip()
     {
-        $vendorExpeditionTrip = VendorExpeditionTrip::factory()->make()->toArray();
+        $VendorTrip = VendorTrip::factory()->make()->toArray();
 
-        $createdVendorExpeditionTrip = $this->vendorExpeditionTripRepo->create($vendorExpeditionTrip);
+        $createdVendorTrip = $this->VendorTripRepo->create($VendorTrip);
 
-        $createdVendorExpeditionTrip = $createdVendorExpeditionTrip->toArray();
-        $this->assertArrayHasKey('id', $createdVendorExpeditionTrip);
-        $this->assertNotNull($createdVendorExpeditionTrip['id'], 'Created VendorExpeditionTrip must have id specified');
-        $this->assertNotNull(VendorExpeditionTrip::find($createdVendorExpeditionTrip['id']), 'VendorExpeditionTrip with given id must be in DB');
-        $this->assertModelData($vendorExpeditionTrip, $createdVendorExpeditionTrip);
+        $createdVendorTrip = $createdVendorTrip->toArray();
+        $this->assertArrayHasKey('id', $createdVendorTrip);
+        $this->assertNotNull($createdVendorTrip['id'], 'Created VendorTrip must have id specified');
+        $this->assertNotNull(VendorTrip::find($createdVendorTrip['id']), 'VendorTrip with given id must be in DB');
+        $this->assertModelData($VendorTrip, $createdVendorTrip);
     }
 
     /**
@@ -42,12 +42,12 @@ class VendorExpeditionTripRepositoryTest extends TestCase
      */
     public function test_read_vendor_expedition_trip()
     {
-        $vendorExpeditionTrip = VendorExpeditionTrip::factory()->create();
+        $VendorTrip = VendorTrip::factory()->create();
 
-        $dbVendorExpeditionTrip = $this->vendorExpeditionTripRepo->find($vendorExpeditionTrip->id);
+        $dbVendorTrip = $this->VendorTripRepo->find($VendorTrip->id);
 
-        $dbVendorExpeditionTrip = $dbVendorExpeditionTrip->toArray();
-        $this->assertModelData($vendorExpeditionTrip->toArray(), $dbVendorExpeditionTrip);
+        $dbVendorTrip = $dbVendorTrip->toArray();
+        $this->assertModelData($VendorTrip->toArray(), $dbVendorTrip);
     }
 
     /**
@@ -55,14 +55,14 @@ class VendorExpeditionTripRepositoryTest extends TestCase
      */
     public function test_update_vendor_expedition_trip()
     {
-        $vendorExpeditionTrip = VendorExpeditionTrip::factory()->create();
-        $fakeVendorExpeditionTrip = VendorExpeditionTrip::factory()->make()->toArray();
+        $VendorTrip = VendorTrip::factory()->create();
+        $fakeVendorTrip = VendorTrip::factory()->make()->toArray();
 
-        $updatedVendorExpeditionTrip = $this->vendorExpeditionTripRepo->update($fakeVendorExpeditionTrip, $vendorExpeditionTrip->id);
+        $updatedVendorTrip = $this->VendorTripRepo->update($fakeVendorTrip, $VendorTrip->id);
 
-        $this->assertModelData($fakeVendorExpeditionTrip, $updatedVendorExpeditionTrip->toArray());
-        $dbVendorExpeditionTrip = $this->vendorExpeditionTripRepo->find($vendorExpeditionTrip->id);
-        $this->assertModelData($fakeVendorExpeditionTrip, $dbVendorExpeditionTrip->toArray());
+        $this->assertModelData($fakeVendorTrip, $updatedVendorTrip->toArray());
+        $dbVendorTrip = $this->VendorTripRepo->find($VendorTrip->id);
+        $this->assertModelData($fakeVendorTrip, $dbVendorTrip->toArray());
     }
 
     /**
@@ -70,11 +70,11 @@ class VendorExpeditionTripRepositoryTest extends TestCase
      */
     public function test_delete_vendor_expedition_trip()
     {
-        $vendorExpeditionTrip = VendorExpeditionTrip::factory()->create();
+        $VendorTrip = VendorTrip::factory()->create();
 
-        $resp = $this->vendorExpeditionTripRepo->delete($vendorExpeditionTrip->id);
+        $resp = $this->VendorTripRepo->delete($VendorTrip->id);
 
         $this->assertTrue($resp);
-        $this->assertNull(VendorExpeditionTrip::find($vendorExpeditionTrip->id), 'VendorExpeditionTrip should not exist in DB');
+        $this->assertNull(VendorTrip::find($VendorTrip->id), 'VendorTrip should not exist in DB');
     }
 }

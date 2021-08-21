@@ -4,27 +4,28 @@ namespace App\DataTables\Inventory;
 
 use App\Models\Inventory\StockInventory;
 use App\Repositories\Inventory\WarehouseRepository;
-use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Services\DataTable;
 
 class StockInventoryDataTable extends DataTable
 {
     /**
-    * example mapping filter column to search by keyword, default use %keyword%
-    */
+     * example mapping filter column to search by keyword, default use %keyword%.
+     */
     private $columnFilterOperator = [
-        'warehouse.name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'warehouse.name' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
 
     private $mapColumnSearch = [
-        'warehouse.name' => 'warehouse_id'
+        'warehouse.name' => 'warehouse_id',
     ];
-    
+
     /**
      * Build DataTable class.
      *
-     * @param mixed $query Results from query() method.
+     * @param mixed $query results from query() method
+     *
      * @return \Yajra\DataTables\DataTableAbstract
      */
     public function dataTable($query)
@@ -32,10 +33,11 @@ class StockInventoryDataTable extends DataTable
         $dataTable = new EloquentDataTable($query);
         if (!empty($this->columnFilterOperator)) {
             foreach ($this->columnFilterOperator as $column => $operator) {
-                $columnSearch = $this->mapColumnSearch[$column] ?? $column;                
+                $columnSearch = $this->mapColumnSearch[$column] ?? $column;
                 $dataTable->filterColumn($column, new $operator($columnSearch));
             }
         }
+
         return $dataTable->addColumn('action', 'inventory.stock_inventories.datatables_actions');
     }
 
@@ -43,6 +45,7 @@ class StockInventoryDataTable extends DataTable
      * Get query source of dataTable.
      *
      * @param \App\Models\StockInventory $model
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(StockInventory $model)
@@ -62,43 +65,44 @@ class StockInventoryDataTable extends DataTable
             ->minifiedAjax()
             ->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')])
             ->parameters([
-                'dom'       => 'Brtip',
+                'dom' => 'Brtip',
                 'stateSave' => true,
-                'order'     => [[0, 'desc']],
-                'buttons'   => [
+                'order' => [[0, 'desc']],
+                'buttons' => [
                     [
-                       'extend' => 'create',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
+                        'extend' => 'create',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-plus"></i> '.__('auth.app.create').'',
                     ],
                     [
-                       'extend' => 'export',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
+                        'extend' => 'export',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
                     ],
                     [
-                       'extend' => 'print',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
+                        'extend' => 'print',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-print"></i> '.__('auth.app.print').'',
                     ],
                     [
-                       'extend' => 'reset',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-undo"></i> ' .__('auth.app.reset').''
+                        'extend' => 'reset',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-undo"></i> '.__('auth.app.reset').'',
                     ],
                     [
-                       'extend' => 'reload',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
+                        'extend' => 'reload',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-refresh"></i> '.__('auth.app.reload').'',
                     ],
                 ],
-                 'language' => [
-                   'url' => url('vendor/datatables/i18n/en-gb.json'),
-                 ],
-                 'responsive' => true,
-                 'fixedHeader' => true,
-                 'orderCellsTop' => true     
-            ]);
+                'language' => [
+                    'url' => url('vendor/datatables/i18n/en-gb.json'),
+                ],
+                'responsive' => true,
+                'fixedHeader' => true,
+                'orderCellsTop' => true,
+            ])
+        ;
     }
 
     /**
@@ -108,10 +112,11 @@ class StockInventoryDataTable extends DataTable
      */
     protected function getColumns()
     {
-        $listWarehouse = (new WarehouseRepository(app()))->all([],['id as value','name as text'])->toArray();        
+        $listWarehouse = (new WarehouseRepository(app()))->all([], ['id as value', 'name as text'])->toArray();
+
         return [
             'name' => new Column(['title' => __('models/stockInventories.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
-            'warehouse_id' => new Column(['title' => __('models/stockInventories.fields.warehouse_id'), 'data' => 'warehouse.name', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => array_merge([['value' => '', 'text' => 'Pilih warehouse']] ,$listWarehouse) ])
+            'warehouse_id' => new Column(['title' => __('models/stockInventories.fields.warehouse_id'), 'data' => 'warehouse.name', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => array_merge([['value' => '', 'text' => 'Pilih warehouse']], $listWarehouse)]),
         ];
     }
 
@@ -122,6 +127,6 @@ class StockInventoryDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'stock_inventories_datatable_' . time();
+        return 'stock_inventories_datatable_'.time();
     }
 }

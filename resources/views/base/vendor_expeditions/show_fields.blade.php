@@ -1,24 +1,24 @@
 <!-- Name Field -->
 <div class="form-group row">
-    {!! Form::label('name', __('models/vendorExpeditions.fields.name').':', ['class' => 'col-md-3 col-form-label']) !!}
+    {!! Form::label('name', __('models/Vendors.fields.name').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        <p>{{ $vendorExpedition->name }}</p>
+        <p>{{ $Vendor->name }}</p>
     </div>
 </div>
 
 <!-- Address Field -->
 <div class="form-group row">
-    {!! Form::label('address', __('models/vendorExpeditions.fields.address').':', ['class' => 'col-md-3 col-form-label']) !!}
+    {!! Form::label('address', __('models/Vendors.fields.address').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        <p>{{ $vendorExpedition->address }}</p>
+        <p>{{ $Vendor->address }}</p>
     </div>
 </div>
 
 <!-- Email Field -->
 <div class="form-group row">
-    {!! Form::label('email', __('models/vendorExpeditions.fields.email').':', ['class' => 'col-md-3 col-form-label']) !!}
+    {!! Form::label('email', __('models/Vendors.fields.email').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        <p>{{ $vendorExpedition->email }}</p>
+        <p>{{ $Vendor->email }}</p>
     </div>
 </div>
 

@@ -46,7 +46,7 @@ class VehicleDataTable extends DataTable
      */
     public function query(Vehicle $model)
     {
-        return $model->where(['vendor_expedition_id' => $this->getIdReferences()])->with(['vehicleGroup', 'vendorExpedition'])->newQuery();
+        return $model->where(['vendor_expedition_id' => $this->getIdReferences()])->with(['vehicleGroup', 'Vendor'])->newQuery();
     }
 
     /**

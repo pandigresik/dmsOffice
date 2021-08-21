@@ -3,7 +3,7 @@
 @section('content')
     @push('breadcrumb')
     <ol class="breadcrumb border-0 m-0">
-        <li class="breadcrumb-item">@lang('models/vendorExpeditions.plural')</li>
+        <li class="breadcrumb-item">@lang('models/Vendors.plural')</li>
     </ol>
     @endpush
     <div class="container-fluid">
@@ -14,8 +14,8 @@
                      <div class="card">
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
-                             @lang('models/vendorExpeditions.plural')
-                             <a class="pull-right" href="{{ route('base.vendorExpeditions.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                             @lang('models/Vendors.plural')
+                             <a class="pull-right" href="{{ route('base.Vendors.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
                          </div>
                          <div class="card-body">
                              @include('base.vendor_expeditions.table')

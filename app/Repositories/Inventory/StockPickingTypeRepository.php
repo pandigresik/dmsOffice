@@ -18,7 +18,7 @@ class StockPickingTypeRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'name',
-        'code'
+        'code'        
     ];
 
     /**

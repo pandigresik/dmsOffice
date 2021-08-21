@@ -84,12 +84,14 @@ class StockInventoryRepository extends BaseRepository
                     // insert to stockPicking as history
                     \App\Models\Inventory\StockPicking::create([
                         'warehouse_id' => $input['warehouse_id'],
+                        'product_id' => $productLine[$key],
                         'stock_picking_type_id' => 1,
-                        'name' => 'Adjustment Stock',
+                        'name' => $model->name,
                         'quantity' => $diff,
                         'state' => 'completed',
+                        'table_references' => $model->getTable(),
                         'external_references' => $model->id,
-                        'note' => $model->name,
+                        'note' => 'Adjustment Stock',
                     ]);
                     // update stock quantity
                     $quant = \App\Models\Inventory\StockQuant::find($key);

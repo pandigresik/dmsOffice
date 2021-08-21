@@ -28,8 +28,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('menus', App\Http\Controllers\Base\MenusController::class, ['as' => 'base']);
         // Route::resource('menuPermissions', App\Http\Controllers\Base\MenuPermissionsController::class, ["as" => 'base']);
         Route::resource('vehicleGroups', App\Http\Controllers\Base\VehicleGroupController::class, ['as' => 'base']);
-        Route::resource('vendorExpeditions', App\Http\Controllers\Base\VendorExpeditionController::class, ['as' => 'base']);
-        Route::resource('vendorExpeditions.vehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
+        Route::resource('Vendors', App\Http\Controllers\Base\VendorController::class, ['as' => 'base']);
+        Route::resource('Vendors.vehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
         Route::resource('cities', App\Http\Controllers\Base\CityController::class, ['as' => 'base']);
         Route::resource('routeTrips', App\Http\Controllers\Base\RouteTripController::class, ['as' => 'base']);
 
@@ -41,16 +41,23 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['prefix' => 'inventory'], function () {
-        Route::resource('warehouses', App\Http\Controllers\Inventory\WarehouseController::class, ["as" => 'inventory']);
-        Route::resource('stockQuants', App\Http\Controllers\Inventory\StockQuantController::class, ["as" => 'inventory']);
-        Route::get('stockInventories/stockWarehouse', [App\Http\Controllers\Inventory\StockInventoryController::class, 'stockWarehouse'], ["as" => 'inventory'])->name('inventory.stockInventories.stockWarehouse');
-        Route::resource('stockInventories', App\Http\Controllers\Inventory\StockInventoryController::class, ["as" => 'inventory']);        
-        Route::resource('stockPickingTypes', App\Http\Controllers\Inventory\StockPickingTypeController::class, ["as" => 'inventory']);
-        Route::resource('stockPickings', App\Http\Controllers\Inventory\StockPickingController::class, ["as" => 'inventory']);
-        Route::resource('synchronizeInStockPickings', App\Http\Controllers\Inventory\SynchronizeInStockPickingController::class, ["as" => 'inventory']);
-        Route::resource('synchronizeOutStockPickings', App\Http\Controllers\Inventory\SynchronizeOutStockPickingController::class, ["as" => 'inventory']);
+        Route::resource('warehouses', App\Http\Controllers\Inventory\WarehouseController::class, ['as' => 'inventory']);
+        Route::resource('stockQuants', App\Http\Controllers\Inventory\StockQuantController::class, ['as' => 'inventory']);
+        Route::get('stockInventories/stockWarehouse', [App\Http\Controllers\Inventory\StockInventoryController::class, 'stockWarehouse'], ['as' => 'inventory'])->name('inventory.stockInventories.stockWarehouse');
+        Route::resource('stockInventories', App\Http\Controllers\Inventory\StockInventoryController::class, ['as' => 'inventory']);
+        Route::resource('stockPickingTypes', App\Http\Controllers\Inventory\StockPickingTypeController::class, ['as' => 'inventory']);
+        Route::resource('stockPickings', App\Http\Controllers\Inventory\StockPickingController::class, ['as' => 'inventory']);
+        Route::resource('synchronizeInStockPickings', App\Http\Controllers\Inventory\SynchronizeInStockPickingController::class, ['as' => 'inventory']);
+        Route::resource('synchronizeOutStockPickings', App\Http\Controllers\Inventory\SynchronizeOutStockPickingController::class, ['as' => 'inventory']);
     });
 
+    Route::group(['prefix' => 'accounting'], function () {
+        Route::resource('accountAccounts', App\Http\Controllers\Accounting\AccountAccountController::class, ['as' => 'accounting']);
+        Route::resource('accountTypes', App\Http\Controllers\Accounting\AccountTypeController::class, ['as' => 'accounting']);
+        Route::resource('accountJournals', App\Http\Controllers\Accounting\AccountJournalController::class, ['as' => 'accounting']);
+        Route::resource('accountInvoices', App\Http\Controllers\Accounting\AccountInvoiceController::class, ['as' => 'accounting']);
+        Route::resource('accountMoves', App\Http\Controllers\Accounting\AccountMoveController::class, ['as' => 'accounting']);
+    });
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');
     Route::get('/events', [App\Http\Controllers\EventsController::class, 'index'])->name('events.index');
 });
