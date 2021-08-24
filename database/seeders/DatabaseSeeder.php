@@ -12,11 +12,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $user = \App\Models\Base\User::factory([
+        $user = \App\Models\Base\User::create([
             'name' => 'Administrator',
             'email' => 'admin@admin.com',
-            'password' => Hash::make('admin@admin.com'),
-        ])->create();
+            'password' => Hash::make('admin@admin.com')
+        ]);
 
         $role = \App\Models\Base\Role::create([
             'name' => 'administrator',
