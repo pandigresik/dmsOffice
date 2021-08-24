@@ -1,6 +1,8 @@
 <IfModule mod_rewrite.c>
+    Options +FollowSymLinks
     RewriteEngine On
-    RewriteBase /
-    RewriteCond %{HTTP_HOST} ^(www\.)?domain\.tld$ [NC]
-    RewriteRule ^(.*)$ public/$1 [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
 </IfModule>
