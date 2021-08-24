@@ -4,11 +4,12 @@ namespace App\Providers;
 
 use App\Models\Base\Menus;
 use App\Models\Base\Product;
+use App\Models\Inventory\Warehouse;
 use App\Observers\MenusObserver;
 use App\Observers\ProductObserver;
-use App\Models\Inventory\Warehouse;
 use App\Observers\WarehouseObserver;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Routing\UrlGenerator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,15 +18,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        if(env('REDIRECT_HTTPS')) {
+            $this->app['request']->server->set('HTTPS', true);
+        }
     }
 
     /**
      * Bootstrap any application services.
      */
-    public function boot()
+    public function boot(UrlGenerator $url)
     {
-        if(config('app.env') === 'production') {
-            \URL::forceScheme('https');
+        if (env('REDIRECT_HTTPS')) {
+            $url->formatScheme('https');
         }
         // config(['app.locale' => 'id']);
         // Carbon::setLocale('id');
