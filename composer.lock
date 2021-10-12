@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eba0c8ad7963309a5ab0eace160ce1a3",
+    "content-hash": "4d847974b3bdf5c1e8dfd7c889323ca2",
     "packages": [
         {
             "name": "acaronlex/laravel-calendar",
@@ -701,6 +701,82 @@
             "time": "2020-12-14T12:17:39+00:00"
         },
         {
+            "name": "cache/redis-adapter",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-cache/redis-adapter.git",
+                "reference": "80645507231494f9daa874e7bc1bf85d72443188"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-cache/redis-adapter/zipball/80645507231494f9daa874e7bc1bf85d72443188",
+                "reference": "80645507231494f9daa874e7bc1bf85d72443188",
+                "shasum": ""
+            },
+            "require": {
+                "cache/adapter-common": "^1.0",
+                "cache/hierarchical-cache": "^1.0",
+                "php": "^5.6 || ^7.0 || ^8.0",
+                "psr/cache": "^1.0",
+                "psr/simple-cache": "^1.0"
+            },
+            "provide": {
+                "psr/cache-implementation": "^1.0",
+                "psr/simple-cache-implementation": "^1.0"
+            },
+            "require-dev": {
+                "cache/integration-tests": "^0.16",
+                "phpunit/phpunit": "^5.7.21"
+            },
+            "suggest": {
+                "ext-redis": "The extension required to use this pool."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Cache\\Adapter\\Redis\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Scherer",
+                    "email": "aequasi@gmail.com",
+                    "homepage": "https://github.com/aequasi"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/nyholm"
+                }
+            ],
+            "description": "A PSR-6 cache implementation using Redis (PhpRedis). This implementation supports tags",
+            "homepage": "http://www.php-cache.com/en/latest/",
+            "keywords": [
+                "cache",
+                "phpredis",
+                "psr-6",
+                "redis",
+                "tag"
+            ],
+            "support": {
+                "source": "https://github.com/php-cache/redis-adapter/tree/1.1.0"
+            },
+            "time": "2020-12-14T12:17:39+00:00"
+        },
+        {
             "name": "cache/tag-interop",
             "version": "1.0.1",
             "source": {
@@ -758,6 +834,57 @@
                 "source": "https://github.com/php-cache/tag-interop/tree/1.0.1"
             },
             "time": "2020-12-04T14:11:04+00:00"
+        },
+        {
+            "name": "calebporzio/parental",
+            "version": "v0.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/calebporzio/parental.git",
+                "reference": "33344dae4069236ea65f525f605ccf08cac47729"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/calebporzio/parental/zipball/33344dae4069236ea65f525f605ccf08cac47729",
+                "reference": "33344dae4069236ea65f525f605ccf08cac47729",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "~5.6.0|~5.7.0|~5.8.0|^6.0.0|^7.0.0|^8.0.0",
+                "illuminate/events": "~5.6.0|~5.7.0|~5.8.0|^6.0.0|^7.0.0|^8.0.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.6.0|~3.7.0|~3.8.0|^4.0|^5.0|^6.0",
+                "phpunit/phpunit": "^7.0|^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Parental\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Caleb Porzio",
+                    "email": "calebporzio@gmail.com"
+                }
+            ],
+            "description": "A simple eloquent trait that allows relationships to be accessed through child models.",
+            "support": {
+                "issues": "https://github.com/calebporzio/parental/issues",
+                "source": "https://github.com/calebporzio/parental/tree/master"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/calebporzio",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-09-08T20:04:29+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -2006,6 +2133,94 @@
                 }
             ],
             "time": "2020-12-29T14:50:06+00:00"
+        },
+        {
+            "name": "ekmungai/eloquent-ifrs",
+            "version": "v4.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ekmungai/eloquent-ifrs.git",
+                "reference": "8bfd11b5d9334e153b42019c1e03a2a1d0ce3444"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ekmungai/eloquent-ifrs/zipball/8bfd11b5d9334e153b42019c1e03a2a1d0ce3444",
+                "reference": "8bfd11b5d9334e153b42019c1e03a2a1d0ce3444",
+                "shasum": ""
+            },
+            "require": {
+                "calebporzio/parental": "^0.11.0",
+                "doctrine/dbal": "^2.10|^3.1",
+                "illuminate/auth": "^7.0|^8.40.0",
+                "illuminate/database": "^7.0|^8.40.0",
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "facade/ignition": "^2.3.6",
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "fzaninotto/faker": "^1.4",
+                "laravel/legacy-factories": "1.x-dev",
+                "mockery/mockery": "^1.0",
+                "nunomaduro/collision": "^5.0",
+                "nunomaduro/larastan": "^0.7.12",
+                "orchestra/testbench": "^5.0|^6.0",
+                "phpmd/phpmd": "^2.8",
+                "phpunit/phpunit": "9.4.3",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "IFRS\\IFRSServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "IFRS\\": "src"
+                },
+                "classmap": [
+                    "database/factories"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Mungai",
+                    "email": "emungai@karanjamungai.com"
+                }
+            ],
+            "description": "Eloquent Double Entry Accounting with focus on IFRS Compliant Reporting",
+            "keywords": [
+                "Accounting",
+                "eloquent",
+                "laravel",
+                "lumen",
+                "reporting"
+            ],
+            "support": {
+                "issues": "https://github.com/ekmungai/eloquent-ifrs/issues",
+                "source": "https://github.com/ekmungai/eloquent-ifrs"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/[user1",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/ekmungai] # Replace with up to 4 GitHub Sponsors-enabled usernames e.g.",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/user2",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-08-31T17:35:29+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -5431,6 +5646,149 @@
                 "wiki": "https://github.com/ramsey/uuid/wiki"
             },
             "time": "2020-01-27T05:09:17+00:00"
+        },
+        {
+            "name": "rickselby/laravel-gate-cache",
+            "version": "3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rickselby/laravel-gate-cache.git",
+                "reference": "293ff5a54432afe506370be54d84f9b9f36262d0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rickselby/laravel-gate-cache/zipball/293ff5a54432afe506370be54d84f9b9f36262d0",
+                "reference": "293ff5a54432afe506370be54d84f9b9f36262d0",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/auth": "5.5.*|5.6.*|5.7.*|5.8.*|6.*|7.*|8.*",
+                "illuminate/contracts": "5.5.*|5.6.*|5.7.*|5.8.*|6.*|7.*|8.*"
+            },
+            "require-dev": {
+                "graham-campbell/testbench": "^4.0|^5.0",
+                "phpunit/phpunit": "^6.5|^7.0|^8.0|^9.0",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "RickSelby\\Laravel\\GateCache\\GateCacheProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "RickSelby\\Laravel\\GateCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rick Selby",
+                    "email": "rick@selby-family.co.uk"
+                }
+            ],
+            "description": "Add a per-request caching layer to Laravel's Gate",
+            "support": {
+                "issues": "https://github.com/rickselby/laravel-gate-cache/issues",
+                "source": "https://github.com/rickselby/laravel-gate-cache/tree/3.3"
+            },
+            "time": "2021-04-02T13:33:06+00:00"
+        },
+        {
+            "name": "spatie/laravel-activitylog",
+            "version": "3.17.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-activitylog.git",
+                "reference": "bdc44862aaca39ecbd824133b80dbd7c8017ed7f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-activitylog/zipball/bdc44862aaca39ecbd824133b80dbd7c8017ed7f",
+                "reference": "bdc44862aaca39ecbd824133b80dbd7c8017ed7f",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "^6.0 || ^7.0 || ^8.0",
+                "illuminate/database": "^6.0 || ^7.0 || ^8.0",
+                "illuminate/support": "^6.0 || ^7.0 || ^8.0",
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "ext-json": "*",
+                "orchestra/testbench": "^4.0 || ^5.0 || ^6.0",
+                "phpunit/phpunit": "^9.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\Activitylog\\ActivitylogServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Activitylog\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Sebastian De Deyne",
+                    "email": "sebastian@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Tom Witkowski",
+                    "email": "dev.gummibeer@gmail.com",
+                    "homepage": "https://gummibeer.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A very simple activity logger to monitor the users of your website or application",
+            "homepage": "https://github.com/spatie/activitylog",
+            "keywords": [
+                "activity",
+                "laravel",
+                "log",
+                "spatie",
+                "user"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-activitylog/issues",
+                "source": "https://github.com/spatie/laravel-activitylog/tree/3.17.0"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-03-02T16:49:06+00:00"
         },
         {
             "name": "spatie/laravel-menu",

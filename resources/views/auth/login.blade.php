@@ -54,9 +54,9 @@
                 <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
                     <div class="card-body text-center">
                         <div>
-                            <h2>Sign up</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.</p>
+                            <h2>Easy Accounting</h2>
+                            <p>Make your life easier</p>
+                            <p>Don't have account ?</p>
                                 <a class="btn btn-primary active mt-3" href="{{ url('/register') }}">Register Now!</a>
                         </div>
                     </div>

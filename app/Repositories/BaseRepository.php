@@ -101,10 +101,10 @@ abstract class BaseRepository
     {
         $query = $this->model->newQuery();
 
-        if (count($search)) {
+        if (!empty($search)) {
             foreach ($search as $key => $value) {
                 if (in_array($key, $this->getFieldsSearchable())) {
-                    $query->search($value, $key);
+                    $query->search($value, [$key]);
                 }
             }
         }
@@ -130,7 +130,7 @@ abstract class BaseRepository
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function all($search = [], $columns = ['*'], $skip = null, $limit = null)
+    public function all($search = [], $skip = null, $limit = null, $columns = ['*'])
     {
         $this->eagerLoadRelations();
         $query = $this->allQuery($search, $skip, $limit);        
@@ -183,7 +183,7 @@ abstract class BaseRepository
 
         $model = $query->findOrFail($id);
 
-        $model->fill($input);
+        $model->fill($input);        
 
         $model->save();
 

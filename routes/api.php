@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
-/*
+use Illuminate\Support\Facades\Route; /*
 |--------------------------------------------------------------------------
 | API Routes
 |--------------------------------------------------------------------------
@@ -17,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 });
-
 Route::group(['prefix' => 'v1'], function () {
     Route::resource('menus', Base\MenusAPIController::class);
     Route::resource('vendor_expeditions', Base\VendorAPIController::class);
@@ -26,9 +23,16 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('vehicle_groups', Base\VehicleGroupAPIController::class);
     Route::resource('vehicles', Base\VehicleAPIController::class);
 
-    Route::resource('account_accounts', Accounting\AccountAccountAPIController::class);
-    Route::resource('account_types', Accounting\AccountTypeAPIController::class);
-    Route::resource('account_journals', Accounting\AccountJournalAPIController::class);
-    Route::resource('account_invoices', Accounting\AccountInvoiceAPIController::class);
-    Route::resource('account_moves', Accounting\AccountMoveAPIController::class);
+    Route::resource('ifrs_accounts', Accounting\IfrsAccountsAPIController::class);
+    Route::resource('ifrs_categories', Accounting\IfrsCategoriesAPIController::class);
+    Route::resource('ifrs_entities', Accounting\IfrsEntitiesAPIController::class);
+    Route::resource('ifrs_currencies', Accounting\IfrsCurrenciesAPIController::class);
+    Route::resource('ifrs_exchange_rates', Accounting\IfrsExchangeRatesAPIController::class);
+    Route::resource('ifrs_reporting_periods', Accounting\IfrsReportingPeriodsAPIController::class);
+    Route::resource('ifrs_vats', Accounting\IfrsVatsAPIController::class);
+});
+
+
+Route::group(['prefix' => 'inventory'], function () {
+    Route::resource('btb_view_tmps', App\Http\Controllers\API\Inventory\Inventory\BtbViewTmpAPIController::class);
 });

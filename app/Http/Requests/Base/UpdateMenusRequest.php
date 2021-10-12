@@ -25,7 +25,7 @@ class UpdateMenusRequest extends FormRequest
     public function rules()
     {
         $rules = Menus::$rules;
-        $id = $this->segment(2);
+        $id = $this->route('menu');
         $rules['name'] = $rules['name'].','.$id;
 
         return $rules;

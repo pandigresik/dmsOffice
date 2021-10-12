@@ -6,8 +6,12 @@ use App\Traits\SearchModelTrait;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
+use IFRS\Traits\IFRSUser;
+use IFRS\Traits\Recycling;
+use IFRS\Interfaces\Recyclable;
 
 /**
  * @SWG\Definition(
@@ -59,8 +63,11 @@ use Spatie\Permission\Traits\HasRoles;
  *      )
  * )
  */
-class User extends Authenticatable
+class User extends Authenticatable implements Recyclable
 {
+    use IFRSUser;
+    use Recycling;
+    use SoftDeletes;
     use HasFactory;
     use HasRoles;
     use HasPermissions;

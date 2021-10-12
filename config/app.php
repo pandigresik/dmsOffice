@@ -1,5 +1,6 @@
 <?php
 
+
 return [
 
     /*
@@ -184,7 +185,8 @@ return [
         App\Providers\DoctrineServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         InfyOm\GeneratorBuilder\GeneratorBuilderServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class        
+        Spatie\Permission\PermissionServiceProvider::class,      
+        //RickSelby\Laravel\GateCache\GateCacheProvider::class
     ],
 
     /*

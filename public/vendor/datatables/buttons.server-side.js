@@ -268,6 +268,19 @@
     }
   }
 
+  DataTable.ext.buttons.import = {
+    className: 'buttons-import',
+
+    text: function (dt) {
+      return '<i class="fa fa-upload"></i> ' + dt.i18n('buttons.import', 'Import')
+    },
+
+    action: function (e, dt, button, config) {      
+      const _ajaxUrl = dt.ajax.url()      
+      window.location = 'base/import/create?urlOrigin='+_ajaxUrl
+    }
+  }
+
   if (typeof DataTable.ext.buttons.copyHtml5 !== 'undefined') {
     $.extend(DataTable.ext.buttons.copyHtml5, {
       text: function (dt) {

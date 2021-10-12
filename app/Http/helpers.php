@@ -54,6 +54,19 @@ if (!function_exists('convertArrayPairValue')) {
     }
 }
 
+if (!function_exists('convertArrayPairValueWithKey')) {
+    function convertArrayPairValueWithKey($values, $keyPair = 'text,value')
+    {
+        $result = [];
+        foreach ($values as $k => $value) {
+            list($key, $val) = explode(',',$keyPair);
+            array_push($result, [$key => $value, $val => $k]);
+        }
+
+        return $result;
+    }
+}
+
 if (!function_exists('generateMenu')) {
     function generateMenu(array $tree)
     {
@@ -63,7 +76,7 @@ if (!function_exists('generateMenu')) {
                                         &nbsp;<span>'.$item->name ?? 'header'.'</span>')->addClass('c-sidebar-nav-dropdown-toggle');
                 $menu->submenu($header, generateMenu($item->children->all())->addClass('c-sidebar-nav-dropdown-items')->addParentClass('c-sidebar-nav-dropdown'));
             } else {
-                $menu->addIfCan($item->permissions->pluck('name'), Html::raw('<a class="c-sidebar-nav-link" href="'.$item->route.'">
+                $menu->addIfCan($item->permissions->pluck('name'), Html::raw('<a class="c-sidebar-nav-link" href="'.$item->route.'">                
                                         <i class="'.$item->icon.'"></i>
                                         &nbsp;<span>'.$item->name.'</span>
                                     </a>')->addParentClass('nav-item'));

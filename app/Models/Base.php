@@ -4,21 +4,27 @@ namespace App\Models;
 
 use App\Traits\BlameableCustomTrait;
 use App\Traits\SearchModelTrait;
+use App\Traits\ShowColumnOptionTrait;
 use DigitalCloud\Blameable\Traits\Blameable;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+
 
 class Base extends Model
 {
     use Cachable;
     use SearchModelTrait;
+    use ShowColumnOptionTrait;
+    use LogsActivity;
     use Blameable, BlameableCustomTrait{
         BlameableCustomTrait::bootBlameable insteadof Blameable;
     }
+
+    protected static $logFillable = true;
+
     const CREATED_BY = 'created_by';
-    const UPDATED_BY = 'updated_by';
-    /** this column shown on dropdown, usually name */
-    protected $showColumnOption = 'name';
+    const UPDATED_BY = 'updated_by';    
 
     /**
      * Get the name of the "created by" column.
@@ -41,28 +47,6 @@ class Base extends Model
     }
 
     /**
-     * Get the value of showColumnOption.
-     */
-    public function getShowColumnOption()
-    {
-        return $this->showColumnOption ?? $this->getKeyName();
-    }
-
-    /**
-     * Set the value of showColumnOption.
-     *
-     * @param mixed $showColumnOption
-     *
-     * @return self
-     */
-    public function setShowColumnOption($showColumnOption)
-    {
-        $this->showColumnOption = $showColumnOption;
-
-        return $this;
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function createdBy()
@@ -76,5 +60,5 @@ class Base extends Model
     public function updatedBy()
     {
         return $this->belongsTo(\App\Models\Base\User::class, static::UPDATED_BY);
-    }
+    }    
 }

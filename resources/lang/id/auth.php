@@ -19,6 +19,7 @@ return [
     'app' => [
         'create' => 'Buat',
         'export' => 'Export',
+        'import' => 'Import',
         'print' => 'Cetak',
         'reset' => 'Reset',
         'reload' => 'Refresh'

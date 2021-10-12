@@ -22,6 +22,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //Route::group(['middleware' => ['auth','role:administrator']],function (){
 Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'base'], function () {
+        Route::resource('import', App\Http\Controllers\Base\ImportController::class, ['as' => 'base']);
+        Route::resource('export', App\Http\Controllers\Base\ExportController::class, ['as' => 'base']);
         Route::resource('roles', App\Http\Controllers\Base\RoleController::class, ['as' => 'base']);
         Route::resource('permissions', App\Http\Controllers\Base\PermissionController::class, ['as' => 'base']);
         Route::resource('users', App\Http\Controllers\Base\UserController::class, ['as' => 'base']);
@@ -52,11 +54,13 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['prefix' => 'accounting'], function () {
-        Route::resource('accountAccounts', App\Http\Controllers\Accounting\AccountAccountController::class, ['as' => 'accounting']);
-        Route::resource('accountTypes', App\Http\Controllers\Accounting\AccountTypeController::class, ['as' => 'accounting']);
-        Route::resource('accountJournals', App\Http\Controllers\Accounting\AccountJournalController::class, ['as' => 'accounting']);
-        Route::resource('accountInvoices', App\Http\Controllers\Accounting\AccountInvoiceController::class, ['as' => 'accounting']);
-        Route::resource('accountMoves', App\Http\Controllers\Accounting\AccountMoveController::class, ['as' => 'accounting']);
+        Route::resource('ifrsAccounts', App\Http\Controllers\Accounting\IfrsAccountsController::class, ['as' => 'accounting']);
+        Route::resource('ifrsCategories', App\Http\Controllers\Accounting\IfrsCategoriesController::class, ['as' => 'accounting']);
+        Route::resource('ifrsEntities', App\Http\Controllers\Accounting\IfrsEntitiesController::class, ['as' => 'accounting']);
+        Route::resource('ifrsCurrencies', App\Http\Controllers\Accounting\IfrsCurrenciesController::class, ['as' => 'accounting']);
+        Route::resource('ifrsExchangeRates', App\Http\Controllers\Accounting\IfrsExchangeRatesController::class, ['as' => 'accounting']);
+        Route::resource('ifrsReportingPeriods', App\Http\Controllers\Accounting\IfrsReportingPeriodsController::class, ['as' => 'accounting']);
+        Route::resource('ifrsVats', App\Http\Controllers\Accounting\IfrsVatsController::class, ['as' => 'accounting']);
     });
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');
     Route::get('/events', [App\Http\Controllers\EventsController::class, 'index'])->name('events.index');
@@ -71,3 +75,11 @@ Route::post('generator_builder/rollback', '\InfyOm\GeneratorBuilder\Controllers\
     'generator_builder/generate-from-file',
     '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@generateFromFile'
 )->name('io_generator_builder_generate_from_file');
+
+Route::get('/demo', [App\Http\Controllers\DemoAccountingController::class, 'index']);
+
+
+
+Route::group(['prefix' => 'inventory'], function () {
+    Route::resource('btbViewTmps', App\Http\Controllers\Inventory\Inventory\BtbViewTmpController::class, ["as" => 'inventory']);
+});

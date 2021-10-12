@@ -6,54 +6,6 @@ use App\Models\Base as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Kalnoy\Nestedset\NodeTrait;
 
-/**
- * @SWG\Definition(
- *      definition="Menus",
- *      required={"name", "status"},
- *      @SWG\Property(
- *          property="id",
- *          description="id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="name",
- *          description="name",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="description",
- *          description="description",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="status",
- *          description="status",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="icon",
- *          description="icon",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="route",
- *          description="route",
- *          type="string"
- *      ),
- *      @SWG\Property(
- *          property="parent_id",
- *          description="parent_id",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="seq_number",
- *          description="seq_number",
- *          type="boolean"
- *      )
- * )
- */
 class MenusTree extends Model
 {
     use HasFactory;

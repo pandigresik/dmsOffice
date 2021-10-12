@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\CompanyDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateCompanyRequest;
 use App\Http\Requests\Base\UpdateCompanyRequest;
 use App\Repositories\Base\CompanyRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class CompanyController extends AppBaseController
 {
-    /** @var  CompanyRepository */
+    /** @var CompanyRepository */
     private $companyRepository;
 
     public function __construct(CompanyRepository $companyRepo)
@@ -25,7 +23,6 @@ class CompanyController extends AppBaseController
     /**
      * Display a listing of the Company.
      *
-     * @param CompanyDataTable $companyDataTable
      * @return Response
      */
     public function index(CompanyDataTable $companyDataTable)
@@ -46,8 +43,6 @@ class CompanyController extends AppBaseController
     /**
      * Store a newly created Company in storage.
      *
-     * @param CreateCompanyRequest $request
-     *
      * @return Response
      */
     public function store(CreateCompanyRequest $request)
@@ -64,7 +59,7 @@ class CompanyController extends AppBaseController
     /**
      * Display the specified Company.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class CompanyController extends AppBaseController
     /**
      * Show the form for editing the specified Company.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class CompanyController extends AppBaseController
     /**
      * Update the specified Company in storage.
      *
-     * @param  int              $id
-     * @param UpdateCompanyRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class CompanyController extends AppBaseController
     /**
      * Remove the specified Company from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class CompanyController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Company from storage.         
+     * Provide options item based on relationship model Company from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

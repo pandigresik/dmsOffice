@@ -23,7 +23,7 @@ class CreateMenusTable extends Migration
             $table->integer('parent_id')->nullable();
             $table->unsignedInteger('_lft')->nullable();
             $table->unsignedInteger('_rgt')->nullable();
-            $table->integer('seq_number')->nullable()->default(1);
+            $table->tinyInteger('seq_number')->nullable()->default(1);
         });
     }
 

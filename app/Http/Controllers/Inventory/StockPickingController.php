@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\StockPickingDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateStockPickingRequest;
 use App\Http\Requests\Inventory\UpdateStockPickingRequest;
+use App\Repositories\Base\VendorRepository;
 use App\Repositories\Inventory\StockPickingRepository;
 use App\Repositories\Inventory\StockPickingTypeRepository;
 use App\Repositories\Inventory\WarehouseRepository;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class StockPickingController extends AppBaseController
 {
-    /** @var  StockPickingRepository */
+    /** @var StockPickingRepository */
     private $stockPickingRepository;
 
     public function __construct(StockPickingRepository $stockPickingRepo)
@@ -26,7 +26,6 @@ class StockPickingController extends AppBaseController
     /**
      * Display a listing of the StockPicking.
      *
-     * @param StockPickingDataTable $stockPickingDataTable
      * @return Response
      */
     public function index(StockPickingDataTable $stockPickingDataTable)
@@ -47,8 +46,6 @@ class StockPickingController extends AppBaseController
     /**
      * Store a newly created StockPicking in storage.
      *
-     * @param CreateStockPickingRequest $request
-     *
      * @return Response
      */
     public function store(CreateStockPickingRequest $request)
@@ -65,7 +62,7 @@ class StockPickingController extends AppBaseController
     /**
      * Display the specified StockPicking.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -85,7 +82,7 @@ class StockPickingController extends AppBaseController
     /**
      * Show the form for editing the specified StockPicking.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -105,8 +102,7 @@ class StockPickingController extends AppBaseController
     /**
      * Update the specified StockPicking in storage.
      *
-     * @param  int              $id
-     * @param UpdateStockPickingRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -130,7 +126,7 @@ class StockPickingController extends AppBaseController
     /**
      * Remove the specified StockPicking from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -152,18 +148,22 @@ class StockPickingController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model StockPicking from storage.         
+     * Provide options item based on relationship model StockPicking from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $stockPickingType = new StockPickingTypeRepository(app());
         $warehouse = new WarehouseRepository(app());
+        $vendor = new VendorRepository(app());
+
         return [
             'stockPickingTypeItems' => ['' => __('crud.option.stockPickingType_placeholder')] + $stockPickingType->pluck(),
-            'warehouseItems' => ['' => __('crud.option.warehouse_placeholder')] + $warehouse->pluck()            
+            'warehouseItems' => ['' => __('crud.option.warehouse_placeholder')] + $warehouse->pluck(),
+            'vendorItems' => ['' => __('crud.option.vendor_placeholder')] + $vendor->pluck(),
         ];
     }
 }

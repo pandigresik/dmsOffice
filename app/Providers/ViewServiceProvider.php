@@ -1,12 +1,6 @@
 <?php
 
 namespace App\Providers;
-use App\Models\Inventory\StockPicking;
-use App\Models\Accounting\AccountJournal;
-use App\Models\Base\Vendor;
-use App\Models\Accounting\DefaultCreditAccount;
-use App\Models\Accounting\DefaultDebitAccount;
-use App\Models\Base\Company;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +22,5 @@ class ViewServiceProvider extends ServiceProvider
         //     $stockPickingItems = StockPicking::pluck('id')->toArray();
         //     $view->with('stockPickingItems', $stockPickingItems);
         // });
-        
     }
 }

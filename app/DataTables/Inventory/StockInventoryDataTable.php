@@ -112,7 +112,7 @@ class StockInventoryDataTable extends DataTable
      */
     protected function getColumns()
     {
-        $listWarehouse = (new WarehouseRepository(app()))->all([], ['id as value', 'name as text'])->toArray();
+        $listWarehouse = (new WarehouseRepository(app()))->all([], null, null, ['id as value', 'name as text'])->toArray();
 
         return [
             'name' => new Column(['title' => __('models/stockInventories.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),

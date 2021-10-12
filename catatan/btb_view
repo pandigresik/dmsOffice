@@ -1,0 +1,18 @@
+create view btb_view as 
+select '2021-10-01' as Tgl_BTB,'079-0000076' as No_BTB, 116 as ID_Vendor, 'PT. TIV-Prod pandaan' as Nama_Vendor, 'LMS' as Nama_PT, 9087878 as No_CO, 67678687 as No_DN,'2021-09-24' as Tgl_sjp, 'Pasuruan' as Depo, 'A.220' as Nama_Produk
+union
+select '2021-10-02' as Tgl_BTB,'079-0000076' as No_BTB, 116 as ID_Vendor, 'PT. TIV-Prod pandaan' as Nama_Vendor, 'LMS' as Nama_PT, 9087878 as No_CO, 67678687 as No_DN,'2021-09-24' as Tgl_sjp, 'Pasuruan' as Depo, 'A.220' as Nama_Produk
+union
+select '2021-10-03' as Tgl_BTB,'079-0000076' as No_BTB, 116 as ID_Vendor, 'PT. TIV-Prod pandaan' as Nama_Vendor, 'LMS' as Nama_PT, 9087878 as No_CO, 67678687 as No_DN,'2021-09-24' as Tgl_sjp, 'Pasuruan' as Depo, 'A.220' as Nama_Produk
+union
+select '2021-10-04' as Tgl_BTB,'079-0000076' as No_BTB, 116 as ID_Vendor, 'PT. TIV-Prod pandaan' as Nama_Vendor, 'LMS' as Nama_PT, 9087878 as No_CO, 67678687 as No_DN,'2021-09-24' as Tgl_sjp, 'Pasuruan' as Depo, 'A.220' as Nama_Produk
+union
+select '2021-10-05' as Tgl_BTB,'079-0000076' as No_BTB, 116 as ID_Vendor, 'PT. TIV-Prod pandaan' as Nama_Vendor, 'LMS' as Nama_PT, 9087878 as No_CO, 67678687 as No_DN,'2021-09-24' as Tgl_sjp, 'Pasuruan' as Depo, 'A.220' as Nama_Produk
+union
+select '2021-10-06' as Tgl_BTB,'079-0000076' as No_BTB, 116 as ID_Vendor, 'PT. TIV-Prod pandaan' as Nama_Vendor, 'LMS' as Nama_PT, 9087878 as No_CO, 67678687 as No_DN,'2021-09-24' as Tgl_sjp, 'Pasuruan' as Depo, 'A.220' as Nama_Produk
+union
+select '2021-10-06' as Tgl_BTB,'079-0000076' as No_BTB, 116 as ID_Vendor, 'PT. TIV-Prod pandaan' as Nama_Vendor, 'LMS' as Nama_PT, 9087878 as No_CO, 67678687 as No_DN,'2021-09-24' as Tgl_sjp, 'Pasuruan' as Depo, 'A.220' as Nama_Produk
+
+
+create table btb_view_tmp from 
+select * from btb_view
