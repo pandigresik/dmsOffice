@@ -36,7 +36,7 @@ class VendorDataTable extends DataTable
         })->editColumn('is_expedition', function($m){
 
             return $m->is_expedition ? 'Ya' : 'Tidak';
-        })->addColumn('action', 'base.vendor_expeditions.datatables_actions');
+        })->addColumn('action', 'base.vendors.datatables_actions');
     }
 
     /**
@@ -111,12 +111,12 @@ class VendorDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'name' => new Column(['title' => __('models/Vendors.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
-            'address' => new Column(['title' => __('models/Vendors.fields.address'), 'data' => 'address', 'searchable' => true, 'elmsearch' => 'text']),
-            'email' => new Column(['title' => __('models/Vendors.fields.email'), 'data' => 'email', 'searchable' => true, 'elmsearch' => 'text']),
-            'is_supplier' => new Column(['title' => __('models/Vendors.fields.is_supplier'), 'data' => 'is_supplier', 'searchable' => true, 'elmsearch' => 'text']),
-            'is_expedition' => new Column(['title' => __('models/Vendors.fields.is_expedition'), 'data' => 'is_expedition', 'searchable' => true, 'elmsearch' => 'text']),
-            'is_customer' => new Column(['title' => __('models/Vendors.fields.is_customer'), 'data' => 'is_customer', 'searchable' => true, 'elmsearch' => 'text']),
+            'name' => new Column(['title' => __('models/vendors.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
+            'address' => new Column(['title' => __('models/vendors.fields.address'), 'data' => 'address', 'searchable' => true, 'elmsearch' => 'text']),
+            'email' => new Column(['title' => __('models/vendors.fields.email'), 'data' => 'email', 'searchable' => true, 'elmsearch' => 'text']),
+            'is_supplier' => new Column(['title' => __('models/vendors.fields.is_supplier'), 'data' => 'is_supplier', 'searchable' => true, 'elmsearch' => 'text']),
+            'is_expedition' => new Column(['title' => __('models/vendors.fields.is_expedition'), 'data' => 'is_expedition', 'searchable' => true, 'elmsearch' => 'text']),
+            'is_customer' => new Column(['title' => __('models/vendors.fields.is_customer'), 'data' => 'is_customer', 'searchable' => true, 'elmsearch' => 'text']),
 
         ];
     }
@@ -128,6 +128,6 @@ class VendorDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'vendor_expeditions_datatable_'.time();
+        return 'vendors_datatable_'.time();
     }
 }

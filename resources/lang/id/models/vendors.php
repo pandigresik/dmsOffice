@@ -2,7 +2,7 @@
 
 return array (
   'singular' => 'Vendor',
-  'plural' => 'Vendors',
+  'plural' => 'vendors',
   'fields' => 
   array (
     'id' => 'Id',

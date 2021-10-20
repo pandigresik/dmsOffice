@@ -28,7 +28,7 @@ class VendorController extends AppBaseController
      */
     public function index(VendorDataTable $VendorDataTable)
     {
-        return $VendorDataTable->render('base.vendor_expeditions.index');
+        return $VendorDataTable->render('base.vendors.index');
     }
 
     /**
@@ -38,7 +38,16 @@ class VendorController extends AppBaseController
      */
     public function create()
     {
-        return view('base.vendor_expeditions.create')->with($this->getOptionItems());
+        $dataTabs = [
+            'contact' => ['text' => 'Contact Person', 'url' => route('demo'), 'class' => ''],
+            'location' => ['text' => 'Tujuan Pengiriman', 'url' => 'tes.php', 'class' => ''],
+            'vehicle' => ['text' => 'Kendaraan', 'url' => 'tes.php', 'class' => ''],
+            'trip' => ['text' => 'Trip', 'url' => 'tes.php', 'class' => ''],
+            'description' => ['text' => 'Keterangan', 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
+        ];
+        return view('base.vendors.create')
+            ->with('dataTabs',$dataTabs)
+            ->with($this->getOptionItems());
     }
 
     /**
@@ -51,9 +60,9 @@ class VendorController extends AppBaseController
         $input = $request->all();        
         $Vendor = $this->VendorRepository->create($input);
         
-        Flash::success(__('messages.saved', ['model' => __('models/Vendors.singular')]));
+        Flash::success(__('messages.saved', ['model' => __('models/vendors.singular')]));
 
-        return redirect(route('base.Vendors.index'));
+        return redirect(route('base.vendors.index'));
     }
 
     /**
@@ -68,12 +77,12 @@ class VendorController extends AppBaseController
         $Vendor = $this->VendorRepository->find($id);
 
         if (empty($Vendor)) {
-            Flash::error(__('models/Vendors.singular').' '.__('messages.not_found'));
+            Flash::error(__('models/vendors.singular').' '.__('messages.not_found'));
 
-            return redirect(route('base.Vendors.index'));
+            return redirect(route('base.vendors.index'));
         }
 
-        return view('base.vendor_expeditions.show')->with('Vendor', $Vendor)->with($this->getOptionItems());
+        return view('base.vendors.show')->with('Vendor', $Vendor)->with($this->getOptionItems());
     }
 
     /**
@@ -88,12 +97,12 @@ class VendorController extends AppBaseController
         $Vendor = $this->VendorRepository->find($id);
 
         if (empty($Vendor)) {
-            Flash::error(__('messages.not_found', ['model' => __('models/Vendors.singular')]));
+            Flash::error(__('messages.not_found', ['model' => __('models/vendors.singular')]));
 
-            return redirect(route('base.Vendors.index'));
+            return redirect(route('base.vendors.index'));
         }
 
-        return view('base.vendor_expeditions.edit')->with('Vendor', $Vendor)->with($this->getOptionItems());
+        return view('base.vendors.edit')->with('Vendor', $Vendor)->with($this->getOptionItems());
     }
 
     /**
@@ -108,16 +117,16 @@ class VendorController extends AppBaseController
         $Vendor = $this->VendorRepository->find($id);
 
         if (empty($Vendor)) {
-            Flash::error(__('messages.not_found', ['model' => __('models/Vendors.singular')]));
+            Flash::error(__('messages.not_found', ['model' => __('models/vendors.singular')]));
 
-            return redirect(route('base.Vendors.index'));
+            return redirect(route('base.vendors.index'));
         }
         
         $Vendor = $this->VendorRepository->update($request->all(), $id);        
 
-        Flash::success(__('messages.updated', ['model' => __('models/Vendors.singular')]));
+        Flash::success(__('messages.updated', ['model' => __('models/vendors.singular')]));
 
-        return redirect(route('base.Vendors.index'));
+        return redirect(route('base.vendors.index'));
     }
 
     /**
@@ -132,16 +141,16 @@ class VendorController extends AppBaseController
         $Vendor = $this->VendorRepository->find($id);
 
         if (empty($Vendor)) {
-            Flash::error(__('messages.not_found', ['model' => __('models/Vendors.singular')]));
+            Flash::error(__('messages.not_found', ['model' => __('models/vendors.singular')]));
 
-            return redirect(route('base.Vendors.index'));
+            return redirect(route('base.vendors.index'));
         }
 
         $this->VendorRepository->delete($id);
 
-        Flash::success(__('messages.deleted', ['model' => __('models/Vendors.singular')]));
+        Flash::success(__('messages.deleted', ['model' => __('models/vendors.singular')]));
 
-        return redirect(route('base.Vendors.index'));
+        return redirect(route('base.vendors.index'));
     }
 
     /**

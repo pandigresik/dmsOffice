@@ -1,3 +1,0 @@
-id,name,active,currency_id,company_id,sequence,discount_policy,create_uid,create_date,write_uid,write_date
-1,Public Pricelist,t,12,,1,with_discount,1,2021-08-04 22:55:05.627265,1,2021-08-04 22:56:30.77256
-2,Default USD pricelist,t,2,,16,with_discount,1,2021-08-13 14:02:16.099817,1,2021-08-13 14:02:16.099817

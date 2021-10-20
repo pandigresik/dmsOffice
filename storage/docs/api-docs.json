@@ -2991,13 +2991,13 @@
                 }
             }
         },
-        "/Vendors": {
+        "/vendors": {
             "get": {
                 "tags": [
                     "Vendor"
                 ],
-                "summary": "Get a listing of the Vendors.",
-                "description": "Get all Vendors",
+                "summary": "Get a listing of the vendors.",
+                "description": "Get all vendors",
                 "produces": [
                     "application/json"
                 ],
@@ -3065,7 +3065,7 @@
                 }
             }
         },
-        "/Vendors/{id}": {
+        "/vendors/{id}": {
             "get": {
                 "tags": [
                     "Vendor"

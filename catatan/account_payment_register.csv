@@ -1,2 +1,0 @@
-id,payment_date,amount,communication,group_payment,currency_id,journal_id,partner_bank_id,payment_type,partner_type,source_amount,source_amount_currency,source_currency_id,can_edit_wizard,can_group_payments,company_id,partner_id,payment_method_id,payment_difference_handling,writeoff_account_id,writeoff_label,create_uid,create_date,write_uid,write_date,payment_token_id
-1,2021-08-13,700,IRYT90877,t,12,7,2,outbound,supplier,700.0,700,12,t,f,1,10,2,open,,Write-Off,2,2021-08-13 14:00:01.599179,2,2021-08-13 14:00:01.599179,

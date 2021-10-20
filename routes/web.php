@@ -30,8 +30,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('menus', App\Http\Controllers\Base\MenusController::class, ['as' => 'base']);
         // Route::resource('menuPermissions', App\Http\Controllers\Base\MenuPermissionsController::class, ["as" => 'base']);
         Route::resource('vehicleGroups', App\Http\Controllers\Base\VehicleGroupController::class, ['as' => 'base']);
-        Route::resource('Vendors', App\Http\Controllers\Base\VendorController::class, ['as' => 'base']);
-        Route::resource('Vendors.vehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
+        Route::resource('vendors', App\Http\Controllers\Base\VendorController::class, ['as' => 'base']);
+        Route::resource('vendors.vehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
         Route::resource('cities', App\Http\Controllers\Base\CityController::class, ['as' => 'base']);
         Route::resource('routeTrips', App\Http\Controllers\Base\RouteTripController::class, ['as' => 'base']);
 
@@ -76,9 +76,7 @@ Route::post('generator_builder/rollback', '\InfyOm\GeneratorBuilder\Controllers\
     '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@generateFromFile'
 )->name('io_generator_builder_generate_from_file');
 
-Route::get('/demo', [App\Http\Controllers\DemoAccountingController::class, 'index']);
-
-
+Route::get('/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');
 
 Route::group(['prefix' => 'inventory'], function () {
     Route::resource('btbViewTmps', App\Http\Controllers\Inventory\Inventory\BtbViewTmpController::class, ["as" => 'inventory']);

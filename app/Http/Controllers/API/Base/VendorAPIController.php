@@ -28,10 +28,10 @@ class VendorAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/Vendors",
-     *      summary="Get a listing of the Vendors.",
+     *      path="/vendors",
+     *      summary="Get a listing of the vendors.",
      *      tags={"Vendor"},
-     *      description="Get all Vendors",
+     *      description="Get all vendors",
      *      produces={"application/json"},
      *      @SWG\Response(
      *          response=200,
@@ -57,20 +57,20 @@ class VendorAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $Vendors = $this->VendorRepository->all(
+        $vendors = $this->VendorRepository->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
         );
 
-        return $this->sendResponse(VendorResource::collection($Vendors), 'Vendor Expeditions retrieved successfully');
+        return $this->sendResponse(VendorResource::collection($vendors), 'Vendor Expeditions retrieved successfully');
     }
 
     /**
      * @return Response
      *
      * @SWG\Post(
-     *      path="/Vendors",
+     *      path="/vendors",
      *      summary="Store a newly created Vendor in storage",
      *      tags={"Vendor"},
      *      description="Store Vendor",
@@ -118,7 +118,7 @@ class VendorAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Get(
-     *      path="/Vendors/{id}",
+     *      path="/vendors/{id}",
      *      summary="Display the specified Vendor",
      *      tags={"Vendor"},
      *      description="Get Vendor",
@@ -169,7 +169,7 @@ class VendorAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Put(
-     *      path="/Vendors/{id}",
+     *      path="/vendors/{id}",
      *      summary="Update the specified Vendor in storage",
      *      tags={"Vendor"},
      *      description="Update Vendor",
@@ -231,7 +231,7 @@ class VendorAPIController extends AppBaseController
      * @return Response
      *
      * @SWG\Delete(
-     *      path="/Vendors/{id}",
+     *      path="/vendors/{id}",
      *      summary="Remove the specified Vendor from storage",
      *      tags={"Vendor"},
      *      description="Delete Vendor",

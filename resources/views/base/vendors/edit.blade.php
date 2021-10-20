@@ -4,7 +4,7 @@
     @push('breadcrumb')
         <ol class="breadcrumb border-0 m-0">
           <li class="breadcrumb-item">
-             <a href="{!! route('base.Vendors.index') !!}">@lang('models/Vendors.singular')</a>
+             <a href="{!! route('base.vendors.index') !!}">@lang('models/vendors.singular')</a>
           </li>
           <li class="breadcrumb-item active">@lang('crud.edit')</li>
         </ol>
@@ -14,24 +14,24 @@
              @include('coreui-templates::common.errors')
              <div class="row">
                  <div class="col-lg-12">
-                    {!! Form::model($Vendor, ['route' => ['base.Vendors.update', $Vendor->id], 'method' => 'patch']) !!}  
+                    {!! Form::model($Vendor, ['route' => ['base.vendors.update', $Vendor->id], 'method' => 'patch']) !!}  
                       <div class="card">                          
                           <div class="card-header">
                               <i class="fa fa-edit fa-lg"></i>
-                              <strong>Edit @lang('models/Vendors.singular')</strong>
+                              <strong>Edit @lang('models/vendors.singular')</strong>
                           </div>
                           <div class="card-body">                              
 
-                              @include('base.vendor_expeditions.fields')
+                              @include('base.vendors.fields')
                               <!-- List Route Field -->
-                              @include('base.vendor_expeditions.route_trips')
+                              @include('base.vendors.route_trips')
                               
                             </div>
                           <div class="card-footer">
                           <!-- Submit Field -->
                             <div class="form-group col-sm-12">
                                 {!! Form::submit(__('crud.save'), ['class' => 'btn btn-primary']) !!}
-                                <a href="{{ route('base.Vendors.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
+                                <a href="{{ route('base.vendors.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
                             </div>
                           </div>                            
                       </div>                    

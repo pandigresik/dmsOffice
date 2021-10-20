@@ -5,7 +5,7 @@ namespace App\Models\Base;
 use App\Traits\SearchModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Models\Permission as Model;
-
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 /**
  * @SWG\Definition(
  *      definition="Permission",
@@ -42,6 +42,7 @@ use Spatie\Permission\Models\Permission as Model;
 class Permission extends Model
 {
     use HasFactory;
+    use Cachable;
     use SearchModelTrait;
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';

@@ -15,7 +15,7 @@
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
                              @lang('models/vehicles.plural')
-                             <a class="pull-right" href="{{ route('base.Vendors.vehicles.create', $VendorId) }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                             <a class="pull-right" href="{{ route('base.vendors.vehicles.create', $VendorId) }}"><i class="fa fa-plus-square fa-lg"></i></a>
                          </div>
                          <div class="card-body">
                              @include('base.vehicles.table')

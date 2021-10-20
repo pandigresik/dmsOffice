@@ -6,7 +6,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 @php
-                                    $vendorTrip = isset($Vendor) ? $Vendor->trips()->pluck('route_trip_id','route_trip_id') : [];                                     
+                                    $vendorTrip = isset($vendor) ? $vendor->trips()->pluck('route_trip_id','route_trip_id') : [];                                     
                                 @endphp
                                 <div class="row">
                                     @forelse ($trips as $key => $groupVehicle)

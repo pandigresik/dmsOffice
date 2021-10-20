@@ -60,7 +60,7 @@ class VehicleController extends AppBaseController
 
         Flash::success(__('messages.saved', ['model' => __('models/vehicles.singular')]));
 
-        return redirect(route('base.Vendors.vehicles.index', $id));
+        return redirect(route('base.vendors.vehicles.index', $id));
     }
 
     /**

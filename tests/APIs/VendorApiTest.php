@@ -19,7 +19,7 @@ class VendorApiTest extends TestCase
 
         $this->response = $this->json(
             'POST',
-            '/api/base/vendor_expeditions', $Vendor
+            '/api/base/vendors', $Vendor
         );
 
         $this->assertApiResponse($Vendor);
@@ -34,7 +34,7 @@ class VendorApiTest extends TestCase
 
         $this->response = $this->json(
             'GET',
-            '/api/base/vendor_expeditions/'.$Vendor->id
+            '/api/base/vendors/'.$Vendor->id
         );
 
         $this->assertApiResponse($Vendor->toArray());
@@ -50,7 +50,7 @@ class VendorApiTest extends TestCase
 
         $this->response = $this->json(
             'PUT',
-            '/api/base/vendor_expeditions/'.$Vendor->id,
+            '/api/base/vendors/'.$Vendor->id,
             $editedVendor
         );
 
@@ -66,13 +66,13 @@ class VendorApiTest extends TestCase
 
         $this->response = $this->json(
             'DELETE',
-             '/api/base/vendor_expeditions/'.$Vendor->id
+             '/api/base/vendors/'.$Vendor->id
          );
 
         $this->assertApiSuccess();
         $this->response = $this->json(
             'GET',
-            '/api/base/vendor_expeditions/'.$Vendor->id
+            '/api/base/vendors/'.$Vendor->id
         );
 
         $this->response->assertStatus(404);
