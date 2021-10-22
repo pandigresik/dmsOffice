@@ -1,8 +1,10 @@
 {!! Form::open(['route' => ['base.vendors.destroy', $id], 'method' => 'delete']) !!}
 <div class='btn-group'>
-    <a href="{{ route('base.vendors.vehicles.index', $id) }}" class='btn btn-ghost-success'>
+    <!--     
+    <a href="{ { route('base.vendors.vehicles.index', $id) }}" class='btn btn-ghost-success'>
        <i class="fa fa-truck"></i>
     </a>
+    -->
     <a href="{{ route('base.vendors.show', $id) }}" class='btn btn-ghost-success'>
        <i class="fa fa-eye"></i>
     </a>

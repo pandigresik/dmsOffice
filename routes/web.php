@@ -31,7 +31,13 @@ Route::group(['middleware' => ['auth']], function () {
         // Route::resource('menuPermissions', App\Http\Controllers\Base\MenuPermissionsController::class, ["as" => 'base']);
         Route::resource('vehicleGroups', App\Http\Controllers\Base\VehicleGroupController::class, ['as' => 'base']);
         Route::resource('vendors', App\Http\Controllers\Base\VendorController::class, ['as' => 'base']);
-        Route::resource('vendors.vehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
+        Route::resource('vendors.contacts', App\Http\Controllers\Base\VendorContactController::class, ["as" => 'base'])->except(['create']);
+        Route::get('vendors/contacts/form/{json?}', 'App\Http\Controllers\Base\VendorContactController@form')->name('base.vendors.contacts.form');
+        Route::resource('vendors.locations', App\Http\Controllers\Base\VendorLocationController::class, ["as" => 'base'])->except(['create']);
+        Route::get('vendors/locations/form/{json?}', 'App\Http\Controllers\Base\VendorLocationController@form')->name('base.vendors.locations.form');
+        Route::resource('vendors.vehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base'])->except(['create']);
+        Route::get('vendors/vehicles/form/{json?}', 'App\Http\Controllers\Base\VehicleController@form')->name('base.vendors.vehicles.form');
+        //Route::resource('vehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
         Route::resource('cities', App\Http\Controllers\Base\CityController::class, ['as' => 'base']);
         Route::resource('routeTrips', App\Http\Controllers\Base\RouteTripController::class, ['as' => 'base']);
 
@@ -76,8 +82,8 @@ Route::post('generator_builder/rollback', '\InfyOm\GeneratorBuilder\Controllers\
     '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@generateFromFile'
 )->name('io_generator_builder_generate_from_file');
 
-Route::get('/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');
+Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');
 
 Route::group(['prefix' => 'inventory'], function () {
-    Route::resource('btbViewTmps', App\Http\Controllers\Inventory\Inventory\BtbViewTmpController::class, ["as" => 'inventory']);
+    Route::resource('btbViewTmps', App\Http\Controllers\Inventory\BtbViewTmpController::class, ["as" => 'inventory']);
 });

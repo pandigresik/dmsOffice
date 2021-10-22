@@ -5,6 +5,7 @@ import 'jquery.redirect/jquery.redirect'
 import './basePath.js'
 import 'ckeditor'
 import 'ckeditor/adapters/jquery'
+import bootbox from 'bootbox'
 
 import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -12,7 +13,6 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import FileUploadWithPreview from 'file-upload-with-preview'
 
-const bootbox = require('bootbox')
 class Main {
   setWorkflow (f) {
     this.workflow = f
@@ -100,13 +100,13 @@ class Main {
         }, 500)
       } catch (e) {
 
-      }
-      // bootbox.hideAll()
+      }      
     }
   }
 
   loadContent (_url, _data, _type, _target, _callback) {
     const _mainElm = $(_target)
+    const _ini = this
     $.ajax({
       url: _url,
       data: _data,
@@ -119,14 +119,11 @@ class Main {
         _mainElm.html(data)
       }
     }).done(function () {
-      this.initFormatInput(_mainElm)
+      _ini.initFormatInput(_mainElm)
       if (_callback !== undefined) {
         _callback()
-      }
-      if (_mainElm.find('li.tabclick.default>a').length) {
-        _mainElm.find('li.tabclick.default>a').trigger('click')
-      }
-      this.executeWorkflow()
+      }      
+      _ini.executeWorkflow()
     })
   }
 
@@ -138,16 +135,35 @@ class Main {
     this.loadContent(_url, _data, 'POST', _target, refreshFn)
   }
 
+  defaultValidateOption () {
+    return {
+      errorElement: 'em',
+      errorPlacement: function(error, element) {
+        error.addClass('invalid-feedback')
+        if (element.prop('type') === 'checkbox') {
+          error.insertAfter(element.parent('label'))
+        } else {
+          error.insertAfter(element)
+        }
+      },
+      highlight: function(element) {
+        $(element).addClass('is-invalid').removeClass('is-valid')
+      },
+      unhighlight: function(element) {
+        $(element).addClass('is-valid').removeClass('is-invalid')
+      }
+    }
+  }
   initFormatInput (_closestTarget) {
     const _ini = this
     const _tmpTarget = _closestTarget === undefined ? $('form') : _closestTarget
     const _tagName = _tmpTarget.prop('tagName')
     const _target = _tmpTarget
     const _targetForm = _tagName === 'FORM' ? _tmpTarget : _tmpTarget.find('form')
-    _targetForm.each(function () {
+    _targetForm.each(function () {          
       const _container = $(this).find('div.form-error-validate-container')
       const _setContainerError = $(this).data('error-container')
-      const _objValidate = {
+      const _objValidateTmp = {
         submitHandler: function (_form) {
           // const _form = this.currentForm
           $(_form).find('.inputmask').each(function () {
@@ -170,31 +186,32 @@ class Main {
               $(this).val(_val)
             }
           })
-
-          _form.submit()
-        },
-        errorElement: 'em',
-        errorPlacement: function (error, element) {
-          error.addClass('invalid-feedback')
-          if (element.prop('type') === 'checkbox') {
-            error.insertAfter(element.parent('label'))
-          } else {
-            error.insertAfter(element)
-          }
-        },
-        highlight: function (element) {
-          $(element).addClass('is-invalid').removeClass('is-valid')
-        },
-        unhighlight: function (element) {
-          $(element).addClass('is-valid').removeClass('is-invalid')
-        }
+          
+          _form.submit()          
+        },        
+      }
+      const _defaultObjValidate = _ini.defaultValidateOption()
+      const _objValidate = {
+        ..._defaultObjValidate,
+        ..._objValidateTmp
       }
       if (_setContainerError !== undefined) {
         _objValidate.errorLabelContainer = _container
-      };
-      // @ts-ignore
+      };      
       $(this).validate(_objValidate)
     })
+
+    _ini.initDatetime(_target)
+    _ini.initInputmask(_target)
+    _ini.initSelect(_target)
+    _ini.initEditor(_target)
+    _ini.initCalendar(_target)
+  }
+
+  initFormatInputWithoutValidate (_closestTarget) {
+    const _ini = this
+    const _tmpTarget = _closestTarget === undefined ? $('form') : _closestTarget    
+    const _target = _tmpTarget    
 
     _ini.initDatetime(_target)
     _ini.initInputmask(_target)
@@ -409,12 +426,18 @@ class Main {
       const _options = {
         size: _size,
         title: _title,
-        message: data
+        message: data,
+        onShown: function () {
+          console.log('tesss')
+          const _dialog = $(this).closest('.bootbox')
+          console.log(_dialog)
+          console.log($(this))
+          $(this).find('.modal-dialog').addClass('modal-dialog-scrollable')
+          _ini.initFormatInput(_dialog)
+        }
       }
-      bootbox.dialog(_options).bind('shown.bs.modal', function () {
-        const _dialog = $(this).closest('.bootbox')
-        _ini.initFormatInput(_dialog)
-      })
+      bootbox.dialog(_options)
+      //_dialog.addEventListener('shown.bs.modal', 
     })
   }
 
@@ -469,7 +492,7 @@ class Main {
     const _href = $(elm).data('href')
     const _target = $(_href)
     if (_.isEmpty(_target.html())) {
-      this.postContentView(_url, {
+      this.getContentView(_url, {
         key: _json
       }, _target)
     }

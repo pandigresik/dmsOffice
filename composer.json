@@ -84,14 +84,14 @@
             "Database\\Seeders\\": "database/seeders/",
             "InfyOm\\Generator\\Generators\\": "overrides/laravel-generator/src/Generators/",
             "InfyOm\\Generator\\Commands\\": "overrides/laravel-generator/src/Commands/",
-            "IFRS\\Scopes\\": "overrides/eloquent-ifrs/src/Scopes/"
+            "IFRS\\Scopes\\": "overrides/eloquent-ifrs/src/Scopes/"            
         },
         "exclude-from-classmap": [
             "vendor/infyomlabs/laravel-generator/src/Generators/Scaffold/ControllerGenerator.php",
             "vendor/infyomlabs/laravel-generator/src/Generators/Scaffold/ViewGenerator.php",
             "vendor/infyomlabs/laravel-generator/src/Generators/FactoryGenerator.php",
             "vendor/infyomlabs/laravel-generator/src/Commands/BaseCommand.php",
-            "vendor/ekmungai/eloquent-ifrs/src/Scopes/EntityScope.php"
+            "vendor/ekmungai/eloquent-ifrs/src/Scopes/EntityScope.php"            
         ],
         "files": [
             "app/Http/helpers.php"

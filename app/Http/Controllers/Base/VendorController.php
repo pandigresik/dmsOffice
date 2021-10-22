@@ -13,12 +13,12 @@ use App\Http\Requests\Base\UpdateVendorRequest;
 
 class VendorController extends AppBaseController
 {
-    /** @var VendorRepository */
-    private $VendorRepository;
+    /** @var vendorRepository */
+    private $vendorRepository;
 
-    public function __construct(VendorRepository $VendorRepo)
+    public function __construct(VendorRepository $vendorRepo)
     {
-        $this->VendorRepository = $VendorRepo;
+        $this->vendorRepository = $vendorRepo;
     }
 
     /**
@@ -26,9 +26,9 @@ class VendorController extends AppBaseController
      *
      * @return Response
      */
-    public function index(VendorDataTable $VendorDataTable)
+    public function index(VendorDataTable $vendorDataTable)
     {
-        return $VendorDataTable->render('base.vendors.index');
+        return $vendorDataTable->render('base.vendors.index');
     }
 
     /**
@@ -38,12 +38,16 @@ class VendorController extends AppBaseController
      */
     public function create()
     {
+        $defaultContactView = view('base.vendors.partials.contact_blank',['json' => [], 'url' => route('base.vendors.contacts.form')])->render();
+        $defaultDestinationView = view('base.vendors.partials.destination_blank',['json' => [], 'url' => route('base.vendors.locations.form')])->render();
+        $defaultVehicleView = view('base.vendors.partials.vehicle_blank',['json' => [], 'url' => route('base.vendors.vehicles.form')])->render();
+        $defaultTripView = view('base.vendors.partials.trip_blank', ['json' => [], 'url' => route('base.vendors.vehicles.form')])->render();
         $dataTabs = [
-            'contact' => ['text' => 'Contact Person', 'url' => route('demo'), 'class' => ''],
-            'location' => ['text' => 'Tujuan Pengiriman', 'url' => 'tes.php', 'class' => ''],
-            'vehicle' => ['text' => 'Kendaraan', 'url' => 'tes.php', 'class' => ''],
-            'trip' => ['text' => 'Trip', 'url' => 'tes.php', 'class' => ''],
-            'description' => ['text' => 'Keterangan', 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
+            'contact' => ['text' => 'Contact Person', 'json' => [] ,'url' => '','defaultContent' => $defaultContactView ,'class' => ''],
+            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => [], 'url' => '', 'defaultContent' => $defaultDestinationView, 'class' => ''],
+            'vehicle' => ['text' => 'Kendaraan', 'json' => [], 'url' =>  '', 'defaultContent' => $defaultVehicleView, 'class' => ''],
+            'trip' => ['text' => 'Trip', 'json' => [], 'url' =>  '', 'defaultContent' => $defaultTripView, 'class' => ''],
+            'description' => ['text' => 'Keterangan', 'json' => [], 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
         ];
         return view('base.vendors.create')
             ->with('dataTabs',$dataTabs)
@@ -58,7 +62,7 @@ class VendorController extends AppBaseController
     public function store(CreateVendorRequest $request)
     {
         $input = $request->all();        
-        $Vendor = $this->VendorRepository->create($input);
+        $Vendor = $this->vendorRepository->create($input);
         
         Flash::success(__('messages.saved', ['model' => __('models/vendors.singular')]));
 
@@ -74,7 +78,7 @@ class VendorController extends AppBaseController
      */
     public function show($id)
     {
-        $Vendor = $this->VendorRepository->find($id);
+        $Vendor = $this->vendorRepository->find($id);
 
         if (empty($Vendor)) {
             Flash::error(__('models/vendors.singular').' '.__('messages.not_found'));
@@ -94,7 +98,7 @@ class VendorController extends AppBaseController
      */
     public function edit($id)
     {
-        $Vendor = $this->VendorRepository->find($id);
+        $Vendor = $this->vendorRepository->find($id);
 
         if (empty($Vendor)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendors.singular')]));
@@ -114,7 +118,7 @@ class VendorController extends AppBaseController
      */
     public function update($id, UpdateVendorRequest $request)
     {
-        $Vendor = $this->VendorRepository->find($id);
+        $Vendor = $this->vendorRepository->find($id);
 
         if (empty($Vendor)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendors.singular')]));
@@ -122,7 +126,7 @@ class VendorController extends AppBaseController
             return redirect(route('base.vendors.index'));
         }
         
-        $Vendor = $this->VendorRepository->update($request->all(), $id);        
+        $Vendor = $this->vendorRepository->update($request->all(), $id);        
 
         Flash::success(__('messages.updated', ['model' => __('models/vendors.singular')]));
 
@@ -138,7 +142,7 @@ class VendorController extends AppBaseController
      */
     public function destroy($id)
     {
-        $Vendor = $this->VendorRepository->find($id);
+        $Vendor = $this->vendorRepository->find($id);
 
         if (empty($Vendor)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendors.singular')]));
@@ -146,7 +150,7 @@ class VendorController extends AppBaseController
             return redirect(route('base.vendors.index'));
         }
 
-        $this->VendorRepository->delete($id);
+        $this->vendorRepository->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/vendors.singular')]));
 

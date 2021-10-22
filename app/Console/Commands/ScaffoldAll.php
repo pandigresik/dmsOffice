@@ -113,30 +113,30 @@ class ScaffoldAll extends Command
                     '--save' => true,
                 ]));
                 $this->generatePermission(Str::snake($t));
-                $this->call('infyom:api', array_merge($prefixOption, [
-                    'model' => $model,
-                    '--fieldsFile' => $model.'.json',
-                    '--skip' => 'dump-autoload,migration,model',
-                ]));
+                // $this->call('infyom:api', array_merge($prefixOption, [
+                //     'model' => $model,
+                //     '--fieldsFile' => $model.'.json',
+                //     '--skip' => 'dump-autoload,migration,model',
+                // ]));
 
-                if (empty($json['module'])) {
-                    $resourceClass = "App\\Http\\Resources\\{$model}Resource";
-                } else {
-                    $prefixModule = ucfirst(Str::camel($json['module']));
-                    $resourceClass = "App\\Http\\Resources\\{$prefixModule}\\{$model}Resource";
-                }
+                // if (empty($json['module'])) {
+                //     $resourceClass = "App\\Http\\Resources\\{$model}Resource";
+                // } else {
+                //     $prefixModule = ucfirst(Str::camel($json['module']));
+                //     $resourceClass = "App\\Http\\Resources\\{$prefixModule}\\{$model}Resource";
+                // }
 
-                $this->call('make:resource', [
-                    'name' => $resourceClass,
-                    '--collection' => true,
-                ]);
+                // $this->call('make:resource', [
+                //     'name' => $resourceClass,
+                //     '--collection' => true,
+                // ]);
 
-                // create tests
-                $this->call('infyom.api:tests', array_merge($prefixOption, [
-                    'model' => $model,
-                    '--fieldsFile' => $model.'.json',
-                    '--skip' => 'dump-autoload',
-                ]));
+                // // create tests
+                // $this->call('infyom.api:tests', array_merge($prefixOption, [
+                //     'model' => $model,
+                //     '--fieldsFile' => $model.'.json',
+                //     '--skip' => 'dump-autoload',
+                // ]));
             }
         }
     }

@@ -13,6 +13,7 @@ try {
   window.$ = window.jQuery = require('jquery')
   window.moment = require('moment')
   window.toastr = require('toastr')
+  window.bootbox = require('bootbox')
   require('bootstrap')
   require('@coreui/coreui/dist/js/coreui.bundle')
   require('select2')
@@ -25,6 +26,11 @@ try {
   require('ladda')
 } catch (e) {}
 
+window.$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the

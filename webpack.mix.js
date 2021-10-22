@@ -84,6 +84,7 @@ mix.webpackConfig({
       cleanOnceBeforeBuildPatterns: [
         '**/*',
         '!index.php',
+        '!.htaccess',
         '!vendor/**/**'
       ]
     }),

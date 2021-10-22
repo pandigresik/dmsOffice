@@ -31,8 +31,3 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('ifrs_reporting_periods', Accounting\IfrsReportingPeriodsAPIController::class);
     Route::resource('ifrs_vats', Accounting\IfrsVatsAPIController::class);
 });
-
-
-Route::group(['prefix' => 'inventory'], function () {
-    Route::resource('btb_view_tmps', App\Http\Controllers\API\Inventory\Inventory\BtbViewTmpAPIController::class);
-});
