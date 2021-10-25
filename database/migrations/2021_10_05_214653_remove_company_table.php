@@ -19,11 +19,11 @@ class RemoveCompanyTable extends Migration
         });
         Schema::dropIfExists('account_invoice_line');
         Schema::dropIfExists('account_move_line');
-        Schema::dropIfExists('account_move');                
-        Schema::dropIfExists('account_journal');
+        Schema::dropIfExists('account_move');                       
         Schema::dropIfExists('account_invoice');
+        Schema::dropIfExists('account_journal');
         Schema::dropIfExists('account_account');
-        Schema::dropIfExists('account_type');                
+        Schema::dropIfExists('account_type');
         Schema::dropIfExists('company');
     }
 
