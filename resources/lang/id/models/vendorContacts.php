@@ -15,5 +15,6 @@ return array (
     'address' => 'Address',
     'city' => 'City',
     'state' => 'State',
+    'program' => 'Program'
   ),
 );

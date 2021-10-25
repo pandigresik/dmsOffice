@@ -14,6 +14,7 @@ try {
   window.moment = require('moment')
   window.toastr = require('toastr')
   window.bootbox = require('bootbox')
+  require('jquery-serializejson')
   require('bootstrap')
   require('@coreui/coreui/dist/js/coreui.bundle')
   require('select2')

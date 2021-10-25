@@ -4,6 +4,8 @@ namespace App\Repositories\Base;
 
 use App\Models\Base\Vendor;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\DB;
+use Psr\Log\LogLevel;
 
 /**
  * Class VendorRepository.
@@ -48,11 +50,25 @@ class VendorRepository extends BaseRepository
      */
     public function create($input)
     {
-        $trips = $input['trips'];
-        unset($input['trips']);
-        $model = parent::create($input);
-        $model->trips()->sync($trips);
-        return $model;
+        DB::beginTransaction();
+
+        try {
+            $vendorContact = $input['vendorContact'] ?? [];
+            $model = parent::create($input);
+            if(!empty($vendorContact)){
+                $model->vendorContacts()->createMany($vendorContact);
+            }
+            
+            DB::commit();
+            return $model;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error($e);
+
+            return $e;
+        }
+
+        
     }
 
     /**
@@ -64,11 +80,12 @@ class VendorRepository extends BaseRepository
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
     public function update($input, $id)
-    {           
+    {
         $trips = $input['trips'];
         unset($input['trips']);
         $model = parent::update($input, $id);
         $model->trips()->sync($trips);
+
         return $model;
     }
 }

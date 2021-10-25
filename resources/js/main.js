@@ -18,6 +18,11 @@ class Main {
     this.workflow = f
   }
 
+  setButtonCaller(elm) {
+    $('.button-caller').removeClass('button-caller');
+    $(elm).addClass('button-caller');
+  }
+
   executeWorkflow () {
     if (_.isEmpty(this.workflow)) {
       const _target = this.workflow.shift()
@@ -162,10 +167,10 @@ class Main {
     const _targetForm = _tagName === 'FORM' ? _tmpTarget : _tmpTarget.find('form')
     _targetForm.each(function () {          
       const _container = $(this).find('div.form-error-validate-container')
-      const _setContainerError = $(this).data('error-container')
+      const _setContainerError = $(this).data('error-container')      
       const _objValidateTmp = {
         submitHandler: function (_form) {
-          // const _form = this.currentForm
+          const _submit = $(_form).data('submitable') ?? 1
           $(_form).find('.inputmask').each(function () {
             if ($(this).data('unmask')) {
               // @ts-ignore
@@ -187,7 +192,10 @@ class Main {
             }
           })
           
-          _form.submit()          
+          if(_submit){
+            _form.submit()
+          }
+          
         },        
       }
       const _defaultObjValidate = _ini.defaultValidateOption()
@@ -427,17 +435,12 @@ class Main {
         size: _size,
         title: _title,
         message: data,
-        onShown: function () {
-          console.log('tesss')
-          const _dialog = $(this).closest('.bootbox')
-          console.log(_dialog)
-          console.log($(this))
-          $(this).find('.modal-dialog').addClass('modal-dialog-scrollable')
-          _ini.initFormatInput(_dialog)
-        }
+        scrollable: true        
       }
-      bootbox.dialog(_options)
-      //_dialog.addEventListener('shown.bs.modal', 
+      bootbox.dialog(_options).on('shown.coreui.modal', function (e) {          
+          const _dialog = $(e.target)             
+          _ini.initFormatInput(_dialog)
+      });  
     })
   }
 

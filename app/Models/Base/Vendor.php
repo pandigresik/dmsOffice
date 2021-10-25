@@ -83,6 +83,12 @@ class Vendor extends Model
         'name',
         'address',
         'email',
+        'city',
+        'state',
+        'phone',
+        'payment_term',
+        'tax_identification',
+        'group',
         'is_supplier',
         'is_customer',
         'is_expedition',
@@ -128,19 +134,27 @@ class Vendor extends Model
      **/
     public function vehicles()
     {
-        return $this->hasMany(\App\Models\Base\Vehicle::class, 'vendor_expedition_id');
+        return $this->hasMany(\App\Models\Base\Vehicle::class, 'vendor_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
-    public function VendorTrips()
+    public function vendorTrips()
     {
-        return $this->hasMany(\App\Models\Base\VendorTrip::class, 'vendor_expedition_id');
+        return $this->hasMany(\App\Models\Base\VendorTrip::class, 'vendor_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function vendorContacts()
+    {
+        return $this->hasMany(\App\Models\Base\VendorContact::class, 'vendor_id');
     }
 
     public function trips()
     {
-        return $this->belongsToMany(\App\Models\Base\RouteTrip::class,'vendor_expedition_trip','vendor_expedition_id');
+        return $this->belongsToMany(\App\Models\Base\RouteTrip::class,'vendor_expedition_trip','vendor_id');
     }
 }

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Base;
 
-use Flash;
-use Response;
-use App\Http\Controllers\AppBaseController;
-use App\Repositories\Base\RouteTripRepository;
 use App\DataTables\Base\VendorDataTable;
-use App\Repositories\Base\VendorRepository;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateVendorRequest;
 use App\Http\Requests\Base\UpdateVendorRequest;
+use App\Repositories\Base\CityRepository;
+use App\Repositories\Base\RouteTripRepository;
+use App\Repositories\Base\VendorRepository;
+use Flash;
+use Response;
 
 class VendorController extends AppBaseController
 {
@@ -38,20 +39,22 @@ class VendorController extends AppBaseController
      */
     public function create()
     {
-        $defaultContactView = view('base.vendors.partials.contact_blank',['json' => [], 'url' => route('base.vendors.contacts.form')])->render();
-        $defaultDestinationView = view('base.vendors.partials.destination_blank',['json' => [], 'url' => route('base.vendors.locations.form')])->render();
-        $defaultVehicleView = view('base.vendors.partials.vehicle_blank',['json' => [], 'url' => route('base.vendors.vehicles.form')])->render();
-        $defaultTripView = view('base.vendors.partials.trip_blank', ['json' => [], 'url' => route('base.vendors.vehicles.form')])->render();
+        $defaultContactView = view('base.vendors.partials.contact_blank', ['json' => [], 'url' => route('base.vendorsContacts.create')])->render();
+        $defaultDestinationView = view('base.vendors.partials.destination_blank', ['json' => [], 'url' => route('base.vendorsLocations.create')])->render();
+        $defaultVehicleView = view('base.vendors.partials.vehicle_blank', ['json' => [], 'url' => route('base.vendorsVehicles.create')])->render();
+        $defaultTripView = view('base.vendors.partials.trip_blank', ['json' => [], 'url' => route('base.vendorsVehicles.create')])->render();
         $dataTabs = [
-            'contact' => ['text' => 'Contact Person', 'json' => [] ,'url' => '','defaultContent' => $defaultContactView ,'class' => ''],
+            'contact' => ['text' => 'Contact Person', 'json' => [], 'url' => '', 'defaultContent' => $defaultContactView, 'class' => ''],
             'destination' => ['text' => 'Tujuan Pengiriman', 'json' => [], 'url' => '', 'defaultContent' => $defaultDestinationView, 'class' => ''],
-            'vehicle' => ['text' => 'Kendaraan', 'json' => [], 'url' =>  '', 'defaultContent' => $defaultVehicleView, 'class' => ''],
-            'trip' => ['text' => 'Trip', 'json' => [], 'url' =>  '', 'defaultContent' => $defaultTripView, 'class' => ''],
+            'vehicle' => ['text' => 'Kendaraan', 'json' => [], 'url' => '', 'defaultContent' => $defaultVehicleView, 'class' => ''],
+            'trip' => ['text' => 'Trip', 'json' => [], 'url' => '', 'defaultContent' => $defaultTripView, 'class' => ''],
             'description' => ['text' => 'Keterangan', 'json' => [], 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
         ];
+
         return view('base.vendors.create')
-            ->with('dataTabs',$dataTabs)
-            ->with($this->getOptionItems());
+            ->with('dataTabs', $dataTabs)
+            ->with($this->getOptionItems())
+        ;
     }
 
     /**
@@ -61,9 +64,9 @@ class VendorController extends AppBaseController
      */
     public function store(CreateVendorRequest $request)
     {
-        $input = $request->all();        
-        $Vendor = $this->vendorRepository->create($input);
-        
+        $input = $request->all();
+        $vendor = $this->vendorRepository->create($input);
+
         Flash::success(__('messages.saved', ['model' => __('models/vendors.singular')]));
 
         return redirect(route('base.vendors.index'));
@@ -98,15 +101,26 @@ class VendorController extends AppBaseController
      */
     public function edit($id)
     {
-        $Vendor = $this->vendorRepository->find($id);
+        $vendor = $this->vendorRepository->find($id);
 
-        if (empty($Vendor)) {
+        if (empty($vendor)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendors.singular')]));
 
             return redirect(route('base.vendors.index'));
         }
-
-        return view('base.vendors.edit')->with('Vendor', $Vendor)->with($this->getOptionItems());
+        $jsonDefaultSearching = ['vendor_id' => $id];        
+        $dataTabs = [
+            'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('base.vendorsContacts.index', ['vendor_id' => $id]), 'defaultContent' => '', 'class' => ''],
+            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => '', 'defaultContent' => '', 'class' => ''],
+            'vehicle' => ['text' => 'Kendaraan', 'json' => $jsonDefaultSearching, 'url' => '', 'defaultContent' => '', 'class' => ''],
+            'trip' => ['text' => 'Trip', 'json' => $jsonDefaultSearching, 'url' => '', 'defaultContent' => '', 'class' => ''],
+            'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
+        ];
+        
+        return view('base.vendors.edit')
+            ->with('dataTabs', $dataTabs)
+            ->with('vendor', $vendor)
+            ->with($this->getOptionItems());
     }
 
     /**
@@ -125,8 +139,8 @@ class VendorController extends AppBaseController
 
             return redirect(route('base.vendors.index'));
         }
-        
-        $Vendor = $this->vendorRepository->update($request->all(), $id);        
+
+        $Vendor = $this->vendorRepository->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/vendors.singular')]));
 
@@ -166,16 +180,18 @@ class VendorController extends AppBaseController
      */
     private function getOptionItems()
     {
+        $city = new CityRepository(app());
+
         return [
-            'trips' => $this->listTrip()->groupBy('vehicleGroup.name')
+            'cityItems' => ['' => __('crud.option.city_placeholder_origin')] + $city->pluck(),
         ];
     }
 
-    private function listTrip()
-    {
-        $app = app();
-        $trips = new RouteTripRepository($app);
+    // private function listTrip()
+    // {
+    //     $app = app();
+    //     $trips = new RouteTripRepository($app);
 
-        return $trips->with(['vehicleGroup'])->all();
-    }
+    //     return $trips->with(['vehicleGroup'])->all();
+    // }
 }

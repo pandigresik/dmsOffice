@@ -88,7 +88,8 @@ class VendorContact extends Model
         'description',
         'address',
         'city',
-        'state'
+        'state',
+        'program'
     ];
 
     /**

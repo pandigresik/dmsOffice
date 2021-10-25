@@ -16,7 +16,7 @@ class UpdateVendorRequest extends FormRequest
      */
     public function authorize()
     {
-        $permissionName = 'vendor_expedition-update';
+        $permissionName = 'vendor-update';
 
         return \Auth::user()->can($permissionName);
     }

@@ -17,7 +17,7 @@ use Response;
 class VendorContactController extends AppBaseController
 {
     /** @var  VendorContactRepository */
-    private $vendorContactRepository;
+    private $vendorContactRepository;        
 
     public function __construct(VendorContactRepository $vendorContactRepo)
     {
@@ -32,7 +32,8 @@ class VendorContactController extends AppBaseController
      */
     public function index(VendorContactDataTable $vendorContactDataTable)
     {
-        return $vendorContactDataTable->render('base.vendor_contacts.index');
+        //return $vendorContactDataTable->render('base.vendor_contacts.index');
+        echo request('vendor_id');
     }
 
     /**
@@ -42,7 +43,9 @@ class VendorContactController extends AppBaseController
      */
     public function create()
     {
-        return view('base.vendor_contacts.create')->with($this->getOptionItems());
+        $idForm = \Carbon\Carbon::now()->timestamp;
+        return view('base.vendor_contacts.create')->with($this->getOptionItems())
+                ->with(['stateForm' => 'insert', 'idForm' => $idForm ,'prefixName' => 'vendorContact['.$idForm.']']);
     }
 
     /**
@@ -60,7 +63,7 @@ class VendorContactController extends AppBaseController
 
         Flash::success(__('messages.saved', ['model' => __('models/vendorContacts.singular')]));
 
-        return redirect(route('base.vendors.contacts.index'));
+        return redirect(route('base.vendorsContacts.index'));
     }
 
     /**
@@ -77,7 +80,7 @@ class VendorContactController extends AppBaseController
         if (empty($vendorContact)) {
             Flash::error(__('models/vendorContacts.singular').' '.__('messages.not_found'));
 
-            return redirect(route('base.vendors.contacts.index'));
+            return redirect(route('base.vendorsContacts.index'));
         }
 
         return view('base.vendor_contacts.show')->with('vendorContact', $vendorContact);
@@ -97,10 +100,10 @@ class VendorContactController extends AppBaseController
         if (empty($vendorContact)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendorContacts.singular')]));
 
-            return redirect(route('base.vendors.contacts.index'));
+            return redirect(route('base.vendorsContacts.index'));
         }
 
-        return view('base.vendor_contacts.edit')->with('vendorContact', $vendorContact)->with($this->getOptionItems());
+        return view('base.vendor_contacts.edit')->with('vendorContact', $vendorContact)->with($this->getOptionItems())->with(['stateForm' => 'update', 'id' => $id]);
     }
 
     /**
@@ -118,14 +121,14 @@ class VendorContactController extends AppBaseController
         if (empty($vendorContact)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendorContacts.singular')]));
 
-            return redirect(route('base.vendors.contacts.index'));
+            return redirect(route('base.vendorsContacts.index'));
         }
 
         $vendorContact = $this->vendorContactRepository->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/vendorContacts.singular')]));
 
-        return redirect(route('base.vendors.contacts.index'));
+        return redirect(route('base.vendorsContacts.index'));
     }
 
     /**
@@ -142,14 +145,14 @@ class VendorContactController extends AppBaseController
         if (empty($vendorContact)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendorContacts.singular')]));
 
-            return redirect(route('base.vendors.contacts.index'));
+            return redirect(route('base.vendorsContacts.index'));
         }
 
         $this->vendorContactRepository->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/vendorContacts.singular')]));
 
-        return redirect(route('base.vendors.contacts.index'));
+        return redirect(route('base.vendorsContacts.index'));
     }
 
     /**
@@ -166,10 +169,5 @@ class VendorContactController extends AppBaseController
         return [
             'cityItems' => ['' => __('crud.option.city_placeholder_origin')] + $city->pluck(),            
         ];
-    }
-
-    public  function form(){
-
-        return view('base.vendor_contacts.create_new')->with($this->getOptionItems());
-    }
+    }    
 }

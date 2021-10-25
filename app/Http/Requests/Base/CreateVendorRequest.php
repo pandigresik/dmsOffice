@@ -14,7 +14,7 @@ class CreateVendorRequest extends FormRequest
      */
     public function authorize()
     {
-        $permissionName = 'vendor_expedition-create';
+        $permissionName = 'vendor-create';
 
         return \Auth::user()->can($permissionName);
     }
@@ -39,7 +39,7 @@ class CreateVendorRequest extends FormRequest
     public function all($keys = null)
     {
         $keys = (new Vendor())->fillable;
-        array_push($keys, 'trips');
+        $keys = array_merge(['vendorContact','vendorLocation','vendorVehicle','vendorTrip'],$keys);
         return parent::all($keys);
     }
 }

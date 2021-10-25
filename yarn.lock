@@ -4048,6 +4048,11 @@ jquery-datatables-checkboxes@^1.2.12:
     datatables.net ">=1.10.8"
     jquery ">=1.7"
 
+jquery-serializejson@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/jquery-serializejson/-/jquery-serializejson-3.2.1.tgz#2d1b701695bf192f6e92cdf6b22db5a3177ea045"
+  integrity sha512-89UxVNC4ac9XC5tWPz3DjSTYFcT5z6JYsxGVw+qHhD61FzjbEzXJHjpdLnezWujjqtIECi/URQ6KdPmDE9imGA==
+
 jquery-validation@^1.19.3:
   version "1.19.3"
   resolved "https://registry.npmjs.org/jquery-validation/-/jquery-validation-1.19.3.tgz"

@@ -54,6 +54,7 @@
         "font-awesome": "^4.7.0",
         "html-webpack-plugin": "^5.3.2",
         "jquery-datatables-checkboxes": "^1.2.12",
+        "jquery-serializejson": "^3.2.1",
         "jquery-validation": "^1.19.3",
         "jquery.redirect": "^1.1.4",
         "ladda": "^2.0.1",
