@@ -41,10 +41,9 @@ class UpdateVendorRequest extends FormRequest
      * @return array
      */
     public function all($keys = null)
-    {
+    {        
         $keys = (new Vendor())->fillable;
-        $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
-        array_push($keys, 'trips');
+        $keys = array_merge(['vendorContact','vendorLocation','vendorVehicle','vendorTrip'],$keys);
         return parent::all($keys);
     }
 }

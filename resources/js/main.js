@@ -7,14 +7,16 @@ import 'ckeditor'
 import 'ckeditor/adapters/jquery'
 import bootbox from 'bootbox'
 
-import { Calendar } from '@fullcalendar/core'
+import {
+  Calendar
+} from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 import FileUploadWithPreview from 'file-upload-with-preview'
 
 class Main {
-  setWorkflow (f) {
+  setWorkflow(f) {
     this.workflow = f
   }
 
@@ -23,31 +25,31 @@ class Main {
     $(elm).addClass('button-caller');
   }
 
-  executeWorkflow () {
+  executeWorkflow() {
     if (_.isEmpty(this.workflow)) {
       const _target = this.workflow.shift()
       $(_target.element).trigger('click')
     }
   }
 
-  getAjaxData (_url, _type, _data, _callback) {
+  getAjaxData(_url, _type, _data, _callback) {
     $.ajax({
       url: _url,
       data: _data,
       dataType: 'json',
       type: _type,
-      beforeSend: function () {},
-      success: function (data) {
+      beforeSend: function() {},
+      success: function(data) {
 
       }
-    }).done(function (data) {
+    }).done(function(data) {
       if (_callback !== undefined) {
         _callback(data)
       }
     })
   }
 
-  alertDialog (title, message, callback) {
+  alertDialog(title, message, callback) {
     bootbox.alert({
       title: title,
       message: message,
@@ -57,7 +59,7 @@ class Main {
           className: 'btn-primary btn-sm'
         }
       },
-      callback (result) {
+      callback(result) {
         if (callback !== undefined) {
           callback(result)
         }
@@ -65,51 +67,51 @@ class Main {
     })
   }
 
-  resetForm (elm) {
+  resetForm(elm) {
     const _form = $(elm).closest('form')
     const _exclude = $(elm).data('exclude')
     _form.find('input,textarea').not($(elm)).not(_exclude).val('')
-    _form.find('select').not($(elm)).not(_exclude).each(function () {
+    _form.find('select').not($(elm)).not(_exclude).each(function() {
       $(this).val($(this).find('option:first').val())
     })
   }
 
-  getHtmlData (_url, _type, _data, _callback) {
+  getHtmlData(_url, _type, _data, _callback) {
     let _ini = this;
     $.ajax({
       url: _url,
       data: _data,
       dataType: 'html',
       type: _type,
-      beforeSend: function () {
+      beforeSend: function() {
         _ini.showLoading(true)
       },
-      success: function (data) {
+      success: function(data) {
         _ini.showLoading(false)
       }
-    }).done(function (data) {
+    }).done(function(data) {
       if (_callback !== undefined) {
         _callback(data)
       }
     })
   }
 
-  showLoading (state) {
+  showLoading(state) {
     if (state) {
       this.bootboxInfo = bootbox.alert('Please wait ......')
     } else {
       try {
         const _ini = this
-        setTimeout(function () {
+        setTimeout(function() {
           _ini.bootboxInfo.modal('hide')
         }, 500)
       } catch (e) {
 
-      }      
+      }
     }
   }
 
-  loadContent (_url, _data, _type, _target, _callback) {
+  loadContent(_url, _data, _type, _target, _callback) {
     const _mainElm = $(_target)
     const _ini = this
     $.ajax({
@@ -117,30 +119,30 @@ class Main {
       data: _data,
       dataType: 'html',
       type: _type,
-      beforeSend: function () {
+      beforeSend: function() {
         _mainElm.html('Loading ......')
       },
-      success: function (data) {
+      success: function(data) {
         _mainElm.html(data)
       }
-    }).done(function () {
+    }).done(function() {
       _ini.initFormatInput(_mainElm)
       if (_callback !== undefined) {
         _callback()
-      }      
+      }
       _ini.executeWorkflow()
     })
   }
 
-  getContentView (_url, _data, _target, refreshFn = function () {}) {
+  getContentView(_url, _data, _target, refreshFn = function() {}) {
     this.loadContent(_url, _data, 'GET', _target, refreshFn)
   }
 
-  postContentView (_url, _data, _target, refreshFn = function () {}) {
+  postContentView(_url, _data, _target, refreshFn = function() {}) {
     this.loadContent(_url, _data, 'POST', _target, refreshFn)
   }
 
-  defaultValidateOption () {
+  defaultValidateOption() {
     return {
       errorElement: 'em',
       errorPlacement: function(error, element) {
@@ -159,19 +161,19 @@ class Main {
       }
     }
   }
-  initFormatInput (_closestTarget) {
+  initFormatInput(_closestTarget) {
     const _ini = this
     const _tmpTarget = _closestTarget === undefined ? $('form') : _closestTarget
     const _tagName = _tmpTarget.prop('tagName')
     const _target = _tmpTarget
     const _targetForm = _tagName === 'FORM' ? _tmpTarget : _tmpTarget.find('form')
-    _targetForm.each(function () {          
+    _targetForm.each(function() {
       const _container = $(this).find('div.form-error-validate-container')
-      const _setContainerError = $(this).data('error-container')      
+      const _setContainerError = $(this).data('error-container')
       const _objValidateTmp = {
-        submitHandler: function (_form) {
+        submitHandler: function(_form) {
           const _submit = $(_form).data('submitable') ?? 1
-          $(_form).find('.inputmask').each(function () {
+          $(_form).find('.inputmask').each(function() {
             if ($(this).data('unmask')) {
               // @ts-ignore
               const _option = $(this).data('optionmask') || {}
@@ -184,19 +186,19 @@ class Main {
             }
           })
 
-          $(_form).find('.datetime').each(function () {
+          $(_form).find('.datetime').each(function() {
             if ($(this).data('daterangepicker') !== undefined) {
               const _val = _ini.getValueDateSQL($(this))
               $(this).data('daterangepicker').remove()
               $(this).val(_val)
             }
           })
-          
-          if(_submit){
+
+          if (_submit) {
             _form.submit()
           }
-          
-        },        
+
+        },
       }
       const _defaultObjValidate = _ini.defaultValidateOption()
       const _objValidate = {
@@ -205,7 +207,7 @@ class Main {
       }
       if (_setContainerError !== undefined) {
         _objValidate.errorLabelContainer = _container
-      };      
+      };
       $(this).validate(_objValidate)
     })
 
@@ -216,10 +218,10 @@ class Main {
     _ini.initCalendar(_target)
   }
 
-  initFormatInputWithoutValidate (_closestTarget) {
+  initFormatInputWithoutValidate(_closestTarget) {
     const _ini = this
-    const _tmpTarget = _closestTarget === undefined ? $('form') : _closestTarget    
-    const _target = _tmpTarget    
+    const _tmpTarget = _closestTarget === undefined ? $('form') : _closestTarget
+    const _target = _tmpTarget
 
     _ini.initDatetime(_target)
     _ini.initInputmask(_target)
@@ -228,9 +230,9 @@ class Main {
     _ini.initCalendar(_target)
   }
 
-  initInputFile (_target) {
+  initInputFile(_target) {
     const uploadFile = []
-    _target.find('.upload-file').each(function () {
+    _target.find('.upload-file').each(function() {
       const _defaultOption = {
         showDeleteButtonOnImages: true,
         text: {
@@ -248,8 +250,8 @@ class Main {
     })
   }
 
-  initInputmask (_target) {
-    _target.find('.inputmask').each(function () {
+  initInputmask(_target) {
+    _target.find('.inputmask').each(function() {
       const _option = $(this).data('optionmask') || {}
       const _type = $(this).attr('type')
       const _allowedElement = ['text', 'url', 'search', 'tel', 'password']
@@ -263,8 +265,8 @@ class Main {
     })
   }
 
-  initDatetime (_target) {
-    _target.find('.datetime').each(function () {
+  initDatetime(_target) {
+    _target.find('.datetime').each(function() {
       const _optionDate = $(this).data('optiondate') || {}
       const _defaultOption = {
         locale: {
@@ -282,7 +284,7 @@ class Main {
       }
       // @ts-ignore
       if (_optionDate.hideDatePicker === false) {
-        $(this).daterangepicker(_option).on('show.daterangepicker', function (ev, picker) {
+        $(this).daterangepicker(_option).on('show.daterangepicker', function(ev, picker) {
           picker.container.find('.calendar-table').hide()
         })
       } else {
@@ -291,17 +293,17 @@ class Main {
     })
   }
 
-  initEditor (_target) {
-    _target.find('.editor').each(function () {
+  initEditor(_target) {
+    _target.find('.editor').each(function() {
       const _optionEditor = $(this).data('optioneditor') || {}
       // @ts-ignore
       $(this).ckeditor(_optionEditor)
     })
   }
 
-  initSelect (_target) {
+  initSelect(_target) {
     const _ini = this
-    _target.find('.select2').each(function () {
+    _target.find('.select2').each(function() {
       const _optionSelect = $(this).data('optionselect') || {}
       const _firstOption = $(this).find('option').eq(0)
       let _placeholder = 'Choose option'
@@ -330,14 +332,14 @@ class Main {
             type: 'get',
             dataType: 'json',
             delay: 500,
-            data: function (params) {
+            data: function(params) {
               return {
                 q: $.trim(params.term), // search term
                 page: params.page,
                 repository: _repository
               }
             },
-            processResults: function (data) {
+            processResults: function(data) {
               data.page = data.from || 1
               return {
                 results: data.data,
@@ -359,13 +361,13 @@ class Main {
     })
   }
 
-  formatText (icon) {
+  formatText(icon) {
     const _icon = $(icon.element).data('icon') ?? icon.text
     return $('<span><i class="' + _icon + '"></i> ' + icon.text + '</span>')
   }
 
-  initCalendar (_target) {
-    _target.find('.calendar').each(function () {
+  initCalendar(_target) {
+    _target.find('.calendar').each(function() {
       const _elm = document.getElementById($(this).attr('id'))
       const _eventSourcesUrl = $(this).data('eventurl')
       const _defaultOption = {
@@ -377,10 +379,10 @@ class Main {
           url: _eventSourcesUrl,
           type: 'POST',
           data: {
-          /* custom_param1: 'something',
-                        custom_param2: 'somethingelse' */
+            /* custom_param1: 'something',
+                          custom_param2: 'somethingelse' */
           },
-          error: function () {
+          error: function() {
             alert('there was an error while fetching events!')
           },
           color: 'none', // a non-ajax option
@@ -403,9 +405,9 @@ class Main {
                     }
                 }
         }, */
-        eventRender: function (event, element) {
+        eventRender: function(event, element) {
           if (!_.isEmpty(event.className)) {
-          // $day = $date.getDate();
+            // $day = $date.getDate();
             const title = element.find('.fc-title')
             title.html(title.text())
             $("td.fc-day[data-date='" + event.start.format('YYYY-MM-DD') + "']").addClass(event.className.join(' '))
@@ -424,27 +426,27 @@ class Main {
     })
   }
 
-  popupModal (elm, _type, _callback) {
+  popupModal(elm, _type, _callback) {
     const _data = $(elm).data('json')
     const _url = $(elm).data('url')
     const _title = $(elm).data('title') || ''
     const _ini = this
     const _size = $(elm).data('size') === undefined ? 'extra-large' : $(elm).data('size')
-    this.getHtmlData(_url, _type, _data, function (data) {
+    this.getHtmlData(_url, _type, _data, function(data) {
       const _options = {
         size: _size,
         title: _title,
         message: data,
-        scrollable: true        
+        scrollable: true
       }
-      bootbox.dialog(_options).on('shown.coreui.modal', function (e) {          
-          const _dialog = $(e.target)             
-          _ini.initFormatInput(_dialog)
-      });  
+      bootbox.dialog(_options).on('shown.coreui.modal', function(e) {
+        const _dialog = $(e.target)
+        _ini.initFormatInput(_dialog)
+      });
     })
   }
 
-  loadDetailPage (elm, _type, _callback) {
+  loadDetailPage(elm, _type, _callback) {
     let _data = $(elm).data('json')
     const _url = $(elm).data('url')
     const _ref = $(elm).data('ref')
@@ -462,7 +464,7 @@ class Main {
     if (_refElm.length) {
       _data.ref = _refElm.val()
     }
-    this.getHtmlData(_url, _type, _data, function (data) {
+    this.getHtmlData(_url, _type, _data, function(data) {
       $(_target).html(data)
       if (_callback !== undefined) {
         _callback(data)
@@ -470,7 +472,7 @@ class Main {
     })
   }
 
-  redirectUrl (elm) {
+  redirectUrl(elm) {
     const _url = $(elm).data('url')
     let _json = $(elm).closest('tr').data('json')
     const _type = $(elm).data('tipe') || 'post'
@@ -489,7 +491,7 @@ class Main {
     )
   }
 
-  loadContentTab (elm) {
+  loadContentTab(elm) {
     const _url = $(elm).data('url')
     const _json = $(elm).data('json')
     const _href = $(elm).data('href')
@@ -501,7 +503,7 @@ class Main {
     }
   }
 
-  clickElm (elm, _target) {
+  clickElm(elm, _target) {
     const _data = $(elm).data()
     if (_data !== undefined) {
       for (const _i in _data) {
@@ -524,11 +526,11 @@ class Main {
     $(_target).click()
   }
 
-  _clearHtmlData (_targetHtml) {
+  _clearHtmlData(_targetHtml) {
     _targetHtml.html('')
   }
 
-  editRecord (elm) {
+  editRecord(elm) {
     const _key = $(elm).closest('tr').data('key')
     const _url = $(elm).data('url')
     this.postContentView(_url, {
@@ -536,7 +538,7 @@ class Main {
     })
   }
 
-  refresh (_url) {
+  refresh(_url) {
     if (_url) {
       window.location.href = _url
     } else {
@@ -545,7 +547,7 @@ class Main {
     }
   }
 
-  setRequiredElm (elm) {
+  setRequiredElm(elm) {
     const _parent = $(elm).data('parent')
     const _target = $(elm).data('target')
     const _elmTarget = $(elm).closest(_parent).find(_target).not($(elm))
@@ -556,19 +558,19 @@ class Main {
     }
   }
 
-  autofocus (elm) {
+  autofocus(elm) {
     const _position = $(elm).offset()
     $(document).scrollTop(_position.top - 100)
   }
 
-  autofocusCarousel (elm) {
+  autofocusCarousel(elm) {
     let _position = $(elm).offset()
     const _inCarousel = $(elm).closest('.carousel-item')
     if (_inCarousel.length) {
       if (!_inCarousel.hasClass('active')) {
         _inCarousel.siblings('.active').removeClass('active')
         _inCarousel.addClass('active')
-        setTimeout(function () {
+        setTimeout(function() {
           _position = $(elm).offset()
           $(document).scrollTop(_position.top - 100)
         }, 500)
@@ -578,7 +580,7 @@ class Main {
     }
   }
 
-  getValueDateSQL (elm) {
+  getValueDateSQL(elm) {
     let result = null
     try {
       const _v = $(elm).data('daterangepicker')
@@ -604,6 +606,14 @@ class Main {
       console.error(e)
     }
     return result
+  }
+
+  generateFormField(_prefix, _json) {
+    const _form = []
+    for (const _i in _json) {
+      _form.push(`<input type='hidden' name='${_prefix}[${_i}]' value='${_json[_i]}' >`)
+    }
+    return _form
   }
 }
 

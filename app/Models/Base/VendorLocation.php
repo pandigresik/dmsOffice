@@ -74,7 +74,7 @@ class VendorLocation extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
+    protected $appends = ['state_form'];
     protected $dates = ['deleted_at'];
 
 
@@ -120,5 +120,23 @@ class VendorLocation extends Model
     public function routeTrip()
     {
         return $this->belongsTo(\App\Models\Base\RouteTrip::class, 'route_trip_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function vendor()
+    {
+        return $this->belongsTo(\App\Models\Base\Vendor::class, 'vendor_id');
+    }
+
+    /**
+     * Determine if the user is an administrator.
+     *
+     * @return bool
+     */
+    public function getStateFormAttribute()
+    {
+        return $this->attributes['id'] ? 'update' : 'insert';
     }
 }

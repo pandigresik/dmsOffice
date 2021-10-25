@@ -38,17 +38,9 @@
                             .replace('{contactMobile}', _json['mobile'])
                             .replace('{contactTop}', _json['payment_term'])                        
                             .replace('{contactProgram}', _json['program'])
-                            .replace('{contactForm}', generateFormField(`vendorContact[${_idForm}]`, _json).join(''))
+                            .replace('{contactForm}', main.generateFormField(`vendorContact[${_idForm}]`, _json).join(''))
                 )
                 _form.closest('.bootbox').find('button.bootbox-close-button').click()
             }
-        }
-
-        function generateFormField(_prefix,_json){
-            const _form = []
-            for(const _i in _json){
-                _form.push(`<input type='hidden' name='${_prefix}[${_i}]' value='${_json[_i]}' >`)
-            }
-            return _form
-        }
+        }        
     </script>

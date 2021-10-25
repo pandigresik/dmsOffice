@@ -25,7 +25,8 @@ class VendorContactRepository extends BaseRepository
         'description',
         'address',
         'city',
-        'state'
+        'state',
+        'vendor_id'
     ];
 
     /**

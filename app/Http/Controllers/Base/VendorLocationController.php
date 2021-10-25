@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Base;
 
-use App\DataTables\Base\VendorLocationDataTable;
+use Flash;
+use Response;
 use App\Http\Requests\Base;
+use Illuminate\Http\Request;
+use App\Repositories\Base\CityRepository;
+use App\Http\Controllers\AppBaseController;
+use App\Repositories\Base\RouteTripRepository;
+use App\DataTables\Base\VendorLocationDataTable;
+use App\Repositories\Base\VendorLocationRepository;
 use App\Http\Requests\Base\CreateVendorLocationRequest;
 use App\Http\Requests\Base\UpdateVendorLocationRequest;
-use App\Repositories\Base\VendorLocationRepository;
-use App\Repositories\Base\RouteTripRepository;
-use Flash;
-use App\Http\Controllers\AppBaseController;
-use Response;
 
 class VendorLocationController extends AppBaseController
 {
@@ -23,14 +25,18 @@ class VendorLocationController extends AppBaseController
     }
 
     /**
-     * Display a listing of the VendorLocation.
+     * Display a listing of the VendorContact.
      *
-     * @param VendorLocationDataTable $vendorLocationDataTable
+     * @param Request $request
+     *
      * @return Response
      */
-    public function index(VendorLocationDataTable $vendorLocationDataTable)
-    {
-        return $vendorLocationDataTable->render('base.vendor_locations.index');
+    public function index(Request $request)
+    {           
+        $locations = $this->vendorLocationRepository->all(['vendor_id' => $request->get('vendor_id')]);
+        $buttonView = view('base.vendors.partials.location_button', ['json' => [], 'url' => route('base.vendorsLocations.create')])->render();
+        return view('base.vendor_locations.index')->with(['locations' => $locations, 'buttonView' => $buttonView]);
+        
     }
 
     /**
@@ -40,7 +46,12 @@ class VendorLocationController extends AppBaseController
      */
     public function create()
     {
-        return view('base.vendor_locations.create')->with($this->getOptionItems());
+        $idForm = \Carbon\Carbon::now()->timestamp;
+
+        return view('base.vendor_locations.create')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'insert'],'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'vendorLocation['.$idForm.']'])
+        ;
+        
     }
 
     /**
@@ -98,7 +109,14 @@ class VendorLocationController extends AppBaseController
             return redirect(route('base.vendors.locations.index'));
         }
 
-        return view('base.vendor_locations.edit')->with('vendorLocation', $vendorLocation)->with($this->getOptionItems());
+        $idForm = $id;
+        $vendorLocation->stateForm = 'update';
+        $obj = new \stdClass();
+        $obj->vendorLocation = [$id => $vendorLocation];
+
+        return view('base.vendor_locations.edit')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'vendorLocation' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'vendorLocation['.$idForm.']'])
+        ;
     }
 
     /**
@@ -159,9 +177,12 @@ class VendorLocationController extends AppBaseController
      */
     private function getOptionItems(){        
         $routeTrip = new RouteTripRepository(app());
+        $city = new CityRepository(app());
         return [
-            'routeTripItems' => ['' => __('crud.option.routeTrip_placeholder')] + $routeTrip->pluck()            
+            'routeTripItems' => ['' => __('crud.option.routeTrip_placeholder')] + $routeTrip->pluck(),            
+            'cityItems' => ['' => __('crud.option.city_placeholder_origin')] + $city->pluck()
         ];
+        
     }
 
     public  function form(){

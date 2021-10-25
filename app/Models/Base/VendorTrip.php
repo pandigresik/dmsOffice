@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * @SWG\Definition(
  *      definition="VendorTrip",
- *      required={"vendor_expedition_id", "route_trip_id"},
+ *      required={"vendor_id", "route_trip_id"},
  *      @SWG\Property(
  *          property="id",
  *          description="id",
@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *          format="int32"
  *      ),
  *      @SWG\Property(
- *          property="vendor_expedition_id",
- *          description="vendor_expedition_id",
+ *          property="vendor_id",
+ *          description="vendor_id",
  *          type="integer",
  *          format="int32"
  *      ),
@@ -65,18 +65,18 @@ class VendorTrip extends Model
 
     use HasFactory;
 
-    public $table = 'vendor_expedition_trip';
+    public $table = 'vendor_trip';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
+    protected $appends = ['state_form'];
     protected $dates = ['deleted_at'];
 
 
 
     public $fillable = [
-        'vendor_expedition_id',
+        'vendor_id',
         'route_trip_id',
         'created_by',
         'updated_by'
@@ -88,7 +88,7 @@ class VendorTrip extends Model
      * @var array
      */
     protected $casts = [        
-        'vendor_expedition_id' => 'integer',
+        'vendor_id' => 'integer',
         'route_trip_id' => 'integer',
         'created_by' => 'integer',
         'updated_by' => 'integer'
@@ -100,7 +100,7 @@ class VendorTrip extends Model
      * @var array
      */
     public static $rules = [
-        'vendor_expedition_id' => 'required',
+        'vendor_id' => 'required',
         'route_trip_id' => 'required',
         'created_by' => 'nullable',
         'updated_by' => 'nullable',        
@@ -119,8 +119,18 @@ class VendorTrip extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
-    public function Vendor()
+    public function vendor()
     {
-        return $this->belongsTo(\App\Models\Base\Vendor::class, 'vendor_expedition_id');
+        return $this->belongsTo(\App\Models\Base\Vendor::class, 'vendor_id');
+    }
+
+    /**
+     * Determine if the user is an administrator.
+     *
+     * @return bool
+     */
+    public function getStateFormAttribute()
+    {
+        return $this->attributes['id'] ? 'update' : 'insert';
     }
 }

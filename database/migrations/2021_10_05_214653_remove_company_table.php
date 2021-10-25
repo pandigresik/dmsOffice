@@ -17,13 +17,13 @@ class RemoveCompanyTable extends Migration
             $table->dropForeign('fk_warehouse_company');
             $table->foreign('company_id', 'fk_warehouse_company')->references('id')->on('ifrs_entities');
         });
-        Schema::dropIfExists('account_type');
-        Schema::dropIfExists('account_account');
+        Schema::dropIfExists('account_invoice_line');
+        Schema::dropIfExists('account_move_line');
+        Schema::dropIfExists('account_move');                
         Schema::dropIfExists('account_journal');
         Schema::dropIfExists('account_invoice');
-        Schema::dropIfExists('account_invoice_line');
-        Schema::dropIfExists('account_move');
-        Schema::dropIfExists('account_move_line');
+        Schema::dropIfExists('account_account');
+        Schema::dropIfExists('account_type');                
         Schema::dropIfExists('company');
     }
 

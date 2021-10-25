@@ -74,7 +74,7 @@ class VendorContact extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
+    protected $appends = ['state_form'];
     protected $dates = ['deleted_at'];
 
 
@@ -127,5 +127,21 @@ class VendorContact extends Model
         'state' => 'required|string|max:50'
     ];
 
-    
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function vendor()
+    {
+        return $this->belongsTo(\App\Models\Base\Vendor::class, 'vendor_id');
+    }
+
+    /**
+     * Determine if the user is an administrator.
+     *
+     * @return bool
+     */
+    public function getStateFormAttribute()
+    {
+        return $this->attributes['id'] ? 'update' : 'insert';
+    }
 }

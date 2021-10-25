@@ -4,15 +4,16 @@
             <a class="card-header-action btn-setting" href="#">
                 <i class="fa fa-gear"></i>
             </a>
-            @if ($stateForm == 'update')
-            <a class="card-header-action" href="#">
+            @if ($dataCard['stateForm'] == 'update')            
+            <a class="card-header-action button-caller" href="#" data-json="[]" data-url="{{route('base.vendorsContacts.edit', $dataCard['id']) }}" onclick="main.setButtonCaller(this);main.popupModal(this,'get');return false">
                 <i class="fa fa-pencil"></i>
             </a>
-            <a class="card-header-action btn-close" href="#" onclick="$(this).closest('div.card').fadeIn();return false">
+            <a class="card-header-action btn-close" href="#" 
+                onclick="$(this).closest('div.card').fadeOut();$(this).closest('div.card').find('.form-hidden').append('<input type=\'hidden\' name=\'vendorContact[{{ $dataCard['id'] }}][stateForm]\' value=\'delete\' >');return false">
                 <i class="fa fa-trash"></i>
             </a>
             @endif
-            @if ($stateForm == 'insert')                            
+            @if ($dataCard['stateForm'] == 'insert')                            
             <a class="card-header-action btn-close" href="#" onclick="$(this).closest('div.card').remove();return false">
                 <i class="fa fa-trash"></i>
             </a>    
@@ -23,9 +24,9 @@
     <div class="show">
         <div class="card-body">
             <div class="card-content">
-                <div>{contactName}</div>
-                <div>{contactPosition}</div>
-                <div>{contactMobile}</div>
+                <div>{{ $dataCard['name'] ?? '{contactName}' }}</div>
+                <div>{{ $dataCard['position'] ?? '{contactPosition}' }}</div>
+                <div>{{ $dataCard['mobile'] ?? '{contactMobile}' }}</div>
                 <div class="row">
                     <div class="col-md-3">TOP</div>
                     <div class="col-md-9">{contactTop}</div>

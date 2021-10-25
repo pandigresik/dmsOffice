@@ -153,6 +153,14 @@ class Vendor extends Model
         return $this->hasMany(\App\Models\Base\VendorContact::class, 'vendor_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function vendorLocations()
+    {
+        return $this->hasMany(\App\Models\Base\VendorLocation::class, 'vendor_id');
+    }
+
     public function trips()
     {
         return $this->belongsToMany(\App\Models\Base\RouteTrip::class,'vendor_expedition_trip','vendor_id');

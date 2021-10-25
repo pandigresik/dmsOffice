@@ -5,7 +5,6 @@ namespace App\Repositories\Base;
 use App\Models\Base\Vendor;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
-use Psr\Log\LogLevel;
 
 /**
  * Class VendorRepository.
@@ -54,12 +53,16 @@ class VendorRepository extends BaseRepository
 
         try {
             $vendorContact = $input['vendorContact'] ?? [];
+            $vendorLocation = $input['vendorLocation'] ?? [];
             $model = parent::create($input);
-            if(!empty($vendorContact)){
+            if (!empty($vendorContact)) {
                 $model->vendorContacts()->createMany($vendorContact);
             }
-            
+            if (!empty($vendorLocation)) {
+                $model->vendorLocations()->createMany($vendorLocation);
+            }
             DB::commit();
+
             return $model;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -67,8 +70,6 @@ class VendorRepository extends BaseRepository
 
             return $e;
         }
-
-        
     }
 
     /**
@@ -81,11 +82,66 @@ class VendorRepository extends BaseRepository
      */
     public function update($input, $id)
     {
-        $trips = $input['trips'];
-        unset($input['trips']);
-        $model = parent::update($input, $id);
-        $model->trips()->sync($trips);
+        DB::beginTransaction();
 
-        return $model;
+        try {
+            $vendorContact = $input['vendorContact'] ?? [];
+            $vendorLocation = $input['vendorLocation'] ?? [];
+            $model = parent::update($input, $id);
+            if (!empty($vendorContact)) {                
+                foreach ($vendorContact as $key => $vc) {
+                    $stateForm = $vc['stateForm'];
+                    switch ($stateForm) {
+                        case 'insert':
+                            $model->vendorContacts()->create($vc);
+
+                            break;
+                        case 'update':
+                            $obj = \App\Models\Base\VendorContact::find($key);
+                            $obj->fill($vc)->save();
+
+                            break;
+                        case 'delete':
+                            \App\Models\Base\VendorContact::whereId($key)->delete();
+
+                            break;
+                    }
+                }
+            }
+            if (!empty($vendorLocation)) {
+                foreach ($vendorLocation as $key => $vc) {
+                    $stateForm = $vc['stateForm'];
+                    switch ($stateForm) {
+                        case 'insert':
+                            $model->vendorLocations()->create($vc);
+
+                            break;
+                        case 'update':
+                            $obj = \App\Models\Base\VendorLocation::find($key);
+                            $obj->fill($vc)->save();
+
+                            break;
+                        case 'delete':
+                            \App\Models\Base\VendorLocation::whereId($key)->delete();
+
+                            break;
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return $model;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error($e);
+
+            return $e;
+        }
+
+        // $trips = $input['trips'];
+        // unset($input['trips']);
+        // $model = parent::update($input, $id);
+        // $model->trips()->sync($trips);
     }
 }

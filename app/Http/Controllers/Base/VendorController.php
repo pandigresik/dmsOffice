@@ -40,7 +40,7 @@ class VendorController extends AppBaseController
     public function create()
     {
         $defaultContactView = view('base.vendors.partials.contact_blank', ['json' => [], 'url' => route('base.vendorsContacts.create')])->render();
-        $defaultDestinationView = view('base.vendors.partials.destination_blank', ['json' => [], 'url' => route('base.vendorsLocations.create')])->render();
+        $defaultDestinationView = view('base.vendors.partials.location_blank', ['json' => [], 'url' => route('base.vendorsLocations.create')])->render();
         $defaultVehicleView = view('base.vendors.partials.vehicle_blank', ['json' => [], 'url' => route('base.vendorsVehicles.create')])->render();
         $defaultTripView = view('base.vendors.partials.trip_blank', ['json' => [], 'url' => route('base.vendorsVehicles.create')])->render();
         $dataTabs = [
@@ -111,9 +111,9 @@ class VendorController extends AppBaseController
         $jsonDefaultSearching = ['vendor_id' => $id];        
         $dataTabs = [
             'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('base.vendorsContacts.index', ['vendor_id' => $id]), 'defaultContent' => '', 'class' => ''],
-            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => '', 'defaultContent' => '', 'class' => ''],
-            'vehicle' => ['text' => 'Kendaraan', 'json' => $jsonDefaultSearching, 'url' => '', 'defaultContent' => '', 'class' => ''],
-            'trip' => ['text' => 'Trip', 'json' => $jsonDefaultSearching, 'url' => '', 'defaultContent' => '', 'class' => ''],
+            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.vendorsLocations.index', ['vendor_id' => $id]), 'defaultContent' => '', 'class' => ''],
+            'vehicle' => ['text' => 'Kendaraan', 'json' => $jsonDefaultSearching, 'url' => route('base.vendorsVehicles.index', ['vendor_id' => $id]), 'defaultContent' => '', 'class' => ''],
+            'trip' => ['text' => 'Trip', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'defaultContent' => '', 'class' => ''],
             'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
         ];
         
