@@ -20,7 +20,7 @@ class CreateDmsInvProductkitinfoTable extends Migration
             $table->string('szProductId', 50);
             $table->decimal('decQty', 18, 2);
             $table->string('szUomId', 50)->index('IX_DMS_INV_ProductKitInfo_1');
-            $table->primary(['iInternalId', 'iId']);
+            $table->unique(['iInternalId', 'iId']);
             $table->unique(['szId', 'szProductId'], 'IX_DMS_INV_ProductKitInfo');
         });
     }

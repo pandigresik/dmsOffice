@@ -14,7 +14,7 @@ class CreateDmsApSupplierTable extends Migration
     public function up()
     {
         Schema::create('dms_ap_supplier', function (Blueprint $table) {
-            $table->unsignedInteger('iInternalId');
+            $table->unsignedInteger('iInternalId')->autoIncrement();
             $table->char('iId', 50)->default('ewid(');
             $table->string('szId', 50)->unique('IX_DMS_AP_Supplier');
             $table->string('szName', 50);
@@ -23,7 +23,7 @@ class CreateDmsApSupplierTable extends Migration
             $table->string('szUserUpdatedId', 20);
             $table->dateTime('dtmCreated')->default('2000-01-01 00:00:00');
             $table->dateTime('dtmLastUpdated')->default('2000-01-01 00:00:00');
-            $table->primary(['iInternalId', 'iId']);
+            $table->unique(['iInternalId', 'iId']);
         });
     }
 

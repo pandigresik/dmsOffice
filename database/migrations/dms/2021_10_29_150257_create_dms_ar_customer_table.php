@@ -29,7 +29,7 @@ class CreateDmsArCustomerTable extends Migration
             $table->dateTime('dtmCreated')->default('2000-01-01 00:00:00');
             $table->dateTime('dtmLastUpdated')->default('2000-01-01 00:00:00');
             $table->string('szMCOId', 50)->default('0')->index('IX_DMS_AR_Customer_6C2A0948_FDFF_42C7_B7AF_561703C05155');
-            $table->primary(['iInternalId', 'iId']);
+            $table->unique(['iInternalId', 'iId']);
         });
     }
 

@@ -20,7 +20,7 @@ class CreateDmsInvProductitemcategoryTable extends Migration
             $table->integer('intItemNumber');
             $table->string('szCategoryTypeId', 50)->index('IX_DMS_INV_ProductItemCategory_1');
             $table->string('szCategoryValue', 50)->index('IX_DMS_INV_ProductItemCategory_2');
-            $table->primary(['iInternalId', 'iId']);
+            $table->unique(['iInternalId', 'iId']);
             $table->unique(['szId', 'intItemNumber'], 'IX_DMS_INV_ProductItemCategory');
             $table->index(['szCategoryTypeId', 'szCategoryValue'], 'IX_DMS_INV_ProductItemCategory_3');
         });

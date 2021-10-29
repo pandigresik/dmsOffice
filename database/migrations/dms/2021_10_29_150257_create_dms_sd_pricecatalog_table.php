@@ -28,7 +28,7 @@ class CreateDmsSdPricecatalogTable extends Migration
             $table->string('szUserUpdatedId', 20);
             $table->dateTime('dtmCreated')->default('2000-01-01 00:00:00');
             $table->dateTime('dtmLastUpdated')->default('2000-01-01 00:00:00');
-            $table->primary(['iInternalId', 'iId']);
+            $table->unique(['iInternalId', 'iId']);
             $table->index(['dtmValidFrom', 'dtmValidTo', 'szCompanyId', 'intPriority'], 'IX_DMS_SD_PriceCatalog_5');
         });
     }

@@ -30,7 +30,7 @@ class CreateDmsSdRouteitemTable extends Migration
             $table->integer('intWeek2');
             $table->integer('intWeek3');
             $table->integer('intWeek4');
-            $table->primary(['iInternalId', 'iId']);
+            $table->unique(['iInternalId', 'iId']);
             $table->unique(['szId', 'intItemNumber'], 'IX_DMS_SD_RouteItem');
             $table->index(['szId', 'szCustomerId'], 'IX_DMS_SD_RouteItem_3');
         });

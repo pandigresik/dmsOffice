@@ -19,7 +19,7 @@ class CreateDmsInvCarrierdriverTable extends Migration
             $table->string('szId', 50);
             $table->integer('intItemNumber');
             $table->string('szDriverName', 50);
-            $table->primary(['iInternalId', 'iId']);
+            $table->unique(['iInternalId', 'iId']);
             $table->unique(['szId', 'intItemNumber'], 'IX_DMS_INV_CarrierDriver');
         });
     }
