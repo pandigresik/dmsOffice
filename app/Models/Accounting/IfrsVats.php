@@ -3,8 +3,8 @@
 namespace App\Models\Accounting;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -65,27 +65,39 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class IfrsVats extends Model
 {
-    use SoftDeletes;    
+    use SoftDeletes;
     use HasFactory;
 
-    public $table = 'ifrs_vats';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const CREATED_BY = null;
-    const UPDATED_BY = NULL;
+    const UPDATED_BY = null;
 
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'ifrs_vats';
 
     public $fillable = [
         'entity_id',
         'account_id',
         'code',
         'name',
-        'rate',        
+        'rate',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'entity_id' => 'required',
+        'account_id' => 'nullable',
+        'code' => 'required|string|max:1',
+        'name' => 'required|string|max:300',
+        'rate' => 'required|numeric',
+        //'destroyed_at' => 'nullable'
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -103,22 +115,8 @@ class IfrsVats extends Model
     ];
 
     /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'entity_id' => 'required',
-        'account_id' => 'nullable',
-        'code' => 'required|string|max:1',
-        'name' => 'required|string|max:300',
-        'rate' => 'required|numeric',
-        //'destroyed_at' => 'nullable'
-    ];
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function account()
     {
         return $this->belongsTo(\App\Models\Accounting\IfrsAccount::class, 'account_id');
@@ -126,7 +124,7 @@ class IfrsVats extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function entity()
     {
         return $this->belongsTo(\App\Models\Accounting\IfrsEntities::class, 'entity_id');
@@ -134,7 +132,7 @@ class IfrsVats extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function ifrsLedgers()
     {
         return $this->hasMany(\App\Models\Accounting\IfrsLedger::class, 'vat_id');
@@ -142,7 +140,7 @@ class IfrsVats extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function ifrsLineItems()
     {
         return $this->hasMany(\App\Models\Accounting\IfrsLineItem::class, 'vat_id');

@@ -3,8 +3,8 @@
 namespace App\Models\Base;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -69,23 +69,34 @@ class VendorLocation extends Model
 
     use HasFactory;
 
-    public $table = 'vendor_location';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-    protected $appends = ['state_form'];
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'vendor_location';
 
     public $fillable = [
         'address',
         'city',
         'state',
         'additional_cost',
-        'route_trip_id'
+        'route_trip_id',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'address' => 'nullable|string|max:255',
+        'city' => 'required|string|max:50',
+        'state' => 'required|string|max:50',
+        'additional_cost' => 'required|numeric',
+        'route_trip_id' => 'required',
+    ];
+
+    protected $appends = ['state_form'];
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -98,25 +109,12 @@ class VendorLocation extends Model
         'city' => 'string',
         'state' => 'string',
         'additional_cost' => 'float',
-        'route_trip_id' => 'integer'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'address' => 'nullable|string|max:255',
-        'city' => 'required|string|max:50',
-        'state' => 'required|string|max:50',
-        'additional_cost' => 'required|numeric',
-        'route_trip_id' => 'required'
+        'route_trip_id' => 'integer',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function routeTrip()
     {
         return $this->belongsTo(\App\Models\Base\RouteTrip::class, 'route_trip_id');
@@ -124,7 +122,7 @@ class VendorLocation extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function vendor()
     {
         return $this->belongsTo(\App\Models\Base\Vendor::class, 'vendor_id');

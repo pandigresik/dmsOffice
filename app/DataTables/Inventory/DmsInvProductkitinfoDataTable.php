@@ -115,7 +115,7 @@ class DmsInvProductkitinfoDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsInvProductkitinfos.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsInvProductkitinfos.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szId' => new Column(['title' => __('models/dmsInvProductkitinfos.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'szProductId' => new Column(['title' => __('models/dmsInvProductkitinfos.fields.szProductId'), 'data' => 'szProductId', 'searchable' => true, 'elmsearch' => 'text']),
             'decQty' => new Column(['title' => __('models/dmsInvProductkitinfos.fields.decQty'), 'data' => 'decQty', 'searchable' => true, 'elmsearch' => 'text']),

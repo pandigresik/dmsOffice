@@ -3,8 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -40,20 +40,27 @@ class StockInventory extends Model
 
     use HasFactory;
 
-    public $table = 'stock_inventory';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'stock_inventory';
 
     public $fillable = [
         'name',
-        'warehouse_id'
+        'warehouse_id',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'name' => 'required|string|max:100',
+        'warehouse_id' => 'required',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -63,22 +70,12 @@ class StockInventory extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'warehouse_id' => 'integer'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'name' => 'required|string|max:100',
-        'warehouse_id' => 'required'
+        'warehouse_id' => 'integer',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function warehouse()
     {
         return $this->belongsTo(\App\Models\Inventory\Warehouse::class, 'warehouse_id');
@@ -86,7 +83,7 @@ class StockInventory extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function stockInventoryLines()
     {
         return $this->hasMany(\App\Models\Inventory\StockInventoryLine::class, 'stock_inventory_id');

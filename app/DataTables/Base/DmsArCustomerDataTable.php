@@ -115,20 +115,20 @@ class DmsArCustomerDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsArCustomers.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsArCustomers.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szId' => new Column(['title' => __('models/dmsArCustomers.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'szName' => new Column(['title' => __('models/dmsArCustomers.fields.szName'), 'data' => 'szName', 'searchable' => true, 'elmsearch' => 'text']),
-            'szDescription' => new Column(['title' => __('models/dmsArCustomers.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
+            //'szDescription' => new Column(['title' => __('models/dmsArCustomers.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
             'szHierarchyId' => new Column(['title' => __('models/dmsArCustomers.fields.szHierarchyId'), 'data' => 'szHierarchyId', 'searchable' => true, 'elmsearch' => 'text']),
             'szHierarchyFull' => new Column(['title' => __('models/dmsArCustomers.fields.szHierarchyFull'), 'data' => 'szHierarchyFull', 'searchable' => true, 'elmsearch' => 'text']),
             'szIDCard' => new Column(['title' => __('models/dmsArCustomers.fields.szIDCard'), 'data' => 'szIDCard', 'searchable' => true, 'elmsearch' => 'text']),
             'bHasDifferentCollectAddress' => new Column(['title' => __('models/dmsArCustomers.fields.bHasDifferentCollectAddress'), 'data' => 'bHasDifferentCollectAddress', 'searchable' => true, 'elmsearch' => 'text']),
             'szCode' => new Column(['title' => __('models/dmsArCustomers.fields.szCode'), 'data' => 'szCode', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserCreatedId' => new Column(['title' => __('models/dmsArCustomers.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserUpdatedId' => new Column(['title' => __('models/dmsArCustomers.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmCreated' => new Column(['title' => __('models/dmsArCustomers.fields.dtmCreated'), 'data' => 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmLastUpdated' => new Column(['title' => __('models/dmsArCustomers.fields.dtmLastUpdated'), 'data' => 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text']),
-            'szMCOId' => new Column(['title' => __('models/dmsArCustomers.fields.szMCOId'), 'data' => 'szMCOId', 'searchable' => true, 'elmsearch' => 'text'])
+            // 'szUserCreatedId' => new Column(['title' => __('models/dmsArCustomers.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szUserUpdatedId' => new Column(['title' => __('models/dmsArCustomers.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmCreated' => new Column(['title' => __('models/dmsArCustomers.fields.dtmCreated'), 'data' => // 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmLastUpdated' => new Column(['title' => __('models/dmsArCustomers.fields.dtmLastUpdated'), 'data' => // 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szMCOId' => new Column(['title' => __('models/dmsArCustomers.fields.szMCOId'), 'data' => 'szMCOId', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

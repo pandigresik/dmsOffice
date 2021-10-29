@@ -1,9 +1,9 @@
-{!! Form::open(['route' => ['inventory.dmsInvProductitemcategories.destroy', $id], 'method' => 'delete']) !!}
+{!! Form::open(['route' => ['inventory.dmsInvProductitemcategories.destroy', $iInternalId], 'method' => 'delete']) !!}
 <div class='btn-group'>
-    <a href="{{ route('inventory.dmsInvProductitemcategories.show', $id) }}" class='btn btn-ghost-success'>
+    <a href="{{ route('inventory.dmsInvProductitemcategories.show', $iInternalId) }}" class='btn btn-ghost-success'>
        <i class="fa fa-eye"></i>
     </a>
-    <a href="{{ route('inventory.dmsInvProductitemcategories.edit', $id) }}" class='btn btn-ghost-info'>
+    <a href="{{ route('inventory.dmsInvProductitemcategories.edit', $iInternalId) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>
     {!! Form::button('<i class="fa fa-trash"></i>', [

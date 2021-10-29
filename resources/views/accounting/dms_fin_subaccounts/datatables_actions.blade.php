@@ -1,9 +1,9 @@
-{!! Form::open(['route' => ['accounting.dmsFinSubaccounts.destroy', $id], 'method' => 'delete']) !!}
+{!! Form::open(['route' => ['accounting.dmsFinSubaccounts.destroy', $iInternalId], 'method' => 'delete']) !!}
 <div class='btn-group'>
-    <a href="{{ route('accounting.dmsFinSubaccounts.show', $id) }}" class='btn btn-ghost-success'>
+    <a href="{{ route('accounting.dmsFinSubaccounts.show', $iInternalId) }}" class='btn btn-ghost-success'>
        <i class="fa fa-eye"></i>
     </a>
-    <a href="{{ route('accounting.dmsFinSubaccounts.edit', $id) }}" class='btn btn-ghost-info'>
+    <a href="{{ route('accounting.dmsFinSubaccounts.edit', $iInternalId) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>
     {!! Form::button('<i class="fa fa-trash"></i>', [

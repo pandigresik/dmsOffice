@@ -14,7 +14,7 @@
              @include('coreui-templates::common.errors')
              <div class="row">
                  <div class="col-lg-12">
-                    {!! Form::model($dmsInvUom, ['route' => ['inventory.dmsInvUoms.update', $dmsInvUom->id], 'method' => 'patch']) !!}  
+                    {!! Form::model($dmsInvUom, ['route' => ['inventory.dmsInvUoms.update', $dmsInvUom->iInternalId], 'method' => 'patch']) !!}  
                       <div class="card">                          
                           <div class="card-header">
                               <i class="fa fa-edit fa-lg"></i>

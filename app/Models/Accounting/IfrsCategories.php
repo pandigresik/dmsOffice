@@ -3,8 +3,8 @@
 namespace App\Models\Accounting;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -69,22 +69,32 @@ class IfrsCategories extends Model
 
     use HasFactory;
 
-    public $table = 'ifrs_categories';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const CREATED_BY = null;
     const UPDATED_BY = null;
 
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'ifrs_categories';
 
     public $fillable = [
         'entity_id',
         'category_type',
-        'name'
+        'name',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'entity_id' => 'required',
+        'category_type' => 'required|string',
+        'name' => 'required|string|max:300',
+        'destroyed_at' => 'nullable',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -96,24 +106,12 @@ class IfrsCategories extends Model
         'entity_id' => 'integer',
         'category_type' => 'string',
         'name' => 'string',
-        'destroyed_at' => 'datetime'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'entity_id' => 'required',
-        'category_type' => 'required|string',
-        'name' => 'required|string|max:300',
-        'destroyed_at' => 'nullable'
+        'destroyed_at' => 'datetime',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function entity()
     {
         return $this->belongsTo(\App\Models\Accounting\IfrsEntities::class, 'entity_id');
@@ -121,7 +119,7 @@ class IfrsCategories extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function entityIdentity()
     {
         return $this->entity()->selectRaw('*, name as name_entity');
@@ -129,7 +127,7 @@ class IfrsCategories extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function ifrsAccounts()
     {
         return $this->hasMany(\App\Models\Accounting\IfrsAccount::class, 'category_id');

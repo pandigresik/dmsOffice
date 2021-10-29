@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
         }
         // code ini hanya akan dijalankan ketika render view menu
         view()->composer('layouts.menu', function ($view) {
-            $items = \App\Models\Base\Menus::with(['permissions'])->orderBy('seq_number')->get();
+            $items = \App\Models\Base\Menus::with(['permissions'])->orderBy('seq_number')->get();            
             $tree = new \Kalnoy\Nestedset\Collection();
             foreach ($items as $item) {
                 $menuTree = new \App\Models\Base\MenusTree();

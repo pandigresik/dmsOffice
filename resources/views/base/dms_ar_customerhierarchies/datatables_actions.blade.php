@@ -1,9 +1,9 @@
-{!! Form::open(['route' => ['base.dmsArCustomerhierarchies.destroy', $id], 'method' => 'delete']) !!}
+{!! Form::open(['route' => ['base.dmsArCustomerhierarchies.destroy', $iInternalId], 'method' => 'delete']) !!}
 <div class='btn-group'>
-    <a href="{{ route('base.dmsArCustomerhierarchies.show', $id) }}" class='btn btn-ghost-success'>
+    <a href="{{ route('base.dmsArCustomerhierarchies.show', $iInternalId) }}" class='btn btn-ghost-success'>
        <i class="fa fa-eye"></i>
     </a>
-    <a href="{{ route('base.dmsArCustomerhierarchies.edit', $id) }}" class='btn btn-ghost-info'>
+    <a href="{{ route('base.dmsArCustomerhierarchies.edit', $iInternalId) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>
     {!! Form::button('<i class="fa fa-trash"></i>', [

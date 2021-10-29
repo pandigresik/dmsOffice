@@ -3,8 +3,8 @@
 namespace App\Models\Base;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -69,15 +69,10 @@ class VendorContact extends Model
 
     use HasFactory;
 
-    public $table = 'vendor_contact';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-    protected $appends = ['state_form'];
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'vendor_contact';
 
     public $fillable = [
         'name',
@@ -89,8 +84,28 @@ class VendorContact extends Model
         'address',
         'city',
         'state',
-        'program'
+        'program',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'name' => 'required|string|max:50',
+        'position' => 'nullable|string|max:50',
+        'email' => 'nullable|string|max:50',
+        'phone' => 'nullable|string|max:50',
+        'mobile' => 'nullable|string|max:50',
+        'description' => 'nullable|string|max:255',
+        'address' => 'nullable|string|max:255',
+        'city' => 'required|string|max:50',
+        'state' => 'required|string|max:50',
+    ];
+
+    protected $appends = ['state_form'];
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -107,29 +122,12 @@ class VendorContact extends Model
         'description' => 'string',
         'address' => 'string',
         'city' => 'string',
-        'state' => 'string'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'name' => 'required|string|max:50',
-        'position' => 'nullable|string|max:50',
-        'email' => 'nullable|string|max:50',
-        'phone' => 'nullable|string|max:50',
-        'mobile' => 'nullable|string|max:50',
-        'description' => 'nullable|string|max:255',
-        'address' => 'nullable|string|max:255',
-        'city' => 'required|string|max:50',
-        'state' => 'required|string|max:50'
+        'state' => 'string',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function vendor()
     {
         return $this->belongsTo(\App\Models\Base\Vendor::class, 'vendor_id');

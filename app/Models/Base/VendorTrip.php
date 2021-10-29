@@ -3,7 +3,6 @@
 namespace App\Models\Base;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -61,41 +60,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class VendorTrip extends Model
-{    
-
+{
     use HasFactory;
 
-    public $table = 'vendor_trip';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-    protected $appends = ['state_form'];
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'vendor_trip';
 
     public $fillable = [
         'vendor_id',
         'route_trip_id',
         'created_by',
-        'updated_by'
+        'updated_by',
     ];
 
     /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    protected $casts = [        
-        'vendor_id' => 'integer',
-        'route_trip_id' => 'integer',
-        'created_by' => 'integer',
-        'updated_by' => 'integer'
-    ];
-
-    /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
@@ -103,14 +84,29 @@ class VendorTrip extends Model
         'vendor_id' => 'required',
         'route_trip_id' => 'required',
         'created_by' => 'nullable',
-        'updated_by' => 'nullable',        
+        'updated_by' => 'nullable',
         'created_at' => 'nullable',
-        'updated_at' => 'nullable'
+        'updated_at' => 'nullable',
+    ];
+
+    protected $appends = ['state_form'];
+    protected $dates = ['deleted_at'];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'vendor_id' => 'integer',
+        'route_trip_id' => 'integer',
+        'created_by' => 'integer',
+        'updated_by' => 'integer',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function routeTrip()
     {
         return $this->belongsTo(\App\Models\Base\RouteTrip::class, 'route_trip_id');
@@ -118,7 +114,7 @@ class VendorTrip extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function vendor()
     {
         return $this->belongsTo(\App\Models\Base\Vendor::class, 'vendor_id');

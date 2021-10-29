@@ -3,8 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -40,22 +40,31 @@ class StockQuant extends Model
 
     use HasFactory;
 
-    public $table = 'stock_quant';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'stock_quant';
 
     public $fillable = [
         'product_id',
         'warehouse_id',
         'quantity',
-        'uom_id'
+        'uom_id',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'product_id' => 'required',
+        'warehouse_id' => 'required',
+        'quantity' => 'required|integer',
+        'uom_id' => 'required',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -67,24 +76,12 @@ class StockQuant extends Model
         'product_id' => 'integer',
         'warehouse_id' => 'integer',
         'quantity' => 'integer',
-        'uom_id' => 'integer'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'product_id' => 'required',
-        'warehouse_id' => 'required',
-        'quantity' => 'required|integer',
-        'uom_id' => 'required'
+        'uom_id' => 'integer',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function product()
     {
         return $this->belongsTo(\App\Models\Base\Product::class, 'product_id');
@@ -92,7 +89,7 @@ class StockQuant extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function uom()
     {
         return $this->belongsTo(\App\Models\Base\Uom::class, 'uom_id');
@@ -100,7 +97,7 @@ class StockQuant extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function warehouse()
     {
         return $this->belongsTo(\App\Models\Inventory\Warehouse::class, 'warehouse_id');

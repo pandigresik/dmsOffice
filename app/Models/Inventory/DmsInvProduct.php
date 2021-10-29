@@ -3,7 +3,6 @@
 namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -62,20 +61,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class DmsInvProduct extends Model
 {
-    use SoftDeletes;
-
     use HasFactory;
 
+    const CREATED_AT = 'dtmCreated';
+    const UPDATED_AT = 'dtmLastUpdated';
+
     public $table = 'dms_inv_product';
-    
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
-
+    public $primaryKey = 'iInternalId';
     public $fillable = [
         'iId',
         'szId',
@@ -93,8 +86,35 @@ class DmsInvProduct extends Model
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'iId' => 'required|string|max:50',
+        'szId' => 'required|string|max:50',
+        'szName' => 'required|string|max:50',
+        'szDescription' => 'required|string|max:1000',
+        'szTrackingType' => 'required|string|max:10',
+        'szUomId' => 'required|string|max:50',
+        'bUseComposite' => 'required|boolean',
+        'bKit' => 'required|boolean',
+        'szQtyFormat' => 'required|string|max:50',
+        'szProductType' => 'required|string|max:50',
+        'szNickName' => 'nullable|string|max:30',
+        'dtmStartDate' => 'required',
+        'dtmEndDate' => 'required',
+        'szUserCreatedId' => 'required|string|max:20',
+        'szUserUpdatedId' => 'required|string|max:20',
+        'dtmCreated' => 'required',
+        'dtmLastUpdated' => 'required',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -119,33 +139,6 @@ class DmsInvProduct extends Model
         'szUserCreatedId' => 'string',
         'szUserUpdatedId' => 'string',
         'dtmCreated' => 'datetime',
-        'dtmLastUpdated' => 'datetime'
+        'dtmLastUpdated' => 'datetime',
     ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'iId' => 'required|string|max:50',
-        'szId' => 'required|string|max:50',
-        'szName' => 'required|string|max:50',
-        'szDescription' => 'required|string|max:1000',
-        'szTrackingType' => 'required|string|max:10',
-        'szUomId' => 'required|string|max:50',
-        'bUseComposite' => 'required|boolean',
-        'bKit' => 'required|boolean',
-        'szQtyFormat' => 'required|string|max:50',
-        'szProductType' => 'required|string|max:50',
-        'szNickName' => 'nullable|string|max:30',
-        'dtmStartDate' => 'required',
-        'dtmEndDate' => 'required',
-        'szUserCreatedId' => 'required|string|max:20',
-        'szUserUpdatedId' => 'required|string|max:20',
-        'dtmCreated' => 'required',
-        'dtmLastUpdated' => 'required'
-    ];
-
-    
 }

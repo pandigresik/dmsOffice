@@ -3,8 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -48,23 +48,33 @@ class StockInventoryLine extends Model
 
     use HasFactory;
 
-    public $table = 'stock_inventory_line';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const CREATED_BY = null;
     const UPDATED_BY = null;
 
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'stock_inventory_line';
 
     public $fillable = [
         'stock_inventory_id',
         'product_id',
         'uom_id',
-        'quantity'
+        'quantity',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'stock_inventory_id' => 'required',
+        'product_id' => 'required',
+        'uom_id' => 'required',
+        'quantity' => 'required|integer',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -76,24 +86,12 @@ class StockInventoryLine extends Model
         'stock_inventory_id' => 'integer',
         'product_id' => 'integer',
         'uom_id' => 'integer',
-        'quantity' => 'integer'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'stock_inventory_id' => 'required',
-        'product_id' => 'required',
-        'uom_id' => 'required',
-        'quantity' => 'required|integer'
+        'quantity' => 'integer',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function stockInventory()
     {
         return $this->belongsTo(\App\Models\Inventory\StockInventory::class, 'stock_inventory_id');
@@ -101,7 +99,7 @@ class StockInventoryLine extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function product()
     {
         return $this->belongsTo(\App\Models\Base\Product::class, 'product_id');
@@ -109,7 +107,7 @@ class StockInventoryLine extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function uom()
     {
         return $this->belongsTo(\App\Models\Base\Uom::class, 'uom_id');

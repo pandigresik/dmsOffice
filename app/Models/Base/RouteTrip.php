@@ -110,7 +110,7 @@ class RouteTrip extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function VendorTrips()
     {
         return $this->hasMany(\App\Models\Base\VendorTrip::class, 'route_trip_id');
@@ -118,13 +118,14 @@ class RouteTrip extends Model
 
     public function vendors()
     {
-        return $this->belongsToMany(\App\Models\Base\RouteTrip::class,'route_trip','route_trip_id');
+        return $this->belongsToMany(\App\Models\Base\RouteTrip::class, 'route_trip', 'route_trip_id');
     }
 
     /**
-     * Get the Price
+     * Get the Price.
      *
-     * @param  string  $value
+     * @param string $value
+     *
      * @return string
      */
     public function getPriceAttribute($value)

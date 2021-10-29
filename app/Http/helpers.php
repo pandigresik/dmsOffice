@@ -7,16 +7,24 @@ use Spatie\Menu\Laravel\Link;
 if (!function_exists('localFormatDate')) {
     function localFormatDate($value)
     {
-        return Date::parse($value)->format(config('app.date_format'));
+        return Date::parse($value)->format(config('local.date_format'));
     }
 }
 
 if (!function_exists('createLocalFormatDate')) {
     function createLocalFormatDate($value)
     {
-        return Date::createFromFormat(config('app.date_format'), $value);
+        return Date::createFromFormat(config('local.date_format'), $value);
     }
 }
+
+if (!function_exists('localNumberFormat')) {
+    function localNumberFormat($value)
+    {        
+        return number_format($value,config('local.digit_decimal'),config('local.decimal_separator'),config('local.thousand_separator'));
+    }
+}
+
 // ['width:9000','height:7000'] to ['width' => 9000,'height' => 7000]
 if (!function_exists('convertStringArray')) {
     function convertStringArray($values, $separator = ':')

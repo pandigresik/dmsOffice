@@ -115,7 +115,7 @@ class DmsArDoccustomerDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsArDoccustomers.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsArDoccustomers.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szDocId' => new Column(['title' => __('models/dmsArDoccustomers.fields.szDocId'), 'data' => 'szDocId', 'searchable' => true, 'elmsearch' => 'text']),
             'dtmDoc' => new Column(['title' => __('models/dmsArDoccustomers.fields.dtmDoc'), 'data' => 'dtmDoc', 'searchable' => true, 'elmsearch' => 'text']),
             'szCustomerId' => new Column(['title' => __('models/dmsArDoccustomers.fields.szCustomerId'), 'data' => 'szCustomerId', 'searchable' => true, 'elmsearch' => 'text']),
@@ -130,10 +130,10 @@ class DmsArDoccustomerDataTable extends DataTable
             'szHierarchyId' => new Column(['title' => __('models/dmsArDoccustomers.fields.szHierarchyId'), 'data' => 'szHierarchyId', 'searchable' => true, 'elmsearch' => 'text']),
             'szHierarchyFull' => new Column(['title' => __('models/dmsArDoccustomers.fields.szHierarchyFull'), 'data' => 'szHierarchyFull', 'searchable' => true, 'elmsearch' => 'text']),
             'szDocFUpId' => new Column(['title' => __('models/dmsArDoccustomers.fields.szDocFUpId'), 'data' => 'szDocFUpId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserCreatedId' => new Column(['title' => __('models/dmsArDoccustomers.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserUpdatedId' => new Column(['title' => __('models/dmsArDoccustomers.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmCreated' => new Column(['title' => __('models/dmsArDoccustomers.fields.dtmCreated'), 'data' => 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmLastUpdated' => new Column(['title' => __('models/dmsArDoccustomers.fields.dtmLastUpdated'), 'data' => 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
+            // 'szUserCreatedId' => new Column(['title' => __('models/dmsArDoccustomers.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szUserUpdatedId' => new Column(['title' => __('models/dmsArDoccustomers.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmCreated' => new Column(['title' => __('models/dmsArDoccustomers.fields.dtmCreated'), 'data' => // 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmLastUpdated' => new Column(['title' => __('models/dmsArDoccustomers.fields.dtmLastUpdated'), 'data' => // 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

@@ -115,7 +115,7 @@ class DmsArCustomerrouteinfoDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szId' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'intItemNumber' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.intItemNumber'), 'data' => 'intItemNumber', 'searchable' => true, 'elmsearch' => 'text']),
             'szRouteType' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.szRouteType'), 'data' => 'szRouteType', 'searchable' => true, 'elmsearch' => 'text']),
@@ -131,10 +131,10 @@ class DmsArCustomerrouteinfoDataTable extends DataTable
             'bWeek2' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.bWeek2'), 'data' => 'bWeek2', 'searchable' => true, 'elmsearch' => 'text']),
             'bWeek3' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.bWeek3'), 'data' => 'bWeek3', 'searchable' => true, 'elmsearch' => 'text']),
             'bWeek4' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.bWeek4'), 'data' => 'bWeek4', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserCreatedId' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserUpdatedId' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmCreated' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.dtmCreated'), 'data' => 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmLastUpdated' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.dtmLastUpdated'), 'data' => 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
+            // 'szUserCreatedId' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szUserUpdatedId' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmCreated' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.dtmCreated'), 'data' => // 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmLastUpdated' => new Column(['title' => __('models/dmsArCustomerrouteinfos.fields.dtmLastUpdated'), 'data' => // 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

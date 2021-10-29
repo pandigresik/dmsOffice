@@ -4,14 +4,14 @@ namespace App\Models\Base;
 
 use App\Traits\SearchModelTrait;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Permission\Traits\HasPermissions;
-use Spatie\Permission\Traits\HasRoles;
+use IFRS\Interfaces\Recyclable;
 use IFRS\Traits\IFRSUser;
 use IFRS\Traits\Recycling;
-use IFRS\Interfaces\Recyclable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @SWG\Definition(

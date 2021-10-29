@@ -3,8 +3,8 @@
 namespace App\Models\Accounting;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -69,16 +69,12 @@ class IfrsAccounts extends Model
 
     use HasFactory;
 
-    public $table = 'ifrs_accounts';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const CREATED_BY = null;
     const UPDATED_BY = null;
 
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'ifrs_accounts';
 
     public $fillable = [
         'entity_id',
@@ -90,6 +86,24 @@ class IfrsAccounts extends Model
         'account_type',
         //'destroyed_at'
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'entity_id' => 'required',
+        'category_id' => 'nullable',
+        'currency_id' => 'required',
+        'code' => 'required|integer',
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string|max:1000',
+        //'account_type' => 'required|string',
+        'destroyed_at' => 'nullable',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -105,26 +119,11 @@ class IfrsAccounts extends Model
         'name' => 'string',
         'description' => 'string',
         'account_type' => 'string',
-        'destroyed_at' => 'datetime'
+        'destroyed_at' => 'datetime',
     ];
 
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'entity_id' => 'required',
-        'category_id' => 'nullable',
-        'currency_id' => 'required',
-        'code' => 'required|integer',
-        'name' => 'required|string|max:255',
-        'description' => 'nullable|string|max:1000',
-        //'account_type' => 'required|string',
-        'destroyed_at' => 'nullable'
-    ];
-
-    public function setCategoryIdAttribute($value){
+    public function setCategoryIdAttribute($value)
+    {
         $category = \App\Models\Accounting\IfrsCategories::find($value);
         $this->attributes['account_type'] = $category->category_type;
         $this->attributes['category_id'] = $value;
@@ -132,7 +131,7 @@ class IfrsAccounts extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function category()
     {
         return $this->belongsTo(\App\Models\Accounting\IfrsCategories::class, 'category_id');
@@ -140,7 +139,7 @@ class IfrsAccounts extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function currency()
     {
         return $this->belongsTo(\App\Models\Accounting\IfrsCurrency::class, 'currency_id');
@@ -148,7 +147,7 @@ class IfrsAccounts extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function entity()
     {
         return $this->belongsTo(\App\Models\Accounting\IfrsEntities::class, 'entity_id');
@@ -156,7 +155,7 @@ class IfrsAccounts extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function ifrsAssignments()
     {
         return $this->hasMany(\App\Models\Accounting\IfrsAssignment::class, 'forex_account_id');
@@ -164,7 +163,7 @@ class IfrsAccounts extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function ifrsBalances()
     {
         return $this->hasMany(\App\Models\Accounting\IfrsBalance::class, 'account_id');
@@ -172,7 +171,7 @@ class IfrsAccounts extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function ifrsLedgers()
     {
         return $this->hasMany(\App\Models\Accounting\IfrsLedger::class, 'folio_account');
@@ -180,7 +179,7 @@ class IfrsAccounts extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function ifrsLedger1s()
     {
         return $this->hasMany(\App\Models\Accounting\IfrsLedger::class, 'post_account');
@@ -188,7 +187,7 @@ class IfrsAccounts extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function ifrsLineItems()
     {
         return $this->hasMany(\App\Models\Accounting\IfrsLineItem::class, 'account_id');
@@ -196,7 +195,7 @@ class IfrsAccounts extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function ifrsTransactions()
     {
         return $this->hasMany(\App\Models\Accounting\IfrsTransaction::class, 'account_id');
@@ -204,7 +203,7 @@ class IfrsAccounts extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function ifrsVats()
     {
         return $this->hasMany(\App\Models\Accounting\IfrsVat::class, 'account_id');

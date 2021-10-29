@@ -3,8 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -71,15 +71,10 @@ class BtbViewTmp extends Model
 
     use HasFactory;
 
-    public $table = 'btb_view_tmp';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'btb_view_tmp';
 
     public $fillable = [
         'Tgl_BTB',
@@ -91,8 +86,28 @@ class BtbViewTmp extends Model
         'No_DN',
         'Tgl_sjp',
         'Depo',
-        'Nama_Produk'
+        'Nama_Produk',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'Tgl_BTB' => 'required|string|max:10',
+        'No_BTB' => 'required|string|max:11',
+        'ID_Vendor' => 'required',
+        'Nama_Vendor' => 'required|string|max:20',
+        'Nama_PT' => 'required|string|max:3',
+        'No_CO' => 'required',
+        'No_DN' => 'required',
+        'Tgl_sjp' => 'required|string|max:10',
+        'Depo' => 'required|string|max:8',
+        'Nama_Produk' => 'required|string|max:5',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -109,26 +124,6 @@ class BtbViewTmp extends Model
         'No_DN' => 'integer',
         'Tgl_sjp' => 'string',
         'Depo' => 'string',
-        'Nama_Produk' => 'string'
+        'Nama_Produk' => 'string',
     ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'Tgl_BTB' => 'required|string|max:10',
-        'No_BTB' => 'required|string|max:11',
-        'ID_Vendor' => 'required',
-        'Nama_Vendor' => 'required|string|max:20',
-        'Nama_PT' => 'required|string|max:3',
-        'No_CO' => 'required',
-        'No_DN' => 'required',
-        'Tgl_sjp' => 'required|string|max:10',
-        'Depo' => 'required|string|max:8',
-        'Nama_Produk' => 'required|string|max:5'
-    ];
-
-    
 }

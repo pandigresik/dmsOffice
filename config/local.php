@@ -19,4 +19,7 @@ return [
     'datetime_format' => 'd M Y H:i:s',
     'date_format_javascript' => 'DD MMM YYYY',
     'datetime_format_javascript' => 'DD MMM YYYY HH:mm:ss',
+    'thousand_separator' => '.',
+    'decimal_separator' => ',',
+    'digit_decimal' => 2
 ];

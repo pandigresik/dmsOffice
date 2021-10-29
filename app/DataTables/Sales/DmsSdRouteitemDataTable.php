@@ -115,7 +115,7 @@ class DmsSdRouteitemDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsSdRouteitems.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsSdRouteitems.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szId' => new Column(['title' => __('models/dmsSdRouteitems.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'intItemNumber' => new Column(['title' => __('models/dmsSdRouteitems.fields.intItemNumber'), 'data' => 'intItemNumber', 'searchable' => true, 'elmsearch' => 'text']),
             'szCustomerId' => new Column(['title' => __('models/dmsSdRouteitems.fields.szCustomerId'), 'data' => 'szCustomerId', 'searchable' => true, 'elmsearch' => 'text']),

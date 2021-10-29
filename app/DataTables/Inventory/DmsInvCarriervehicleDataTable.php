@@ -115,7 +115,7 @@ class DmsInvCarriervehicleDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsInvCarriervehicles.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsInvCarriervehicles.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szId' => new Column(['title' => __('models/dmsInvCarriervehicles.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'intItemNumber' => new Column(['title' => __('models/dmsInvCarriervehicles.fields.intItemNumber'), 'data' => 'intItemNumber', 'searchable' => true, 'elmsearch' => 'text']),
             'szVehicleNo' => new Column(['title' => __('models/dmsInvCarriervehicles.fields.szVehicleNo'), 'data' => 'szVehicleNo', 'searchable' => true, 'elmsearch' => 'text']),

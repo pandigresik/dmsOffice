@@ -115,7 +115,7 @@ class DmsSdPricecatalogDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szId' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'szName' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.szName'), 'data' => 'szName', 'searchable' => true, 'elmsearch' => 'text']),
             'szDescription' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
@@ -124,10 +124,10 @@ class DmsSdPricecatalogDataTable extends DataTable
             'dtmValidFrom' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.dtmValidFrom'), 'data' => 'dtmValidFrom', 'searchable' => true, 'elmsearch' => 'text']),
             'dtmValidTo' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.dtmValidTo'), 'data' => 'dtmValidTo', 'searchable' => true, 'elmsearch' => 'text']),
             'intPriority' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.intPriority'), 'data' => 'intPriority', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserCreatedId' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserUpdatedId' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmCreated' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.dtmCreated'), 'data' => 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmLastUpdated' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.dtmLastUpdated'), 'data' => 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
+            // 'szUserCreatedId' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szUserUpdatedId' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmCreated' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.dtmCreated'), 'data' => // 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmLastUpdated' => new Column(['title' => __('models/dmsSdPricecatalogs.fields.dtmLastUpdated'), 'data' => // 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

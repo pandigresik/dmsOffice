@@ -115,16 +115,16 @@ class DmsInvVehicletypeDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsInvVehicletypes.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsInvVehicletypes.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szId' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'szName' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szName'), 'data' => 'szName', 'searchable' => true, 'elmsearch' => 'text']),
             'szDescription' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
             'decWeight' => new Column(['title' => __('models/dmsInvVehicletypes.fields.decWeight'), 'data' => 'decWeight', 'searchable' => true, 'elmsearch' => 'text']),
             'decVolume' => new Column(['title' => __('models/dmsInvVehicletypes.fields.decVolume'), 'data' => 'decVolume', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserCreatedId' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserUpdatedId' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmCreated' => new Column(['title' => __('models/dmsInvVehicletypes.fields.dtmCreated'), 'data' => 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmLastUpdated' => new Column(['title' => __('models/dmsInvVehicletypes.fields.dtmLastUpdated'), 'data' => 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
+            // 'szUserCreatedId' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szUserUpdatedId' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmCreated' => new Column(['title' => __('models/dmsInvVehicletypes.fields.dtmCreated'), 'data' => // 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmLastUpdated' => new Column(['title' => __('models/dmsInvVehicletypes.fields.dtmLastUpdated'), 'data' => // 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

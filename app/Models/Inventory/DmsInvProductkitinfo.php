@@ -3,7 +3,6 @@
 namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -62,27 +61,36 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class DmsInvProductkitinfo extends Model
 {
-    use SoftDeletes;
-
     use HasFactory;
 
+    const CREATED_AT = 'dtmCreated';
+    const UPDATED_AT = 'dtmLastUpdated';
+
     public $table = 'dms_inv_productkitinfo';
-    
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
-
+    public $primaryKey = 'iInternalId';
     public $fillable = [
         'iId',
         'szId',
         'szProductId',
         'decQty',
-        'szUomId'
+        'szUomId',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'iId' => 'required|string|max:50',
+        'szId' => 'required|string|max:50',
+        'szProductId' => 'required|string|max:50',
+        'decQty' => 'required|numeric',
+        'szUomId' => 'required|string|max:50',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -95,21 +103,6 @@ class DmsInvProductkitinfo extends Model
         'szId' => 'string',
         'szProductId' => 'string',
         'decQty' => 'decimal:2',
-        'szUomId' => 'string'
+        'szUomId' => 'string',
     ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'iId' => 'required|string|max:50',
-        'szId' => 'required|string|max:50',
-        'szProductId' => 'required|string|max:50',
-        'decQty' => 'required|numeric',
-        'szUomId' => 'required|string|max:50'
-    ];
-
-    
 }

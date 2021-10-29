@@ -3,7 +3,6 @@
 namespace App\Models\Base;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -62,20 +61,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class DmsArCustomerrouteinfo extends Model
 {
-    use SoftDeletes;
-
     use HasFactory;
 
+    const CREATED_AT = 'dtmCreated';
+    const UPDATED_AT = 'dtmLastUpdated';
+
     public $table = 'dms_ar_customerrouteinfo';
-    
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
-
+    public $primaryKey = 'iInternalId';
     public $fillable = [
         'iId',
         'szId',
@@ -96,8 +89,38 @@ class DmsArCustomerrouteinfo extends Model
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'iId' => 'required|string|max:50',
+        'szId' => 'required|string|max:50',
+        'intItemNumber' => 'required|integer',
+        'szRouteType' => 'required|string|max:20',
+        'szEmployeeId' => 'required|string|max:50',
+        'bMon' => 'required|boolean',
+        'bTue' => 'required|boolean',
+        'bWed' => 'required|boolean',
+        'bThu' => 'required|boolean',
+        'bFri' => 'required|boolean',
+        'bSat' => 'required|boolean',
+        'bSun' => 'required|boolean',
+        'bWeek1' => 'required|boolean',
+        'bWeek2' => 'required|boolean',
+        'bWeek3' => 'required|boolean',
+        'bWeek4' => 'required|boolean',
+        'szUserCreatedId' => 'required|string|max:20',
+        'szUserUpdatedId' => 'required|string|max:20',
+        'dtmCreated' => 'required',
+        'dtmLastUpdated' => 'required',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -125,36 +148,6 @@ class DmsArCustomerrouteinfo extends Model
         'szUserCreatedId' => 'string',
         'szUserUpdatedId' => 'string',
         'dtmCreated' => 'datetime',
-        'dtmLastUpdated' => 'datetime'
+        'dtmLastUpdated' => 'datetime',
     ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'iId' => 'required|string|max:50',
-        'szId' => 'required|string|max:50',
-        'intItemNumber' => 'required|integer',
-        'szRouteType' => 'required|string|max:20',
-        'szEmployeeId' => 'required|string|max:50',
-        'bMon' => 'required|boolean',
-        'bTue' => 'required|boolean',
-        'bWed' => 'required|boolean',
-        'bThu' => 'required|boolean',
-        'bFri' => 'required|boolean',
-        'bSat' => 'required|boolean',
-        'bSun' => 'required|boolean',
-        'bWeek1' => 'required|boolean',
-        'bWeek2' => 'required|boolean',
-        'bWeek3' => 'required|boolean',
-        'bWeek4' => 'required|boolean',
-        'szUserCreatedId' => 'required|string|max:20',
-        'szUserUpdatedId' => 'required|string|max:20',
-        'dtmCreated' => 'required',
-        'dtmLastUpdated' => 'required'
-    ];
-
-    
 }

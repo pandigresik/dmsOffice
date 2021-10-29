@@ -3,9 +3,10 @@
 namespace App\Models\Base;
 
 use App\Traits\SearchModelTrait;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Permission\Models\Permission as Model;
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+
 /**
  * @SWG\Definition(
  *      definition="Permission",
@@ -42,7 +43,7 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 class Permission extends Model
 {
     use HasFactory;
-    use Cachable;
+    //use Cachable;
     use SearchModelTrait;
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';

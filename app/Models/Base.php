@@ -10,7 +10,6 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-
 class Base extends Model
 {
     use Cachable;
@@ -21,10 +20,10 @@ class Base extends Model
         BlameableCustomTrait::bootBlameable insteadof Blameable;
     }
 
-    protected static $logFillable = true;
-
     const CREATED_BY = 'created_by';
-    const UPDATED_BY = 'updated_by';    
+    const UPDATED_BY = 'updated_by';
+
+    protected static $logFillable = true;
 
     /**
      * Get the name of the "created by" column.
@@ -60,5 +59,5 @@ class Base extends Model
     public function updatedBy()
     {
         return $this->belongsTo(\App\Models\Base\User::class, static::UPDATED_BY);
-    }    
+    }
 }

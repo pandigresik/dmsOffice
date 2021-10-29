@@ -115,7 +115,7 @@ class DmsInvProductDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsInvProducts.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsInvProducts.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szId' => new Column(['title' => __('models/dmsInvProducts.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'szName' => new Column(['title' => __('models/dmsInvProducts.fields.szName'), 'data' => 'szName', 'searchable' => true, 'elmsearch' => 'text']),
             'szDescription' => new Column(['title' => __('models/dmsInvProducts.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
@@ -123,15 +123,15 @@ class DmsInvProductDataTable extends DataTable
             'szUomId' => new Column(['title' => __('models/dmsInvProducts.fields.szUomId'), 'data' => 'szUomId', 'searchable' => true, 'elmsearch' => 'text']),
             'bUseComposite' => new Column(['title' => __('models/dmsInvProducts.fields.bUseComposite'), 'data' => 'bUseComposite', 'searchable' => true, 'elmsearch' => 'text']),
             'bKit' => new Column(['title' => __('models/dmsInvProducts.fields.bKit'), 'data' => 'bKit', 'searchable' => true, 'elmsearch' => 'text']),
-            'szQtyFormat' => new Column(['title' => __('models/dmsInvProducts.fields.szQtyFormat'), 'data' => 'szQtyFormat', 'searchable' => true, 'elmsearch' => 'text']),
+            //'szQtyFormat' => new Column(['title' => __('models/dmsInvProducts.fields.szQtyFormat'), 'data' => 'szQtyFormat', 'searchable' => true, 'elmsearch' => 'text']),
             'szProductType' => new Column(['title' => __('models/dmsInvProducts.fields.szProductType'), 'data' => 'szProductType', 'searchable' => true, 'elmsearch' => 'text']),
-            'szNickName' => new Column(['title' => __('models/dmsInvProducts.fields.szNickName'), 'data' => 'szNickName', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmStartDate' => new Column(['title' => __('models/dmsInvProducts.fields.dtmStartDate'), 'data' => 'dtmStartDate', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmEndDate' => new Column(['title' => __('models/dmsInvProducts.fields.dtmEndDate'), 'data' => 'dtmEndDate', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserCreatedId' => new Column(['title' => __('models/dmsInvProducts.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserUpdatedId' => new Column(['title' => __('models/dmsInvProducts.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmCreated' => new Column(['title' => __('models/dmsInvProducts.fields.dtmCreated'), 'data' => 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmLastUpdated' => new Column(['title' => __('models/dmsInvProducts.fields.dtmLastUpdated'), 'data' => 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
+            //'szNickName' => new Column(['title' => __('models/dmsInvProducts.fields.szNickName'), 'data' => 'szNickName', 'searchable' => true, 'elmsearch' => 'text']),
+            //'dtmStartDate' => new Column(['title' => __('models/dmsInvProducts.fields.dtmStartDate'), 'data' => 'dtmStartDate', 'searchable' => true, 'elmsearch' => 'text']),
+            //'dtmEndDate' => new Column(['title' => __('models/dmsInvProducts.fields.dtmEndDate'), 'data' => 'dtmEndDate', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szUserCreatedId' => new Column(['title' => __('models/dmsInvProducts.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szUserUpdatedId' => new Column(['title' => __('models/dmsInvProducts.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmCreated' => new Column(['title' => __('models/dmsInvProducts.fields.dtmCreated'), 'data' => // 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmLastUpdated' => new Column(['title' => __('models/dmsInvProducts.fields.dtmLastUpdated'), 'data' => // 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

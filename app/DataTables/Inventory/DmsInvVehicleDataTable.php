@@ -35,7 +35,15 @@ class DmsInvVehicleDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', 'inventory.dms_inv_vehicles.datatables_actions');
+        return $dataTable            
+            ->editColumn('decVolume', function($q){
+                return '<div class="text-right">'.$q->decVolume.'</div>';
+            })
+            ->editColumn('decWeight', function($q){
+                return '<div class="text-right">'.$q->decWeight.'</div>';
+            })
+            ->addColumn('action', 'inventory.dms_inv_vehicles.datatables_actions')
+            ->escapeColumns([]);
     }
 
     /**
@@ -115,10 +123,10 @@ class DmsInvVehicleDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsInvVehicles.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsInvVehicles.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szId' => new Column(['title' => __('models/dmsInvVehicles.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'szName' => new Column(['title' => __('models/dmsInvVehicles.fields.szName'), 'data' => 'szName', 'searchable' => true, 'elmsearch' => 'text']),
-            'szDescription' => new Column(['title' => __('models/dmsInvVehicles.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
+            //'szDescription' => new Column(['title' => __('models/dmsInvVehicles.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
             'szBranchId' => new Column(['title' => __('models/dmsInvVehicles.fields.szBranchId'), 'data' => 'szBranchId', 'searchable' => true, 'elmsearch' => 'text']),
             'szPoliceNo' => new Column(['title' => __('models/dmsInvVehicles.fields.szPoliceNo'), 'data' => 'szPoliceNo', 'searchable' => true, 'elmsearch' => 'text']),
             'szChassisNo' => new Column(['title' => __('models/dmsInvVehicles.fields.szChassisNo'), 'data' => 'szChassisNo', 'searchable' => true, 'elmsearch' => 'text']),
@@ -127,10 +135,10 @@ class DmsInvVehicleDataTable extends DataTable
             'decVolume' => new Column(['title' => __('models/dmsInvVehicles.fields.decVolume'), 'data' => 'decVolume', 'searchable' => true, 'elmsearch' => 'text']),
             'szVehicleTypeId' => new Column(['title' => __('models/dmsInvVehicles.fields.szVehicleTypeId'), 'data' => 'szVehicleTypeId', 'searchable' => true, 'elmsearch' => 'text']),
             'dtmVehicleLicense' => new Column(['title' => __('models/dmsInvVehicles.fields.dtmVehicleLicense'), 'data' => 'dtmVehicleLicense', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserCreatedId' => new Column(['title' => __('models/dmsInvVehicles.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szUserUpdatedId' => new Column(['title' => __('models/dmsInvVehicles.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmCreated' => new Column(['title' => __('models/dmsInvVehicles.fields.dtmCreated'), 'data' => 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
-            'dtmLastUpdated' => new Column(['title' => __('models/dmsInvVehicles.fields.dtmLastUpdated'), 'data' => 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
+            // 'szUserCreatedId' => new Column(['title' => __('models/dmsInvVehicles.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szUserUpdatedId' => new Column(['title' => __('models/dmsInvVehicles.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmCreated' => new Column(['title' => __('models/dmsInvVehicles.fields.dtmCreated'), 'data' => // 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'dtmLastUpdated' => new Column(['title' => __('models/dmsInvVehicles.fields.dtmLastUpdated'), 'data' => // 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

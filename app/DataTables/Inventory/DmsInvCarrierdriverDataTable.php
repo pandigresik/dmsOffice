@@ -115,7 +115,7 @@ class DmsInvCarrierdriverDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'iId' => new Column(['title' => __('models/dmsInvCarrierdrivers.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'iId' => new Column(['title' => __('models/dmsInvCarrierdrivers.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
             'szId' => new Column(['title' => __('models/dmsInvCarrierdrivers.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'intItemNumber' => new Column(['title' => __('models/dmsInvCarrierdrivers.fields.intItemNumber'), 'data' => 'intItemNumber', 'searchable' => true, 'elmsearch' => 'text']),
             'szDriverName' => new Column(['title' => __('models/dmsInvCarrierdrivers.fields.szDriverName'), 'data' => 'szDriverName', 'searchable' => true, 'elmsearch' => 'text'])

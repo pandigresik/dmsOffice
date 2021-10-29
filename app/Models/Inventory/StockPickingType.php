@@ -3,8 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -40,20 +40,27 @@ class StockPickingType extends Model
 
     use HasFactory;
 
-    public $table = 'stock_picking_type';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'stock_picking_type';
 
     public $fillable = [
         'name',
-        'code'
+        'code',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'name' => 'required|string|max:50',
+        'code' => 'required|string|max:20',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -63,22 +70,12 @@ class StockPickingType extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'code' => 'string'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'name' => 'required|string|max:50',
-        'code' => 'required|string|max:20'
+        'code' => 'string',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function stockPickings()
     {
         return $this->hasMany(\App\Models\Inventory\StockPicking::class, 'stock_picking_type_id');

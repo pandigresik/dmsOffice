@@ -3,7 +3,6 @@
 namespace App\Models\Sales;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -90,20 +89,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class DmsSdRouteitem extends Model
 {
-    use SoftDeletes;
-
     use HasFactory;
 
+    const CREATED_AT = 'dtmCreated';
+    const UPDATED_AT = 'dtmLastUpdated';
+
     public $table = 'dms_sd_routeitem';
-    
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
-
+    public $primaryKey = 'iInternalId';
     public $fillable = [
         'iId',
         'szId',
@@ -119,8 +112,33 @@ class DmsSdRouteitem extends Model
         'intWeek1',
         'intWeek2',
         'intWeek3',
-        'intWeek4'
+        'intWeek4',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'iId' => 'required|string|max:50',
+        'szId' => 'required|string|max:50',
+        'intItemNumber' => 'required|integer',
+        'szCustomerId' => 'required|string|max:50',
+        'intDay1' => 'required|integer',
+        'intDay2' => 'required|integer',
+        'intDay3' => 'required|integer',
+        'intDay4' => 'required|integer',
+        'intDay5' => 'required|integer',
+        'intDay6' => 'required|integer',
+        'intDay7' => 'required|integer',
+        'intWeek1' => 'required|integer',
+        'intWeek2' => 'required|integer',
+        'intWeek3' => 'required|integer',
+        'intWeek4' => 'required|integer',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -143,31 +161,6 @@ class DmsSdRouteitem extends Model
         'intWeek1' => 'integer',
         'intWeek2' => 'integer',
         'intWeek3' => 'integer',
-        'intWeek4' => 'integer'
+        'intWeek4' => 'integer',
     ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'iId' => 'required|string|max:50',
-        'szId' => 'required|string|max:50',
-        'intItemNumber' => 'required|integer',
-        'szCustomerId' => 'required|string|max:50',
-        'intDay1' => 'required|integer',
-        'intDay2' => 'required|integer',
-        'intDay3' => 'required|integer',
-        'intDay4' => 'required|integer',
-        'intDay5' => 'required|integer',
-        'intDay6' => 'required|integer',
-        'intDay7' => 'required|integer',
-        'intWeek1' => 'required|integer',
-        'intWeek2' => 'required|integer',
-        'intWeek3' => 'required|integer',
-        'intWeek4' => 'required|integer'
-    ];
-
-    
 }
