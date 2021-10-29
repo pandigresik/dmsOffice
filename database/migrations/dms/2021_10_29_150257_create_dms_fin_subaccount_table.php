@@ -22,7 +22,7 @@ class CreateDmsFinSubaccountTable extends Migration
             $table->string('szUserCreatedId', 20);
             $table->string('szUserUpdatedId', 20);
             $table->timestamp('dtmCreated')->useCurrent()->useCurrentOnUpdate();
-            $table->timestamp('dtmLastUpdated')->default('0000-00-00 00:00:00');
+            $table->timestamp('dtmLastUpdated')->default('2000-01-01 00:00:00');
             $table->primary(['iInternalId', 'iId']);
         });
     }
