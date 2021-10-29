@@ -46,6 +46,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('uoms', App\Http\Controllers\Base\UomController::class, ['as' => 'base']);
         Route::resource('settings', App\Http\Controllers\Base\SettingController::class, ['as' => 'base']);
         Route::resource('products', App\Http\Controllers\Base\ProductController::class, ['as' => 'base']);
+
+        /** DMS Table */            
+        Route::resource('dmsApSuppliers', App\Http\Controllers\Base\DmsApSupplierController::class, ["as" => 'base']);
+        Route::resource('dmsArCustomers', App\Http\Controllers\Base\DmsArCustomerController::class, ["as" => 'base']);
+        Route::resource('dmsArCustomercategories', App\Http\Controllers\Base\DmsArCustomercategoryController::class, ["as" => 'base']);
+        Route::resource('dmsArCustomercategorytypes', App\Http\Controllers\Base\DmsArCustomercategorytypeController::class, ["as" => 'base']);
+        Route::resource('dmsArCustomerhierarchies', App\Http\Controllers\Base\DmsArCustomerhierarchyController::class, ["as" => 'base']);
+        Route::resource('dmsArCustomerrouteinfos', App\Http\Controllers\Base\DmsArCustomerrouteinfoController::class, ["as" => 'base']);
+        Route::resource('dmsArDoccustomers', App\Http\Controllers\Base\DmsArDoccustomerController::class, ["as" => 'base']);
+        Route::resource('dmsArPaymentterms', App\Http\Controllers\Base\DmsArPaymenttermController::class, ["as" => 'base']);
+        Route::resource('dmsArPaymenttypes', App\Http\Controllers\Base\DmsArPaymenttypeController::class, ["as" => 'base']);
+        Route::resource('dmsArPricesegments', App\Http\Controllers\Base\DmsArPricesegmentController::class, ["as" => 'base']);
     });
 
     Route::group(['prefix' => 'inventory'], function () {
@@ -57,6 +69,21 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('stockPickings', App\Http\Controllers\Inventory\StockPickingController::class, ['as' => 'inventory']);
         Route::resource('synchronizeInStockPickings', App\Http\Controllers\Inventory\SynchronizeInStockPickingController::class, ['as' => 'inventory']);
         Route::resource('synchronizeOutStockPickings', App\Http\Controllers\Inventory\SynchronizeOutStockPickingController::class, ['as' => 'inventory']);
+        Route::resource('btbViewTmps', App\Http\Controllers\Inventory\BtbViewTmpController::class, ["as" => 'inventory']);
+
+        /** DMS Table */
+        Route::resource('dmsInvCarriers', App\Http\Controllers\Inventory\DmsInvCarrierController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvCarrierdrivers', App\Http\Controllers\Inventory\DmsInvCarrierdriverController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvCarriervehicles', App\Http\Controllers\Inventory\DmsInvCarriervehicleController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvProducts', App\Http\Controllers\Inventory\DmsInvProductController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvProductcategories', App\Http\Controllers\Inventory\DmsInvProductcategoryController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvProductcategorytypes', App\Http\Controllers\Inventory\DmsInvProductcategorytypeController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvProductitemcategories', App\Http\Controllers\Inventory\DmsInvProductitemcategoryController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvProductkitinfos', App\Http\Controllers\Inventory\DmsInvProductkitinfoController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvUoms', App\Http\Controllers\Inventory\DmsInvUomController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvVehicles', App\Http\Controllers\Inventory\DmsInvVehicleController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvVehicletypes', App\Http\Controllers\Inventory\DmsInvVehicletypeController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvWarehouses', App\Http\Controllers\Inventory\DmsInvWarehouseController::class, ["as" => 'inventory']);
     });
 
     Route::group(['prefix' => 'accounting'], function () {
@@ -67,7 +94,17 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('ifrsExchangeRates', App\Http\Controllers\Accounting\IfrsExchangeRatesController::class, ['as' => 'accounting']);
         Route::resource('ifrsReportingPeriods', App\Http\Controllers\Accounting\IfrsReportingPeriodsController::class, ['as' => 'accounting']);
         Route::resource('ifrsVats', App\Http\Controllers\Accounting\IfrsVatsController::class, ['as' => 'accounting']);
+        /** Table DMS */
+        Route::resource('dmsFinAccounts', App\Http\Controllers\Accounting\DmsFinAccountController::class, ["as" => 'accounting']);
+        Route::resource('dmsFinSubaccounts', App\Http\Controllers\Accounting\DmsFinSubaccountController::class, ["as" => 'accounting']);
     });
+
+    Route::group(['prefix' => 'sales'], function () {
+        Route::resource('dmsSdPricecatalogs', App\Http\Controllers\Sales\DmsSdPricecatalogController::class, ["as" => 'sales']);
+        Route::resource('dmsSdRoutes', App\Http\Controllers\Sales\DmsSdRouteController::class, ["as" => 'sales']);
+        Route::resource('dmsSdRouteitems', App\Http\Controllers\Sales\DmsSdRouteitemController::class, ["as" => 'sales']);
+    });
+
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');
     Route::get('/events', [App\Http\Controllers\EventsController::class, 'index'])->name('events.index');
 });
@@ -82,8 +119,10 @@ Route::post('generator_builder/rollback', '\InfyOm\GeneratorBuilder\Controllers\
     '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@generateFromFile'
 )->name('io_generator_builder_generate_from_file');
 
-Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');
+Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');    
 
-Route::group(['prefix' => 'inventory'], function () {
-    Route::resource('btbViewTmps', App\Http\Controllers\Inventory\BtbViewTmpController::class, ["as" => 'inventory']);
-});
+
+
+
+
+
