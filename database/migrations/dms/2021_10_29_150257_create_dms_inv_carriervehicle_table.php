@@ -14,7 +14,7 @@ class CreateDmsInvCarriervehicleTable extends Migration
     public function up()
     {
         Schema::create('dms_inv_carriervehicle', function (Blueprint $table) {
-            $table->unsignedInteger('iInternalId');
+            $table->unsignedInteger('iInternalId')->autoIncrement();
             $table->char('iId', 50)->default('ewid(');
             $table->string('szId', 50);
             $table->integer('intItemNumber');

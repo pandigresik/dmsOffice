@@ -14,7 +14,7 @@ class CreateDmsArDoccustomerTable extends Migration
     public function up()
     {
         Schema::create('dms_ar_doccustomer', function (Blueprint $table) {
-            $table->unsignedInteger('iInternalId');
+            $table->unsignedInteger('iInternalId')->autoIncrement();
             $table->char('iId', 50)->default('ewid(');
             $table->string('szDocId', 50)->unique('IX_DMS_AR_DocCustomer');
             $table->dateTime('dtmDoc')->default('2000-01-01 00:00:00');

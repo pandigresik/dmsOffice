@@ -14,7 +14,7 @@ class CreateDmsSdPricecatalogTable extends Migration
     public function up()
     {
         Schema::create('dms_sd_pricecatalog', function (Blueprint $table) {
-            $table->unsignedInteger('iInternalId');
+            $table->unsignedInteger('iInternalId')->autoIncrement();
             $table->char('iId', 50)->default('ewid(');
             $table->string('szId', 50)->unique('IX_DMS_SD_PriceCatalog');
             $table->string('szName', 50);

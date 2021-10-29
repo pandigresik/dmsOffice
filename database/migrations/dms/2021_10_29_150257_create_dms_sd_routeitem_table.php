@@ -14,7 +14,7 @@ class CreateDmsSdRouteitemTable extends Migration
     public function up()
     {
         Schema::create('dms_sd_routeitem', function (Blueprint $table) {
-            $table->unsignedInteger('iInternalId');
+            $table->unsignedInteger('iInternalId')->autoIncrement();
             $table->char('iId', 50)->default('ewid(');
             $table->string('szId', 50)->index('IX_DMS_SD_RouteItem_2');
             $table->integer('intItemNumber');

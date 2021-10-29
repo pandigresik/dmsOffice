@@ -14,7 +14,7 @@ class CreateDmsArCustomercategoryTable extends Migration
     public function up()
     {
         Schema::create('dms_ar_customercategory', function (Blueprint $table) {
-            $table->unsignedInteger('iInternalId');
+            $table->unsignedInteger('iInternalId')->autoIncrement();
             $table->char('iId', 50)->default('ewid(');
             $table->string('szId', 50)->unique('IX_DMS_AR_CustomerCategory');
             $table->string('szName', 50);
