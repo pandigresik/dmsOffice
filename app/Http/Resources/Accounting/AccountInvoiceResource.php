@@ -9,7 +9,8 @@ class AccountInvoiceResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -27,7 +28,7 @@ class AccountInvoiceResource extends JsonResource
             'comment' => $this->comment,
             'state' => $this->state,
             'date_invoice' => $this->date_invoice,
-            'date_due' => $this->date_due
+            'date_due' => $this->date_due,
         ];
     }
 }

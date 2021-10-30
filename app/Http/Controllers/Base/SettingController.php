@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\SettingDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateSettingRequest;
 use App\Http\Requests\Base\UpdateSettingRequest;
 use App\Repositories\Base\SettingRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class SettingController extends AppBaseController
 {
-    /** @var  SettingRepository */
+    /** @var SettingRepository */
     private $settingRepository;
 
     public function __construct(SettingRepository $settingRepo)
@@ -25,7 +23,6 @@ class SettingController extends AppBaseController
     /**
      * Display a listing of the Setting.
      *
-     * @param SettingDataTable $settingDataTable
      * @return Response
      */
     public function index(SettingDataTable $settingDataTable)
@@ -46,8 +43,6 @@ class SettingController extends AppBaseController
     /**
      * Store a newly created Setting in storage.
      *
-     * @param CreateSettingRequest $request
-     *
      * @return Response
      */
     public function store(CreateSettingRequest $request)
@@ -64,7 +59,7 @@ class SettingController extends AppBaseController
     /**
      * Display the specified Setting.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class SettingController extends AppBaseController
     /**
      * Show the form for editing the specified Setting.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class SettingController extends AppBaseController
     /**
      * Update the specified Setting in storage.
      *
-     * @param  int              $id
-     * @param UpdateSettingRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class SettingController extends AppBaseController
     /**
      * Remove the specified Setting from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class SettingController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Setting from storage.         
+     * Provide options item based on relationship model Setting from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

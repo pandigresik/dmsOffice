@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DmsArPricesegmentDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateDmsArPricesegmentRequest;
 use App\Http\Requests\Base\UpdateDmsArPricesegmentRequest;
 use App\Repositories\Base\DmsArPricesegmentRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsArPricesegmentController extends AppBaseController
 {
-    /** @var  DmsArPricesegmentRepository */
+    /** @var DmsArPricesegmentRepository */
     private $dmsArPricesegmentRepository;
 
     public function __construct(DmsArPricesegmentRepository $dmsArPricesegmentRepo)
@@ -25,7 +23,6 @@ class DmsArPricesegmentController extends AppBaseController
     /**
      * Display a listing of the DmsArPricesegment.
      *
-     * @param DmsArPricesegmentDataTable $dmsArPricesegmentDataTable
      * @return Response
      */
     public function index(DmsArPricesegmentDataTable $dmsArPricesegmentDataTable)
@@ -46,8 +43,6 @@ class DmsArPricesegmentController extends AppBaseController
     /**
      * Store a newly created DmsArPricesegment in storage.
      *
-     * @param CreateDmsArPricesegmentRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsArPricesegmentRequest $request)
@@ -64,7 +59,7 @@ class DmsArPricesegmentController extends AppBaseController
     /**
      * Display the specified DmsArPricesegment.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsArPricesegmentController extends AppBaseController
     /**
      * Show the form for editing the specified DmsArPricesegment.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsArPricesegmentController extends AppBaseController
     /**
      * Update the specified DmsArPricesegment in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsArPricesegmentRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsArPricesegmentController extends AppBaseController
     /**
      * Remove the specified DmsArPricesegment from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsArPricesegmentController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsArPricesegment from storage.         
+     * Provide options item based on relationship model DmsArPricesegment from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

@@ -1,18 +1,18 @@
 <?php
 
 return array (
-  'singular' => 'DmsArCustomercategorytype',
-  'plural' => 'DmsArCustomercategorytypes',
+  'singular' => 'Tipe Kategori Pelanggan',
+  'plural' => 'Tipe Kategori Pelanggan',
   'fields' => 
   array (
     'iInternalId' => 'Iinternalid',
     'iId' => 'Iid',
-    'szId' => 'Szid',
-    'szName' => 'Szname',
-    'szDescription' => 'Szdescription',
-    'szUserCreatedId' => 'Szusercreatedid',
-    'szUserUpdatedId' => 'Szuserupdatedid',
-    'dtmCreated' => 'Dtmcreated',
-    'dtmLastUpdated' => 'Dtmlastupdated',
+    'szId' => 'Id',
+    'szName' => 'Nama',
+    'szDescription' => 'Deskripsi',
+    'szUserCreatedId' => 'Dibuat Oleh',
+    'szUserUpdatedId' => 'Diupdate Oleh',
+    'dtmCreated' => 'Waktu Buat',
+    'dtmLastUpdated' => 'Waktu Ubah',
   ),
 );

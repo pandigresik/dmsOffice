@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\DmsInvProductkitinfoDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateDmsInvProductkitinfoRequest;
 use App\Http\Requests\Inventory\UpdateDmsInvProductkitinfoRequest;
 use App\Repositories\Inventory\DmsInvProductkitinfoRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsInvProductkitinfoController extends AppBaseController
 {
-    /** @var  DmsInvProductkitinfoRepository */
+    /** @var DmsInvProductkitinfoRepository */
     private $dmsInvProductkitinfoRepository;
 
     public function __construct(DmsInvProductkitinfoRepository $dmsInvProductkitinfoRepo)
@@ -25,7 +23,6 @@ class DmsInvProductkitinfoController extends AppBaseController
     /**
      * Display a listing of the DmsInvProductkitinfo.
      *
-     * @param DmsInvProductkitinfoDataTable $dmsInvProductkitinfoDataTable
      * @return Response
      */
     public function index(DmsInvProductkitinfoDataTable $dmsInvProductkitinfoDataTable)
@@ -46,8 +43,6 @@ class DmsInvProductkitinfoController extends AppBaseController
     /**
      * Store a newly created DmsInvProductkitinfo in storage.
      *
-     * @param CreateDmsInvProductkitinfoRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsInvProductkitinfoRequest $request)
@@ -64,7 +59,7 @@ class DmsInvProductkitinfoController extends AppBaseController
     /**
      * Display the specified DmsInvProductkitinfo.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsInvProductkitinfoController extends AppBaseController
     /**
      * Show the form for editing the specified DmsInvProductkitinfo.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsInvProductkitinfoController extends AppBaseController
     /**
      * Update the specified DmsInvProductkitinfo in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsInvProductkitinfoRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsInvProductkitinfoController extends AppBaseController
     /**
      * Remove the specified DmsInvProductkitinfo from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsInvProductkitinfoController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsInvProductkitinfo from storage.         
+     * Provide options item based on relationship model DmsInvProductkitinfo from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

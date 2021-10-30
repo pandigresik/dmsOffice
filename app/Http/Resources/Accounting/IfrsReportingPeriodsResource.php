@@ -9,7 +9,8 @@ class IfrsReportingPeriodsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -21,7 +22,7 @@ class IfrsReportingPeriodsResource extends JsonResource
             'status' => $this->status,
             'calendar_year' => $this->calendar_year,
             'destroyed_at' => $this->destroyed_at,
-            'closing_date' => $this->closing_date
+            'closing_date' => $this->closing_date,
         ];
     }
 }

@@ -24,8 +24,6 @@ class UpdateIfrsEntitiesAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = IfrsEntities::$rules;
-        
-        return $rules;
+        return IfrsEntities::$rules;
     }
 }

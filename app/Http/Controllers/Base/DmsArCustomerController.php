@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DmsArCustomerDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateDmsArCustomerRequest;
 use App\Http\Requests\Base\UpdateDmsArCustomerRequest;
 use App\Repositories\Base\DmsArCustomerRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsArCustomerController extends AppBaseController
 {
-    /** @var  DmsArCustomerRepository */
+    /** @var DmsArCustomerRepository */
     private $dmsArCustomerRepository;
 
     public function __construct(DmsArCustomerRepository $dmsArCustomerRepo)
@@ -25,7 +23,6 @@ class DmsArCustomerController extends AppBaseController
     /**
      * Display a listing of the DmsArCustomer.
      *
-     * @param DmsArCustomerDataTable $dmsArCustomerDataTable
      * @return Response
      */
     public function index(DmsArCustomerDataTable $dmsArCustomerDataTable)
@@ -46,8 +43,6 @@ class DmsArCustomerController extends AppBaseController
     /**
      * Store a newly created DmsArCustomer in storage.
      *
-     * @param CreateDmsArCustomerRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsArCustomerRequest $request)
@@ -64,7 +59,7 @@ class DmsArCustomerController extends AppBaseController
     /**
      * Display the specified DmsArCustomer.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsArCustomerController extends AppBaseController
     /**
      * Show the form for editing the specified DmsArCustomer.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -97,15 +92,19 @@ class DmsArCustomerController extends AppBaseController
 
             return redirect(route('base.dmsArCustomers.index'));
         }
-
-        return view('base.dms_ar_customers.edit')->with('dmsArCustomer', $dmsArCustomer)->with($this->getOptionItems());
-    }
+        $jsonDefaultSearching = ['dms_ar_customer_id' => $id];
+        $dataTabs = [
+            'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('base.contactCustomers.index', ['dms_ar_customer_id' => $id]), 'defaultContent' => '', 'class' => ''],
+            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.locationCustomers.index', ['dms_ar_customer_id' => $id]), 'defaultContent' => '', 'class' => ''],            
+            'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
+        ];
+        return view('base.dms_ar_customers.edit')->with('dataTabs', $dataTabs)->with('dmsArCustomer', $dmsArCustomer)->with($this->getOptionItems());
+    }    
 
     /**
      * Update the specified DmsArCustomer in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsArCustomerRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +128,7 @@ class DmsArCustomerController extends AppBaseController
     /**
      * Remove the specified DmsArCustomer from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +150,15 @@ class DmsArCustomerController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsArCustomer from storage.         
+     * Provide options item based on relationship model DmsArCustomer from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

@@ -33,6 +33,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "3.0",
         "laravelcollective/html": "^6.2",
+        "mtolhuijs/laravel-database-synchronizer": "^0.3.6",
         "ramsey/uuid-doctrine": "^1.6",
         "rickselby/laravel-gate-cache": "^3.3",
         "spatie/laravel-activitylog": "^3.17",

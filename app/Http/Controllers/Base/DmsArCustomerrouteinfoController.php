@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DmsArCustomerrouteinfoDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateDmsArCustomerrouteinfoRequest;
 use App\Http\Requests\Base\UpdateDmsArCustomerrouteinfoRequest;
 use App\Repositories\Base\DmsArCustomerrouteinfoRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsArCustomerrouteinfoController extends AppBaseController
 {
-    /** @var  DmsArCustomerrouteinfoRepository */
+    /** @var DmsArCustomerrouteinfoRepository */
     private $dmsArCustomerrouteinfoRepository;
 
     public function __construct(DmsArCustomerrouteinfoRepository $dmsArCustomerrouteinfoRepo)
@@ -25,7 +23,6 @@ class DmsArCustomerrouteinfoController extends AppBaseController
     /**
      * Display a listing of the DmsArCustomerrouteinfo.
      *
-     * @param DmsArCustomerrouteinfoDataTable $dmsArCustomerrouteinfoDataTable
      * @return Response
      */
     public function index(DmsArCustomerrouteinfoDataTable $dmsArCustomerrouteinfoDataTable)
@@ -46,8 +43,6 @@ class DmsArCustomerrouteinfoController extends AppBaseController
     /**
      * Store a newly created DmsArCustomerrouteinfo in storage.
      *
-     * @param CreateDmsArCustomerrouteinfoRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsArCustomerrouteinfoRequest $request)
@@ -64,7 +59,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
     /**
      * Display the specified DmsArCustomerrouteinfo.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
     /**
      * Show the form for editing the specified DmsArCustomerrouteinfo.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
     /**
      * Update the specified DmsArCustomerrouteinfo in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsArCustomerrouteinfoRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
     /**
      * Remove the specified DmsArCustomerrouteinfo from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsArCustomerrouteinfoController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsArCustomerrouteinfo from storage.         
+     * Provide options item based on relationship model DmsArCustomerrouteinfo from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

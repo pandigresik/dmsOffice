@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Inventory;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Inventory\CreateWarehouseAPIRequest;
 use App\Http\Requests\API\Inventory\UpdateWarehouseAPIRequest;
+use App\Http\Resources\Inventory\WarehouseResource;
 use App\Models\Inventory\Warehouse;
 use App\Repositories\Inventory\WarehouseRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Inventory\WarehouseResource;
 use Response;
 
 /**
- * Class WarehouseController
- * @package App\Http\Controllers\API\Inventory
+ * Class WarehouseController.
  */
-
 class WarehouseAPIController extends AppBaseController
 {
-    /** @var  WarehouseRepository */
+    /** @var WarehouseRepository */
     private $warehouseRepository;
 
     public function __construct(WarehouseRepository $warehouseRepo)
@@ -27,7 +25,6 @@ class WarehouseAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class WarehouseAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateWarehouseAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class WarehouseAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class WarehouseAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateWarehouseAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class WarehouseAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

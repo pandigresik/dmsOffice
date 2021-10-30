@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\DmsInvProductDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateDmsInvProductRequest;
 use App\Http\Requests\Inventory\UpdateDmsInvProductRequest;
 use App\Repositories\Inventory\DmsInvProductRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsInvProductController extends AppBaseController
 {
-    /** @var  DmsInvProductRepository */
+    /** @var DmsInvProductRepository */
     private $dmsInvProductRepository;
 
     public function __construct(DmsInvProductRepository $dmsInvProductRepo)
@@ -25,7 +23,6 @@ class DmsInvProductController extends AppBaseController
     /**
      * Display a listing of the DmsInvProduct.
      *
-     * @param DmsInvProductDataTable $dmsInvProductDataTable
      * @return Response
      */
     public function index(DmsInvProductDataTable $dmsInvProductDataTable)
@@ -46,8 +43,6 @@ class DmsInvProductController extends AppBaseController
     /**
      * Store a newly created DmsInvProduct in storage.
      *
-     * @param CreateDmsInvProductRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsInvProductRequest $request)
@@ -64,7 +59,7 @@ class DmsInvProductController extends AppBaseController
     /**
      * Display the specified DmsInvProduct.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsInvProductController extends AppBaseController
     /**
      * Show the form for editing the specified DmsInvProduct.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsInvProductController extends AppBaseController
     /**
      * Update the specified DmsInvProduct in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsInvProductRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsInvProductController extends AppBaseController
     /**
      * Remove the specified DmsInvProduct from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsInvProductController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsInvProduct from storage.         
+     * Provide options item based on relationship model DmsInvProduct from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

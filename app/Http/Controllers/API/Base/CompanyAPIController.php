@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Base;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Base\CreateCompanyAPIRequest;
 use App\Http\Requests\API\Base\UpdateCompanyAPIRequest;
+use App\Http\Resources\Base\CompanyResource;
 use App\Models\Base\Company;
 use App\Repositories\Base\CompanyRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Base\CompanyResource;
 use Response;
 
 /**
- * Class CompanyController
- * @package App\Http\Controllers\API\Base
+ * Class CompanyController.
  */
-
 class CompanyAPIController extends AppBaseController
 {
-    /** @var  CompanyRepository */
+    /** @var CompanyRepository */
     private $companyRepository;
 
     public function __construct(CompanyRepository $companyRepo)
@@ -27,7 +25,6 @@ class CompanyAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class CompanyAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateCompanyAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class CompanyAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class CompanyAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateCompanyAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class CompanyAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

@@ -24,8 +24,6 @@ class UpdateStockInventoryAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = StockInventory::$rules;
-        
-        return $rules;
+        return StockInventory::$rules;
     }
 }

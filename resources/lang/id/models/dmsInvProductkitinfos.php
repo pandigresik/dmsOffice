@@ -7,7 +7,7 @@ return array (
   array (
     'iInternalId' => 'Iinternalid',
     'iId' => 'Iid',
-    'szId' => 'Szid',
+    'szId' => 'Id',
     'szProductId' => 'Szproductid',
     'decQty' => 'Decqty',
     'szUomId' => 'Szuomid',

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "340f009b85a26767d2a968fb32d4f05c",
+    "content-hash": "2ff904eb006ff94fc483d193b2c692eb",
     "packages": [
         {
             "name": "acaronlex/laravel-calendar",
@@ -4451,6 +4451,67 @@
                 }
             ],
             "time": "2020-12-14T13:15:25+00:00"
+        },
+        {
+            "name": "mtolhuijs/laravel-database-synchronizer",
+            "version": "0.3.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/socialblue/laravel-database-synchronizer.git",
+                "reference": "5af0c86805fc357b5025a3f7b7f0b4c8d79e73e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/socialblue/laravel-database-synchronizer/zipball/5af0c86805fc357b5025a3f7b7f0b4c8d79e73e8",
+                "reference": "5af0c86805fc357b5025a3f7b7f0b4c8d79e73e8",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "~2.3",
+                "ext-pdo": "*",
+                "illuminate/support": "~5|~6|~7|~8"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.1",
+                "orchestra/testbench": "~3.0|~4.0|~5.0|~6.0",
+                "phpunit/phpunit": "~7.0|~8.0|~9.0|~10.0",
+                "sempro/phpunit-pretty-print": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "mtolhuijs\\LDS\\DatabaseSynchronizerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "mtolhuijs\\LDS\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Maarten Tolhuijs",
+                    "email": "mtolhuys@hotmail.com",
+                    "homepage": "https://github.com/mtolhuys/laravel-database-synchronize"
+                }
+            ],
+            "description": "Synchronize your production and development databases with a simple command",
+            "homepage": "https://github.com/mtolhuys/laravel-database-synchronizer",
+            "keywords": [
+                "laravel",
+                "laravel-database-synchronizer"
+            ],
+            "support": {
+                "issues": "https://github.com/socialblue/laravel-database-synchronizer/issues",
+                "source": "https://github.com/socialblue/laravel-database-synchronizer/tree/0.3.6"
+            },
+            "time": "2021-02-24T18:23:13+00:00"
         },
         {
             "name": "myclabs/php-enum",

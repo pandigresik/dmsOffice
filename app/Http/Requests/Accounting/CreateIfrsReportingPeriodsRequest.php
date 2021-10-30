@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Accounting;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Accounting\IfrsReportingPeriods;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateIfrsReportingPeriodsRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateIfrsReportingPeriodsRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'ifrs_reporting_periods-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateIfrsReportingPeriodsRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new IfrsReportingPeriods)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new IfrsReportingPeriods())->fillable;
+
         return parent::all($keys);
     }
 }

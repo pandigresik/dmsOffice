@@ -9,7 +9,6 @@ use App\Http\Requests\Base\UpdateUserRequest;
 use App\Repositories\Base\RoleRepository;
 use App\Repositories\Base\UserRepository;
 use Flash;
-use Illuminate\Foundation\Http\FormRequest;
 use Response;
 
 class UserController extends AppBaseController
@@ -52,7 +51,7 @@ class UserController extends AppBaseController
         $input = $request->all();
 
         $user = $this->userRepository->create($input);
-        
+
         Flash::success('User saved successfully.');
 
         return redirect(route('base.users.index'));
@@ -116,7 +115,7 @@ class UserController extends AppBaseController
         }
 
         $user = $this->userRepository->update($request->all(), $id);
-        
+
         Flash::success('User updated successfully.');
 
         return redirect(route('base.users.index'));
@@ -152,5 +151,5 @@ class UserController extends AppBaseController
         $roles = new RoleRepository($app);
 
         return $roles->all();
-    }   
+    }
 }

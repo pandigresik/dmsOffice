@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Accounting;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Accounting\CreateIfrsVatsAPIRequest;
 use App\Http\Requests\API\Accounting\UpdateIfrsVatsAPIRequest;
+use App\Http\Resources\Accounting\IfrsVatsResource;
 use App\Models\Accounting\IfrsVats;
 use App\Repositories\Accounting\IfrsVatsRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Accounting\IfrsVatsResource;
 use Response;
 
 /**
- * Class IfrsVatsController
- * @package App\Http\Controllers\API\Accounting
+ * Class IfrsVatsController.
  */
-
 class IfrsVatsAPIController extends AppBaseController
 {
-    /** @var  IfrsVatsRepository */
+    /** @var IfrsVatsRepository */
     private $ifrsVatsRepository;
 
     public function __construct(IfrsVatsRepository $ifrsVatsRepo)
@@ -27,7 +25,6 @@ class IfrsVatsAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class IfrsVatsAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateIfrsVatsAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class IfrsVatsAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class IfrsVatsAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateIfrsVatsAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class IfrsVatsAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Base;
 
 use App\Http\Controllers\AppBaseController;
-use Illuminate\Http\Request;
 use Flash;
+use Illuminate\Http\Request;
 use Response;
 
 class ImportController extends AppBaseController
@@ -23,8 +23,8 @@ class ImportController extends AppBaseController
     {
         $urlOrigin = $request->input('urlOrigin');
         $urlArray = parse_url($urlOrigin);
-        
-        $model = $this->getModel($urlArray['path']);        
+
+        $model = $this->getModel($urlArray['path']);
 
         $modelImport = '\\App\Imports\\'.$model.'Import';
 
@@ -42,29 +42,27 @@ class ImportController extends AppBaseController
                     .' values : '.$failure->values() // The values of the row that has failed.
                 );
             }
-            
+
             Flash::error('Data imported failed <br />'.join('<br />', $messages));
 
             return redirect();
-            ;
         }
         Flash::success('Data imported successfully');
 
         return redirect($urlOrigin);
-        ;
     }
 
-    private function getModel($path){
+    private function getModel($path)
+    {
         $modelPath = explode('/', $path);
         $result = [];
-        array_walk($modelPath, function($item)  use (&$result) {
+        array_walk($modelPath, function ($item) use (&$result) {
             if (!empty($item)) {
                 array_push($result, \Str::ucfirst($item));
-            }            
+            }
         });
         $lastIndex = count($result) - 1;
         $result[$lastIndex] = \Str::ucfirst(\Str::singular(end($result)));
-
 
         return implode('\\', $result);
     }

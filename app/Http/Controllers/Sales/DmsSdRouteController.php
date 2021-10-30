@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Sales;
 
 use App\DataTables\Sales\DmsSdRouteDataTable;
-use App\Http\Requests\Sales;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Sales\CreateDmsSdRouteRequest;
 use App\Http\Requests\Sales\UpdateDmsSdRouteRequest;
 use App\Repositories\Sales\DmsSdRouteRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsSdRouteController extends AppBaseController
 {
-    /** @var  DmsSdRouteRepository */
+    /** @var DmsSdRouteRepository */
     private $dmsSdRouteRepository;
 
     public function __construct(DmsSdRouteRepository $dmsSdRouteRepo)
@@ -25,7 +23,6 @@ class DmsSdRouteController extends AppBaseController
     /**
      * Display a listing of the DmsSdRoute.
      *
-     * @param DmsSdRouteDataTable $dmsSdRouteDataTable
      * @return Response
      */
     public function index(DmsSdRouteDataTable $dmsSdRouteDataTable)
@@ -46,8 +43,6 @@ class DmsSdRouteController extends AppBaseController
     /**
      * Store a newly created DmsSdRoute in storage.
      *
-     * @param CreateDmsSdRouteRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsSdRouteRequest $request)
@@ -64,7 +59,7 @@ class DmsSdRouteController extends AppBaseController
     /**
      * Display the specified DmsSdRoute.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsSdRouteController extends AppBaseController
     /**
      * Show the form for editing the specified DmsSdRoute.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsSdRouteController extends AppBaseController
     /**
      * Update the specified DmsSdRoute in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsSdRouteRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsSdRouteController extends AppBaseController
     /**
      * Remove the specified DmsSdRoute from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsSdRouteController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsSdRoute from storage.         
+     * Provide options item based on relationship model DmsSdRoute from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

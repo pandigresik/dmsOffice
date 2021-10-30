@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DmsArDoccustomerDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateDmsArDoccustomerRequest;
 use App\Http\Requests\Base\UpdateDmsArDoccustomerRequest;
 use App\Repositories\Base\DmsArDoccustomerRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsArDoccustomerController extends AppBaseController
 {
-    /** @var  DmsArDoccustomerRepository */
+    /** @var DmsArDoccustomerRepository */
     private $dmsArDoccustomerRepository;
 
     public function __construct(DmsArDoccustomerRepository $dmsArDoccustomerRepo)
@@ -25,7 +23,6 @@ class DmsArDoccustomerController extends AppBaseController
     /**
      * Display a listing of the DmsArDoccustomer.
      *
-     * @param DmsArDoccustomerDataTable $dmsArDoccustomerDataTable
      * @return Response
      */
     public function index(DmsArDoccustomerDataTable $dmsArDoccustomerDataTable)
@@ -46,8 +43,6 @@ class DmsArDoccustomerController extends AppBaseController
     /**
      * Store a newly created DmsArDoccustomer in storage.
      *
-     * @param CreateDmsArDoccustomerRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsArDoccustomerRequest $request)
@@ -64,7 +59,7 @@ class DmsArDoccustomerController extends AppBaseController
     /**
      * Display the specified DmsArDoccustomer.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsArDoccustomerController extends AppBaseController
     /**
      * Show the form for editing the specified DmsArDoccustomer.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsArDoccustomerController extends AppBaseController
     /**
      * Update the specified DmsArDoccustomer in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsArDoccustomerRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsArDoccustomerController extends AppBaseController
     /**
      * Remove the specified DmsArDoccustomer from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsArDoccustomerController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsArDoccustomer from storage.         
+     * Provide options item based on relationship model DmsArDoccustomer from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

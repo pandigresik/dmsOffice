@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Inventory;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Inventory\CreateStockPickingTypeAPIRequest;
 use App\Http\Requests\API\Inventory\UpdateStockPickingTypeAPIRequest;
+use App\Http\Resources\Inventory\StockPickingTypeResource;
 use App\Models\Inventory\StockPickingType;
 use App\Repositories\Inventory\StockPickingTypeRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Inventory\StockPickingTypeResource;
 use Response;
 
 /**
- * Class StockPickingTypeController
- * @package App\Http\Controllers\API\Inventory
+ * Class StockPickingTypeController.
  */
-
 class StockPickingTypeAPIController extends AppBaseController
 {
-    /** @var  StockPickingTypeRepository */
+    /** @var StockPickingTypeRepository */
     private $stockPickingTypeRepository;
 
     public function __construct(StockPickingTypeRepository $stockPickingTypeRepo)
@@ -27,7 +25,6 @@ class StockPickingTypeAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class StockPickingTypeAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateStockPickingTypeAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class StockPickingTypeAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class StockPickingTypeAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateStockPickingTypeAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class StockPickingTypeAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

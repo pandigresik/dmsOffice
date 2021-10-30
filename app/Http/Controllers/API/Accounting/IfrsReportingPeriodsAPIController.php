@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Accounting;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Accounting\CreateIfrsReportingPeriodsAPIRequest;
 use App\Http\Requests\API\Accounting\UpdateIfrsReportingPeriodsAPIRequest;
+use App\Http\Resources\Accounting\IfrsReportingPeriodsResource;
 use App\Models\Accounting\IfrsReportingPeriods;
 use App\Repositories\Accounting\IfrsReportingPeriodsRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Accounting\IfrsReportingPeriodsResource;
 use Response;
 
 /**
- * Class IfrsReportingPeriodsController
- * @package App\Http\Controllers\API\Accounting
+ * Class IfrsReportingPeriodsController.
  */
-
 class IfrsReportingPeriodsAPIController extends AppBaseController
 {
-    /** @var  IfrsReportingPeriodsRepository */
+    /** @var IfrsReportingPeriodsRepository */
     private $ifrsReportingPeriodsRepository;
 
     public function __construct(IfrsReportingPeriodsRepository $ifrsReportingPeriodsRepo)
@@ -27,7 +25,6 @@ class IfrsReportingPeriodsAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class IfrsReportingPeriodsAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateIfrsReportingPeriodsAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class IfrsReportingPeriodsAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class IfrsReportingPeriodsAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateIfrsReportingPeriodsAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class IfrsReportingPeriodsAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

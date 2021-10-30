@@ -9,7 +9,8 @@ class AccountTypeResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -20,7 +21,7 @@ class AccountTypeResource extends JsonResource
             'include_initial_balance' => $this->include_initial_balance,
             'type' => $this->type,
             'internal_group' => $this->internal_group,
-            'note' => $this->note
+            'note' => $this->note,
         ];
     }
 }

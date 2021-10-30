@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Accounting;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Accounting\CreateIfrsCurrenciesAPIRequest;
 use App\Http\Requests\API\Accounting\UpdateIfrsCurrenciesAPIRequest;
+use App\Http\Resources\Accounting\IfrsCurrenciesResource;
 use App\Models\Accounting\IfrsCurrencies;
 use App\Repositories\Accounting\IfrsCurrenciesRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Accounting\IfrsCurrenciesResource;
 use Response;
 
 /**
- * Class IfrsCurrenciesController
- * @package App\Http\Controllers\API\Accounting
+ * Class IfrsCurrenciesController.
  */
-
 class IfrsCurrenciesAPIController extends AppBaseController
 {
-    /** @var  IfrsCurrenciesRepository */
+    /** @var IfrsCurrenciesRepository */
     private $ifrsCurrenciesRepository;
 
     public function __construct(IfrsCurrenciesRepository $ifrsCurrenciesRepo)
@@ -27,7 +25,6 @@ class IfrsCurrenciesAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class IfrsCurrenciesAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateIfrsCurrenciesAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class IfrsCurrenciesAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class IfrsCurrenciesAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateIfrsCurrenciesAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class IfrsCurrenciesAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

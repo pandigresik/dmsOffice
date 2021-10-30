@@ -58,6 +58,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('dmsArPaymentterms', App\Http\Controllers\Base\DmsArPaymenttermController::class, ["as" => 'base']);
         Route::resource('dmsArPaymenttypes', App\Http\Controllers\Base\DmsArPaymenttypeController::class, ["as" => 'base']);
         Route::resource('dmsArPricesegments', App\Http\Controllers\Base\DmsArPricesegmentController::class, ["as" => 'base']);
+
+        Route::resource('contactSuppliers', App\Http\Controllers\Base\ContactSupplierController::class, ["as" => 'base']);
+        Route::resource('locationSuppliers', App\Http\Controllers\Base\LocationSupplierController::class, ["as" => 'base']);
+        Route::resource('contactCustomers', App\Http\Controllers\Base\ContactCustomerController::class, ["as" => 'base']);
+        Route::resource('locationCustomers', App\Http\Controllers\Base\LocationCustomerController::class, ["as" => 'base']);
     });
 
     Route::group(['prefix' => 'inventory'], function () {
@@ -84,6 +89,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('dmsInvVehicles', App\Http\Controllers\Inventory\DmsInvVehicleController::class, ["as" => 'inventory']);
         Route::resource('dmsInvVehicletypes', App\Http\Controllers\Inventory\DmsInvVehicletypeController::class, ["as" => 'inventory']);
         Route::resource('dmsInvWarehouses', App\Http\Controllers\Inventory\DmsInvWarehouseController::class, ["as" => 'inventory']);
+
+        Route::resource('vehicleEkspedisis', App\Http\Controllers\Inventory\VehicleEkspedisiController::class, ["as" => 'inventory']);
+        Route::resource('contactEkspedisis', App\Http\Controllers\Inventory\ContactEkspedisiController::class, ["as" => 'inventory']);
+        Route::resource('locationEkspedisis', App\Http\Controllers\Inventory\LocationEkspedisiController::class, ["as" => 'inventory']);
     });
 
     Route::group(['prefix' => 'accounting'], function () {
@@ -119,10 +128,4 @@ Route::post('generator_builder/rollback', '\InfyOm\GeneratorBuilder\Controllers\
     '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@generateFromFile'
 )->name('io_generator_builder_generate_from_file');
 
-Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');    
-
-
-
-
-
-
+Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');

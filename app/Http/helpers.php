@@ -20,8 +20,8 @@ if (!function_exists('createLocalFormatDate')) {
 
 if (!function_exists('localNumberFormat')) {
     function localNumberFormat($value)
-    {        
-        return number_format($value,config('local.digit_decimal'),config('local.decimal_separator'),config('local.thousand_separator'));
+    {
+        return number_format($value, config('local.digit_decimal'), config('local.decimal_separator'), config('local.thousand_separator'));
     }
 }
 
@@ -54,7 +54,7 @@ if (!function_exists('convertArrayPairValue')) {
     {
         $result = [];
         foreach ($values as $value) {
-            list($key, $val) = explode(',',$keyPair);
+            list($key, $val) = explode(',', $keyPair);
             array_push($result, [$key => $value, $val => $value]);
         }
 
@@ -67,7 +67,7 @@ if (!function_exists('convertArrayPairValueWithKey')) {
     {
         $result = [];
         foreach ($values as $k => $value) {
-            list($key, $val) = explode(',',$keyPair);
+            list($key, $val) = explode(',', $keyPair);
             array_push($result, [$key => $value, $val => $k]);
         }
 

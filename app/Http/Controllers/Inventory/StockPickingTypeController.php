@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\StockPickingTypeDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateStockPickingTypeRequest;
 use App\Http\Requests\Inventory\UpdateStockPickingTypeRequest;
 use App\Repositories\Inventory\StockPickingTypeRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class StockPickingTypeController extends AppBaseController
 {
-    /** @var  StockPickingTypeRepository */
+    /** @var StockPickingTypeRepository */
     private $stockPickingTypeRepository;
 
     public function __construct(StockPickingTypeRepository $stockPickingTypeRepo)
@@ -25,7 +23,6 @@ class StockPickingTypeController extends AppBaseController
     /**
      * Display a listing of the StockPickingType.
      *
-     * @param StockPickingTypeDataTable $stockPickingTypeDataTable
      * @return Response
      */
     public function index(StockPickingTypeDataTable $stockPickingTypeDataTable)
@@ -46,8 +43,6 @@ class StockPickingTypeController extends AppBaseController
     /**
      * Store a newly created StockPickingType in storage.
      *
-     * @param CreateStockPickingTypeRequest $request
-     *
      * @return Response
      */
     public function store(CreateStockPickingTypeRequest $request)
@@ -64,7 +59,7 @@ class StockPickingTypeController extends AppBaseController
     /**
      * Display the specified StockPickingType.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class StockPickingTypeController extends AppBaseController
     /**
      * Show the form for editing the specified StockPickingType.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class StockPickingTypeController extends AppBaseController
     /**
      * Update the specified StockPickingType in storage.
      *
-     * @param  int              $id
-     * @param UpdateStockPickingTypeRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class StockPickingTypeController extends AppBaseController
     /**
      * Remove the specified StockPickingType from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class StockPickingTypeController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model StockPickingType from storage.         
+     * Provide options item based on relationship model StockPickingType from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DmsApSupplierDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateDmsApSupplierRequest;
 use App\Http\Requests\Base\UpdateDmsApSupplierRequest;
 use App\Repositories\Base\DmsApSupplierRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsApSupplierController extends AppBaseController
 {
-    /** @var  DmsApSupplierRepository */
+    /** @var DmsApSupplierRepository */
     private $dmsApSupplierRepository;
 
     public function __construct(DmsApSupplierRepository $dmsApSupplierRepo)
@@ -25,7 +23,6 @@ class DmsApSupplierController extends AppBaseController
     /**
      * Display a listing of the DmsApSupplier.
      *
-     * @param DmsApSupplierDataTable $dmsApSupplierDataTable
      * @return Response
      */
     public function index(DmsApSupplierDataTable $dmsApSupplierDataTable)
@@ -46,8 +43,6 @@ class DmsApSupplierController extends AppBaseController
     /**
      * Store a newly created DmsApSupplier in storage.
      *
-     * @param CreateDmsApSupplierRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsApSupplierRequest $request)
@@ -64,7 +59,7 @@ class DmsApSupplierController extends AppBaseController
     /**
      * Display the specified DmsApSupplier.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsApSupplierController extends AppBaseController
     /**
      * Show the form for editing the specified DmsApSupplier.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsApSupplierController extends AppBaseController
     /**
      * Update the specified DmsApSupplier in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsApSupplierRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsApSupplierController extends AppBaseController
     /**
      * Remove the specified DmsApSupplier from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsApSupplierController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsApSupplier from storage.         
+     * Provide options item based on relationship model DmsApSupplier from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

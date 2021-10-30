@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\StockPickingType;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateStockPickingTypeRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateStockPickingTypeRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'stock_picking_type-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateStockPickingTypeRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new StockPickingType)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new StockPickingType())->fillable;
+
         return parent::all($keys);
     }
 }

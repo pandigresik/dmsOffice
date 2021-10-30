@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\DmsInvCarrierDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateDmsInvCarrierRequest;
 use App\Http\Requests\Inventory\UpdateDmsInvCarrierRequest;
 use App\Repositories\Inventory\DmsInvCarrierRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsInvCarrierController extends AppBaseController
 {
-    /** @var  DmsInvCarrierRepository */
+    /** @var DmsInvCarrierRepository */
     private $dmsInvCarrierRepository;
 
     public function __construct(DmsInvCarrierRepository $dmsInvCarrierRepo)
@@ -25,7 +23,6 @@ class DmsInvCarrierController extends AppBaseController
     /**
      * Display a listing of the DmsInvCarrier.
      *
-     * @param DmsInvCarrierDataTable $dmsInvCarrierDataTable
      * @return Response
      */
     public function index(DmsInvCarrierDataTable $dmsInvCarrierDataTable)
@@ -46,8 +43,6 @@ class DmsInvCarrierController extends AppBaseController
     /**
      * Store a newly created DmsInvCarrier in storage.
      *
-     * @param CreateDmsInvCarrierRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsInvCarrierRequest $request)
@@ -64,7 +59,7 @@ class DmsInvCarrierController extends AppBaseController
     /**
      * Display the specified DmsInvCarrier.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsInvCarrierController extends AppBaseController
     /**
      * Show the form for editing the specified DmsInvCarrier.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsInvCarrierController extends AppBaseController
     /**
      * Update the specified DmsInvCarrier in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsInvCarrierRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsInvCarrierController extends AppBaseController
     /**
      * Remove the specified DmsInvCarrier from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsInvCarrierController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsInvCarrier from storage.         
+     * Provide options item based on relationship model DmsInvCarrier from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

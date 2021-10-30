@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\DmsInvCarrierdriver;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateDmsInvCarrierdriverRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateDmsInvCarrierdriverRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'dms_inv_carrierdriver-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateDmsInvCarrierdriverRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new DmsInvCarrierdriver)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new DmsInvCarrierdriver())->fillable;
+
         return parent::all($keys);
     }
 }

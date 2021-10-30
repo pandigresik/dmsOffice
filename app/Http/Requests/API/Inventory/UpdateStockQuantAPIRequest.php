@@ -24,8 +24,6 @@ class UpdateStockQuantAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = StockQuant::$rules;
-        
-        return $rules;
+        return StockQuant::$rules;
     }
 }

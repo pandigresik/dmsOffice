@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DmsArCustomerhierarchyDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateDmsArCustomerhierarchyRequest;
 use App\Http\Requests\Base\UpdateDmsArCustomerhierarchyRequest;
 use App\Repositories\Base\DmsArCustomerhierarchyRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsArCustomerhierarchyController extends AppBaseController
 {
-    /** @var  DmsArCustomerhierarchyRepository */
+    /** @var DmsArCustomerhierarchyRepository */
     private $dmsArCustomerhierarchyRepository;
 
     public function __construct(DmsArCustomerhierarchyRepository $dmsArCustomerhierarchyRepo)
@@ -25,7 +23,6 @@ class DmsArCustomerhierarchyController extends AppBaseController
     /**
      * Display a listing of the DmsArCustomerhierarchy.
      *
-     * @param DmsArCustomerhierarchyDataTable $dmsArCustomerhierarchyDataTable
      * @return Response
      */
     public function index(DmsArCustomerhierarchyDataTable $dmsArCustomerhierarchyDataTable)
@@ -46,8 +43,6 @@ class DmsArCustomerhierarchyController extends AppBaseController
     /**
      * Store a newly created DmsArCustomerhierarchy in storage.
      *
-     * @param CreateDmsArCustomerhierarchyRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsArCustomerhierarchyRequest $request)
@@ -64,7 +59,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
     /**
      * Display the specified DmsArCustomerhierarchy.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
     /**
      * Show the form for editing the specified DmsArCustomerhierarchy.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
     /**
      * Update the specified DmsArCustomerhierarchy in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsArCustomerhierarchyRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
     /**
      * Remove the specified DmsArCustomerhierarchy from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsArCustomerhierarchyController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsArCustomerhierarchy from storage.         
+     * Provide options item based on relationship model DmsArCustomerhierarchy from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

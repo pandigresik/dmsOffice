@@ -24,8 +24,6 @@ class UpdateIfrsCurrenciesAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = IfrsCurrencies::$rules;
-        
-        return $rules;
+        return IfrsCurrencies::$rules;
     }
 }

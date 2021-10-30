@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Accounting;
 
 use App\DataTables\Accounting\DmsFinSubaccountDataTable;
-use App\Http\Requests\Accounting;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateDmsFinSubaccountRequest;
 use App\Http\Requests\Accounting\UpdateDmsFinSubaccountRequest;
 use App\Repositories\Accounting\DmsFinSubaccountRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsFinSubaccountController extends AppBaseController
 {
-    /** @var  DmsFinSubaccountRepository */
+    /** @var DmsFinSubaccountRepository */
     private $dmsFinSubaccountRepository;
 
     public function __construct(DmsFinSubaccountRepository $dmsFinSubaccountRepo)
@@ -25,7 +23,6 @@ class DmsFinSubaccountController extends AppBaseController
     /**
      * Display a listing of the DmsFinSubaccount.
      *
-     * @param DmsFinSubaccountDataTable $dmsFinSubaccountDataTable
      * @return Response
      */
     public function index(DmsFinSubaccountDataTable $dmsFinSubaccountDataTable)
@@ -46,8 +43,6 @@ class DmsFinSubaccountController extends AppBaseController
     /**
      * Store a newly created DmsFinSubaccount in storage.
      *
-     * @param CreateDmsFinSubaccountRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsFinSubaccountRequest $request)
@@ -64,7 +59,7 @@ class DmsFinSubaccountController extends AppBaseController
     /**
      * Display the specified DmsFinSubaccount.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsFinSubaccountController extends AppBaseController
     /**
      * Show the form for editing the specified DmsFinSubaccount.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsFinSubaccountController extends AppBaseController
     /**
      * Update the specified DmsFinSubaccount in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsFinSubaccountRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsFinSubaccountController extends AppBaseController
     /**
      * Remove the specified DmsFinSubaccount from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsFinSubaccountController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsFinSubaccount from storage.         
+     * Provide options item based on relationship model DmsFinSubaccount from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

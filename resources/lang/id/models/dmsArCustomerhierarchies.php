@@ -1,20 +1,20 @@
 <?php
 
 return array (
-  'singular' => 'DmsArCustomerhierarchy',
-  'plural' => 'DmsArCustomerhierarchies',
+  'singular' => 'Hirarki Pelanggan',
+  'plural' => 'Hirarki Pelanggan',
   'fields' => 
   array (
     'iInternalId' => 'Iinternalid',
     'iId' => 'Iid',
-    'szId' => 'Szid',
-    'szName' => 'Szname',
-    'szDescription' => 'Szdescription',
-    'szParentId' => 'Szparentid',
-    'szCode' => 'Szcode',
-    'szUserCreatedId' => 'Szusercreatedid',
-    'szUserUpdatedId' => 'Szuserupdatedid',
-    'dtmCreated' => 'Dtmcreated',
-    'dtmLastUpdated' => 'Dtmlastupdated',
+    'szId' => 'Id',
+    'szName' => 'Nama',
+    'szDescription' => 'Deskripsi',
+    'szParentId' => 'Parent',
+    'szCode' => 'Kode',
+    'szUserCreatedId' => 'Dibuat Oleh',
+    'szUserUpdatedId' => 'Diupdate Oleh',
+    'dtmCreated' => 'Waktu Buat',
+    'dtmLastUpdated' => 'Waktu Ubah',
   ),
 );

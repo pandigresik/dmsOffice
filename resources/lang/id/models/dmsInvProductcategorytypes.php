@@ -1,19 +1,19 @@
 <?php
 
 return array (
-  'singular' => 'DmsInvProductcategorytype',
-  'plural' => 'DmsInvProductcategorytypes',
+  'singular' => 'Tipe Kategori Produk',
+  'plural' => 'Tipe Kategori Produk',
   'fields' => 
   array (
     'iInternalId' => 'Iinternalid',
     'iId' => 'Iid',
-    'szId' => 'Szid',
-    'szName' => 'Szname',
-    'szDescription' => 'Szdescription',
+    'szId' => 'Id',
+    'szName' => 'Nama',
+    'szDescription' => 'Deskripsi',
     'bUseForPriceCalc' => 'Buseforpricecalc',
-    'szUserCreatedId' => 'Szusercreatedid',
-    'szUserUpdatedId' => 'Szuserupdatedid',
-    'dtmCreated' => 'Dtmcreated',
-    'dtmLastUpdated' => 'Dtmlastupdated',
+    'szUserCreatedId' => 'Dibuat Oleh',
+    'szUserUpdatedId' => 'Diupdate Oleh',
+    'dtmCreated' => 'Waktu Buat',
+    'dtmLastUpdated' => 'Waktu Ubah',
   ),
 );

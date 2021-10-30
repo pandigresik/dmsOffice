@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Accounting;
 
-use Flash;
-use Response;
-use App\Http\Controllers\AppBaseController;
 use App\DataTables\Accounting\IfrsEntitiesDataTable;
-use App\Repositories\Accounting\IfrsEntitiesRepository;
-use App\Repositories\Accounting\IfrsCurrenciesRepository;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateIfrsEntitiesRequest;
 use App\Http\Requests\Accounting\UpdateIfrsEntitiesRequest;
+use App\Repositories\Accounting\IfrsCurrenciesRepository;
+use App\Repositories\Accounting\IfrsEntitiesRepository;
+use Flash;
+use Response;
 
 class IfrsEntitiesController extends AppBaseController
 {
@@ -153,11 +153,12 @@ class IfrsEntitiesController extends AppBaseController
      * @return Response
      */
     private function getOptionItems()
-    {        
+    {
 //        $ifrsCurrency = new IfrsCurrenciesRepository(app());
         $ifrsEntity = new IfrsEntitiesRepository(app());
+
         return [
-//            'currencyItems' => ['' => __('crud.option.ifrsEntity_placeholder')] + $ifrsCurrency->pluck(),
+            //            'currencyItems' => ['' => __('crud.option.ifrsEntity_placeholder')] + $ifrsCurrency->pluck(),
             'parentItems' => ['' => __('crud.option.ifrsEntity_placeholder')] + $ifrsEntity->pluck(),
         ];
     }

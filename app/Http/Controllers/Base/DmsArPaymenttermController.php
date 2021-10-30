@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DmsArPaymenttermDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateDmsArPaymenttermRequest;
 use App\Http\Requests\Base\UpdateDmsArPaymenttermRequest;
 use App\Repositories\Base\DmsArPaymenttermRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsArPaymenttermController extends AppBaseController
 {
-    /** @var  DmsArPaymenttermRepository */
+    /** @var DmsArPaymenttermRepository */
     private $dmsArPaymenttermRepository;
 
     public function __construct(DmsArPaymenttermRepository $dmsArPaymenttermRepo)
@@ -25,7 +23,6 @@ class DmsArPaymenttermController extends AppBaseController
     /**
      * Display a listing of the DmsArPaymentterm.
      *
-     * @param DmsArPaymenttermDataTable $dmsArPaymenttermDataTable
      * @return Response
      */
     public function index(DmsArPaymenttermDataTable $dmsArPaymenttermDataTable)
@@ -46,8 +43,6 @@ class DmsArPaymenttermController extends AppBaseController
     /**
      * Store a newly created DmsArPaymentterm in storage.
      *
-     * @param CreateDmsArPaymenttermRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsArPaymenttermRequest $request)
@@ -64,7 +59,7 @@ class DmsArPaymenttermController extends AppBaseController
     /**
      * Display the specified DmsArPaymentterm.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsArPaymenttermController extends AppBaseController
     /**
      * Show the form for editing the specified DmsArPaymentterm.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsArPaymenttermController extends AppBaseController
     /**
      * Update the specified DmsArPaymentterm in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsArPaymenttermRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsArPaymenttermController extends AppBaseController
     /**
      * Remove the specified DmsArPaymentterm from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsArPaymenttermController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsArPaymentterm from storage.         
+     * Provide options item based on relationship model DmsArPaymentterm from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

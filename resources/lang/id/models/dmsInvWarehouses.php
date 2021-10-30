@@ -1,20 +1,20 @@
 <?php
 
 return array (
-  'singular' => 'DmsInvWarehouse',
-  'plural' => 'DmsInvWarehouses',
+  'singular' => 'Gudang',
+  'plural' => 'Gudang',
   'fields' => 
   array (
     'iInternalId' => 'Iinternalid',
     'iId' => 'Iid',
-    'szId' => 'Szid',
-    'szName' => 'Szname',
-    'szDescription' => 'Szdescription',
-    'szBranchId' => 'Szbranchid',
-    'bAllowForSalesTransaction' => 'Ballowforsalestransaction',
-    'szUserCreatedId' => 'Szusercreatedid',
-    'szUserUpdatedId' => 'Szuserupdatedid',
-    'dtmCreated' => 'Dtmcreated',
-    'dtmLastUpdated' => 'Dtmlastupdated',
+    'szId' => 'Id',
+    'szName' => 'Nama',
+    'szDescription' => 'Deskripsi',
+    'szBranchId' => 'Id Cabang',
+    'bAllowForSalesTransaction' => 'Bisa Trasnsaksi Penjualan',
+    'szUserCreatedId' => 'Dibuat Oleh',
+    'szUserUpdatedId' => 'Diupdate Oleh',
+    'dtmCreated' => 'Waktu Buat',
+    'dtmLastUpdated' => 'Waktu Ubah',
   ),
 );

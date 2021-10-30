@@ -24,8 +24,6 @@ class UpdateWarehouseAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = Warehouse::$rules;
-        
-        return $rules;
+        return Warehouse::$rules;
     }
 }

@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Base;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Base\CreateSettingAPIRequest;
 use App\Http\Requests\API\Base\UpdateSettingAPIRequest;
+use App\Http\Resources\Base\SettingResource;
 use App\Models\Base\Setting;
 use App\Repositories\Base\SettingRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Base\SettingResource;
 use Response;
 
 /**
- * Class SettingController
- * @package App\Http\Controllers\API\Base
+ * Class SettingController.
  */
-
 class SettingAPIController extends AppBaseController
 {
-    /** @var  SettingRepository */
+    /** @var SettingRepository */
     private $settingRepository;
 
     public function __construct(SettingRepository $settingRepo)
@@ -27,7 +25,6 @@ class SettingAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class SettingAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateSettingAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class SettingAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class SettingAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateSettingAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class SettingAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

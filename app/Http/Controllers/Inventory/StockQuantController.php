@@ -7,8 +7,8 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateStockQuantRequest;
 use App\Http\Requests\Inventory\UpdateStockQuantRequest;
 use App\Repositories\Base\ProductRepository;
-use App\Repositories\Inventory\StockQuantRepository;
 use App\Repositories\Base\UomRepository;
+use App\Repositories\Inventory\StockQuantRepository;
 use App\Repositories\Inventory\WarehouseRepository;
 use Flash;
 use Response;
@@ -95,7 +95,7 @@ class StockQuantController extends AppBaseController
 
             return redirect(route('inventory.stockQuants.index'));
         }
-        
+
         return view('inventory.stock_quants.edit')->with('stockQuant', $stockQuant)->with($this->getOptionItems());
     }
 

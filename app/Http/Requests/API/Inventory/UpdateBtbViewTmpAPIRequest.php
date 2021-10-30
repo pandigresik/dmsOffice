@@ -24,8 +24,6 @@ class UpdateBtbViewTmpAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = BtbViewTmp::$rules;
-        
-        return $rules;
+        return BtbViewTmp::$rules;
     }
 }

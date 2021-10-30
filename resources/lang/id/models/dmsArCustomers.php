@@ -1,24 +1,24 @@
 <?php
 
 return array (
-  'singular' => 'DmsArCustomer',
-  'plural' => 'DmsArCustomers',
+  'singular' => 'Pelanggan',
+  'plural' => 'Pelanggan',
   'fields' => 
   array (
     'iInternalId' => 'Iinternalid',
     'iId' => 'Iid',
-    'szId' => 'Szid',
-    'szName' => 'Szname',
-    'szDescription' => 'Szdescription',
-    'szHierarchyId' => 'Szhierarchyid',
-    'szHierarchyFull' => 'Szhierarchyfull',
-    'szIDCard' => 'Szidcard',
-    'bHasDifferentCollectAddress' => 'Bhasdifferentcollectaddress',
-    'szCode' => 'Szcode',
-    'szUserCreatedId' => 'Szusercreatedid',
-    'szUserUpdatedId' => 'Szuserupdatedid',
-    'dtmCreated' => 'Dtmcreated',
-    'dtmLastUpdated' => 'Dtmlastupdated',
+    'szId' => 'Id',
+    'szName' => 'Nama',
+    'szDescription' => 'Deskripsi',
+    'szHierarchyId' => 'Hirarki id',
+    'szHierarchyFull' => 'Hirarki Full',
+    'szIDCard' => 'Id card',
+    'bHasDifferentCollectAddress' => 'Ada Alamat Lain',
+    'szCode' => 'Kode',
+    'szUserCreatedId' => 'Dibuat Oleh',
+    'szUserUpdatedId' => 'Diupdate Oleh',
+    'dtmCreated' => 'Waktu Buat',
+    'dtmLastUpdated' => 'Waktu Ubah',
     'szMCOId' => 'Szmcoid',
   ),
 );

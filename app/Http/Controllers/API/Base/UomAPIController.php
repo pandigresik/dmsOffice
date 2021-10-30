@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Base;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Base\CreateUomAPIRequest;
 use App\Http\Requests\API\Base\UpdateUomAPIRequest;
+use App\Http\Resources\Base\UomResource;
 use App\Models\Base\Uom;
 use App\Repositories\Base\UomRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Base\UomResource;
 use Response;
 
 /**
- * Class UomController
- * @package App\Http\Controllers\API\Base
+ * Class UomController.
  */
-
 class UomAPIController extends AppBaseController
 {
-    /** @var  UomRepository */
+    /** @var UomRepository */
     private $uomRepository;
 
     public function __construct(UomRepository $uomRepo)
@@ -27,7 +25,6 @@ class UomAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class UomAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateUomAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class UomAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class UomAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateUomAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class UomAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

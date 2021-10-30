@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Sales;
 
 use App\DataTables\Sales\DmsSdPricecatalogDataTable;
-use App\Http\Requests\Sales;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Sales\CreateDmsSdPricecatalogRequest;
 use App\Http\Requests\Sales\UpdateDmsSdPricecatalogRequest;
 use App\Repositories\Sales\DmsSdPricecatalogRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsSdPricecatalogController extends AppBaseController
 {
-    /** @var  DmsSdPricecatalogRepository */
+    /** @var DmsSdPricecatalogRepository */
     private $dmsSdPricecatalogRepository;
 
     public function __construct(DmsSdPricecatalogRepository $dmsSdPricecatalogRepo)
@@ -25,7 +23,6 @@ class DmsSdPricecatalogController extends AppBaseController
     /**
      * Display a listing of the DmsSdPricecatalog.
      *
-     * @param DmsSdPricecatalogDataTable $dmsSdPricecatalogDataTable
      * @return Response
      */
     public function index(DmsSdPricecatalogDataTable $dmsSdPricecatalogDataTable)
@@ -46,8 +43,6 @@ class DmsSdPricecatalogController extends AppBaseController
     /**
      * Store a newly created DmsSdPricecatalog in storage.
      *
-     * @param CreateDmsSdPricecatalogRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsSdPricecatalogRequest $request)
@@ -64,7 +59,7 @@ class DmsSdPricecatalogController extends AppBaseController
     /**
      * Display the specified DmsSdPricecatalog.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsSdPricecatalogController extends AppBaseController
     /**
      * Show the form for editing the specified DmsSdPricecatalog.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsSdPricecatalogController extends AppBaseController
     /**
      * Update the specified DmsSdPricecatalog in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsSdPricecatalogRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsSdPricecatalogController extends AppBaseController
     /**
      * Remove the specified DmsSdPricecatalog from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsSdPricecatalogController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsSdPricecatalog from storage.         
+     * Provide options item based on relationship model DmsSdPricecatalog from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

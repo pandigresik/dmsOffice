@@ -9,7 +9,8 @@ class IfrsExchangeRatesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -21,7 +22,7 @@ class IfrsExchangeRatesResource extends JsonResource
             'valid_from' => $this->valid_from,
             'valid_to' => $this->valid_to,
             'rate' => $this->rate,
-            'destroyed_at' => $this->destroyed_at
+            'destroyed_at' => $this->destroyed_at,
         ];
     }
 }

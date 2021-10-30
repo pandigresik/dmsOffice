@@ -23,7 +23,7 @@
                           <div class="card-body">                              
 
                               @include('base.dms_ar_customers.fields')
-
+                              <x-tabs :data="$dataTabs"/>
                               
                             </div>
                           <div class="card-footer">

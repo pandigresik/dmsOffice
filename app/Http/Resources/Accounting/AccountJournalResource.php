@@ -9,7 +9,8 @@ class AccountJournalResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -21,7 +22,7 @@ class AccountJournalResource extends JsonResource
             'company_id' => $this->company_id,
             'default_debit_account_id' => $this->default_debit_account_id,
             'default_credit_account_id' => $this->default_credit_account_id,
-            'type' => $this->type
+            'type' => $this->type,
         ];
     }
 }

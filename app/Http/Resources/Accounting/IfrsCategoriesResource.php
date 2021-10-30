@@ -9,7 +9,8 @@ class IfrsCategoriesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -19,7 +20,7 @@ class IfrsCategoriesResource extends JsonResource
             'entity_id' => $this->entity_id,
             'category_type' => $this->category_type,
             'name' => $this->name,
-            'destroyed_at' => $this->destroyed_at
+            'destroyed_at' => $this->destroyed_at,
         ];
     }
 }

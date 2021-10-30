@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\DmsInvCarrierdriverDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateDmsInvCarrierdriverRequest;
 use App\Http\Requests\Inventory\UpdateDmsInvCarrierdriverRequest;
 use App\Repositories\Inventory\DmsInvCarrierdriverRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsInvCarrierdriverController extends AppBaseController
 {
-    /** @var  DmsInvCarrierdriverRepository */
+    /** @var DmsInvCarrierdriverRepository */
     private $dmsInvCarrierdriverRepository;
 
     public function __construct(DmsInvCarrierdriverRepository $dmsInvCarrierdriverRepo)
@@ -25,7 +23,6 @@ class DmsInvCarrierdriverController extends AppBaseController
     /**
      * Display a listing of the DmsInvCarrierdriver.
      *
-     * @param DmsInvCarrierdriverDataTable $dmsInvCarrierdriverDataTable
      * @return Response
      */
     public function index(DmsInvCarrierdriverDataTable $dmsInvCarrierdriverDataTable)
@@ -46,8 +43,6 @@ class DmsInvCarrierdriverController extends AppBaseController
     /**
      * Store a newly created DmsInvCarrierdriver in storage.
      *
-     * @param CreateDmsInvCarrierdriverRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsInvCarrierdriverRequest $request)
@@ -64,7 +59,7 @@ class DmsInvCarrierdriverController extends AppBaseController
     /**
      * Display the specified DmsInvCarrierdriver.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsInvCarrierdriverController extends AppBaseController
     /**
      * Show the form for editing the specified DmsInvCarrierdriver.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsInvCarrierdriverController extends AppBaseController
     /**
      * Update the specified DmsInvCarrierdriver in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsInvCarrierdriverRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsInvCarrierdriverController extends AppBaseController
     /**
      * Remove the specified DmsInvCarrierdriver from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsInvCarrierdriverController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsInvCarrierdriver from storage.         
+     * Provide options item based on relationship model DmsInvCarrierdriver from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

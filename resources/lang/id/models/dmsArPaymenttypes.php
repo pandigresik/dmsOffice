@@ -1,19 +1,19 @@
 <?php
 
 return array (
-  'singular' => 'DmsArPaymenttype',
-  'plural' => 'DmsArPaymenttypes',
+  'singular' => 'Tipe Pembayaran',
+  'plural' => 'Tipe Pembayaran',
   'fields' => 
   array (
     'iInternalId' => 'Iinternalid',
     'iId' => 'Iid',
-    'szId' => 'Szid',
-    'szName' => 'Szname',
-    'szDescription' => 'Szdescription',
-    'szPaymentTypeId' => 'Szpaymenttypeid',
-    'szUserCreatedId' => 'Szusercreatedid',
-    'szUserUpdatedId' => 'Szuserupdatedid',
-    'dtmCreated' => 'Dtmcreated',
-    'dtmLastUpdated' => 'Dtmlastupdated',
+    'szId' => 'Id',
+    'szName' => 'Nama',
+    'szDescription' => 'Deskripsi',
+    'szPaymentTypeId' => 'Tipe Pembayaran',
+    'szUserCreatedId' => 'Dibuat Oleh',
+    'szUserUpdatedId' => 'Diupdate Oleh',
+    'dtmCreated' => 'Waktu Buat',
+    'dtmLastUpdated' => 'Waktu Ubah',
   ),
 );

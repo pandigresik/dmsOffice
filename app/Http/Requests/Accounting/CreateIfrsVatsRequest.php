@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Accounting;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Accounting\IfrsVats;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateIfrsVatsRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateIfrsVatsRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'ifrs_vats-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateIfrsVatsRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new IfrsVats)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new IfrsVats())->fillable;
+
         return parent::all($keys);
     }
 }

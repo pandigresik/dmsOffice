@@ -24,8 +24,6 @@ class UpdateIfrsReportingPeriodsAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = IfrsReportingPeriods::$rules;
-        
-        return $rules;
+        return IfrsReportingPeriods::$rules;
     }
 }

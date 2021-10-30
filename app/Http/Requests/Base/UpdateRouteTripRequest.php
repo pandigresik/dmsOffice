@@ -27,10 +27,11 @@ class UpdateRouteTripRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {   
-        $id = $this->route('routeTrip');        
+    {
+        $id = $this->route('routeTrip');
         $rules = RouteTrip::$rules;
-        $rules['name'] = $rules['name'].",name,$id";
+        $rules['name'] = $rules['name'].",name,{$id}";
+
         return $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
     }
 

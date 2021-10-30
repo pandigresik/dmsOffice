@@ -9,7 +9,8 @@ class UomResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -19,7 +20,7 @@ class UomResource extends JsonResource
             'name' => $this->name,
             'uom_category_id' => $this->uom_category_id,
             'factor' => $this->factor,
-            'uom_type' => $this->uom_type
+            'uom_type' => $this->uom_type,
         ];
     }
 }

@@ -9,7 +9,8 @@ class IfrsEntitiesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -23,7 +24,7 @@ class IfrsEntitiesResource extends JsonResource
             'mid_year_balances' => $this->mid_year_balances,
             'year_start' => $this->year_start,
             'destroyed_at' => $this->destroyed_at,
-            'locale' => $this->locale
+            'locale' => $this->locale,
         ];
     }
 }

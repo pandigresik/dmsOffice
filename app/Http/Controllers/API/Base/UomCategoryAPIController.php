@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Base;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Base\CreateUomCategoryAPIRequest;
 use App\Http\Requests\API\Base\UpdateUomCategoryAPIRequest;
+use App\Http\Resources\Base\UomCategoryResource;
 use App\Models\Base\UomCategory;
 use App\Repositories\Base\UomCategoryRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Base\UomCategoryResource;
 use Response;
 
 /**
- * Class UomCategoryController
- * @package App\Http\Controllers\API\Base
+ * Class UomCategoryController.
  */
-
 class UomCategoryAPIController extends AppBaseController
 {
-    /** @var  UomCategoryRepository */
+    /** @var UomCategoryRepository */
     private $uomCategoryRepository;
 
     public function __construct(UomCategoryRepository $uomCategoryRepo)
@@ -27,7 +25,6 @@ class UomCategoryAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class UomCategoryAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateUomCategoryAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class UomCategoryAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class UomCategoryAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateUomCategoryAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class UomCategoryAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

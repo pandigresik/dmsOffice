@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Base;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Base\DmsArPricesegment;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateDmsArPricesegmentRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateDmsArPricesegmentRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'dms_ar_pricesegment-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateDmsArPricesegmentRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new DmsArPricesegment)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new DmsArPricesegment())->fillable;
+
         return parent::all($keys);
     }
 }

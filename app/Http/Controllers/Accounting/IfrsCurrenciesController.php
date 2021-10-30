@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Accounting;
 
-use Flash;
-use Response;
-use App\Http\Controllers\AppBaseController;
-use App\Repositories\Base\CurrenciesRepository;
 use App\DataTables\Accounting\IfrsCurrenciesDataTable;
-use App\Repositories\Accounting\IfrsEntitiesRepository;
-use App\Repositories\Accounting\IfrsCurrenciesRepository;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateIfrsCurrenciesRequest;
 use App\Http\Requests\Accounting\UpdateIfrsCurrenciesRequest;
+use App\Repositories\Accounting\IfrsCurrenciesRepository;
+use App\Repositories\Accounting\IfrsEntitiesRepository;
+use App\Repositories\Base\CurrenciesRepository;
+use Flash;
+use Response;
 
 class IfrsCurrenciesController extends AppBaseController
 {

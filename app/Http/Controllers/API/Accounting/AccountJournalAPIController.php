@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Accounting;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Accounting\CreateAccountJournalAPIRequest;
 use App\Http\Requests\API\Accounting\UpdateAccountJournalAPIRequest;
+use App\Http\Resources\Accounting\AccountJournalResource;
 use App\Models\Accounting\AccountJournal;
 use App\Repositories\Accounting\AccountJournalRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Accounting\AccountJournalResource;
 use Response;
 
 /**
- * Class AccountJournalController
- * @package App\Http\Controllers\API\Accounting
+ * Class AccountJournalController.
  */
-
 class AccountJournalAPIController extends AppBaseController
 {
-    /** @var  AccountJournalRepository */
+    /** @var AccountJournalRepository */
     private $accountJournalRepository;
 
     public function __construct(AccountJournalRepository $accountJournalRepo)
@@ -27,7 +25,6 @@ class AccountJournalAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class AccountJournalAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateAccountJournalAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class AccountJournalAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class AccountJournalAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateAccountJournalAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class AccountJournalAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

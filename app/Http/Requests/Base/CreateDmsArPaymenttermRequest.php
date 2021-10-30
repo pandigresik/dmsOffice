@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Base;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Base\DmsArPaymentterm;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateDmsArPaymenttermRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateDmsArPaymenttermRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'dms_ar_paymentterm-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateDmsArPaymenttermRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new DmsArPaymentterm)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new DmsArPaymentterm())->fillable;
+
         return parent::all($keys);
     }
 }

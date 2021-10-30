@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Base;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Base\VendorContact;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateVendorContactRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateVendorContactRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'vendor_contact-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateVendorContactRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new VendorContact)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new VendorContact())->fillable;
+
         return parent::all($keys);
     }
 }

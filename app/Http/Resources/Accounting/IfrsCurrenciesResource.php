@@ -9,7 +9,8 @@ class IfrsCurrenciesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -19,7 +20,7 @@ class IfrsCurrenciesResource extends JsonResource
             'entity_id' => $this->entity_id,
             'name' => $this->name,
             'currency_code' => $this->currency_code,
-            'destroyed_at' => $this->destroyed_at
+            'destroyed_at' => $this->destroyed_at,
         ];
     }
 }

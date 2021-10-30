@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\UomCategoryDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateUomCategoryRequest;
 use App\Http\Requests\Base\UpdateUomCategoryRequest;
 use App\Repositories\Base\UomCategoryRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class UomCategoryController extends AppBaseController
 {
-    /** @var  UomCategoryRepository */
+    /** @var UomCategoryRepository */
     private $uomCategoryRepository;
 
     public function __construct(UomCategoryRepository $uomCategoryRepo)
@@ -25,7 +23,6 @@ class UomCategoryController extends AppBaseController
     /**
      * Display a listing of the UomCategory.
      *
-     * @param UomCategoryDataTable $uomCategoryDataTable
      * @return Response
      */
     public function index(UomCategoryDataTable $uomCategoryDataTable)
@@ -46,8 +43,6 @@ class UomCategoryController extends AppBaseController
     /**
      * Store a newly created UomCategory in storage.
      *
-     * @param CreateUomCategoryRequest $request
-     *
      * @return Response
      */
     public function store(CreateUomCategoryRequest $request)
@@ -64,7 +59,7 @@ class UomCategoryController extends AppBaseController
     /**
      * Display the specified UomCategory.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class UomCategoryController extends AppBaseController
     /**
      * Show the form for editing the specified UomCategory.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class UomCategoryController extends AppBaseController
     /**
      * Update the specified UomCategory in storage.
      *
-     * @param  int              $id
-     * @param UpdateUomCategoryRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class UomCategoryController extends AppBaseController
     /**
      * Remove the specified UomCategory from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class UomCategoryController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model UomCategory from storage.         
+     * Provide options item based on relationship model UomCategory from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

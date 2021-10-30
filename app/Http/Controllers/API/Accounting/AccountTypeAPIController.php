@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Accounting;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Accounting\CreateAccountTypeAPIRequest;
 use App\Http\Requests\API\Accounting\UpdateAccountTypeAPIRequest;
+use App\Http\Resources\Accounting\AccountTypeResource;
 use App\Models\Accounting\AccountType;
 use App\Repositories\Accounting\AccountTypeRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Accounting\AccountTypeResource;
 use Response;
 
 /**
- * Class AccountTypeController
- * @package App\Http\Controllers\API\Accounting
+ * Class AccountTypeController.
  */
-
 class AccountTypeAPIController extends AppBaseController
 {
-    /** @var  AccountTypeRepository */
+    /** @var AccountTypeRepository */
     private $accountTypeRepository;
 
     public function __construct(AccountTypeRepository $accountTypeRepo)
@@ -27,7 +25,6 @@ class AccountTypeAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class AccountTypeAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateAccountTypeAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class AccountTypeAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class AccountTypeAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateAccountTypeAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class AccountTypeAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

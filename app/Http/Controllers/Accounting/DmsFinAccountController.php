@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Accounting;
 
 use App\DataTables\Accounting\DmsFinAccountDataTable;
-use App\Http\Requests\Accounting;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateDmsFinAccountRequest;
 use App\Http\Requests\Accounting\UpdateDmsFinAccountRequest;
 use App\Repositories\Accounting\DmsFinAccountRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsFinAccountController extends AppBaseController
 {
-    /** @var  DmsFinAccountRepository */
+    /** @var DmsFinAccountRepository */
     private $dmsFinAccountRepository;
 
     public function __construct(DmsFinAccountRepository $dmsFinAccountRepo)
@@ -25,7 +23,6 @@ class DmsFinAccountController extends AppBaseController
     /**
      * Display a listing of the DmsFinAccount.
      *
-     * @param DmsFinAccountDataTable $dmsFinAccountDataTable
      * @return Response
      */
     public function index(DmsFinAccountDataTable $dmsFinAccountDataTable)
@@ -46,8 +43,6 @@ class DmsFinAccountController extends AppBaseController
     /**
      * Store a newly created DmsFinAccount in storage.
      *
-     * @param CreateDmsFinAccountRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsFinAccountRequest $request)
@@ -64,7 +59,7 @@ class DmsFinAccountController extends AppBaseController
     /**
      * Display the specified DmsFinAccount.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsFinAccountController extends AppBaseController
     /**
      * Show the form for editing the specified DmsFinAccount.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsFinAccountController extends AppBaseController
     /**
      * Update the specified DmsFinAccount in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsFinAccountRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsFinAccountController extends AppBaseController
     /**
      * Remove the specified DmsFinAccount from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsFinAccountController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsFinAccount from storage.         
+     * Provide options item based on relationship model DmsFinAccount from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

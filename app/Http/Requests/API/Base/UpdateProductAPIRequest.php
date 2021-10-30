@@ -24,8 +24,6 @@ class UpdateProductAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = Product::$rules;
-        
-        return $rules;
+        return Product::$rules;
     }
 }

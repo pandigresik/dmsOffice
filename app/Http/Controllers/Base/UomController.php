@@ -158,7 +158,7 @@ class UomController extends AppBaseController
 
         return [
             'uomCategoryItems' => ['' => __('crud.option.uomCategory_placeholder')] + $uomCategory->pluck(),
-            'uomTypeItems' => ['references' => 'references', 'smaller' => 'smaller', 'bigger' => 'bigger']
+            'uomTypeItems' => ['references' => 'references', 'smaller' => 'smaller', 'bigger' => 'bigger'],
         ];
     }
 }

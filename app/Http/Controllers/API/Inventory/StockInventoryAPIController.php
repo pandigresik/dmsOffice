@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Inventory;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Inventory\CreateStockInventoryAPIRequest;
 use App\Http\Requests\API\Inventory\UpdateStockInventoryAPIRequest;
+use App\Http\Resources\Inventory\StockInventoryResource;
 use App\Models\Inventory\StockInventory;
 use App\Repositories\Inventory\StockInventoryRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Inventory\StockInventoryResource;
 use Response;
 
 /**
- * Class StockInventoryController
- * @package App\Http\Controllers\API\Inventory
+ * Class StockInventoryController.
  */
-
 class StockInventoryAPIController extends AppBaseController
 {
-    /** @var  StockInventoryRepository */
+    /** @var StockInventoryRepository */
     private $stockInventoryRepository;
 
     public function __construct(StockInventoryRepository $stockInventoryRepo)
@@ -27,7 +25,6 @@ class StockInventoryAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class StockInventoryAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateStockInventoryAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class StockInventoryAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class StockInventoryAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateStockInventoryAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class StockInventoryAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

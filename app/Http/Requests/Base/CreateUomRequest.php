@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Base;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Base\Uom;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateUomRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateUomRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'uom-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateUomRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new Uom)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new Uom())->fillable;
+
         return parent::all($keys);
     }
 }

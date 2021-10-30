@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\DmsInvVehicleDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateDmsInvVehicleRequest;
 use App\Http\Requests\Inventory\UpdateDmsInvVehicleRequest;
 use App\Repositories\Inventory\DmsInvVehicleRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsInvVehicleController extends AppBaseController
 {
-    /** @var  DmsInvVehicleRepository */
+    /** @var DmsInvVehicleRepository */
     private $dmsInvVehicleRepository;
 
     public function __construct(DmsInvVehicleRepository $dmsInvVehicleRepo)
@@ -25,7 +23,6 @@ class DmsInvVehicleController extends AppBaseController
     /**
      * Display a listing of the DmsInvVehicle.
      *
-     * @param DmsInvVehicleDataTable $dmsInvVehicleDataTable
      * @return Response
      */
     public function index(DmsInvVehicleDataTable $dmsInvVehicleDataTable)
@@ -46,8 +43,6 @@ class DmsInvVehicleController extends AppBaseController
     /**
      * Store a newly created DmsInvVehicle in storage.
      *
-     * @param CreateDmsInvVehicleRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsInvVehicleRequest $request)
@@ -64,7 +59,7 @@ class DmsInvVehicleController extends AppBaseController
     /**
      * Display the specified DmsInvVehicle.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsInvVehicleController extends AppBaseController
     /**
      * Show the form for editing the specified DmsInvVehicle.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsInvVehicleController extends AppBaseController
     /**
      * Update the specified DmsInvVehicle in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsInvVehicleRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsInvVehicleController extends AppBaseController
     /**
      * Remove the specified DmsInvVehicle from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsInvVehicleController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsInvVehicle from storage.         
+     * Provide options item based on relationship model DmsInvVehicle from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

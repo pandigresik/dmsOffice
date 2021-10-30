@@ -24,8 +24,6 @@ class UpdateStockPickingTypeAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = StockPickingType::$rules;
-        
-        return $rules;
+        return StockPickingType::$rules;
     }
 }

@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Accounting;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Accounting\CreateAccountInvoiceAPIRequest;
 use App\Http\Requests\API\Accounting\UpdateAccountInvoiceAPIRequest;
+use App\Http\Resources\Accounting\AccountInvoiceResource;
 use App\Models\Accounting\AccountInvoice;
 use App\Repositories\Accounting\AccountInvoiceRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Accounting\AccountInvoiceResource;
 use Response;
 
 /**
- * Class AccountInvoiceController
- * @package App\Http\Controllers\API\Accounting
+ * Class AccountInvoiceController.
  */
-
 class AccountInvoiceAPIController extends AppBaseController
 {
-    /** @var  AccountInvoiceRepository */
+    /** @var AccountInvoiceRepository */
     private $accountInvoiceRepository;
 
     public function __construct(AccountInvoiceRepository $accountInvoiceRepo)
@@ -27,7 +25,6 @@ class AccountInvoiceAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class AccountInvoiceAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateAccountInvoiceAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class AccountInvoiceAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class AccountInvoiceAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateAccountInvoiceAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class AccountInvoiceAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

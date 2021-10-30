@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DmsArPaymenttypeDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateDmsArPaymenttypeRequest;
 use App\Http\Requests\Base\UpdateDmsArPaymenttypeRequest;
 use App\Repositories\Base\DmsArPaymenttypeRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsArPaymenttypeController extends AppBaseController
 {
-    /** @var  DmsArPaymenttypeRepository */
+    /** @var DmsArPaymenttypeRepository */
     private $dmsArPaymenttypeRepository;
 
     public function __construct(DmsArPaymenttypeRepository $dmsArPaymenttypeRepo)
@@ -25,7 +23,6 @@ class DmsArPaymenttypeController extends AppBaseController
     /**
      * Display a listing of the DmsArPaymenttype.
      *
-     * @param DmsArPaymenttypeDataTable $dmsArPaymenttypeDataTable
      * @return Response
      */
     public function index(DmsArPaymenttypeDataTable $dmsArPaymenttypeDataTable)
@@ -46,8 +43,6 @@ class DmsArPaymenttypeController extends AppBaseController
     /**
      * Store a newly created DmsArPaymenttype in storage.
      *
-     * @param CreateDmsArPaymenttypeRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsArPaymenttypeRequest $request)
@@ -64,7 +59,7 @@ class DmsArPaymenttypeController extends AppBaseController
     /**
      * Display the specified DmsArPaymenttype.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsArPaymenttypeController extends AppBaseController
     /**
      * Show the form for editing the specified DmsArPaymenttype.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsArPaymenttypeController extends AppBaseController
     /**
      * Update the specified DmsArPaymenttype in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsArPaymenttypeRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsArPaymenttypeController extends AppBaseController
     /**
      * Remove the specified DmsArPaymenttype from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsArPaymenttypeController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsArPaymenttype from storage.         
+     * Provide options item based on relationship model DmsArPaymenttype from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

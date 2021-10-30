@@ -160,6 +160,7 @@ class IfrsAccountsController extends AppBaseController
         $ifrsCurrency = new IfrsCurrenciesRepository(app());
         $ifrsEntity = new IfrsEntitiesRepository(app());
         $listTypes = config('ifrs')['accounts'];
+
         return [
             'categoryItems' => ['' => __('crud.option.ifrsCategory_placeholder')] + $ifrsCategory->pluck(),
             'currencyItems' => ['' => __('crud.option.ifrsCurrency_placeholder')] + $ifrsCurrency->pluck(),

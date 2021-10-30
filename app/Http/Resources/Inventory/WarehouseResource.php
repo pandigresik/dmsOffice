@@ -9,7 +9,8 @@ class WarehouseResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -18,7 +19,7 @@ class WarehouseResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'internal_code' => $this->internal_code,
-            'company_id' => $this->company_id
+            'company_id' => $this->company_id,
         ];
     }
 }

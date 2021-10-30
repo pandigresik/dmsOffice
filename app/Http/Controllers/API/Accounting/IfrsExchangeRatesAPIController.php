@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Accounting;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Accounting\CreateIfrsExchangeRatesAPIRequest;
 use App\Http\Requests\API\Accounting\UpdateIfrsExchangeRatesAPIRequest;
+use App\Http\Resources\Accounting\IfrsExchangeRatesResource;
 use App\Models\Accounting\IfrsExchangeRates;
 use App\Repositories\Accounting\IfrsExchangeRatesRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Accounting\IfrsExchangeRatesResource;
 use Response;
 
 /**
- * Class IfrsExchangeRatesController
- * @package App\Http\Controllers\API\Accounting
+ * Class IfrsExchangeRatesController.
  */
-
 class IfrsExchangeRatesAPIController extends AppBaseController
 {
-    /** @var  IfrsExchangeRatesRepository */
+    /** @var IfrsExchangeRatesRepository */
     private $ifrsExchangeRatesRepository;
 
     public function __construct(IfrsExchangeRatesRepository $ifrsExchangeRatesRepo)
@@ -27,7 +25,6 @@ class IfrsExchangeRatesAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class IfrsExchangeRatesAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateIfrsExchangeRatesAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class IfrsExchangeRatesAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class IfrsExchangeRatesAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateIfrsExchangeRatesAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class IfrsExchangeRatesAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

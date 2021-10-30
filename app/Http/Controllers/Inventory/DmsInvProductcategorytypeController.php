@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\DmsInvProductcategorytypeDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateDmsInvProductcategorytypeRequest;
 use App\Http\Requests\Inventory\UpdateDmsInvProductcategorytypeRequest;
 use App\Repositories\Inventory\DmsInvProductcategorytypeRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsInvProductcategorytypeController extends AppBaseController
 {
-    /** @var  DmsInvProductcategorytypeRepository */
+    /** @var DmsInvProductcategorytypeRepository */
     private $dmsInvProductcategorytypeRepository;
 
     public function __construct(DmsInvProductcategorytypeRepository $dmsInvProductcategorytypeRepo)
@@ -25,7 +23,6 @@ class DmsInvProductcategorytypeController extends AppBaseController
     /**
      * Display a listing of the DmsInvProductcategorytype.
      *
-     * @param DmsInvProductcategorytypeDataTable $dmsInvProductcategorytypeDataTable
      * @return Response
      */
     public function index(DmsInvProductcategorytypeDataTable $dmsInvProductcategorytypeDataTable)
@@ -46,8 +43,6 @@ class DmsInvProductcategorytypeController extends AppBaseController
     /**
      * Store a newly created DmsInvProductcategorytype in storage.
      *
-     * @param CreateDmsInvProductcategorytypeRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsInvProductcategorytypeRequest $request)
@@ -64,7 +59,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
     /**
      * Display the specified DmsInvProductcategorytype.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
     /**
      * Show the form for editing the specified DmsInvProductcategorytype.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
     /**
      * Update the specified DmsInvProductcategorytype in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsInvProductcategorytypeRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
     /**
      * Remove the specified DmsInvProductcategorytype from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsInvProductcategorytypeController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsInvProductcategorytype from storage.         
+     * Provide options item based on relationship model DmsInvProductcategorytype from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

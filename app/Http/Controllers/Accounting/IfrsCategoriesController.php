@@ -156,6 +156,7 @@ class IfrsCategoriesController extends AppBaseController
     {
         $ifrsEntity = new IfrsEntitiesRepository(app());
         $listCategory = config('ifrs')['accounts'];
+
         return [
             'entityItems' => ['' => __('crud.option.ifrsEntity_placeholder')] + $ifrsEntity->pluck(),
             'categoryItems' => ['' => __('crud.option.ifrsEntity_placeholder')] + $listCategory,

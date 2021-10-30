@@ -1,20 +1,20 @@
 <?php
 
 return array (
-  'singular' => 'DmsInvVehicletype',
-  'plural' => 'DmsInvVehicletypes',
+  'singular' => 'Tipe Kendaraan',
+  'plural' => 'Tipe Kendaraan',
   'fields' => 
   array (
     'iInternalId' => 'Iinternalid',
     'iId' => 'Iid',
-    'szId' => 'Szid',
-    'szName' => 'Szname',
-    'szDescription' => 'Szdescription',
-    'decWeight' => 'Decweight',
-    'decVolume' => 'Decvolume',
-    'szUserCreatedId' => 'Szusercreatedid',
-    'szUserUpdatedId' => 'Szuserupdatedid',
-    'dtmCreated' => 'Dtmcreated',
-    'dtmLastUpdated' => 'Dtmlastupdated',
+    'szId' => 'Id',
+    'szName' => 'Nama',
+    'szDescription' => 'Deskripsi',
+    'decWeight' => 'Berat',
+    'decVolume' => 'Volume',
+    'szUserCreatedId' => 'Dibuat Oleh',
+    'szUserUpdatedId' => 'Diupdate Oleh',
+    'dtmCreated' => 'Waktu Buat',
+    'dtmLastUpdated' => 'Waktu Ubah',
   ),
 );

@@ -24,8 +24,6 @@ class UpdateIfrsVatsAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = IfrsVats::$rules;
-        
-        return $rules;
+        return IfrsVats::$rules;
     }
 }

@@ -9,7 +9,8 @@ class IfrsAccountsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -23,7 +24,7 @@ class IfrsAccountsResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'account_type' => $this->account_type,
-            'destroyed_at' => $this->destroyed_at
+            'destroyed_at' => $this->destroyed_at,
         ];
     }
 }

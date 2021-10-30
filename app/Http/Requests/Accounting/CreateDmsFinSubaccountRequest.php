@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Accounting;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Accounting\DmsFinSubaccount;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateDmsFinSubaccountRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateDmsFinSubaccountRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'dms_fin_subaccount-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateDmsFinSubaccountRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new DmsFinSubaccount)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new DmsFinSubaccount())->fillable;
+
         return parent::all($keys);
     }
 }

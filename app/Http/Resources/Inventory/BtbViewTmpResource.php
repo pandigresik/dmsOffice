@@ -9,7 +9,8 @@ class BtbViewTmpResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -24,7 +25,7 @@ class BtbViewTmpResource extends JsonResource
             'No_DN' => $this->No_DN,
             'Tgl_sjp' => $this->Tgl_sjp,
             'Depo' => $this->Depo,
-            'Nama_Produk' => $this->Nama_Produk
+            'Nama_Produk' => $this->Nama_Produk,
         ];
     }
 }

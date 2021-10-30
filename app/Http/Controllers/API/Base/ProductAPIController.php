@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Base;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Base\CreateProductAPIRequest;
 use App\Http\Requests\API\Base\UpdateProductAPIRequest;
+use App\Http\Resources\Base\ProductResource;
 use App\Models\Base\Product;
 use App\Repositories\Base\ProductRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Base\ProductResource;
 use Response;
 
 /**
- * Class ProductController
- * @package App\Http\Controllers\API\Base
+ * Class ProductController.
  */
-
 class ProductAPIController extends AppBaseController
 {
-    /** @var  ProductRepository */
+    /** @var ProductRepository */
     private $productRepository;
 
     public function __construct(ProductRepository $productRepo)
@@ -27,7 +25,6 @@ class ProductAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class ProductAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateProductAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class ProductAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class ProductAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateProductAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class ProductAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

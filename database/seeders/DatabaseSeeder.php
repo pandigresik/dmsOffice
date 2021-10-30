@@ -46,12 +46,13 @@ class DatabaseSeeder extends Seeder
         $this->call(DmsUsersTableSeeder::class);
         $this->call(DmsPermissionsTableSeeder::class);
         $this->call(DmsMenusTableSeeder::class);
-        $this->call(DmsMenuPermissionsTableSeeder::class);
-        $this->call(DmsRoleHasPermissionsTableSeeder::class);
+        $this->call(DmsMenuPermissionsTableSeeder::class);        
         $this->call(DmsRolesTableSeeder::class);
+        $this->call(DmsRoleHasPermissionsTableSeeder::class);        
+        $this->call(DmsModelHasRolesTableSeeder::class);
         $this->call(DmsRouteTripTableSeeder::class);
         $this->call(DmsSettingTableSeeder::class);
 
-        \App\Models\Base\MenusTree::fixTree();
+        \App\Models\Base\MenusTree::fixTree();        
     }
 }

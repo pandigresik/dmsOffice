@@ -9,7 +9,8 @@ class IfrsVatsResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -21,7 +22,7 @@ class IfrsVatsResource extends JsonResource
             'code' => $this->code,
             'name' => $this->name,
             'rate' => $this->rate,
-            'destroyed_at' => $this->destroyed_at
+            'destroyed_at' => $this->destroyed_at,
         ];
     }
 }

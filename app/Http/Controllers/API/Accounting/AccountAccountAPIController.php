@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Accounting;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Accounting\CreateAccountAccountAPIRequest;
 use App\Http\Requests\API\Accounting\UpdateAccountAccountAPIRequest;
+use App\Http\Resources\Accounting\AccountAccountResource;
 use App\Models\Accounting\AccountAccount;
 use App\Repositories\Accounting\AccountAccountRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Accounting\AccountAccountResource;
 use Response;
 
 /**
- * Class AccountAccountController
- * @package App\Http\Controllers\API\Accounting
+ * Class AccountAccountController.
  */
-
 class AccountAccountAPIController extends AppBaseController
 {
-    /** @var  AccountAccountRepository */
+    /** @var AccountAccountRepository */
     private $accountAccountRepository;
 
     public function __construct(AccountAccountRepository $accountAccountRepo)
@@ -27,7 +25,6 @@ class AccountAccountAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class AccountAccountAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateAccountAccountAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class AccountAccountAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class AccountAccountAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateAccountAccountAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class AccountAccountAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

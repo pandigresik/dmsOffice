@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Base;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Base\UomCategory;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateUomCategoryRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateUomCategoryRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'uom_category-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateUomCategoryRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new UomCategory)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new UomCategory())->fillable;
+
         return parent::all($keys);
     }
 }

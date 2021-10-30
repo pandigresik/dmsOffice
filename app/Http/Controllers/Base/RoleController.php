@@ -9,7 +9,6 @@ use App\Http\Requests\Base\UpdateRoleRequest;
 use App\Repositories\Base\PermissionRepository;
 use App\Repositories\Base\RoleRepository;
 use Flash;
-use Illuminate\Foundation\Http\FormRequest;
 use Response;
 
 class RoleController extends AppBaseController
@@ -51,7 +50,7 @@ class RoleController extends AppBaseController
     {
         $input = $request->all();
 
-        $role = $this->roleRepository->create($input);        
+        $role = $this->roleRepository->create($input);
         Flash::success('Role saved successfully.');
 
         return redirect(route('base.roles.index'));
@@ -112,7 +111,7 @@ class RoleController extends AppBaseController
             return redirect(route('base.roles.index'));
         }
 
-        $role = $this->roleRepository->update($request->all(), $id);        
+        $role = $this->roleRepository->update($request->all(), $id);
         Flash::success('Role updated successfully.');
 
         return redirect(route('base.roles.index'));
@@ -148,5 +147,5 @@ class RoleController extends AppBaseController
         $permissions = new PermissionRepository($app);
 
         return $permissions->all();
-    }    
+    }
 }

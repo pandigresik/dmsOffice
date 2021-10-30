@@ -24,8 +24,6 @@ class UpdateUomCategoryAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = UomCategory::$rules;
-        
-        return $rules;
+        return UomCategory::$rules;
     }
 }

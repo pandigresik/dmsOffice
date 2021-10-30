@@ -7,7 +7,7 @@ return array (
   array (
     'iInternalId' => 'Iinternalid',
     'iId' => 'Iid',
-    'szId' => 'Szid',
+    'szId' => 'Id',
     'intItemNumber' => 'Intitemnumber',
     'szRouteType' => 'Szroutetype',
     'szEmployeeId' => 'Szemployeeid',
@@ -22,9 +22,9 @@ return array (
     'bWeek2' => 'Bweek2',
     'bWeek3' => 'Bweek3',
     'bWeek4' => 'Bweek4',
-    'szUserCreatedId' => 'Szusercreatedid',
-    'szUserUpdatedId' => 'Szuserupdatedid',
-    'dtmCreated' => 'Dtmcreated',
-    'dtmLastUpdated' => 'Dtmlastupdated',
+    'szUserCreatedId' => 'Dibuat Oleh',
+    'szUserUpdatedId' => 'Diupdate Oleh',
+    'dtmCreated' => 'Waktu Buat',
+    'dtmLastUpdated' => 'Waktu Ubah',
   ),
 );

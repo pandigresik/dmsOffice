@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Sales;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Sales\DmsSdRouteitem;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateDmsSdRouteitemRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateDmsSdRouteitemRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'dms_sd_routeitem-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateDmsSdRouteitemRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new DmsSdRouteitem)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new DmsSdRouteitem())->fillable;
+
         return parent::all($keys);
     }
 }

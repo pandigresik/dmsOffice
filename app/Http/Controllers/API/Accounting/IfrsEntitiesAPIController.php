@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Accounting;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Accounting\CreateIfrsEntitiesAPIRequest;
 use App\Http\Requests\API\Accounting\UpdateIfrsEntitiesAPIRequest;
+use App\Http\Resources\Accounting\IfrsEntitiesResource;
 use App\Models\Accounting\IfrsEntities;
 use App\Repositories\Accounting\IfrsEntitiesRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Accounting\IfrsEntitiesResource;
 use Response;
 
 /**
- * Class IfrsEntitiesController
- * @package App\Http\Controllers\API\Accounting
+ * Class IfrsEntitiesController.
  */
-
 class IfrsEntitiesAPIController extends AppBaseController
 {
-    /** @var  IfrsEntitiesRepository */
+    /** @var IfrsEntitiesRepository */
     private $ifrsEntitiesRepository;
 
     public function __construct(IfrsEntitiesRepository $ifrsEntitiesRepo)
@@ -27,7 +25,6 @@ class IfrsEntitiesAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class IfrsEntitiesAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateIfrsEntitiesAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class IfrsEntitiesAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class IfrsEntitiesAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateIfrsEntitiesAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class IfrsEntitiesAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

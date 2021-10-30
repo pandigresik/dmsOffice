@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\StockInventory;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateStockInventoryRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateStockInventoryRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'stock_inventory-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,10 +35,12 @@ class CreateStockInventoryRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new StockInventory)->fillable;
-        $keys = array_merge($keys, ['stock_inventory_line_quantity','stock_inventory_line_product_id','stock_inventory_line_uom_id','stock_inventory_line_current']);
+     */
+    public function all($keys = null)
+    {
+        $keys = (new StockInventory())->fillable;
+        $keys = array_merge($keys, ['stock_inventory_line_quantity', 'stock_inventory_line_product_id', 'stock_inventory_line_uom_id', 'stock_inventory_line_current']);
+
         return parent::all($keys);
     }
 }

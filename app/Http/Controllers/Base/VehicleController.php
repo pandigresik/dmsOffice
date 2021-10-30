@@ -31,7 +31,7 @@ class VehicleController extends AppBaseController
     public function index($id, VehicleDataTable $vehicleDataTable)
     {
         return $vehicleDataTable->setIdReferences($id)->render('base.vehicles.index', ['vendorId' => $id]);
-    }    
+    }
 
     /**
      * Show the form for creating a new Vehicle.
@@ -151,6 +151,11 @@ class VehicleController extends AppBaseController
         return redirect(route('base.vehicles.index'));
     }
 
+    public function form()
+    {
+        return view('base.vehicles.create_new');
+    }
+
     /**
      * Provide options item based on relationship model Vehicle from storage.
      *
@@ -165,10 +170,5 @@ class VehicleController extends AppBaseController
         return [
             'vehicleGroupItems' => ['' => __('crud.option.vehicleGroup_placeholder')] + $vehicleGroup->pluck(),
         ];
-    }
-
-    public  function form(){
-
-        return view('base.vehicles.create_new');
     }
 }

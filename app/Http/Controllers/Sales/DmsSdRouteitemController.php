@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Sales;
 
 use App\DataTables\Sales\DmsSdRouteitemDataTable;
-use App\Http\Requests\Sales;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Sales\CreateDmsSdRouteitemRequest;
 use App\Http\Requests\Sales\UpdateDmsSdRouteitemRequest;
 use App\Repositories\Sales\DmsSdRouteitemRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsSdRouteitemController extends AppBaseController
 {
-    /** @var  DmsSdRouteitemRepository */
+    /** @var DmsSdRouteitemRepository */
     private $dmsSdRouteitemRepository;
 
     public function __construct(DmsSdRouteitemRepository $dmsSdRouteitemRepo)
@@ -25,7 +23,6 @@ class DmsSdRouteitemController extends AppBaseController
     /**
      * Display a listing of the DmsSdRouteitem.
      *
-     * @param DmsSdRouteitemDataTable $dmsSdRouteitemDataTable
      * @return Response
      */
     public function index(DmsSdRouteitemDataTable $dmsSdRouteitemDataTable)
@@ -46,8 +43,6 @@ class DmsSdRouteitemController extends AppBaseController
     /**
      * Store a newly created DmsSdRouteitem in storage.
      *
-     * @param CreateDmsSdRouteitemRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsSdRouteitemRequest $request)
@@ -64,7 +59,7 @@ class DmsSdRouteitemController extends AppBaseController
     /**
      * Display the specified DmsSdRouteitem.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsSdRouteitemController extends AppBaseController
     /**
      * Show the form for editing the specified DmsSdRouteitem.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsSdRouteitemController extends AppBaseController
     /**
      * Update the specified DmsSdRouteitem in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsSdRouteitemRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsSdRouteitemController extends AppBaseController
     /**
      * Remove the specified DmsSdRouteitem from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsSdRouteitemController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsSdRouteitem from storage.         
+     * Provide options item based on relationship model DmsSdRouteitem from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

@@ -9,7 +9,8 @@ class StockPickingTypeResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -17,7 +18,7 @@ class StockPickingTypeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'code' => $this->code
+            'code' => $this->code,
         ];
     }
 }

@@ -9,7 +9,8 @@ class AccountAccountResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -23,7 +24,7 @@ class AccountAccountResource extends JsonResource
             'reconcile' => $this->reconcile,
             'internal_type' => $this->internal_type,
             'internal_group' => $this->internal_group,
-            'note' => $this->note
+            'note' => $this->note,
         ];
     }
 }

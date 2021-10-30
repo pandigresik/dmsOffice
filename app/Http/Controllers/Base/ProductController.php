@@ -155,6 +155,7 @@ class ProductController extends AppBaseController
     private function getOptionItems()
     {
         $uom = new UomRepository(app());
+
         return [
             'uomItems' => ['' => __('crud.option.uom_placeholder')] + $uom->pluck(),
         ];

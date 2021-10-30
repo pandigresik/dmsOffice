@@ -9,7 +9,8 @@ class AccountMoveResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -25,7 +26,7 @@ class AccountMoveResource extends JsonResource
             'amount' => $this->amount,
             'move_type' => $this->move_type,
             'narration' => $this->narration,
-            'stock_picking_id' => $this->stock_picking_id
+            'stock_picking_id' => $this->stock_picking_id,
         ];
     }
 }

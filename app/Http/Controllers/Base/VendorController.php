@@ -108,7 +108,7 @@ class VendorController extends AppBaseController
 
             return redirect(route('base.vendors.index'));
         }
-        $jsonDefaultSearching = ['vendor_id' => $id];        
+        $jsonDefaultSearching = ['vendor_id' => $id];
         $dataTabs = [
             'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('base.vendorsContacts.index', ['vendor_id' => $id]), 'defaultContent' => '', 'class' => ''],
             'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.vendorsLocations.index', ['vendor_id' => $id]), 'defaultContent' => '', 'class' => ''],
@@ -116,11 +116,12 @@ class VendorController extends AppBaseController
             'trip' => ['text' => 'Trip', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'defaultContent' => '', 'class' => ''],
             'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
         ];
-        
+
         return view('base.vendors.edit')
             ->with('dataTabs', $dataTabs)
             ->with('vendor', $vendor)
-            ->with($this->getOptionItems());
+            ->with($this->getOptionItems())
+        ;
     }
 
     /**

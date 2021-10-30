@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Base;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Base\Product;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateProductRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateProductRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'product-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateProductRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new Product)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new Product())->fillable;
+
         return parent::all($keys);
     }
 }

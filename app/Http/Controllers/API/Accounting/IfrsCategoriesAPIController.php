@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Accounting;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Accounting\CreateIfrsCategoriesAPIRequest;
 use App\Http\Requests\API\Accounting\UpdateIfrsCategoriesAPIRequest;
+use App\Http\Resources\Accounting\IfrsCategoriesResource;
 use App\Models\Accounting\IfrsCategories;
 use App\Repositories\Accounting\IfrsCategoriesRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Accounting\IfrsCategoriesResource;
 use Response;
 
 /**
- * Class IfrsCategoriesController
- * @package App\Http\Controllers\API\Accounting
+ * Class IfrsCategoriesController.
  */
-
 class IfrsCategoriesAPIController extends AppBaseController
 {
-    /** @var  IfrsCategoriesRepository */
+    /** @var IfrsCategoriesRepository */
     private $ifrsCategoriesRepository;
 
     public function __construct(IfrsCategoriesRepository $ifrsCategoriesRepo)
@@ -27,7 +25,6 @@ class IfrsCategoriesAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class IfrsCategoriesAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateIfrsCategoriesAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class IfrsCategoriesAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class IfrsCategoriesAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateIfrsCategoriesAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class IfrsCategoriesAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

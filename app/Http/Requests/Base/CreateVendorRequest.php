@@ -39,7 +39,8 @@ class CreateVendorRequest extends FormRequest
     public function all($keys = null)
     {
         $keys = (new Vendor())->fillable;
-        $keys = array_merge(['vendorContact','vendorLocation','vendorVehicle','vendorTrip'],$keys);
+        $keys = array_merge(['vendorContact', 'vendorLocation', 'vendorVehicle', 'vendorTrip'], $keys);
+
         return parent::all($keys);
     }
 }

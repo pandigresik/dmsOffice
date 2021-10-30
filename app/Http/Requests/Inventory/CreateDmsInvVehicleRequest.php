@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\DmsInvVehicle;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateDmsInvVehicleRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateDmsInvVehicleRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'dms_inv_vehicle-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateDmsInvVehicleRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new DmsInvVehicle)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new DmsInvVehicle())->fillable;
+
         return parent::all($keys);
     }
 }

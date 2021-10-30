@@ -2,14 +2,12 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\DmsInvVehicle;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateDmsInvVehicleRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = [];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -19,6 +17,7 @@ class UpdateDmsInvVehicleRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'dms_inv_vehicle-update';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -30,9 +29,8 @@ class UpdateDmsInvVehicleRequest extends FormRequest
     public function rules()
     {
         $rules = DmsInvVehicle::$rules;
-        
-        $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
-        return $rules;
+
+        return $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
     }
 
     /**
@@ -41,10 +39,12 @@ class UpdateDmsInvVehicleRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new DmsInvVehicle)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new DmsInvVehicle())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+
         return parent::all($keys);
     }
 }

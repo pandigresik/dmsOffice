@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DmsArCustomercategoryDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateDmsArCustomercategoryRequest;
 use App\Http\Requests\Base\UpdateDmsArCustomercategoryRequest;
 use App\Repositories\Base\DmsArCustomercategoryRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsArCustomercategoryController extends AppBaseController
 {
-    /** @var  DmsArCustomercategoryRepository */
+    /** @var DmsArCustomercategoryRepository */
     private $dmsArCustomercategoryRepository;
 
     public function __construct(DmsArCustomercategoryRepository $dmsArCustomercategoryRepo)
@@ -25,7 +23,6 @@ class DmsArCustomercategoryController extends AppBaseController
     /**
      * Display a listing of the DmsArCustomercategory.
      *
-     * @param DmsArCustomercategoryDataTable $dmsArCustomercategoryDataTable
      * @return Response
      */
     public function index(DmsArCustomercategoryDataTable $dmsArCustomercategoryDataTable)
@@ -46,8 +43,6 @@ class DmsArCustomercategoryController extends AppBaseController
     /**
      * Store a newly created DmsArCustomercategory in storage.
      *
-     * @param CreateDmsArCustomercategoryRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsArCustomercategoryRequest $request)
@@ -64,7 +59,7 @@ class DmsArCustomercategoryController extends AppBaseController
     /**
      * Display the specified DmsArCustomercategory.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsArCustomercategoryController extends AppBaseController
     /**
      * Show the form for editing the specified DmsArCustomercategory.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsArCustomercategoryController extends AppBaseController
     /**
      * Update the specified DmsArCustomercategory in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsArCustomercategoryRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsArCustomercategoryController extends AppBaseController
     /**
      * Remove the specified DmsArCustomercategory from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsArCustomercategoryController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsArCustomercategory from storage.         
+     * Provide options item based on relationship model DmsArCustomercategory from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

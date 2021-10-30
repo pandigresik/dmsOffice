@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\BtbViewTmpDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateBtbViewTmpRequest;
 use App\Http\Requests\Inventory\UpdateBtbViewTmpRequest;
 use App\Repositories\Inventory\BtbViewTmpRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class BtbViewTmpController extends AppBaseController
 {
-    /** @var  BtbViewTmpRepository */
+    /** @var BtbViewTmpRepository */
     private $btbViewTmpRepository;
 
     public function __construct(BtbViewTmpRepository $btbViewTmpRepo)
@@ -25,7 +23,6 @@ class BtbViewTmpController extends AppBaseController
     /**
      * Display a listing of the BtbViewTmp.
      *
-     * @param BtbViewTmpDataTable $btbViewTmpDataTable
      * @return Response
      */
     public function index(BtbViewTmpDataTable $btbViewTmpDataTable)
@@ -46,8 +43,6 @@ class BtbViewTmpController extends AppBaseController
     /**
      * Store a newly created BtbViewTmp in storage.
      *
-     * @param CreateBtbViewTmpRequest $request
-     *
      * @return Response
      */
     public function store(CreateBtbViewTmpRequest $request)
@@ -64,7 +59,7 @@ class BtbViewTmpController extends AppBaseController
     /**
      * Display the specified BtbViewTmp.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class BtbViewTmpController extends AppBaseController
     /**
      * Show the form for editing the specified BtbViewTmp.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class BtbViewTmpController extends AppBaseController
     /**
      * Update the specified BtbViewTmp in storage.
      *
-     * @param  int              $id
-     * @param UpdateBtbViewTmpRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class BtbViewTmpController extends AppBaseController
     /**
      * Remove the specified BtbViewTmp from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class BtbViewTmpController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model BtbViewTmp from storage.         
+     * Provide options item based on relationship model BtbViewTmp from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\API\Inventory;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\Inventory\CreateBtbViewTmpAPIRequest;
 use App\Http\Requests\API\Inventory\UpdateBtbViewTmpAPIRequest;
+use App\Http\Resources\Inventory\BtbViewTmpResource;
 use App\Models\Inventory\BtbViewTmp;
 use App\Repositories\Inventory\BtbViewTmpRepository;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Resources\Inventory\BtbViewTmpResource;
 use Response;
 
 /**
- * Class BtbViewTmpController
- * @package App\Http\Controllers\API\Inventory
+ * Class BtbViewTmpController.
  */
-
 class BtbViewTmpAPIController extends AppBaseController
 {
-    /** @var  BtbViewTmpRepository */
+    /** @var BtbViewTmpRepository */
     private $btbViewTmpRepository;
 
     public function __construct(BtbViewTmpRepository $btbViewTmpRepo)
@@ -27,7 +25,6 @@ class BtbViewTmpAPIController extends AppBaseController
     }
 
     /**
-     * @param Request $request
      * @return Response
      *
      * @SWG\Get(
@@ -70,7 +67,6 @@ class BtbViewTmpAPIController extends AppBaseController
     }
 
     /**
-     * @param CreateBtbViewTmpAPIRequest $request
      * @return Response
      *
      * @SWG\Post(
@@ -118,6 +114,7 @@ class BtbViewTmpAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Get(
@@ -168,7 +165,7 @@ class BtbViewTmpAPIController extends AppBaseController
 
     /**
      * @param int $id
-     * @param UpdateBtbViewTmpAPIRequest $request
+     *
      * @return Response
      *
      * @SWG\Put(
@@ -230,6 +227,7 @@ class BtbViewTmpAPIController extends AppBaseController
 
     /**
      * @param int $id
+     *
      * @return Response
      *
      * @SWG\Delete(

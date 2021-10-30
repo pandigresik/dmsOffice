@@ -2,14 +2,12 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\DmsInvWarehouse;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateDmsInvWarehouseRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = [];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -19,6 +17,7 @@ class UpdateDmsInvWarehouseRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'dms_inv_warehouse-update';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -30,9 +29,8 @@ class UpdateDmsInvWarehouseRequest extends FormRequest
     public function rules()
     {
         $rules = DmsInvWarehouse::$rules;
-        
-        $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
-        return $rules;
+
+        return $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
     }
 
     /**
@@ -41,10 +39,12 @@ class UpdateDmsInvWarehouseRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new DmsInvWarehouse)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new DmsInvWarehouse())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+
         return parent::all($keys);
     }
 }

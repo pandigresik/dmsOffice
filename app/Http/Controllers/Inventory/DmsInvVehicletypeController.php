@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\DmsInvVehicletypeDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateDmsInvVehicletypeRequest;
 use App\Http\Requests\Inventory\UpdateDmsInvVehicletypeRequest;
 use App\Repositories\Inventory\DmsInvVehicletypeRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsInvVehicletypeController extends AppBaseController
 {
-    /** @var  DmsInvVehicletypeRepository */
+    /** @var DmsInvVehicletypeRepository */
     private $dmsInvVehicletypeRepository;
 
     public function __construct(DmsInvVehicletypeRepository $dmsInvVehicletypeRepo)
@@ -25,7 +23,6 @@ class DmsInvVehicletypeController extends AppBaseController
     /**
      * Display a listing of the DmsInvVehicletype.
      *
-     * @param DmsInvVehicletypeDataTable $dmsInvVehicletypeDataTable
      * @return Response
      */
     public function index(DmsInvVehicletypeDataTable $dmsInvVehicletypeDataTable)
@@ -46,8 +43,6 @@ class DmsInvVehicletypeController extends AppBaseController
     /**
      * Store a newly created DmsInvVehicletype in storage.
      *
-     * @param CreateDmsInvVehicletypeRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsInvVehicletypeRequest $request)
@@ -64,7 +59,7 @@ class DmsInvVehicletypeController extends AppBaseController
     /**
      * Display the specified DmsInvVehicletype.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsInvVehicletypeController extends AppBaseController
     /**
      * Show the form for editing the specified DmsInvVehicletype.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsInvVehicletypeController extends AppBaseController
     /**
      * Update the specified DmsInvVehicletype in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsInvVehicletypeRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsInvVehicletypeController extends AppBaseController
     /**
      * Remove the specified DmsInvVehicletype from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsInvVehicletypeController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsInvVehicletype from storage.         
+     * Provide options item based on relationship model DmsInvVehicletype from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

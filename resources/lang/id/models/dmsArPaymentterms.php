@@ -1,20 +1,20 @@
 <?php
 
 return array (
-  'singular' => 'DmsArPaymentterm',
-  'plural' => 'DmsArPaymentterms',
+  'singular' => 'Payment Term',
+  'plural' => 'Payment Term',
   'fields' => 
   array (
     'iInternalId' => 'Iinternalid',
     'iId' => 'Iid',
-    'szId' => 'Szid',
-    'szName' => 'Szname',
-    'szDescription' => 'Szdescription',
-    'intDueDate' => 'Intduedate',
-    'intDuePrintDate' => 'Intdueprintdate',
-    'szUserCreatedId' => 'Szusercreatedid',
-    'szUserUpdatedId' => 'Szuserupdatedid',
-    'dtmCreated' => 'Dtmcreated',
-    'dtmLastUpdated' => 'Dtmlastupdated',
+    'szId' => 'Id',
+    'szName' => 'Nama',
+    'szDescription' => 'Deskripsi',
+    'intDueDate' => 'Tanggal Kadaluarsa',
+    'intDuePrintDate' => 'Tanggal Cetak',
+    'szUserCreatedId' => 'Dibuat Oleh',
+    'szUserUpdatedId' => 'Diupdate Oleh',
+    'dtmCreated' => 'Waktu Buat',
+    'dtmLastUpdated' => 'Waktu Ubah',
   ),
 );

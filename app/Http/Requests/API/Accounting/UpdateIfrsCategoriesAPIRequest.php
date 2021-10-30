@@ -24,8 +24,6 @@ class UpdateIfrsCategoriesAPIRequest extends APIRequest
      */
     public function rules()
     {
-        $rules = IfrsCategories::$rules;
-        
-        return $rules;
+        return IfrsCategories::$rules;
     }
 }

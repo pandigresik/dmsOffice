@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\DmsInvUomDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateDmsInvUomRequest;
 use App\Http\Requests\Inventory\UpdateDmsInvUomRequest;
 use App\Repositories\Inventory\DmsInvUomRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsInvUomController extends AppBaseController
 {
-    /** @var  DmsInvUomRepository */
+    /** @var DmsInvUomRepository */
     private $dmsInvUomRepository;
 
     public function __construct(DmsInvUomRepository $dmsInvUomRepo)
@@ -25,7 +23,6 @@ class DmsInvUomController extends AppBaseController
     /**
      * Display a listing of the DmsInvUom.
      *
-     * @param DmsInvUomDataTable $dmsInvUomDataTable
      * @return Response
      */
     public function index(DmsInvUomDataTable $dmsInvUomDataTable)
@@ -46,8 +43,6 @@ class DmsInvUomController extends AppBaseController
     /**
      * Store a newly created DmsInvUom in storage.
      *
-     * @param CreateDmsInvUomRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsInvUomRequest $request)
@@ -64,7 +59,7 @@ class DmsInvUomController extends AppBaseController
     /**
      * Display the specified DmsInvUom.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsInvUomController extends AppBaseController
     /**
      * Show the form for editing the specified DmsInvUom.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsInvUomController extends AppBaseController
     /**
      * Update the specified DmsInvUom in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsInvUomRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsInvUomController extends AppBaseController
     /**
      * Remove the specified DmsInvUom from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsInvUomController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsInvUom from storage.         
+     * Provide options item based on relationship model DmsInvUom from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

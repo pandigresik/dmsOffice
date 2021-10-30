@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\DmsInvWarehouseDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateDmsInvWarehouseRequest;
 use App\Http\Requests\Inventory\UpdateDmsInvWarehouseRequest;
 use App\Repositories\Inventory\DmsInvWarehouseRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsInvWarehouseController extends AppBaseController
 {
-    /** @var  DmsInvWarehouseRepository */
+    /** @var DmsInvWarehouseRepository */
     private $dmsInvWarehouseRepository;
 
     public function __construct(DmsInvWarehouseRepository $dmsInvWarehouseRepo)
@@ -25,7 +23,6 @@ class DmsInvWarehouseController extends AppBaseController
     /**
      * Display a listing of the DmsInvWarehouse.
      *
-     * @param DmsInvWarehouseDataTable $dmsInvWarehouseDataTable
      * @return Response
      */
     public function index(DmsInvWarehouseDataTable $dmsInvWarehouseDataTable)
@@ -46,8 +43,6 @@ class DmsInvWarehouseController extends AppBaseController
     /**
      * Store a newly created DmsInvWarehouse in storage.
      *
-     * @param CreateDmsInvWarehouseRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsInvWarehouseRequest $request)
@@ -64,7 +59,7 @@ class DmsInvWarehouseController extends AppBaseController
     /**
      * Display the specified DmsInvWarehouse.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsInvWarehouseController extends AppBaseController
     /**
      * Show the form for editing the specified DmsInvWarehouse.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsInvWarehouseController extends AppBaseController
     /**
      * Update the specified DmsInvWarehouse in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsInvWarehouseRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsInvWarehouseController extends AppBaseController
     /**
      * Remove the specified DmsInvWarehouse from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsInvWarehouseController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsInvWarehouse from storage.         
+     * Provide options item based on relationship model DmsInvWarehouse from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

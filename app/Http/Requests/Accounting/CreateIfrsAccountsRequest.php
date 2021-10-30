@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Accounting;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Accounting\IfrsAccounts;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateIfrsAccountsRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateIfrsAccountsRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'ifrs_accounts-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateIfrsAccountsRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new IfrsAccounts)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new IfrsAccounts())->fillable;
+
         return parent::all($keys);
     }
 }
