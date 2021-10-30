@@ -11,165 +11,47 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run()
-    {
-        $user = \App\Models\Base\User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@admin.com',
-            'password' => Hash::make('admin@admin.com')
-        ]);
+    {                        
+        $this->call(DmsCityTableSeeder::class);
+        $this->call(DmsDmsApSupplierTableSeeder::class);
+        $this->call(DmsDmsArCustomerTableSeeder::class);
+        $this->call(DmsDmsArCustomercategoryTableSeeder::class);
+        $this->call(DmsDmsArCustomercategorytypeTableSeeder::class);
+        $this->call(DmsDmsArCustomerhierarchyTableSeeder::class);
+        $this->call(DmsDmsArCustomerrouteinfoTableSeeder::class);
+        $this->call(DmsDmsArDoccustomerTableSeeder::class);
+        $this->call(DmsDmsArPaymenttermTableSeeder::class);
+        $this->call(DmsDmsArPaymenttypeTableSeeder::class);
+        $this->call(DmsDmsArPricesegmentTableSeeder::class);
+        $this->call(DmsDmsFinAccountTableSeeder::class);
+        $this->call(DmsDmsFinSubaccountTableSeeder::class);
+        $this->call(DmsDmsInvCarrierTableSeeder::class);
+        $this->call(DmsDmsInvCarrierdriverTableSeeder::class);
+        $this->call(DmsDmsInvCarriervehicleTableSeeder::class);
+        $this->call(DmsDmsInvProductTableSeeder::class);
+        $this->call(DmsDmsInvProductcategoryTableSeeder::class);
+        $this->call(DmsDmsInvProductcategorytypeTableSeeder::class);
+        $this->call(DmsDmsInvProductitemcategoryTableSeeder::class);
+        $this->call(DmsDmsInvProductkitinfoTableSeeder::class);
+        $this->call(DmsDmsInvUomTableSeeder::class);
+        $this->call(DmsDmsInvVehicleTableSeeder::class);
+        $this->call(DmsDmsInvVehicletypeTableSeeder::class);
+        $this->call(DmsDmsInvWarehouseTableSeeder::class);
+        $this->call(DmsDmsSdPricecatalogTableSeeder::class);
+        $this->call(DmsDmsSdRouteTableSeeder::class);
+        $this->call(DmsDmsSdRouteitemTableSeeder::class);
+        $this->call(DmsFailedJobsTableSeeder::class);
+        $this->call(DmsIfrsCurrenciesTableSeeder::class);
+        $this->call(DmsIfrsEntitiesTableSeeder::class);
+        $this->call(DmsUsersTableSeeder::class);
+        $this->call(DmsPermissionsTableSeeder::class);
+        $this->call(DmsMenusTableSeeder::class);
+        $this->call(DmsMenuPermissionsTableSeeder::class);
+        $this->call(DmsRoleHasPermissionsTableSeeder::class);
+        $this->call(DmsRolesTableSeeder::class);
+        $this->call(DmsRouteTripTableSeeder::class);
+        $this->call(DmsSettingTableSeeder::class);
 
-        $role = \App\Models\Base\Role::create([
-            'name' => 'administrator',
-            'guard_name' => 'web',
-        ]);
-
-        $user->syncRoles($role);
-        
-        \App\Models\Base\Permission::insert([
-            [
-                'name' => 'menu-index',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'menu-create',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'menu-update',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'menu-delete',
-                'guard_name' => 'web',
-            ],            
-            [
-                'name' => 'user-index',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'user-create',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'user-update',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'user-delete',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'role-index',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'role-create',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'role-update',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'role-delete',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'permission-index',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'permission-create',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'permission-update',
-                'guard_name' => 'web',
-            ],
-            [
-                'name' => 'permission-delete',
-                'guard_name' => 'web',
-            ]
-        ]);
-        $permissions = \App\Models\Base\Permission::get()->pluck('id')->toArray();
-        $role->syncPermissions($permissions);
-        
-        \App\Models\Base\Menus::insert([
-            [
-                'name' => 'Master',
-                'description' => 'Header menu master',
-                'status' => 1,
-                'icon' => 'cil-address-book',
-                'route' => NULL,
-                'parent_id' => NULL,
-                'seq_number' => 1,
-            ],
-            [
-                'name' => 'Report',
-                'description' => 'Header menu report',
-                'status' => 1,
-                'icon' => 'cil-address-book',
-                'route' => NULL,
-                'parent_id' => NULL,
-                'seq_number' => 2,
-            ],
-            [
-                'name' => 'Transaction',
-                'description' => 'Header menu transaction',
-                'status' => 1,
-                'icon' => 'cil-address-book',
-                'route' => NULL,
-                'parent_id' => NULL,
-                'seq_number' => 3,
-            ],            
-            [
-                'name' => 'Menu',
-                'description' => 'Manage menu',
-                'status' => 1,
-                'icon' => 'cil-address-book',
-                'route' => 'base/menus',
-                'parent_id' => 1,
-                'seq_number' => 1,
-            ],
-            [
-                'name' => 'User',
-                'description' => 'Manage users',
-                'status' => 1,
-                'icon' => 'cil-address-book',
-                'route' => 'base/users',
-                'parent_id' => 1,
-                'seq_number' => 2,
-            ],
-            [
-                'name' => 'Role',
-                'description' => 'Manage role',
-                'status' => 1,
-                'icon' => 'cil-address-book',
-                'route' => 'base/roles',
-                'parent_id' => 1,
-                'seq_number' => 3,
-            ],
-            [
-                'name' => 'Permission',
-                'description' => 'Manage users',
-                'status' => 1,
-                'icon' => 'cil-address-book',
-                'route' => 'base/permissions',
-                'parent_id' => 1,
-                'seq_number' => 1,
-            ],
-        ]);
         \App\Models\Base\MenusTree::fixTree();
-        
-        \App\Models\Base\MenuPermissions::insert([
-            ['menu_id' => 4, 'permission_id' => 1],
-            ['menu_id' => 4, 'permission_id' => 2],
-            ['menu_id' => 5, 'permission_id' => 5],
-            ['menu_id' => 5, 'permission_id' => 6],
-            ['menu_id' => 6, 'permission_id' => 9],
-            ['menu_id' => 6, 'permission_id' => 10],
-            ['menu_id' => 5, 'permission_id' => 13],
-            ['menu_id' => 5, 'permission_id' => 14]
-        ]);
     }
 }
