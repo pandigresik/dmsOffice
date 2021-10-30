@@ -44,7 +44,7 @@ class AlterVendorAddTax extends Migration
         });
 
         Schema::table('vendor_contact', function (Blueprint $table) {
-            $table->dropColumn('program', 30);            
+            $table->dropColumn('program');            
         });
     }
 }
