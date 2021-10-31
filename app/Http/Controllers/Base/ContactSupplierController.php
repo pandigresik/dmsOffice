@@ -10,6 +10,7 @@ use App\Repositories\Base\ContactSupplierRepository;
 use App\Repositories\Base\DmsApSupplierRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Http\Request;
 use Response;
 
 class ContactSupplierController extends AppBaseController
@@ -27,10 +28,13 @@ class ContactSupplierController extends AppBaseController
      *
      * @param ContactSupplierDataTable $contactSupplierDataTable
      * @return Response
-     */
-    public function index(ContactSupplierDataTable $contactSupplierDataTable)
+     */    
+    public function index(Request $request)
     {
-        return $contactSupplierDataTable->render('base.contact_suppliers.index');
+        $contacts = $this->contactSupplierRepository->all(['dms_ar_supplier_id' => $request->get('dms_ar_supplier_id')]);
+        $buttonView = view('base.dms_ar_suppliers.partials.contact_button', ['json' => [], 'url' => route('base.contactSuppliers.create')])->render();
+
+        return view('base.contact_suppliers.index')->with(['contacts' => $contacts, 'buttonView' => $buttonView]);        
     }
 
     /**
@@ -40,7 +44,11 @@ class ContactSupplierController extends AppBaseController
      */
     public function create()
     {
-        return view('base.contact_suppliers.create')->with($this->getOptionItems());
+        $idForm = \Carbon\Carbon::now()->timestamp;
+
+        return view('base.contact_suppliers.create')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'contactSupplier['.$idForm.']'])
+        ;        
     }
 
     /**
@@ -158,9 +166,9 @@ class ContactSupplierController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $dmsApSupplier = new DmsApSupplierRepository(app());
+        //$dmsApSupplier = new DmsApSupplierRepository(app());
         return [
-            'dmsApSupplierItems' => ['' => __('crud.option.dmsApSupplier_placeholder')] + $dmsApSupplier->pluck()            
+           // 'dmsApSupplierItems' => ['' => __('crud.option.dmsApSupplier_placeholder')] + $dmsApSupplier->pluck()            
         ];
     }
 }

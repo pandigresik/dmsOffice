@@ -10,6 +10,7 @@ use App\Repositories\Base\LocationCustomerRepository;
 use App\Repositories\Base\DmsArCustomerRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Http\Request;
 use Response;
 
 class LocationCustomerController extends AppBaseController
@@ -28,9 +29,12 @@ class LocationCustomerController extends AppBaseController
      * @param LocationCustomerDataTable $locationCustomerDataTable
      * @return Response
      */
-    public function index(LocationCustomerDataTable $locationCustomerDataTable)
+    public function index(Request $request)
     {
-        return $locationCustomerDataTable->render('base.location_customers.index');
+        $locations = $this->locationCustomerRepository->all(['dms_ar_customer_id' => $request->get('dms_ar_customer_id')]);
+        $buttonView = view('base.dms_ar_customers.partials.location_button', ['json' => [], 'url' => route('base.locationCustomers.create')])->render();
+
+        return view('base.location_customers.index')->with(['locations' => $locations, 'buttonView' => $buttonView]);        
     }
 
     /**
@@ -40,7 +44,11 @@ class LocationCustomerController extends AppBaseController
      */
     public function create()
     {
-        return view('base.location_customers.create')->with($this->getOptionItems());
+        $idForm = \Carbon\Carbon::now()->timestamp;
+
+        return view('base.location_customers.create')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'locationCustomers['.$idForm.']'])
+        ;        
     }
 
     /**
@@ -97,8 +105,14 @@ class LocationCustomerController extends AppBaseController
 
             return redirect(route('base.locationCustomers.index'));
         }
+        $idForm = $id;
+        $locationCustomer->stateForm = 'update';
+        $obj = new \stdClass();
+        $obj->locationCustomer = [$id => $locationCustomer];
 
-        return view('base.location_customers.edit')->with('locationCustomer', $locationCustomer)->with($this->getOptionItems());
+        return view('base.location_customers.edit')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'locationCustomer' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'locationCustomer['.$idForm.']'])
+        ;        
     }
 
     /**
@@ -158,9 +172,9 @@ class LocationCustomerController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $dmsArCustomer = new DmsArCustomerRepository(app());
+        //$dmsArCustomer = new DmsArCustomerRepository(app());
         return [
-            'dmsArCustomerItems' => ['' => __('crud.option.dmsArCustomer_placeholder')] + $dmsArCustomer->pluck()            
+            //'dmsArCustomerItems' => ['' => __('crud.option.dmsArCustomer_placeholder')] + $dmsArCustomer->pluck()            
         ];
     }
 }

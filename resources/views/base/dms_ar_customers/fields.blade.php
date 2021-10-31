@@ -74,38 +74,6 @@
 </div>
 </div>
 
-<!-- Szusercreatedid Field -->
-<div class="form-group row">
-    {!! Form::label('szUserCreatedId', __('models/dmsArCustomers.fields.szUserCreatedId').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('szUserCreatedId', null, ['class' => 'form-control','maxlength' => 20,'maxlength' => 20]) !!}
-</div>
-</div>
-
-<!-- Szuserupdatedid Field -->
-<div class="form-group row">
-    {!! Form::label('szUserUpdatedId', __('models/dmsArCustomers.fields.szUserUpdatedId').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('szUserUpdatedId', null, ['class' => 'form-control','maxlength' => 20,'maxlength' => 20]) !!}
-</div>
-</div>
-
-<!-- Dtmcreated Field -->
-<div class="form-group row">
-    {!! Form::label('dtmCreated', __('models/dmsArCustomers.fields.dtmCreated').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('dtmCreated', null, ['class' => 'form-control datetime', 'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'dtmCreated']) !!}
-</div>
-</div>
-
-<!-- Dtmlastupdated Field -->
-<div class="form-group row">
-    {!! Form::label('dtmLastUpdated', __('models/dmsArCustomers.fields.dtmLastUpdated').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text('dtmLastUpdated', null, ['class' => 'form-control datetime', 'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'dtmLastUpdated']) !!}
-</div>
-</div>
-
 <!-- Szmcoid Field -->
 <div class="form-group row">
     {!! Form::label('szMCOId', __('models/dmsArCustomers.fields.szMCOId').':', ['class' => 'col-md-3 col-form-label']) !!}

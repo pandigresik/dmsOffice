@@ -23,7 +23,7 @@
                           <div class="card-body">                              
 
                               @include('inventory.dms_inv_carriers.fields')
-
+                              <x-tabs :data="$dataTabs"/>
                               
                             </div>
                           <div class="card-footer">

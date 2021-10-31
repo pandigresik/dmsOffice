@@ -31,14 +31,12 @@
             if(_form.valid()){                                
                 const _idForm = '{{ $idForm }}'
                 const _divWrapper = $('.button-caller').closest('div').find('.content-info')
-                const _json = _form.serializeJSON()['contactCustomers'][_idForm]
+                const _json = _form.serializeJSON()['contactCustomer'][_idForm]
                 _divWrapper.append(
                     _template.replace('{contactName}', _json['name'])
                             .replace('{contactPosition}', _json['position'])
-                            .replace('{contactMobile}', _json['mobile'])
-                            .replace('{contactTop}', _json['payment_term'])                        
-                            .replace('{contactProgram}', _json['program'])
-                            .replace('{contactForm}', main.generateFormField(`contactCustomers[${_idForm}]`, _json).join(''))
+                            .replace('{contactMobile}', _json['mobile'])                            
+                            .replace('{contactForm}', main.generateFormField(`contactCustomer[${_idForm}]`, _json).join(''))
                 )
                 _form.closest('.bootbox').find('button.bootbox-close-button').click()
             }

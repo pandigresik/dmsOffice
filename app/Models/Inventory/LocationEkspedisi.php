@@ -3,8 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -30,23 +30,33 @@ class LocationEkspedisi extends Model
 
     use HasFactory;
 
-    public $table = 'location_ekspedisi';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
-
+    public $table = 'location_ekspedisi';
+    protected $appends = ['state_form'];
     public $fillable = [
         'dms_inv_carrier_id',
         'address',
         'city',
         'state',
-        'additional_cost'
+        'additional_cost',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'dms_inv_carrier_id' => 'required|integer',
+        'address' => 'nullable|string|max:255',
+        'city' => 'required|string|max:50',
+        'state' => 'required|string|max:50',
+        'additional_cost' => 'required|numeric',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -59,27 +69,24 @@ class LocationEkspedisi extends Model
         'address' => 'string',
         'city' => 'string',
         'state' => 'string',
-        'additional_cost' => 'float'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'dms_inv_carrier_id' => 'required|integer',
-        'address' => 'nullable|string|max:255',
-        'city' => 'required|string|max:50',
-        'state' => 'required|string|max:50',
-        'additional_cost' => 'required|numeric'
+        'additional_cost' => 'float',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function dmsInvCarrier()
     {
         return $this->belongsTo(\App\Models\Inventory\DmsInvCarrier::class, 'dms_inv_carrier_id');
+    }
+
+    /**
+     * Determine state form
+     *
+     * @return bool
+     */
+    public function getStateFormAttribute()
+    {
+        return $this->attributes['id'] ? 'update' : 'insert';
     }
 }

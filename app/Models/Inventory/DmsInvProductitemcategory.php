@@ -65,6 +65,8 @@ class DmsInvProductitemcategory extends Model
 
     const CREATED_AT = 'dtmCreated';
     const UPDATED_AT = 'dtmLastUpdated';
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
     public $table = 'dms_inv_productitemcategory';
 

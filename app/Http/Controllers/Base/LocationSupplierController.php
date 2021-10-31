@@ -97,8 +97,15 @@ class LocationSupplierController extends AppBaseController
 
             return redirect(route('base.locationSuppliers.index'));
         }
+        $idForm = $id;
+        $locationSupplier->stateForm = 'update';
+        $obj = new \stdClass();
+        $obj->locationSupplier = [$id => $locationSupplier];
 
-        return view('base.location_suppliers.edit')->with('locationSupplier', $locationSupplier)->with($this->getOptionItems());
+        return view('base.location_suppliers.edit')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'locationSupplier' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'locationSupplier['.$idForm.']'])
+        ;
+        
     }
 
     /**
@@ -158,9 +165,9 @@ class LocationSupplierController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $dmsApSupplier = new DmsApSupplierRepository(app());
+        //$dmsApSupplier = new DmsApSupplierRepository(app());
         return [
-            'dmsApSupplierItems' => ['' => __('crud.option.dmsApSupplier_placeholder')] + $dmsApSupplier->pluck()            
+           // 'dmsApSupplierItems' => ['' => __('crud.option.dmsApSupplier_placeholder')] + $dmsApSupplier->pluck()            
         ];
     }
 }

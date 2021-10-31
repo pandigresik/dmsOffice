@@ -32,7 +32,7 @@ class ContactCustomerController extends AppBaseController
     public function index(Request $request)
     {
         $contacts = $this->contactCustomerRepository->all(['dms_ar_customer_id' => $request->get('dms_ar_customer_id')]);
-        $buttonView = view('base.vendors.partials.contact_button', ['json' => [], 'url' => route('base.contactCustomers.create')])->render();
+        $buttonView = view('base.dms_ar_customers.partials.contact_button', ['json' => [], 'url' => route('base.contactCustomers.create')])->render();
 
         return view('base.contact_customers.index')->with(['contacts' => $contacts, 'buttonView' => $buttonView]);        
     }

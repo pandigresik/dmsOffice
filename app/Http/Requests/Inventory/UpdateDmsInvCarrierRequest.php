@@ -44,7 +44,7 @@ class UpdateDmsInvCarrierRequest extends FormRequest
     {
         $keys = (new DmsInvCarrier())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
-
+        $keys = array_merge(['contactEkspedisis', 'locationEkspedisis', 'vehicleEkspedisis', 'tripEkspedisis'], $keys);
         return parent::all($keys);
     }
 }

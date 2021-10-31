@@ -65,6 +65,8 @@ class DmsInvVehicle extends Model
 
     const CREATED_AT = 'dtmCreated';
     const UPDATED_AT = 'dtmLastUpdated';
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
     public $table = 'dms_inv_vehicle';
 
@@ -82,10 +84,10 @@ class DmsInvVehicle extends Model
         'decVolume',
         'szVehicleTypeId',
         'dtmVehicleLicense',
-        'szUserCreatedId',
-        'szUserUpdatedId',
-        'dtmCreated',
-        'dtmLastUpdated',
+        //'szUserCreatedId',
+        // 'szUserUpdatedId',
+        //'dtmCreated',
+        //'dtmLastUpdated',
     ];
 
     /**
@@ -145,6 +147,7 @@ class DmsInvVehicle extends Model
         $toArray['decVolume'] = $this->decVolume;
         $toArray['decWeight'] = $this->decWeight;
         $toArray['dtmVehicleLicense'] = $this->dtmVehicleLicense;
+
         return $toArray;
     }
 

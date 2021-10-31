@@ -23,7 +23,7 @@
                             <div class="card-body">                                
 
                                    @include('base.dms_ap_suppliers.fields')
-                                
+                                    <x-tabs :data="$dataTabs"/>
                             </div>
                             <div class="card-footer">
                                 <!-- Submit Field -->

@@ -26,19 +26,7 @@
             <div class="card-content">
                 <div>{{ $dataCard['name'] ?? '{contactName}' }}</div>
                 <div>{{ $dataCard['position'] ?? '{contactPosition}' }}</div>
-                <div>{{ $dataCard['mobile'] ?? '{contactMobile}' }}</div>
-                <div class="row">
-                    <div class="col-md-3">TOP</div>
-                    <div class="col-md-9">{contactTop}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">Penagihan</div>
-                    <div class="col-md-9">{contactInvoice}</div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">Program</div>
-                    <div class="col-md-9">{contactProgram}</div>
-                </div>
+                <div>{{ $dataCard['mobile'] ?? '{contactMobile}' }}</div>                
             </div>
             <div class="form-hidden collapse">{contactForm}</div>
         </div>

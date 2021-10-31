@@ -93,6 +93,8 @@ class DmsSdRoute extends Model
 
     const CREATED_AT = 'dtmCreated';
     const UPDATED_AT = 'dtmLastUpdated';
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
     public $table = 'dms_sd_route';
 
@@ -104,10 +106,10 @@ class DmsSdRoute extends Model
         'szDescription',
         'szRouteType',
         'szEmployeeId',
-        'szUserCreatedId',
-        'szUserUpdatedId',
-        'dtmCreated',
-        'dtmLastUpdated',
+        //'szUserCreatedId',
+        // 'szUserUpdatedId',
+        //'dtmCreated',
+        //'dtmLastUpdated',
     ];
 
     /**

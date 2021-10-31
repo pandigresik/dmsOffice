@@ -92,8 +92,13 @@ class DmsApSupplierController extends AppBaseController
 
             return redirect(route('base.dmsApSuppliers.index'));
         }
-
-        return view('base.dms_ap_suppliers.edit')->with('dmsApSupplier', $dmsApSupplier)->with($this->getOptionItems());
+        $jsonDefaultSearching = ['dms_ar_supplier_id' => $id];
+        $dataTabs = [
+            'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('base.contactSuppliers.index', ['dms_ar_supplier_id' => $id]), 'defaultContent' => '', 'class' => ''],
+            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.locationSuppliers.index', ['dms_ar_supplier_id' => $id]), 'defaultContent' => '', 'class' => ''],            
+            'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
+        ];
+        return view('base.dms_ap_suppliers.edit')->with('dataTabs', $dataTabs)->with('dmsApSupplier', $dmsApSupplier)->with($this->getOptionItems());
     }
 
     /**

@@ -3,8 +3,8 @@
 namespace App\Models\Base;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -70,23 +70,33 @@ class LocationSupplier extends Model
 
     use HasFactory;
 
-    public $table = 'location_supplier';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
-
+    public $table = 'location_supplier';
+    protected $appends = ['state_form'];
     public $fillable = [
         'dms_ap_supplier_id',
         'address',
         'city',
         'state',
-        'additional_cost'
+        'additional_cost',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'dms_ap_supplier_id' => 'required|integer',
+        'address' => 'nullable|string|max:255',
+        'city' => 'required|string|max:50',
+        'state' => 'required|string|max:50',
+        'additional_cost' => 'required|numeric',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -99,27 +109,24 @@ class LocationSupplier extends Model
         'address' => 'string',
         'city' => 'string',
         'state' => 'string',
-        'additional_cost' => 'float'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'dms_ap_supplier_id' => 'required|integer',
-        'address' => 'nullable|string|max:255',
-        'city' => 'required|string|max:50',
-        'state' => 'required|string|max:50',
-        'additional_cost' => 'required|numeric'
+        'additional_cost' => 'float',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function dmsApSupplier()
     {
         return $this->belongsTo(\App\Models\Base\DmsApSupplier::class, 'dms_ap_supplier_id');
+    }
+
+    /**
+     * Determine state form
+     *
+     * @return bool
+     */
+    public function getStateFormAttribute()
+    {
+        return $this->attributes['id'] ? 'update' : 'insert';
     }
 }

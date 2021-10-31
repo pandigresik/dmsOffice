@@ -3,8 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -30,16 +30,11 @@ class ContactEkspedisi extends Model
 
     use HasFactory;
 
-    public $table = 'contact_ekspedisi';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
-
+    public $table = 'contact_ekspedisi';
+    protected $appends = ['state_form'];
     public $fillable = [
         'dms_inv_carrier_id',
         'name',
@@ -49,8 +44,27 @@ class ContactEkspedisi extends Model
         'mobile',
         'description',
         'address',
-        'city'
+        'city',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'dms_inv_carrier_id' => 'required|integer',
+        'name' => 'required|string|max:50',
+        'position' => 'nullable|string|max:50',
+        'email' => 'nullable|string|max:50',
+        'phone' => 'nullable|string|max:50',
+        'mobile' => 'nullable|string|max:50',
+        'description' => 'nullable|string|max:255',
+        'address' => 'nullable|string|max:255',
+        'city' => 'required|string|max:50',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -67,31 +81,24 @@ class ContactEkspedisi extends Model
         'mobile' => 'string',
         'description' => 'string',
         'address' => 'string',
-        'city' => 'string'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'dms_inv_carrier_id' => 'required|integer',
-        'name' => 'required|string|max:50',
-        'position' => 'nullable|string|max:50',
-        'email' => 'nullable|string|max:50',
-        'phone' => 'nullable|string|max:50',
-        'mobile' => 'nullable|string|max:50',
-        'description' => 'nullable|string|max:255',
-        'address' => 'nullable|string|max:255',
-        'city' => 'required|string|max:50'
+        'city' => 'string',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function dmsInvCarrier()
     {
         return $this->belongsTo(\App\Models\Inventory\DmsInvCarrier::class, 'dms_inv_carrier_id');
+    }
+
+    /**
+     * Determine state form
+     *
+     * @return bool
+     */
+    public function getStateFormAttribute()
+    {
+        return $this->attributes['id'] ? 'update' : 'insert';
     }
 }

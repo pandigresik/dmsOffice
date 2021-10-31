@@ -3,6 +3,8 @@
 namespace App\Repositories\Base;
 
 use App\Models\Base\DmsArCustomer;
+use Illuminate\Support\Facades\DB;
+use App\Models\Base\ContactCustomer;
 use App\Repositories\BaseRepository;
 
 /**
@@ -49,5 +51,64 @@ class DmsArCustomerRepository extends BaseRepository
     public function model()
     {
         return DmsArCustomer::class;
+    }
+
+    public function update($input, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $contactCustomers = $input['contactCustomers'] ?? [];
+            $locationCustomers = $input['locationCustomers'] ?? [];
+            $model = parent::update($input, $id);
+            if (!empty($contactCustomers)) {                
+                foreach ($contactCustomers as $key => $vc) {
+                    $stateForm = $vc['stateForm'];
+                    switch ($stateForm) {
+                        case 'insert':
+                            $model->contactCustomers()->create($vc);
+
+                            break;
+                        case 'update':
+                            $obj = DmsArCustomer::find($key);
+                            $obj->fill($vc)->save();
+
+                            break;
+                        case 'delete':
+                            ContactCustomer::whereId($key)->delete();
+
+                            break;
+                    }
+                }
+            }
+            if (!empty($locationCustomers)) {
+                foreach ($locationCustomers as $key => $vc) {
+                    $stateForm = $vc['stateForm'];
+                    switch ($stateForm) {
+                        case 'insert':
+                            $model->locationCustomers()->create($vc);
+
+                            break;
+                        case 'update':
+                            $obj = DmsArCustomer::find($key);
+                            $obj->fill($vc)->save();
+
+                            break;
+                        case 'delete':
+                            ContactCustomer::whereId($key)->delete();
+
+                            break;
+                    }
+                }
+            }
+            DB::commit();
+
+            return $model;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error($e);
+
+            return $e;
+        }        
     }
 }

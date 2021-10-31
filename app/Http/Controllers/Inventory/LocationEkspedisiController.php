@@ -10,6 +10,7 @@ use App\Repositories\Inventory\LocationEkspedisiRepository;
 use App\Repositories\Inventory\DmsInvCarrierRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Http\Request;
 use Response;
 
 class LocationEkspedisiController extends AppBaseController
@@ -28,9 +29,12 @@ class LocationEkspedisiController extends AppBaseController
      * @param LocationEkspedisiDataTable $locationEkspedisiDataTable
      * @return Response
      */
-    public function index(LocationEkspedisiDataTable $locationEkspedisiDataTable)
+    public function index(Request $request)
     {
-        return $locationEkspedisiDataTable->render('inventory.location_ekspedisis.index');
+        $locations = $this->locationEkspedisiRepository->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')]);
+        $buttonView = view('inventory.dms_inv_carriers.partials.location_button', ['json' => [], 'url' => route('inventory.locationEkspedisis.create')])->render();
+
+        return view('inventory.location_ekspedisis.index')->with(['locations' => $locations, 'buttonView' => $buttonView]);
     }
 
     /**
@@ -40,7 +44,11 @@ class LocationEkspedisiController extends AppBaseController
      */
     public function create()
     {
-        return view('inventory.location_ekspedisis.create')->with($this->getOptionItems());
+        $idForm = \Carbon\Carbon::now()->timestamp;
+
+        return view('inventory.location_ekspedisis.create')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'locationEkspedisis['.$idForm.']'])
+        ;        
     }
 
     /**
@@ -98,7 +106,15 @@ class LocationEkspedisiController extends AppBaseController
             return redirect(route('inventory.locationEkspedisis.index'));
         }
 
-        return view('inventory.location_ekspedisis.edit')->with('locationEkspedisi', $locationEkspedisi)->with($this->getOptionItems());
+        $idForm = $id;
+        $locationEkspedisi->stateForm = 'update';
+        $obj = new \stdClass();
+        $obj->locationEkspedisi = [$id => $locationEkspedisi];
+
+        return view('inventory.location_ekspedisis.edit')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'locationEkspedisi' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'locationEkspedisi['.$idForm.']'])
+        ;
+        
     }
 
     /**
@@ -158,9 +174,9 @@ class LocationEkspedisiController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $dmsInvCarrier = new DmsInvCarrierRepository(app());
-        return [
-            'dmsInvCarrierItems' => ['' => __('crud.option.dmsInvCarrier_placeholder')] + $dmsInvCarrier->pluck()            
-        ];
+        // $dmsInvCarrier = new DmsInvCarrierRepository(app());
+         return [
+        //     'dmsInvCarrierItems' => ['' => __('crud.option.dmsInvCarrier_placeholder')] + $dmsInvCarrier->pluck()            
+         ];
     }
 }

@@ -92,8 +92,15 @@ class DmsInvCarrierController extends AppBaseController
 
             return redirect(route('inventory.dmsInvCarriers.index'));
         }
-
-        return view('inventory.dms_inv_carriers.edit')->with('dmsInvCarrier', $dmsInvCarrier)->with($this->getOptionItems());
+        $jsonDefaultSearching = ['dms_ar_carrier_id' => $id];
+        $dataTabs = [
+            'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('inventory.contactEkspedisis.index', ['dms_inv_carrier_id' => $id]), 'defaultContent' => '', 'class' => ''],
+            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('inventory.locationEkspedisis.index', ['dms_inv_carrier_id' => $id]), 'defaultContent' => '', 'class' => ''],            
+            'vehicle' => ['text' => 'Kendaraan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'defaultContent' => '', 'class' => ''],
+            'trip' => ['text' => 'Trip', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'defaultContent' => '', 'class' => ''],
+            'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
+        ];
+        return view('inventory.dms_inv_carriers.edit')->with('dataTabs', $dataTabs)->with('dmsInvCarrier', $dmsInvCarrier)->with($this->getOptionItems());
     }
 
     /**
@@ -145,7 +152,7 @@ class DmsInvCarrierController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsInvCarrier from storage.
+     * Provide options item inventoryd on relationship model DmsInvCarrier from storage.
      *
      * @throws \Exception
      *

@@ -39,7 +39,7 @@ class CreateDmsApSupplierRequest extends FormRequest
     public function all($keys = null)
     {
         $keys = (new DmsApSupplier())->fillable;
-
+        $keys = array_merge(['contactSuppliers', 'locationSuppliers'], $keys);
         return parent::all($keys);
     }
 }

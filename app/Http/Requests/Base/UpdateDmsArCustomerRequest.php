@@ -44,7 +44,7 @@ class UpdateDmsArCustomerRequest extends FormRequest
     {
         $keys = (new DmsArCustomer())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
-
+        $keys = array_merge(['contactCustomers', 'locationCustomers'], $keys);
         return parent::all($keys);
     }
 }

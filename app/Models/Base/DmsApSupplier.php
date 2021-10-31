@@ -3,6 +3,7 @@
 namespace App\Models\Base;
 
 use App\Models\Base as Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -65,6 +66,8 @@ class DmsApSupplier extends Model
 
     const CREATED_AT = 'dtmCreated';
     const UPDATED_AT = 'dtmLastUpdated';
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
     public $table = 'dms_ap_supplier';
 
@@ -74,10 +77,10 @@ class DmsApSupplier extends Model
         'szId',
         'szName',
         'szDescription',
-        'szUserCreatedId',
-        'szUserUpdatedId',
-        'dtmCreated',
-        'dtmLastUpdated',
+        //'szUserCreatedId',
+        // 'szUserUpdatedId',
+        //'dtmCreated',
+        //'dtmLastUpdated',
     ];
 
     /**
@@ -114,4 +117,20 @@ class DmsApSupplier extends Model
         'dtmCreated' => 'datetime',
         'dtmLastUpdated' => 'datetime',
     ];
+
+    /**
+     * Get all of the contactSuppliers for the DmsAppSupplier
+     */
+    public function contactSuppliers(): HasMany
+    {
+        return $this->hasMany(ContactSupplier::class, 'dms_ap_supplier_id', 'iInternalId');
+    }
+
+    /**
+     * Get all of the locationSuppliers for the DmsAppSupplier.
+     */
+    public function locationSuppliers(): HasMany
+    {
+        return $this->hasMany(LocationSupplier::class, 'dms_ap_supplier_id', 'iInternalId');
+    }
 }

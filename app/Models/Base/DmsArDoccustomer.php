@@ -65,6 +65,8 @@ class DmsArDoccustomer extends Model
 
     const CREATED_AT = 'dtmCreated';
     const UPDATED_AT = 'dtmLastUpdated';
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
     public $table = 'dms_ar_doccustomer';
 
@@ -85,10 +87,10 @@ class DmsArDoccustomer extends Model
         'szHierarchyId',
         'szHierarchyFull',
         'szDocFUpId',
-        'szUserCreatedId',
-        'szUserUpdatedId',
-        'dtmCreated',
-        'dtmLastUpdated',
+        //'szUserCreatedId',
+        // 'szUserUpdatedId',
+        //'dtmCreated',
+        //'dtmLastUpdated',
     ];
 
     /**

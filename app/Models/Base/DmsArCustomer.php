@@ -3,6 +3,7 @@
 namespace App\Models\Base;
 
 use App\Models\Base as Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -65,6 +66,8 @@ class DmsArCustomer extends Model
 
     const CREATED_AT = 'dtmCreated';
     const UPDATED_AT = 'dtmLastUpdated';
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
     public $table = 'dms_ar_customer';
 
@@ -79,10 +82,10 @@ class DmsArCustomer extends Model
         'szIDCard',
         'bHasDifferentCollectAddress',
         'szCode',
-        'szUserCreatedId',
-        'szUserUpdatedId',
-        'dtmCreated',
-        'dtmLastUpdated',
+        // 'szUserCreatedId',
+        // 'szUserUpdatedId',
+        // 'dtmCreated',
+        // 'dtmLastUpdated',
         'szMCOId',
     ];
 
@@ -101,10 +104,10 @@ class DmsArCustomer extends Model
         'szIDCard' => 'required|string|max:50',
         'bHasDifferentCollectAddress' => 'required|boolean',
         'szCode' => 'required|string|max:50',
-        'szUserCreatedId' => 'required|string|max:20',
-        'szUserUpdatedId' => 'required|string|max:20',
-        'dtmCreated' => 'required',
-        'dtmLastUpdated' => 'required',
+        // 'szUserCreatedId' => 'required|string|max:20',
+        // 'szUserUpdatedId' => 'required|string|max:20',
+        // 'dtmCreated' => 'required',
+        // 'dtmLastUpdated' => 'required',
         'szMCOId' => 'required|string|max:50',
     ];
 
@@ -132,4 +135,24 @@ class DmsArCustomer extends Model
         'dtmLastUpdated' => 'datetime',
         'szMCOId' => 'string',
     ];
+
+    /**
+     * Get all of the contactCustomers for the DmsArCustomer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function contactCustomers(): HasMany
+    {
+        return $this->hasMany(ContactCustomer::class, 'dms_ar_customer_id', 'iInternalId');
+    }
+
+    /**
+     * Get all of the locationCustomers for the DmsArCustomer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function locationCustomers(): HasMany
+    {
+        return $this->hasMany(LocationCustomer::class, 'dms_ar_customer_id', 'iInternalId');
+    }
 }

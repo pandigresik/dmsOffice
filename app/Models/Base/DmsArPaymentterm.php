@@ -65,6 +65,8 @@ class DmsArPaymentterm extends Model
 
     const CREATED_AT = 'dtmCreated';
     const UPDATED_AT = 'dtmLastUpdated';
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
     public $table = 'dms_ar_paymentterm';
 
@@ -76,10 +78,10 @@ class DmsArPaymentterm extends Model
         'szDescription',
         'intDueDate',
         'intDuePrintDate',
-        'szUserCreatedId',
-        'szUserUpdatedId',
-        'dtmCreated',
-        'dtmLastUpdated',
+        //'szUserCreatedId',
+        // 'szUserUpdatedId',
+        //'dtmCreated',
+        //'dtmLastUpdated',
     ];
 
     /**

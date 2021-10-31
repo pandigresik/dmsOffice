@@ -4,6 +4,7 @@ namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @SWG\Definition(
@@ -65,6 +66,8 @@ class DmsInvCarrier extends Model
 
     const CREATED_AT = 'dtmCreated';
     const UPDATED_AT = 'dtmLastUpdated';
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
     public $table = 'dms_inv_carrier';
 
@@ -74,10 +77,10 @@ class DmsInvCarrier extends Model
         'szId',
         'szName',
         'szDescription',
-        'szUserCreatedId',
-        'szUserUpdatedId',
-        'dtmCreated',
-        'dtmLastUpdated',
+        //'szUserCreatedId',
+        // 'szUserUpdatedId',
+        //'dtmCreated',
+        //'dtmLastUpdated',
     ];
 
     /**
@@ -90,10 +93,10 @@ class DmsInvCarrier extends Model
         'szId' => 'required|string|max:50',
         'szName' => 'required|string|max:50',
         'szDescription' => 'required|string|max:200',
-        'szUserCreatedId' => 'required|string|max:20',
-        'szUserUpdatedId' => 'required|string|max:20',
-        'dtmCreated' => 'required',
-        'dtmLastUpdated' => 'required',
+        // 'szUserCreatedId' => 'required|string|max:20',
+        // 'szUserUpdatedId' => 'required|string|max:20',
+        // 'dtmCreated' => 'required',
+        // 'dtmLastUpdated' => 'required',
     ];
 
     protected $dates = ['deleted_at'];
@@ -114,4 +117,20 @@ class DmsInvCarrier extends Model
         'dtmCreated' => 'datetime',
         'dtmLastUpdated' => 'datetime',
     ];
+
+    /**
+     * Get all of the contactEkspedisis for the DmsInvCarrier.
+     */
+    public function contactEkspedisis(): HasMany
+    {
+        return $this->hasMany(ContactEkspedisi::class, 'dms_inv_carrier_id', 'iInternalId');
+    }
+
+    /**
+     * Get all of the locationEkspedisis for the DmsInvCarrier.
+     */
+    public function locationEkspedisis(): HasMany
+    {
+        return $this->hasMany(LocationEkspedisi::class, 'dms_inv_carrier_id', 'iInternalId');
+    }
 }

@@ -10,6 +10,8 @@ use App\Repositories\Inventory\ContactEkspedisiRepository;
 use App\Repositories\Inventory\DmsInvCarrierRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\Base\CityRepository;
+use Illuminate\Http\Request;
 use Response;
 
 class ContactEkspedisiController extends AppBaseController
@@ -28,9 +30,12 @@ class ContactEkspedisiController extends AppBaseController
      * @param ContactEkspedisiDataTable $contactEkspedisiDataTable
      * @return Response
      */
-    public function index(ContactEkspedisiDataTable $contactEkspedisiDataTable)
+    public function index(Request $request)
     {
-        return $contactEkspedisiDataTable->render('inventory.contact_ekspedisis.index');
+        $contacts = $this->contactEkspedisiRepository->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')]);
+        $buttonView = view('inventory.dms_inv_carriers.partials.contact_button', ['json' => [], 'url' => route('inventory.contactEkspedisis.create')])->render();
+
+        return view('inventory.contact_ekspedisis.index')->with(['contacts' => $contacts, 'buttonView' => $buttonView]);
     }
 
     /**
@@ -40,7 +45,11 @@ class ContactEkspedisiController extends AppBaseController
      */
     public function create()
     {
-        return view('inventory.contact_ekspedisis.create')->with($this->getOptionItems());
+        $idForm = \Carbon\Carbon::now()->timestamp;
+
+        return view('inventory.contact_ekspedisis.create')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'contactEkspedisis['.$idForm.']'])
+        ;        
     }
 
     /**
@@ -158,9 +167,10 @@ class ContactEkspedisiController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $dmsInvCarrier = new DmsInvCarrierRepository(app());
-        return [
-            'dmsInvCarrierItems' => ['' => __('crud.option.dmsInvCarrier_placeholder')] + $dmsInvCarrier->pluck()            
-        ];
+
+         $city = new CityRepository(app());
+         return [
+             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck([], null, null, 'name', 'name')
+         ];
     }
 }

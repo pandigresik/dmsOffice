@@ -65,6 +65,8 @@ class DmsArCustomercategory extends Model
 
     const CREATED_AT = 'dtmCreated';
     const UPDATED_AT = 'dtmLastUpdated';
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
     public $table = 'dms_ar_customercategory';
 
@@ -75,10 +77,10 @@ class DmsArCustomercategory extends Model
         'szName',
         'szDescription',
         'szCategoryTypeId',
-        'szUserCreatedId',
-        'szUserUpdatedId',
-        'dtmCreated',
-        'dtmLastUpdated',
+        //'szUserCreatedId',
+        // 'szUserUpdatedId',
+        //'dtmCreated',
+        //'dtmLastUpdated',
     ];
 
     /**

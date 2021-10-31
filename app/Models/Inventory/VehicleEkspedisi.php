@@ -3,8 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -30,19 +30,25 @@ class VehicleEkspedisi extends Model
 
     use HasFactory;
 
-    public $table = 'vehicle_ekspedisi';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-
+    public $table = 'vehicle_ekspedisi';
 
     public $fillable = [
-        'dms_inv_vehicle_id'
+        'dms_inv_vehicle_id',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'dms_inv_vehicle_id' => 'required|integer',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -51,21 +57,12 @@ class VehicleEkspedisi extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'dms_inv_vehicle_id' => 'integer'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'dms_inv_vehicle_id' => 'required|integer'
+        'dms_inv_vehicle_id' => 'integer',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function dmsInvVehicle()
     {
         return $this->belongsTo(\App\Models\Inventory\DmsInvVehicle::class, 'dms_inv_vehicle_id');
