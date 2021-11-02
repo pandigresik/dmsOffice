@@ -14,7 +14,7 @@ class RemoveEntityId extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign('entity_id');
+            $table->dropForeign('fk_user_entity');
         });
     }
 
