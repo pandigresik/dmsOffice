@@ -14,8 +14,8 @@ class RemoveCompanyTable extends Migration
     public function up()
     {
         Schema::table('warehouse', function (Blueprint $table) {
-            $table->dropForeign('fk_warehouse_company');
-            $table->foreign('company_id', 'fk_warehouse_company')->references('id')->on('ifrs_entities');
+            //$table->dropForeign('fk_warehouse_company');
+            //$table->foreign('company_id', 'fk_warehouse_company')->references('id')->on('ifrs_entities');
         });
         Schema::dropIfExists('account_invoice_line');
         Schema::dropIfExists('account_move_line');
