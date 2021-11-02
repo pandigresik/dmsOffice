@@ -22,8 +22,7 @@ class UsersTableSeeder extends Seeder
             0 => 
             array (
                 'created_at' => '2021-10-26 22:21:17',
-                'deleted_at' => NULL,
-                'destroyed_at' => NULL,
+                'deleted_at' => NULL,                
                 'email' => 'admin@admin.com',
                 'email_verified_at' => NULL,
                 'entity_id' => NULL,
@@ -36,7 +35,7 @@ class UsersTableSeeder extends Seeder
             array (
                 'created_at' => '2021-11-01 06:35:30',
                 'deleted_at' => NULL,
-                'destroyed_at' => NULL,
+                
                 'email' => 'admin@sejati.com',
                 'email_verified_at' => NULL,
                 'entity_id' => 1,
