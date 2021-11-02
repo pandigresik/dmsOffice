@@ -13,11 +13,11 @@ use Response;
 class DmsSdPricecatalogController extends AppBaseController
 {
     /** @var DmsSdPricecatalogRepository */
-    private $dmsSdPricecatalogRepository;
+    protected $repository;
 
-    public function __construct(DmsSdPricecatalogRepository $dmsSdPricecatalogRepo)
+    public function __construct()
     {
-        $this->dmsSdPricecatalogRepository = $dmsSdPricecatalogRepo;
+        $this->repository = DmsSdPricecatalogRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsSdPricecatalogController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsSdPricecatalog = $this->dmsSdPricecatalogRepository->create($input);
+        $dmsSdPricecatalog = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsSdPricecatalogs.singular')]));
 
@@ -65,7 +65,7 @@ class DmsSdPricecatalogController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsSdPricecatalog = $this->dmsSdPricecatalogRepository->find($id);
+        $dmsSdPricecatalog = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsSdPricecatalog)) {
             Flash::error(__('models/dmsSdPricecatalogs.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsSdPricecatalogController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsSdPricecatalog = $this->dmsSdPricecatalogRepository->find($id);
+        $dmsSdPricecatalog = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsSdPricecatalog)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsSdPricecatalogs.singular')]));
@@ -105,7 +105,7 @@ class DmsSdPricecatalogController extends AppBaseController
      */
     public function update($id, UpdateDmsSdPricecatalogRequest $request)
     {
-        $dmsSdPricecatalog = $this->dmsSdPricecatalogRepository->find($id);
+        $dmsSdPricecatalog = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsSdPricecatalog)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsSdPricecatalogs.singular')]));
@@ -113,7 +113,7 @@ class DmsSdPricecatalogController extends AppBaseController
             return redirect(route('sales.dmsSdPricecatalogs.index'));
         }
 
-        $dmsSdPricecatalog = $this->dmsSdPricecatalogRepository->update($request->all(), $id);
+        $dmsSdPricecatalog = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsSdPricecatalogs.singular')]));
 
@@ -129,7 +129,7 @@ class DmsSdPricecatalogController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsSdPricecatalog = $this->dmsSdPricecatalogRepository->find($id);
+        $dmsSdPricecatalog = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsSdPricecatalog)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsSdPricecatalogs.singular')]));
@@ -137,7 +137,7 @@ class DmsSdPricecatalogController extends AppBaseController
             return redirect(route('sales.dmsSdPricecatalogs.index'));
         }
 
-        $this->dmsSdPricecatalogRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsSdPricecatalogs.singular')]));
 

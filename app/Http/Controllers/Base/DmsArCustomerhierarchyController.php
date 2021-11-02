@@ -13,11 +13,11 @@ use Response;
 class DmsArCustomerhierarchyController extends AppBaseController
 {
     /** @var DmsArCustomerhierarchyRepository */
-    private $dmsArCustomerhierarchyRepository;
+    protected $repository;
 
-    public function __construct(DmsArCustomerhierarchyRepository $dmsArCustomerhierarchyRepo)
+    public function __construct()
     {
-        $this->dmsArCustomerhierarchyRepository = $dmsArCustomerhierarchyRepo;
+        $this->repository = DmsArCustomerhierarchyRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsArCustomerhierarchy = $this->dmsArCustomerhierarchyRepository->create($input);
+        $dmsArCustomerhierarchy = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsArCustomerhierarchies.singular')]));
 
@@ -65,7 +65,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsArCustomerhierarchy = $this->dmsArCustomerhierarchyRepository->find($id);
+        $dmsArCustomerhierarchy = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomerhierarchy)) {
             Flash::error(__('models/dmsArCustomerhierarchies.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsArCustomerhierarchy = $this->dmsArCustomerhierarchyRepository->find($id);
+        $dmsArCustomerhierarchy = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomerhierarchy)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomerhierarchies.singular')]));
@@ -105,7 +105,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
      */
     public function update($id, UpdateDmsArCustomerhierarchyRequest $request)
     {
-        $dmsArCustomerhierarchy = $this->dmsArCustomerhierarchyRepository->find($id);
+        $dmsArCustomerhierarchy = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomerhierarchy)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomerhierarchies.singular')]));
@@ -113,7 +113,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
             return redirect(route('base.dmsArCustomerhierarchies.index'));
         }
 
-        $dmsArCustomerhierarchy = $this->dmsArCustomerhierarchyRepository->update($request->all(), $id);
+        $dmsArCustomerhierarchy = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsArCustomerhierarchies.singular')]));
 
@@ -129,7 +129,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsArCustomerhierarchy = $this->dmsArCustomerhierarchyRepository->find($id);
+        $dmsArCustomerhierarchy = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomerhierarchy)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomerhierarchies.singular')]));
@@ -137,7 +137,7 @@ class DmsArCustomerhierarchyController extends AppBaseController
             return redirect(route('base.dmsArCustomerhierarchies.index'));
         }
 
-        $this->dmsArCustomerhierarchyRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsArCustomerhierarchies.singular')]));
 

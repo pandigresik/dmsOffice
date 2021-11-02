@@ -17,11 +17,10 @@ use Response;
 class CompanyAPIController extends AppBaseController
 {
     /** @var CompanyRepository */
-    private $companyRepository;
+    protected $repository;
 
-    public function __construct(CompanyRepository $companyRepo)
+    public function __construct()
     {
-        $this->companyRepository = $companyRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class CompanyAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $companies = $this->companyRepository->all(
+        $companies = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class CompanyAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $company = $this->companyRepository->create($input);
+        $company = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new CompanyResource($company), 'Company saved successfully');
     }
@@ -154,7 +153,7 @@ class CompanyAPIController extends AppBaseController
     public function show($id)
     {
         /** @var Company $company */
-        $company = $this->companyRepository->find($id);
+        $company = $this->getRepositoryObj()->find($id);
 
         if (empty($company)) {
             return $this->sendError('Company not found');
@@ -214,13 +213,13 @@ class CompanyAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var Company $company */
-        $company = $this->companyRepository->find($id);
+        $company = $this->getRepositoryObj()->find($id);
 
         if (empty($company)) {
             return $this->sendError('Company not found');
         }
 
-        $company = $this->companyRepository->update($input, $id);
+        $company = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new CompanyResource($company), 'Company updated successfully');
     }
@@ -267,7 +266,7 @@ class CompanyAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var Company $company */
-        $company = $this->companyRepository->find($id);
+        $company = $this->getRepositoryObj()->find($id);
 
         if (empty($company)) {
             return $this->sendError('Company not found');

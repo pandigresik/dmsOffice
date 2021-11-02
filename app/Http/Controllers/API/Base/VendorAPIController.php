@@ -17,11 +17,10 @@ use Response;
 class VendorAPIController extends AppBaseController
 {
     /** @var VendorRepository */
-    private $VendorRepository;
+    protected $repository;
 
-    public function __construct(VendorRepository $VendorRepo)
+    public function __construct()
     {
-        $this->VendorRepository = $VendorRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class VendorAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $vendors = $this->VendorRepository->all(
+        $vendors = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class VendorAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $Vendor = $this->VendorRepository->create($input);
+        $Vendor = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new VendorResource($Vendor), 'Vendor Expedition saved successfully');
     }
@@ -154,7 +153,7 @@ class VendorAPIController extends AppBaseController
     public function show($id)
     {
         /** @var Vendor $Vendor */
-        $Vendor = $this->VendorRepository->find($id);
+        $Vendor = $this->getRepositoryObj()->find($id);
 
         if (empty($Vendor)) {
             return $this->sendError('Vendor Expedition not found');
@@ -214,13 +213,13 @@ class VendorAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var Vendor $Vendor */
-        $Vendor = $this->VendorRepository->find($id);
+        $Vendor = $this->getRepositoryObj()->find($id);
 
         if (empty($Vendor)) {
             return $this->sendError('Vendor Expedition not found');
         }
 
-        $Vendor = $this->VendorRepository->update($input, $id);
+        $Vendor = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new VendorResource($Vendor), 'Vendor updated successfully');
     }
@@ -267,7 +266,7 @@ class VendorAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var Vendor $Vendor */
-        $Vendor = $this->VendorRepository->find($id);
+        $Vendor = $this->getRepositoryObj()->find($id);
 
         if (empty($Vendor)) {
             return $this->sendError('Vendor Expedition not found');

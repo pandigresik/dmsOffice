@@ -103,7 +103,7 @@ return [
     */
 
     //'model_extend_class' => 'Eloquent',
-    'model_extend_class' => 'App\Models\Base',
+    'model_extend_class' => 'App\Models\BaseEntity',
 
     /*
     |--------------------------------------------------------------------------

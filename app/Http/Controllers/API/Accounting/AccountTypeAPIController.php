@@ -17,11 +17,10 @@ use Response;
 class AccountTypeAPIController extends AppBaseController
 {
     /** @var AccountTypeRepository */
-    private $accountTypeRepository;
+    protected $repository;
 
-    public function __construct(AccountTypeRepository $accountTypeRepo)
+    public function __construct()
     {
-        $this->accountTypeRepository = $accountTypeRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class AccountTypeAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $accountTypes = $this->accountTypeRepository->all(
+        $accountTypes = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class AccountTypeAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $accountType = $this->accountTypeRepository->create($input);
+        $accountType = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new AccountTypeResource($accountType), 'Account Type saved successfully');
     }
@@ -154,7 +153,7 @@ class AccountTypeAPIController extends AppBaseController
     public function show($id)
     {
         /** @var AccountType $accountType */
-        $accountType = $this->accountTypeRepository->find($id);
+        $accountType = $this->getRepositoryObj()->find($id);
 
         if (empty($accountType)) {
             return $this->sendError('Account Type not found');
@@ -214,13 +213,13 @@ class AccountTypeAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var AccountType $accountType */
-        $accountType = $this->accountTypeRepository->find($id);
+        $accountType = $this->getRepositoryObj()->find($id);
 
         if (empty($accountType)) {
             return $this->sendError('Account Type not found');
         }
 
-        $accountType = $this->accountTypeRepository->update($input, $id);
+        $accountType = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new AccountTypeResource($accountType), 'AccountType updated successfully');
     }
@@ -267,7 +266,7 @@ class AccountTypeAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var AccountType $accountType */
-        $accountType = $this->accountTypeRepository->find($id);
+        $accountType = $this->getRepositoryObj()->find($id);
 
         if (empty($accountType)) {
             return $this->sendError('Account Type not found');

@@ -34,6 +34,8 @@ url?XDEBUG_SESSION_START=1
 php artisan scaffold.all:generate filepath
 php artisan scaffold.all:generate --module=inventory --table=warehouse,stock_quant,stock_inventory,stock_picking_type,stock_picking
 
+php artisan scaffold.all:generate --module=base --table=trip --connection=mysql_sejati
+
 -- generate model 
  php artisan infyom:model StockInventoryLine --fromTable --tableName=stock_inventory_line --skip=dump-autoload,migration --ignoreFields=created_at,updated_at,deleted_at,created_by,updated_by --prefix=inventory
 
@@ -46,6 +48,9 @@ php artisan test --testsuite=Repositories --stop-on-failure --verbose
 
 -- migrate rollback
 php artisan migrate:rollback --step=1 --env=testing
+
+-- migrate, with set database and path
+php artisan migrate --database=mysql_sejati --path=database/migrations/dms
 
 -- generate export 
 php artisan make:export CustomersExport

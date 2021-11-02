@@ -6,6 +6,7 @@ use App\DataTables\Base\CityDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateCityRequest;
 use App\Http\Requests\Base\UpdateCityRequest;
+use App\Models\Base\City;
 use App\Repositories\Base\CityRepository;
 use Flash;
 use Response;
@@ -13,11 +14,11 @@ use Response;
 class CityController extends AppBaseController
 {
     /** @var CityRepository */
-    private $cityRepository;
+    protected $repository;
 
-    public function __construct(CityRepository $cityRepo)
+    public function __construct()
     {
-        $this->cityRepository = $cityRepo;
+        $this->repository = CityRepository::class;
     }
 
     /**
@@ -48,8 +49,8 @@ class CityController extends AppBaseController
     public function store(CreateCityRequest $request)
     {
         $input = $request->all();
-
-        $city = $this->cityRepository->create($input);
+        $this->getRepositoryObj()->setModel(new City());
+        $city = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/cities.singular')]));
 
@@ -65,7 +66,7 @@ class CityController extends AppBaseController
      */
     public function show($id)
     {
-        $city = $this->cityRepository->find($id);
+        $city = $this->getRepositoryObj()->find($id);
 
         if (empty($city)) {
             Flash::error(__('models/cities.singular').' '.__('messages.not_found'));
@@ -85,7 +86,7 @@ class CityController extends AppBaseController
      */
     public function edit($id)
     {
-        $city = $this->cityRepository->find($id);
+        $city = $this->getRepositoryObj()->find($id);
 
         if (empty($city)) {
             Flash::error(__('messages.not_found', ['model' => __('models/cities.singular')]));
@@ -105,7 +106,7 @@ class CityController extends AppBaseController
      */
     public function update($id, UpdateCityRequest $request)
     {
-        $city = $this->cityRepository->find($id);
+        $city = $this->getRepositoryObj()->find($id);
 
         if (empty($city)) {
             Flash::error(__('messages.not_found', ['model' => __('models/cities.singular')]));
@@ -113,7 +114,7 @@ class CityController extends AppBaseController
             return redirect(route('base.cities.index'));
         }
 
-        $city = $this->cityRepository->update($request->all(), $id);
+        $city = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/cities.singular')]));
 
@@ -129,7 +130,7 @@ class CityController extends AppBaseController
      */
     public function destroy($id)
     {
-        $city = $this->cityRepository->find($id);
+        $city = $this->getRepositoryObj()->find($id);
 
         if (empty($city)) {
             Flash::error(__('messages.not_found', ['model' => __('models/cities.singular')]));
@@ -137,7 +138,7 @@ class CityController extends AppBaseController
             return redirect(route('base.cities.index'));
         }
 
-        $this->cityRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/cities.singular')]));
 

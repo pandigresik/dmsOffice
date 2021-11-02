@@ -13,11 +13,11 @@ use Response;
 class DmsApSupplierController extends AppBaseController
 {
     /** @var DmsApSupplierRepository */
-    private $dmsApSupplierRepository;
+    protected $repository;
 
-    public function __construct(DmsApSupplierRepository $dmsApSupplierRepo)
+    public function __construct()
     {
-        $this->dmsApSupplierRepository = $dmsApSupplierRepo;
+        $this->repository = DmsApSupplierRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsApSupplierController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsApSupplier = $this->dmsApSupplierRepository->create($input);
+        $dmsApSupplier = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsApSuppliers.singular')]));
 
@@ -65,7 +65,7 @@ class DmsApSupplierController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsApSupplier = $this->dmsApSupplierRepository->find($id);
+        $dmsApSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsApSupplier)) {
             Flash::error(__('models/dmsApSuppliers.singular').' '.__('messages.not_found'));
@@ -85,19 +85,20 @@ class DmsApSupplierController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsApSupplier = $this->dmsApSupplierRepository->find($id);
+        $dmsApSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsApSupplier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsApSuppliers.singular')]));
 
             return redirect(route('base.dmsApSuppliers.index'));
         }
-        $jsonDefaultSearching = ['dms_ar_supplier_id' => $id];
+        $jsonDefaultSearching = ['dms_ap_supplier_id' => $id];
         $dataTabs = [
-            'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('base.contactSuppliers.index', ['dms_ar_supplier_id' => $id]), 'defaultContent' => '', 'class' => ''],
-            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.locationSuppliers.index', ['dms_ar_supplier_id' => $id]), 'defaultContent' => '', 'class' => ''],            
+            'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('base.contactSuppliers.index', ['dms_ap_supplier_id' => $id]), 'defaultContent' => '', 'class' => ''],
+            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.locationSuppliers.index', ['dms_ap_supplier_id' => $id]), 'defaultContent' => '', 'class' => ''],
             'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
         ];
+
         return view('base.dms_ap_suppliers.edit')->with('dataTabs', $dataTabs)->with('dmsApSupplier', $dmsApSupplier)->with($this->getOptionItems());
     }
 
@@ -110,7 +111,7 @@ class DmsApSupplierController extends AppBaseController
      */
     public function update($id, UpdateDmsApSupplierRequest $request)
     {
-        $dmsApSupplier = $this->dmsApSupplierRepository->find($id);
+        $dmsApSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsApSupplier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsApSuppliers.singular')]));
@@ -118,7 +119,7 @@ class DmsApSupplierController extends AppBaseController
             return redirect(route('base.dmsApSuppliers.index'));
         }
 
-        $dmsApSupplier = $this->dmsApSupplierRepository->update($request->all(), $id);
+        $dmsApSupplier = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsApSuppliers.singular')]));
 
@@ -134,7 +135,7 @@ class DmsApSupplierController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsApSupplier = $this->dmsApSupplierRepository->find($id);
+        $dmsApSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsApSupplier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsApSuppliers.singular')]));
@@ -142,7 +143,7 @@ class DmsApSupplierController extends AppBaseController
             return redirect(route('base.dmsApSuppliers.index'));
         }
 
-        $this->dmsApSupplierRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsApSuppliers.singular')]));
 

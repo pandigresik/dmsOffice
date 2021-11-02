@@ -17,11 +17,10 @@ use Response;
 class StockQuantAPIController extends AppBaseController
 {
     /** @var StockQuantRepository */
-    private $stockQuantRepository;
+    protected $repository;
 
-    public function __construct(StockQuantRepository $stockQuantRepo)
+    public function __construct()
     {
-        $this->stockQuantRepository = $stockQuantRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class StockQuantAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $stockQuants = $this->stockQuantRepository->all(
+        $stockQuants = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class StockQuantAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $stockQuant = $this->stockQuantRepository->create($input);
+        $stockQuant = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new StockQuantResource($stockQuant), 'Stock Quant saved successfully');
     }
@@ -154,7 +153,7 @@ class StockQuantAPIController extends AppBaseController
     public function show($id)
     {
         /** @var StockQuant $stockQuant */
-        $stockQuant = $this->stockQuantRepository->find($id);
+        $stockQuant = $this->getRepositoryObj()->find($id);
 
         if (empty($stockQuant)) {
             return $this->sendError('Stock Quant not found');
@@ -214,13 +213,13 @@ class StockQuantAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var StockQuant $stockQuant */
-        $stockQuant = $this->stockQuantRepository->find($id);
+        $stockQuant = $this->getRepositoryObj()->find($id);
 
         if (empty($stockQuant)) {
             return $this->sendError('Stock Quant not found');
         }
 
-        $stockQuant = $this->stockQuantRepository->update($input, $id);
+        $stockQuant = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new StockQuantResource($stockQuant), 'StockQuant updated successfully');
     }
@@ -267,7 +266,7 @@ class StockQuantAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var StockQuant $stockQuant */
-        $stockQuant = $this->stockQuantRepository->find($id);
+        $stockQuant = $this->getRepositoryObj()->find($id);
 
         if (empty($stockQuant)) {
             return $this->sendError('Stock Quant not found');

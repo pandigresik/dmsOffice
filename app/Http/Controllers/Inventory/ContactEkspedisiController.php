@@ -3,36 +3,35 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\ContactEkspedisiDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateContactEkspedisiRequest;
 use App\Http\Requests\Inventory\UpdateContactEkspedisiRequest;
-use App\Repositories\Inventory\ContactEkspedisiRepository;
-use App\Repositories\Inventory\DmsInvCarrierRepository;
-use Flash;
-use App\Http\Controllers\AppBaseController;
 use App\Repositories\Base\CityRepository;
+use App\Repositories\Inventory\ContactEkspedisiRepository;
+use Flash;
 use Illuminate\Http\Request;
 use Response;
 
 class ContactEkspedisiController extends AppBaseController
 {
-    /** @var  ContactEkspedisiRepository */
-    private $contactEkspedisiRepository;
+    /** @var ContactEkspedisiRepository */
+    protected $repository;
 
-    public function __construct(ContactEkspedisiRepository $contactEkspedisiRepo)
+    public function __construct()
     {
-        $this->contactEkspedisiRepository = $contactEkspedisiRepo;
+        $this->repository = ContactEkspedisiRepository::class;
     }
 
     /**
      * Display a listing of the ContactEkspedisi.
      *
      * @param ContactEkspedisiDataTable $contactEkspedisiDataTable
+     *
      * @return Response
      */
     public function index(Request $request)
     {
-        $contacts = $this->contactEkspedisiRepository->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')]);
+        $contacts = $this->getRepositoryObj()->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')]);
         $buttonView = view('inventory.dms_inv_carriers.partials.contact_button', ['json' => [], 'url' => route('inventory.contactEkspedisis.create')])->render();
 
         return view('inventory.contact_ekspedisis.index')->with(['contacts' => $contacts, 'buttonView' => $buttonView]);
@@ -49,13 +48,11 @@ class ContactEkspedisiController extends AppBaseController
 
         return view('inventory.contact_ekspedisis.create')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'contactEkspedisis['.$idForm.']'])
-        ;        
+        ;
     }
 
     /**
      * Store a newly created ContactEkspedisi in storage.
-     *
-     * @param CreateContactEkspedisiRequest $request
      *
      * @return Response
      */
@@ -63,7 +60,7 @@ class ContactEkspedisiController extends AppBaseController
     {
         $input = $request->all();
 
-        $contactEkspedisi = $this->contactEkspedisiRepository->create($input);
+        $contactEkspedisi = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/contactEkspedisis.singular')]));
 
@@ -73,13 +70,13 @@ class ContactEkspedisiController extends AppBaseController
     /**
      * Display the specified ContactEkspedisi.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function show($id)
     {
-        $contactEkspedisi = $this->contactEkspedisiRepository->find($id);
+        $contactEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($contactEkspedisi)) {
             Flash::error(__('models/contactEkspedisis.singular').' '.__('messages.not_found'));
@@ -93,13 +90,13 @@ class ContactEkspedisiController extends AppBaseController
     /**
      * Show the form for editing the specified ContactEkspedisi.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function edit($id)
     {
-        $contactEkspedisi = $this->contactEkspedisiRepository->find($id);
+        $contactEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($contactEkspedisi)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contactEkspedisis.singular')]));
@@ -113,14 +110,13 @@ class ContactEkspedisiController extends AppBaseController
     /**
      * Update the specified ContactEkspedisi in storage.
      *
-     * @param  int              $id
-     * @param UpdateContactEkspedisiRequest $request
+     * @param int $id
      *
      * @return Response
      */
     public function update($id, UpdateContactEkspedisiRequest $request)
     {
-        $contactEkspedisi = $this->contactEkspedisiRepository->find($id);
+        $contactEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($contactEkspedisi)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contactEkspedisis.singular')]));
@@ -128,7 +124,7 @@ class ContactEkspedisiController extends AppBaseController
             return redirect(route('inventory.contactEkspedisis.index'));
         }
 
-        $contactEkspedisi = $this->contactEkspedisiRepository->update($request->all(), $id);
+        $contactEkspedisi = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/contactEkspedisis.singular')]));
 
@@ -138,13 +134,13 @@ class ContactEkspedisiController extends AppBaseController
     /**
      * Remove the specified ContactEkspedisi from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function destroy($id)
     {
-        $contactEkspedisi = $this->contactEkspedisiRepository->find($id);
+        $contactEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($contactEkspedisi)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contactEkspedisis.singular')]));
@@ -152,7 +148,7 @@ class ContactEkspedisiController extends AppBaseController
             return redirect(route('inventory.contactEkspedisis.index'));
         }
 
-        $this->contactEkspedisiRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/contactEkspedisis.singular')]));
 
@@ -160,17 +156,18 @@ class ContactEkspedisiController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model ContactEkspedisi from storage.         
+     * Provide options item based on relationship model ContactEkspedisi from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
+        $city = new CityRepository(app());
 
-         $city = new CityRepository(app());
-         return [
-             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck([], null, null, 'name', 'name')
-         ];
+        return [
+            'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck([], null, null, 'name', 'name'),
+        ];
     }
 }

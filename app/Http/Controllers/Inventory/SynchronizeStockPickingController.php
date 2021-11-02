@@ -15,11 +15,11 @@ use Response;
 class SynchronizeStockPickingController extends AppBaseController
 {
     /** @var StockPickingRepository */
-    private $stockPickingRepository;
+    protected $repository;
 
-    public function __construct(StockPickingRepository $stockPickingRepo)
+    public function __construct()
     {
-        $this->stockPickingRepository = $stockPickingRepo;
+        $this->repository = StockPickingRepository::class;
     }
 
     /**
@@ -51,7 +51,7 @@ class SynchronizeStockPickingController extends AppBaseController
     {
         $input = $request->all();
 
-        $stockPicking = $this->stockPickingRepository->create($input);
+        $stockPicking = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/stockPickings.singular')]));
 
@@ -67,7 +67,7 @@ class SynchronizeStockPickingController extends AppBaseController
      */
     public function show($id)
     {
-        $stockPicking = $this->stockPickingRepository->find($id);
+        $stockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($stockPicking)) {
             Flash::error(__('models/stockPickings.singular').' '.__('messages.not_found'));
@@ -87,7 +87,7 @@ class SynchronizeStockPickingController extends AppBaseController
      */
     public function edit($id)
     {
-        $stockPicking = $this->stockPickingRepository->find($id);
+        $stockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($stockPicking)) {
             Flash::error(__('messages.not_found', ['model' => __('models/stockPickings.singular')]));
@@ -107,7 +107,7 @@ class SynchronizeStockPickingController extends AppBaseController
      */
     public function update($id, UpdateStockPickingRequest $request)
     {
-        $stockPicking = $this->stockPickingRepository->find($id);
+        $stockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($stockPicking)) {
             Flash::error(__('messages.not_found', ['model' => __('models/stockPickings.singular')]));
@@ -115,7 +115,7 @@ class SynchronizeStockPickingController extends AppBaseController
             return redirect(route('inventory.stockPickings.index'));
         }
 
-        $stockPicking = $this->stockPickingRepository->update($request->all(), $id);
+        $stockPicking = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/stockPickings.singular')]));
 
@@ -131,7 +131,7 @@ class SynchronizeStockPickingController extends AppBaseController
      */
     public function destroy($id)
     {
-        $stockPicking = $this->stockPickingRepository->find($id);
+        $stockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($stockPicking)) {
             Flash::error(__('messages.not_found', ['model' => __('models/stockPickings.singular')]));
@@ -139,7 +139,7 @@ class SynchronizeStockPickingController extends AppBaseController
             return redirect(route('inventory.stockPickings.index'));
         }
 
-        $this->stockPickingRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/stockPickings.singular')]));
 

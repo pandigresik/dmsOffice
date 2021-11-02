@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Base;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Base\ContactCustomer;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateContactCustomerRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateContactCustomerRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'contact_customer-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateContactCustomerRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new ContactCustomer)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new ContactCustomer())->fillable;
+
         return parent::all($keys);
     }
 }

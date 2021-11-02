@@ -6,6 +6,7 @@ use App\DataTables\Base\UserDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateUserRequest;
 use App\Http\Requests\Base\UpdateUserRequest;
+use App\Repositories\Base\EntityRepository;
 use App\Repositories\Base\RoleRepository;
 use App\Repositories\Base\UserRepository;
 use Flash;
@@ -14,11 +15,11 @@ use Response;
 class UserController extends AppBaseController
 {
     /** @var UserRepository */
-    private $userRepository;
+    protected $repository;
 
-    public function __construct(UserRepository $userRepo)
+    public function __construct()
     {
-        $this->userRepository = $userRepo;
+        $this->repository = UserRepository::class;
     }
 
     /**
@@ -38,7 +39,7 @@ class UserController extends AppBaseController
      */
     public function create()
     {
-        return view('base.users.create')->with('roles', $this->listRoles());
+        return view('base.users.create')->with($this->getOptionItems())->with('roles', $this->listRoles());
     }
 
     /**
@@ -50,7 +51,7 @@ class UserController extends AppBaseController
     {
         $input = $request->all();
 
-        $user = $this->userRepository->create($input);
+        $user = $this->getRepositoryObj()->create($input);
 
         Flash::success('User saved successfully.');
 
@@ -66,7 +67,7 @@ class UserController extends AppBaseController
      */
     public function show($id)
     {
-        $user = $this->userRepository->find($id);
+        $user = $this->getRepositoryObj()->find($id);
 
         if (empty($user)) {
             Flash::error('User not found');
@@ -86,7 +87,7 @@ class UserController extends AppBaseController
      */
     public function edit($id)
     {
-        $user = $this->userRepository->find($id);
+        $user = $this->getRepositoryObj()->find($id);
 
         if (empty($user)) {
             Flash::error('User not found');
@@ -94,7 +95,7 @@ class UserController extends AppBaseController
             return redirect(route('base.users.index'));
         }
 
-        return view('base.users.edit')->with(['user' => $user, 'roles' => $this->listRoles()]);
+        return view('base.users.edit')->with($this->getOptionItems())->with(['user' => $user, 'roles' => $this->listRoles()]);
     }
 
     /**
@@ -106,7 +107,7 @@ class UserController extends AppBaseController
      */
     public function update($id, UpdateUserRequest $request)
     {
-        $user = $this->userRepository->find($id);
+        $user = $this->getRepositoryObj()->find($id);
 
         if (empty($user)) {
             Flash::error('User not found');
@@ -114,7 +115,7 @@ class UserController extends AppBaseController
             return redirect(route('base.users.index'));
         }
 
-        $user = $this->userRepository->update($request->all(), $id);
+        $user = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success('User updated successfully.');
 
@@ -130,7 +131,7 @@ class UserController extends AppBaseController
      */
     public function destroy($id)
     {
-        $user = $this->userRepository->find($id);
+        $user = $this->getRepositoryObj()->find($id);
 
         if (empty($user)) {
             Flash::error('User not found');
@@ -138,7 +139,7 @@ class UserController extends AppBaseController
             return redirect(route('base.users.index'));
         }
 
-        $this->userRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success('User deleted successfully.');
 
@@ -151,5 +152,21 @@ class UserController extends AppBaseController
         $roles = new RoleRepository($app);
 
         return $roles->all();
+    }
+
+    /**
+     * Provide options item based on relationship model Entity from storage.
+     *
+     * @throws \Exception
+     *
+     * @return Response
+     */
+    private function getOptionItems()
+    {
+        $entity = new EntityRepository(app());
+
+        return [
+            'entityItems' => ['' => __('crud.option.entity_placeholder')] + $entity->pluck(),
+        ];
     }
 }

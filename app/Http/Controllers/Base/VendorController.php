@@ -15,11 +15,10 @@ use Response;
 class VendorController extends AppBaseController
 {
     /** @var vendorRepository */
-    private $vendorRepository;
+    protected $repository;
 
-    public function __construct(VendorRepository $vendorRepo)
+    public function __construct()
     {
-        $this->vendorRepository = $vendorRepo;
     }
 
     /**
@@ -65,7 +64,7 @@ class VendorController extends AppBaseController
     public function store(CreateVendorRequest $request)
     {
         $input = $request->all();
-        $vendor = $this->vendorRepository->create($input);
+        $vendor = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/vendors.singular')]));
 
@@ -81,7 +80,7 @@ class VendorController extends AppBaseController
      */
     public function show($id)
     {
-        $Vendor = $this->vendorRepository->find($id);
+        $Vendor = $this->getRepositoryObj()->find($id);
 
         if (empty($Vendor)) {
             Flash::error(__('models/vendors.singular').' '.__('messages.not_found'));
@@ -101,7 +100,7 @@ class VendorController extends AppBaseController
      */
     public function edit($id)
     {
-        $vendor = $this->vendorRepository->find($id);
+        $vendor = $this->getRepositoryObj()->find($id);
 
         if (empty($vendor)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendors.singular')]));
@@ -133,7 +132,7 @@ class VendorController extends AppBaseController
      */
     public function update($id, UpdateVendorRequest $request)
     {
-        $Vendor = $this->vendorRepository->find($id);
+        $Vendor = $this->getRepositoryObj()->find($id);
 
         if (empty($Vendor)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendors.singular')]));
@@ -141,7 +140,7 @@ class VendorController extends AppBaseController
             return redirect(route('base.vendors.index'));
         }
 
-        $Vendor = $this->vendorRepository->update($request->all(), $id);
+        $Vendor = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/vendors.singular')]));
 
@@ -157,7 +156,7 @@ class VendorController extends AppBaseController
      */
     public function destroy($id)
     {
-        $Vendor = $this->vendorRepository->find($id);
+        $Vendor = $this->getRepositoryObj()->find($id);
 
         if (empty($Vendor)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendors.singular')]));
@@ -165,7 +164,7 @@ class VendorController extends AppBaseController
             return redirect(route('base.vendors.index'));
         }
 
-        $this->vendorRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/vendors.singular')]));
 

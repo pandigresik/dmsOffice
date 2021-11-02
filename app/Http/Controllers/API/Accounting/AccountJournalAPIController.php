@@ -17,11 +17,10 @@ use Response;
 class AccountJournalAPIController extends AppBaseController
 {
     /** @var AccountJournalRepository */
-    private $accountJournalRepository;
+    protected $repository;
 
-    public function __construct(AccountJournalRepository $accountJournalRepo)
+    public function __construct()
     {
-        $this->accountJournalRepository = $accountJournalRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class AccountJournalAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $accountJournals = $this->accountJournalRepository->all(
+        $accountJournals = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class AccountJournalAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $accountJournal = $this->accountJournalRepository->create($input);
+        $accountJournal = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new AccountJournalResource($accountJournal), 'Account Journal saved successfully');
     }
@@ -154,7 +153,7 @@ class AccountJournalAPIController extends AppBaseController
     public function show($id)
     {
         /** @var AccountJournal $accountJournal */
-        $accountJournal = $this->accountJournalRepository->find($id);
+        $accountJournal = $this->getRepositoryObj()->find($id);
 
         if (empty($accountJournal)) {
             return $this->sendError('Account Journal not found');
@@ -214,13 +213,13 @@ class AccountJournalAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var AccountJournal $accountJournal */
-        $accountJournal = $this->accountJournalRepository->find($id);
+        $accountJournal = $this->getRepositoryObj()->find($id);
 
         if (empty($accountJournal)) {
             return $this->sendError('Account Journal not found');
         }
 
-        $accountJournal = $this->accountJournalRepository->update($input, $id);
+        $accountJournal = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new AccountJournalResource($accountJournal), 'AccountJournal updated successfully');
     }
@@ -267,7 +266,7 @@ class AccountJournalAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var AccountJournal $accountJournal */
-        $accountJournal = $this->accountJournalRepository->find($id);
+        $accountJournal = $this->getRepositoryObj()->find($id);
 
         if (empty($accountJournal)) {
             return $this->sendError('Account Journal not found');

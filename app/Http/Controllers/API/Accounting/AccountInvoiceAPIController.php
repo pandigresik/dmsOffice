@@ -17,11 +17,10 @@ use Response;
 class AccountInvoiceAPIController extends AppBaseController
 {
     /** @var AccountInvoiceRepository */
-    private $accountInvoiceRepository;
+    protected $repository;
 
-    public function __construct(AccountInvoiceRepository $accountInvoiceRepo)
+    public function __construct()
     {
-        $this->accountInvoiceRepository = $accountInvoiceRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class AccountInvoiceAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $accountInvoices = $this->accountInvoiceRepository->all(
+        $accountInvoices = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class AccountInvoiceAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $accountInvoice = $this->accountInvoiceRepository->create($input);
+        $accountInvoice = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new AccountInvoiceResource($accountInvoice), 'Account Invoice saved successfully');
     }
@@ -154,7 +153,7 @@ class AccountInvoiceAPIController extends AppBaseController
     public function show($id)
     {
         /** @var AccountInvoice $accountInvoice */
-        $accountInvoice = $this->accountInvoiceRepository->find($id);
+        $accountInvoice = $this->getRepositoryObj()->find($id);
 
         if (empty($accountInvoice)) {
             return $this->sendError('Account Invoice not found');
@@ -214,13 +213,13 @@ class AccountInvoiceAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var AccountInvoice $accountInvoice */
-        $accountInvoice = $this->accountInvoiceRepository->find($id);
+        $accountInvoice = $this->getRepositoryObj()->find($id);
 
         if (empty($accountInvoice)) {
             return $this->sendError('Account Invoice not found');
         }
 
-        $accountInvoice = $this->accountInvoiceRepository->update($input, $id);
+        $accountInvoice = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new AccountInvoiceResource($accountInvoice), 'AccountInvoice updated successfully');
     }
@@ -267,7 +266,7 @@ class AccountInvoiceAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var AccountInvoice $accountInvoice */
-        $accountInvoice = $this->accountInvoiceRepository->find($id);
+        $accountInvoice = $this->getRepositoryObj()->find($id);
 
         if (empty($accountInvoice)) {
             return $this->sendError('Account Invoice not found');

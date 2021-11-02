@@ -17,11 +17,10 @@ use Response;
 class StockPickingTypeAPIController extends AppBaseController
 {
     /** @var StockPickingTypeRepository */
-    private $stockPickingTypeRepository;
+    protected $repository;
 
-    public function __construct(StockPickingTypeRepository $stockPickingTypeRepo)
+    public function __construct()
     {
-        $this->stockPickingTypeRepository = $stockPickingTypeRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class StockPickingTypeAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $stockPickingTypes = $this->stockPickingTypeRepository->all(
+        $stockPickingTypes = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class StockPickingTypeAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $stockPickingType = $this->stockPickingTypeRepository->create($input);
+        $stockPickingType = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new StockPickingTypeResource($stockPickingType), 'Stock Picking Type saved successfully');
     }
@@ -154,7 +153,7 @@ class StockPickingTypeAPIController extends AppBaseController
     public function show($id)
     {
         /** @var StockPickingType $stockPickingType */
-        $stockPickingType = $this->stockPickingTypeRepository->find($id);
+        $stockPickingType = $this->getRepositoryObj()->find($id);
 
         if (empty($stockPickingType)) {
             return $this->sendError('Stock Picking Type not found');
@@ -214,13 +213,13 @@ class StockPickingTypeAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var StockPickingType $stockPickingType */
-        $stockPickingType = $this->stockPickingTypeRepository->find($id);
+        $stockPickingType = $this->getRepositoryObj()->find($id);
 
         if (empty($stockPickingType)) {
             return $this->sendError('Stock Picking Type not found');
         }
 
-        $stockPickingType = $this->stockPickingTypeRepository->update($input, $id);
+        $stockPickingType = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new StockPickingTypeResource($stockPickingType), 'StockPickingType updated successfully');
     }
@@ -267,7 +266,7 @@ class StockPickingTypeAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var StockPickingType $stockPickingType */
-        $stockPickingType = $this->stockPickingTypeRepository->find($id);
+        $stockPickingType = $this->getRepositoryObj()->find($id);
 
         if (empty($stockPickingType)) {
             return $this->sendError('Stock Picking Type not found');

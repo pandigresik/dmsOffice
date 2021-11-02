@@ -13,11 +13,11 @@ use Response;
 class DmsArCustomerController extends AppBaseController
 {
     /** @var DmsArCustomerRepository */
-    private $dmsArCustomerRepository;
+    protected $repository;
 
-    public function __construct(DmsArCustomerRepository $dmsArCustomerRepo)
+    public function __construct()
     {
-        $this->dmsArCustomerRepository = $dmsArCustomerRepo;
+        $this->repository = DmsArCustomerRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsArCustomerController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsArCustomer = $this->dmsArCustomerRepository->create($input);
+        $dmsArCustomer = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsArCustomers.singular')]));
 
@@ -65,7 +65,7 @@ class DmsArCustomerController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsArCustomer = $this->dmsArCustomerRepository->find($id);
+        $dmsArCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomer)) {
             Flash::error(__('models/dmsArCustomers.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsArCustomerController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsArCustomer = $this->dmsArCustomerRepository->find($id);
+        $dmsArCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomers.singular')]));
@@ -95,11 +95,12 @@ class DmsArCustomerController extends AppBaseController
         $jsonDefaultSearching = ['dms_ar_customer_id' => $id];
         $dataTabs = [
             'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('base.contactCustomers.index', ['dms_ar_customer_id' => $id]), 'defaultContent' => '', 'class' => ''],
-            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.locationCustomers.index', ['dms_ar_customer_id' => $id]), 'defaultContent' => '', 'class' => ''],            
+            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.locationCustomers.index', ['dms_ar_customer_id' => $id]), 'defaultContent' => '', 'class' => ''],
             'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
         ];
+
         return view('base.dms_ar_customers.edit')->with('dataTabs', $dataTabs)->with('dmsArCustomer', $dmsArCustomer)->with($this->getOptionItems());
-    }    
+    }
 
     /**
      * Update the specified DmsArCustomer in storage.
@@ -110,7 +111,7 @@ class DmsArCustomerController extends AppBaseController
      */
     public function update($id, UpdateDmsArCustomerRequest $request)
     {
-        $dmsArCustomer = $this->dmsArCustomerRepository->find($id);
+        $dmsArCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomers.singular')]));
@@ -118,7 +119,7 @@ class DmsArCustomerController extends AppBaseController
             return redirect(route('base.dmsArCustomers.index'));
         }
 
-        $dmsArCustomer = $this->dmsArCustomerRepository->update($request->all(), $id);
+        $dmsArCustomer = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsArCustomers.singular')]));
 
@@ -134,7 +135,7 @@ class DmsArCustomerController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsArCustomer = $this->dmsArCustomerRepository->find($id);
+        $dmsArCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomers.singular')]));
@@ -142,7 +143,7 @@ class DmsArCustomerController extends AppBaseController
             return redirect(route('base.dmsArCustomers.index'));
         }
 
-        $this->dmsArCustomerRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsArCustomers.singular')]));
 

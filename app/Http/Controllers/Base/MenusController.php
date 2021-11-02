@@ -15,11 +15,11 @@ use Response;
 class MenusController extends AppBaseController
 {
     /** @var MenusRepository */
-    private $menusRepository;
+    protected $repository;
 
-    public function __construct(MenusRepository $menusRepo)
+    public function __construct()
     {
-        $this->menusRepository = $menusRepo;
+        $this->repository = MenusRepository::class;
     }
 
     /**
@@ -51,7 +51,7 @@ class MenusController extends AppBaseController
     {
         $input = $request->all();
 
-        $menus = $this->menusRepository->create($input);
+        $menus = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/menus.singular')]));
 
@@ -67,7 +67,7 @@ class MenusController extends AppBaseController
      */
     public function show($id)
     {
-        $menus = $this->menusRepository->find($id);
+        $menus = $this->getRepositoryObj()->find($id);
 
         if (empty($menus)) {
             Flash::error(__('models/menus.singular').' '.__('messages.not_found'));
@@ -87,7 +87,7 @@ class MenusController extends AppBaseController
      */
     public function edit($id)
     {
-        $menus = $this->menusRepository->find($id);
+        $menus = $this->getRepositoryObj()->find($id);
 
         if (empty($menus)) {
             Flash::error(__('messages.not_found', ['model' => __('models/menus.singular')]));
@@ -107,7 +107,7 @@ class MenusController extends AppBaseController
      */
     public function update($id, UpdateMenusRequest $request)
     {
-        $menus = $this->menusRepository->find($id);
+        $menus = $this->getRepositoryObj()->find($id);
 
         if (empty($menus)) {
             Flash::error(__('messages.not_found', ['model' => __('models/menus.singular')]));
@@ -115,7 +115,7 @@ class MenusController extends AppBaseController
             return redirect(route('base.menus.index'));
         }
 
-        $menus = $this->menusRepository->update($request->all(), $id);
+        $menus = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/menus.singular')]));
 
@@ -131,7 +131,7 @@ class MenusController extends AppBaseController
      */
     public function destroy($id)
     {
-        $menus = $this->menusRepository->find($id);
+        $menus = $this->getRepositoryObj()->find($id);
 
         if (empty($menus)) {
             Flash::error(__('messages.not_found', ['model' => __('models/menus.singular')]));
@@ -139,7 +139,7 @@ class MenusController extends AppBaseController
             return redirect(route('base.menus.index'));
         }
 
-        $this->menusRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/menus.singular')]));
 

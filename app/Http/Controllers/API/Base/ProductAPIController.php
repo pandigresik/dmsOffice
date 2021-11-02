@@ -17,11 +17,10 @@ use Response;
 class ProductAPIController extends AppBaseController
 {
     /** @var ProductRepository */
-    private $productRepository;
+    protected $repository;
 
-    public function __construct(ProductRepository $productRepo)
+    public function __construct()
     {
-        $this->productRepository = $productRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class ProductAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $products = $this->productRepository->all(
+        $products = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class ProductAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $product = $this->productRepository->create($input);
+        $product = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new ProductResource($product), 'Product saved successfully');
     }
@@ -154,7 +153,7 @@ class ProductAPIController extends AppBaseController
     public function show($id)
     {
         /** @var Product $product */
-        $product = $this->productRepository->find($id);
+        $product = $this->getRepositoryObj()->find($id);
 
         if (empty($product)) {
             return $this->sendError('Product not found');
@@ -214,13 +213,13 @@ class ProductAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var Product $product */
-        $product = $this->productRepository->find($id);
+        $product = $this->getRepositoryObj()->find($id);
 
         if (empty($product)) {
             return $this->sendError('Product not found');
         }
 
-        $product = $this->productRepository->update($input, $id);
+        $product = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new ProductResource($product), 'Product updated successfully');
     }
@@ -267,7 +266,7 @@ class ProductAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var Product $product */
-        $product = $this->productRepository->find($id);
+        $product = $this->getRepositoryObj()->find($id);
 
         if (empty($product)) {
             return $this->sendError('Product not found');

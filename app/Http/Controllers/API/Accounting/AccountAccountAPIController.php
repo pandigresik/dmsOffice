@@ -17,11 +17,10 @@ use Response;
 class AccountAccountAPIController extends AppBaseController
 {
     /** @var AccountAccountRepository */
-    private $accountAccountRepository;
+    protected $repository;
 
-    public function __construct(AccountAccountRepository $accountAccountRepo)
+    public function __construct()
     {
-        $this->accountAccountRepository = $accountAccountRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class AccountAccountAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $accountAccounts = $this->accountAccountRepository->all(
+        $accountAccounts = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class AccountAccountAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $accountAccount = $this->accountAccountRepository->create($input);
+        $accountAccount = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new AccountAccountResource($accountAccount), 'Account Account saved successfully');
     }
@@ -154,7 +153,7 @@ class AccountAccountAPIController extends AppBaseController
     public function show($id)
     {
         /** @var AccountAccount $accountAccount */
-        $accountAccount = $this->accountAccountRepository->find($id);
+        $accountAccount = $this->getRepositoryObj()->find($id);
 
         if (empty($accountAccount)) {
             return $this->sendError('Account Account not found');
@@ -214,13 +213,13 @@ class AccountAccountAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var AccountAccount $accountAccount */
-        $accountAccount = $this->accountAccountRepository->find($id);
+        $accountAccount = $this->getRepositoryObj()->find($id);
 
         if (empty($accountAccount)) {
             return $this->sendError('Account Account not found');
         }
 
-        $accountAccount = $this->accountAccountRepository->update($input, $id);
+        $accountAccount = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new AccountAccountResource($accountAccount), 'AccountAccount updated successfully');
     }
@@ -267,7 +266,7 @@ class AccountAccountAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var AccountAccount $accountAccount */
-        $accountAccount = $this->accountAccountRepository->find($id);
+        $accountAccount = $this->getRepositoryObj()->find($id);
 
         if (empty($accountAccount)) {
             return $this->sendError('Account Account not found');

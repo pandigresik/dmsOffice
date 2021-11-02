@@ -13,11 +13,11 @@ use Response;
 class DmsFinAccountController extends AppBaseController
 {
     /** @var DmsFinAccountRepository */
-    private $dmsFinAccountRepository;
+    protected $repository;
 
-    public function __construct(DmsFinAccountRepository $dmsFinAccountRepo)
+    public function __construct()
     {
-        $this->dmsFinAccountRepository = $dmsFinAccountRepo;
+        $this->repository = DmsFinAccountRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsFinAccountController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsFinAccount = $this->dmsFinAccountRepository->create($input);
+        $dmsFinAccount = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsFinAccounts.singular')]));
 
@@ -65,7 +65,7 @@ class DmsFinAccountController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsFinAccount = $this->dmsFinAccountRepository->find($id);
+        $dmsFinAccount = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsFinAccount)) {
             Flash::error(__('models/dmsFinAccounts.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsFinAccountController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsFinAccount = $this->dmsFinAccountRepository->find($id);
+        $dmsFinAccount = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsFinAccount)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsFinAccounts.singular')]));
@@ -105,7 +105,7 @@ class DmsFinAccountController extends AppBaseController
      */
     public function update($id, UpdateDmsFinAccountRequest $request)
     {
-        $dmsFinAccount = $this->dmsFinAccountRepository->find($id);
+        $dmsFinAccount = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsFinAccount)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsFinAccounts.singular')]));
@@ -113,7 +113,7 @@ class DmsFinAccountController extends AppBaseController
             return redirect(route('accounting.dmsFinAccounts.index'));
         }
 
-        $dmsFinAccount = $this->dmsFinAccountRepository->update($request->all(), $id);
+        $dmsFinAccount = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsFinAccounts.singular')]));
 
@@ -129,7 +129,7 @@ class DmsFinAccountController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsFinAccount = $this->dmsFinAccountRepository->find($id);
+        $dmsFinAccount = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsFinAccount)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsFinAccounts.singular')]));
@@ -137,7 +137,7 @@ class DmsFinAccountController extends AppBaseController
             return redirect(route('accounting.dmsFinAccounts.index'));
         }
 
-        $this->dmsFinAccountRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsFinAccounts.singular')]));
 

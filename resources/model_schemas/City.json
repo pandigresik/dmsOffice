@@ -24,6 +24,18 @@
         "inView": true
     },
     {
+        "name": "province",
+        "dbType": "string,60",
+        "htmlType": "text",
+        "validations": "required|string|max:60|string|max:60",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
         "type": "relation",
         "relation": "1tm,RouteTrip,destination"
     },

@@ -17,11 +17,10 @@ use Response;
 class CityAPIController extends AppBaseController
 {
     /** @var CityRepository */
-    private $cityRepository;
+    protected $repository;
 
-    public function __construct(CityRepository $cityRepo)
+    public function __construct()
     {
-        $this->cityRepository = $cityRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class CityAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $cities = $this->cityRepository->all(
+        $cities = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class CityAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $city = $this->cityRepository->create($input);
+        $city = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new CityResource($city), 'City saved successfully');
     }
@@ -154,7 +153,7 @@ class CityAPIController extends AppBaseController
     public function show($id)
     {
         /** @var City $city */
-        $city = $this->cityRepository->find($id);
+        $city = $this->getRepositoryObj()->find($id);
 
         if (empty($city)) {
             return $this->sendError('City not found');
@@ -214,13 +213,13 @@ class CityAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var City $city */
-        $city = $this->cityRepository->find($id);
+        $city = $this->getRepositoryObj()->find($id);
 
         if (empty($city)) {
             return $this->sendError('City not found');
         }
 
-        $city = $this->cityRepository->update($input, $id);
+        $city = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new CityResource($city), 'City updated successfully');
     }
@@ -267,7 +266,7 @@ class CityAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var City $city */
-        $city = $this->cityRepository->find($id);
+        $city = $this->getRepositoryObj()->find($id);
 
         if (empty($city)) {
             return $this->sendError('City not found');

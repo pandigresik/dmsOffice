@@ -40,6 +40,7 @@ class CreateDmsInvCarrierRequest extends FormRequest
     {
         $keys = (new DmsInvCarrier())->fillable;
         $keys = array_merge(['contactEkspedisis', 'locationEkspedisis', 'vehicleEkspedisis', 'tripEkspedisis'], $keys);
+
         return parent::all($keys);
     }
 }

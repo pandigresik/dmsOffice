@@ -2,9 +2,9 @@
 
 namespace App\Models\Base;
 
-use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @SWG\Definition(
@@ -119,7 +119,7 @@ class DmsApSupplier extends Model
     ];
 
     /**
-     * Get all of the contactSuppliers for the DmsAppSupplier
+     * Get all of the contactSuppliers for the DmsAppSupplier.
      */
     public function contactSuppliers(): HasMany
     {

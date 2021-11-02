@@ -3,38 +3,38 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\ContactSupplierDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateContactSupplierRequest;
 use App\Http\Requests\Base\UpdateContactSupplierRequest;
 use App\Repositories\Base\ContactSupplierRepository;
 use App\Repositories\Base\DmsApSupplierRepository;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Response;
 
 class ContactSupplierController extends AppBaseController
 {
-    /** @var  ContactSupplierRepository */
-    private $contactSupplierRepository;
+    /** @var ContactSupplierRepository */
+    protected $repository;
 
-    public function __construct(ContactSupplierRepository $contactSupplierRepo)
+    public function __construct()
     {
-        $this->contactSupplierRepository = $contactSupplierRepo;
+        $this->repository = ContactSupplierRepository::class;
     }
 
     /**
      * Display a listing of the ContactSupplier.
      *
      * @param ContactSupplierDataTable $contactSupplierDataTable
+     *
      * @return Response
-     */    
+     */
     public function index(Request $request)
     {
-        $contacts = $this->contactSupplierRepository->all(['dms_ar_supplier_id' => $request->get('dms_ar_supplier_id')]);
-        $buttonView = view('base.dms_ar_suppliers.partials.contact_button', ['json' => [], 'url' => route('base.contactSuppliers.create')])->render();
+        $contacts = $this->getRepositoryObj()->all(['dms_ap_supplier_id' => $request->get('dms_ap_supplier_id')]);
+        $buttonView = view('base.dms_ap_suppliers.partials.contact_button', ['json' => [], 'url' => route('base.contactSuppliers.create')])->render();
 
-        return view('base.contact_suppliers.index')->with(['contacts' => $contacts, 'buttonView' => $buttonView]);        
+        return view('base.contact_suppliers.index')->with(['contacts' => $contacts, 'buttonView' => $buttonView]);
     }
 
     /**
@@ -48,13 +48,11 @@ class ContactSupplierController extends AppBaseController
 
         return view('base.contact_suppliers.create')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'contactSupplier['.$idForm.']'])
-        ;        
+        ;
     }
 
     /**
      * Store a newly created ContactSupplier in storage.
-     *
-     * @param CreateContactSupplierRequest $request
      *
      * @return Response
      */
@@ -62,7 +60,7 @@ class ContactSupplierController extends AppBaseController
     {
         $input = $request->all();
 
-        $contactSupplier = $this->contactSupplierRepository->create($input);
+        $contactSupplier = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/contactSuppliers.singular')]));
 
@@ -72,13 +70,13 @@ class ContactSupplierController extends AppBaseController
     /**
      * Display the specified ContactSupplier.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function show($id)
     {
-        $contactSupplier = $this->contactSupplierRepository->find($id);
+        $contactSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($contactSupplier)) {
             Flash::error(__('models/contactSuppliers.singular').' '.__('messages.not_found'));
@@ -92,13 +90,13 @@ class ContactSupplierController extends AppBaseController
     /**
      * Show the form for editing the specified ContactSupplier.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function edit($id)
     {
-        $contactSupplier = $this->contactSupplierRepository->find($id);
+        $contactSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($contactSupplier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contactSuppliers.singular')]));
@@ -112,14 +110,13 @@ class ContactSupplierController extends AppBaseController
     /**
      * Update the specified ContactSupplier in storage.
      *
-     * @param  int              $id
-     * @param UpdateContactSupplierRequest $request
+     * @param int $id
      *
      * @return Response
      */
     public function update($id, UpdateContactSupplierRequest $request)
     {
-        $contactSupplier = $this->contactSupplierRepository->find($id);
+        $contactSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($contactSupplier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contactSuppliers.singular')]));
@@ -127,7 +124,7 @@ class ContactSupplierController extends AppBaseController
             return redirect(route('base.contactSuppliers.index'));
         }
 
-        $contactSupplier = $this->contactSupplierRepository->update($request->all(), $id);
+        $contactSupplier = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/contactSuppliers.singular')]));
 
@@ -137,13 +134,13 @@ class ContactSupplierController extends AppBaseController
     /**
      * Remove the specified ContactSupplier from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function destroy($id)
     {
-        $contactSupplier = $this->contactSupplierRepository->find($id);
+        $contactSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($contactSupplier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contactSuppliers.singular')]));
@@ -151,7 +148,7 @@ class ContactSupplierController extends AppBaseController
             return redirect(route('base.contactSuppliers.index'));
         }
 
-        $this->contactSupplierRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/contactSuppliers.singular')]));
 
@@ -159,16 +156,17 @@ class ContactSupplierController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model ContactSupplier from storage.         
+     * Provide options item based on relationship model ContactSupplier from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         //$dmsApSupplier = new DmsApSupplierRepository(app());
         return [
-           // 'dmsApSupplierItems' => ['' => __('crud.option.dmsApSupplier_placeholder')] + $dmsApSupplier->pluck()            
+            // 'dmsApSupplierItems' => ['' => __('crud.option.dmsApSupplier_placeholder')] + $dmsApSupplier->pluck()
         ];
     }
 }

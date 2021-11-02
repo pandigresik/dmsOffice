@@ -17,11 +17,10 @@ use Response;
 class AccountMoveAPIController extends AppBaseController
 {
     /** @var AccountMoveRepository */
-    private $accountMoveRepository;
+    protected $repository;
 
-    public function __construct(AccountMoveRepository $accountMoveRepo)
+    public function __construct()
     {
-        $this->accountMoveRepository = $accountMoveRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class AccountMoveAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $accountMoves = $this->accountMoveRepository->all(
+        $accountMoves = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class AccountMoveAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $accountMove = $this->accountMoveRepository->create($input);
+        $accountMove = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new AccountMoveResource($accountMove), 'Account Move saved successfully');
     }
@@ -154,7 +153,7 @@ class AccountMoveAPIController extends AppBaseController
     public function show($id)
     {
         /** @var AccountMove $accountMove */
-        $accountMove = $this->accountMoveRepository->find($id);
+        $accountMove = $this->getRepositoryObj()->find($id);
 
         if (empty($accountMove)) {
             return $this->sendError('Account Move not found');
@@ -214,13 +213,13 @@ class AccountMoveAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var AccountMove $accountMove */
-        $accountMove = $this->accountMoveRepository->find($id);
+        $accountMove = $this->getRepositoryObj()->find($id);
 
         if (empty($accountMove)) {
             return $this->sendError('Account Move not found');
         }
 
-        $accountMove = $this->accountMoveRepository->update($input, $id);
+        $accountMove = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new AccountMoveResource($accountMove), 'AccountMove updated successfully');
     }
@@ -267,7 +266,7 @@ class AccountMoveAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var AccountMove $accountMove */
-        $accountMove = $this->accountMoveRepository->find($id);
+        $accountMove = $this->getRepositoryObj()->find($id);
 
         if (empty($accountMove)) {
             return $this->sendError('Account Move not found');

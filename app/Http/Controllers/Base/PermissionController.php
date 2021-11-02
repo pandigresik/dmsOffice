@@ -14,11 +14,11 @@ use Response;
 class PermissionController extends AppBaseController
 {
     /** @var PermissionRepository */
-    private $permissionRepository;
+    protected $repository;
 
-    public function __construct(PermissionRepository $permissionRepo)
+    public function __construct()
     {
-        $this->permissionRepository = $permissionRepo;
+        $this->repository = PermissionRepository::class;
     }
 
     /**
@@ -54,7 +54,7 @@ class PermissionController extends AppBaseController
     {
         $input = $request->all();
 
-        $permission = $this->permissionRepository->create($input);
+        $permission = $this->getRepositoryObj()->create($input);
 
         Flash::success('Permission saved successfully.');
 
@@ -70,7 +70,7 @@ class PermissionController extends AppBaseController
      */
     public function show($id)
     {
-        $permission = $this->permissionRepository->find($id);
+        $permission = $this->getRepositoryObj()->find($id);
 
         if (empty($permission)) {
             Flash::error('Permission not found');
@@ -90,7 +90,7 @@ class PermissionController extends AppBaseController
      */
     public function edit($id)
     {
-        $permission = $this->permissionRepository->find($id);
+        $permission = $this->getRepositoryObj()->find($id);
 
         if (empty($permission)) {
             Flash::error('Permission not found');
@@ -110,7 +110,7 @@ class PermissionController extends AppBaseController
      */
     public function update($id, UpdatePermissionRequest $request)
     {
-        $permission = $this->permissionRepository->find($id);
+        $permission = $this->getRepositoryObj()->find($id);
 
         if (empty($permission)) {
             Flash::error('Permission not found');
@@ -118,7 +118,7 @@ class PermissionController extends AppBaseController
             return redirect(route('base.permissions.index'));
         }
 
-        $permission = $this->permissionRepository->update($request->all(), $id);
+        $permission = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success('Permission updated successfully.');
 
@@ -134,7 +134,7 @@ class PermissionController extends AppBaseController
      */
     public function destroy($id)
     {
-        $permission = $this->permissionRepository->find($id);
+        $permission = $this->getRepositoryObj()->find($id);
 
         if (empty($permission)) {
             Flash::error('Permission not found');
@@ -142,7 +142,7 @@ class PermissionController extends AppBaseController
             return redirect(route('base.permissions.index'));
         }
 
-        $this->permissionRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success('Permission deleted successfully.');
 

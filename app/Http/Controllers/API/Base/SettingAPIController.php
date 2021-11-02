@@ -17,11 +17,10 @@ use Response;
 class SettingAPIController extends AppBaseController
 {
     /** @var SettingRepository */
-    private $settingRepository;
+    protected $repository;
 
-    public function __construct(SettingRepository $settingRepo)
+    public function __construct()
     {
-        $this->settingRepository = $settingRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class SettingAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $settings = $this->settingRepository->all(
+        $settings = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class SettingAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $setting = $this->settingRepository->create($input);
+        $setting = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new SettingResource($setting), 'Setting saved successfully');
     }
@@ -154,7 +153,7 @@ class SettingAPIController extends AppBaseController
     public function show($id)
     {
         /** @var Setting $setting */
-        $setting = $this->settingRepository->find($id);
+        $setting = $this->getRepositoryObj()->find($id);
 
         if (empty($setting)) {
             return $this->sendError('Setting not found');
@@ -214,13 +213,13 @@ class SettingAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var Setting $setting */
-        $setting = $this->settingRepository->find($id);
+        $setting = $this->getRepositoryObj()->find($id);
 
         if (empty($setting)) {
             return $this->sendError('Setting not found');
         }
 
-        $setting = $this->settingRepository->update($input, $id);
+        $setting = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new SettingResource($setting), 'Setting updated successfully');
     }
@@ -267,7 +266,7 @@ class SettingAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var Setting $setting */
-        $setting = $this->settingRepository->find($id);
+        $setting = $this->getRepositoryObj()->find($id);
 
         if (empty($setting)) {
             return $this->sendError('Setting not found');

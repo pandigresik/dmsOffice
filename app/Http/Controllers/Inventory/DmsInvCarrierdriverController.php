@@ -13,11 +13,11 @@ use Response;
 class DmsInvCarrierdriverController extends AppBaseController
 {
     /** @var DmsInvCarrierdriverRepository */
-    private $dmsInvCarrierdriverRepository;
+    protected $repository;
 
-    public function __construct(DmsInvCarrierdriverRepository $dmsInvCarrierdriverRepo)
+    public function __construct()
     {
-        $this->dmsInvCarrierdriverRepository = $dmsInvCarrierdriverRepo;
+        $this->repository = DmsInvCarrierdriverRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsInvCarrierdriverController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsInvCarrierdriver = $this->dmsInvCarrierdriverRepository->create($input);
+        $dmsInvCarrierdriver = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsInvCarrierdrivers.singular')]));
 
@@ -65,7 +65,7 @@ class DmsInvCarrierdriverController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsInvCarrierdriver = $this->dmsInvCarrierdriverRepository->find($id);
+        $dmsInvCarrierdriver = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvCarrierdriver)) {
             Flash::error(__('models/dmsInvCarrierdrivers.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsInvCarrierdriverController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsInvCarrierdriver = $this->dmsInvCarrierdriverRepository->find($id);
+        $dmsInvCarrierdriver = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvCarrierdriver)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvCarrierdrivers.singular')]));
@@ -105,7 +105,7 @@ class DmsInvCarrierdriverController extends AppBaseController
      */
     public function update($id, UpdateDmsInvCarrierdriverRequest $request)
     {
-        $dmsInvCarrierdriver = $this->dmsInvCarrierdriverRepository->find($id);
+        $dmsInvCarrierdriver = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvCarrierdriver)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvCarrierdrivers.singular')]));
@@ -113,7 +113,7 @@ class DmsInvCarrierdriverController extends AppBaseController
             return redirect(route('inventory.dmsInvCarrierdrivers.index'));
         }
 
-        $dmsInvCarrierdriver = $this->dmsInvCarrierdriverRepository->update($request->all(), $id);
+        $dmsInvCarrierdriver = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsInvCarrierdrivers.singular')]));
 
@@ -129,7 +129,7 @@ class DmsInvCarrierdriverController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsInvCarrierdriver = $this->dmsInvCarrierdriverRepository->find($id);
+        $dmsInvCarrierdriver = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvCarrierdriver)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvCarrierdrivers.singular')]));
@@ -137,7 +137,7 @@ class DmsInvCarrierdriverController extends AppBaseController
             return redirect(route('inventory.dmsInvCarrierdrivers.index'));
         }
 
-        $this->dmsInvCarrierdriverRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsInvCarrierdrivers.singular')]));
 

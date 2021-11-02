@@ -2,9 +2,9 @@
 
 namespace App\Models\Base;
 
-use App\Models\Base as Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @SWG\Definition(
@@ -137,9 +137,7 @@ class DmsArCustomer extends Model
     ];
 
     /**
-     * Get all of the contactCustomers for the DmsArCustomer
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the contactCustomers for the DmsArCustomer.
      */
     public function contactCustomers(): HasMany
     {
@@ -147,9 +145,7 @@ class DmsArCustomer extends Model
     }
 
     /**
-     * Get all of the locationCustomers for the DmsArCustomer
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the locationCustomers for the DmsArCustomer.
      */
     public function locationCustomers(): HasMany
     {

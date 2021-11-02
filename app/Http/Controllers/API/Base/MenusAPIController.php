@@ -17,11 +17,10 @@ use Response;
 class MenusAPIController extends AppBaseController
 {
     /** @var MenusRepository */
-    private $menusRepository;
+    protected $repository;
 
-    public function __construct(MenusRepository $menusRepo)
+    public function __construct()
     {
-        $this->menusRepository = $menusRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class MenusAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $menus = $this->menusRepository->all(
+        $menus = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class MenusAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $menus = $this->menusRepository->create($input);
+        $menus = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new MenusResource($menus), 'Menus saved successfully');
     }
@@ -154,7 +153,7 @@ class MenusAPIController extends AppBaseController
     public function show($id)
     {
         /** @var Menus $menus */
-        $menus = $this->menusRepository->find($id);
+        $menus = $this->getRepositoryObj()->find($id);
 
         if (empty($menus)) {
             return $this->sendError('Menus not found');
@@ -214,13 +213,13 @@ class MenusAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var Menus $menus */
-        $menus = $this->menusRepository->find($id);
+        $menus = $this->getRepositoryObj()->find($id);
 
         if (empty($menus)) {
             return $this->sendError('Menus not found');
         }
 
-        $menus = $this->menusRepository->update($input, $id);
+        $menus = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new MenusResource($menus), 'Menus updated successfully');
     }
@@ -267,7 +266,7 @@ class MenusAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var Menus $menus */
-        $menus = $this->menusRepository->find($id);
+        $menus = $this->getRepositoryObj()->find($id);
 
         if (empty($menus)) {
             return $this->sendError('Menus not found');

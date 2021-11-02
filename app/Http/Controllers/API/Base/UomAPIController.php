@@ -17,11 +17,10 @@ use Response;
 class UomAPIController extends AppBaseController
 {
     /** @var UomRepository */
-    private $uomRepository;
+    protected $repository;
 
-    public function __construct(UomRepository $uomRepo)
+    public function __construct()
     {
-        $this->uomRepository = $uomRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class UomAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $uoms = $this->uomRepository->all(
+        $uoms = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class UomAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $uom = $this->uomRepository->create($input);
+        $uom = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new UomResource($uom), 'Uom saved successfully');
     }
@@ -154,7 +153,7 @@ class UomAPIController extends AppBaseController
     public function show($id)
     {
         /** @var Uom $uom */
-        $uom = $this->uomRepository->find($id);
+        $uom = $this->getRepositoryObj()->find($id);
 
         if (empty($uom)) {
             return $this->sendError('Uom not found');
@@ -214,13 +213,13 @@ class UomAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var Uom $uom */
-        $uom = $this->uomRepository->find($id);
+        $uom = $this->getRepositoryObj()->find($id);
 
         if (empty($uom)) {
             return $this->sendError('Uom not found');
         }
 
-        $uom = $this->uomRepository->update($input, $id);
+        $uom = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new UomResource($uom), 'Uom updated successfully');
     }
@@ -267,7 +266,7 @@ class UomAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var Uom $uom */
-        $uom = $this->uomRepository->find($id);
+        $uom = $this->getRepositoryObj()->find($id);
 
         if (empty($uom)) {
             return $this->sendError('Uom not found');

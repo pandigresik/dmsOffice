@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ff904eb006ff94fc483d193b2c692eb",
+    "content-hash": "f7d9f9ec41d4a181b800a26a25dcae99",
     "packages": [
         {
             "name": "acaronlex/laravel-calendar",
@@ -834,57 +834,6 @@
                 "source": "https://github.com/php-cache/tag-interop/tree/1.0.1"
             },
             "time": "2020-12-04T14:11:04+00:00"
-        },
-        {
-            "name": "calebporzio/parental",
-            "version": "v0.11.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/calebporzio/parental.git",
-                "reference": "33344dae4069236ea65f525f605ccf08cac47729"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/calebporzio/parental/zipball/33344dae4069236ea65f525f605ccf08cac47729",
-                "reference": "33344dae4069236ea65f525f605ccf08cac47729",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/database": "~5.6.0|~5.7.0|~5.8.0|^6.0.0|^7.0.0|^8.0.0",
-                "illuminate/events": "~5.6.0|~5.7.0|~5.8.0|^6.0.0|^7.0.0|^8.0.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "~3.6.0|~3.7.0|~3.8.0|^4.0|^5.0|^6.0",
-                "phpunit/phpunit": "^7.0|^8.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Parental\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Caleb Porzio",
-                    "email": "calebporzio@gmail.com"
-                }
-            ],
-            "description": "A simple eloquent trait that allows relationships to be accessed through child models.",
-            "support": {
-                "issues": "https://github.com/calebporzio/parental/issues",
-                "source": "https://github.com/calebporzio/parental/tree/master"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/calebporzio",
-                    "type": "github"
-                }
-            ],
-            "time": "2020-09-08T20:04:29+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -2133,94 +2082,6 @@
                 }
             ],
             "time": "2020-12-29T14:50:06+00:00"
-        },
-        {
-            "name": "ekmungai/eloquent-ifrs",
-            "version": "v4.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ekmungai/eloquent-ifrs.git",
-                "reference": "8bfd11b5d9334e153b42019c1e03a2a1d0ce3444"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ekmungai/eloquent-ifrs/zipball/8bfd11b5d9334e153b42019c1e03a2a1d0ce3444",
-                "reference": "8bfd11b5d9334e153b42019c1e03a2a1d0ce3444",
-                "shasum": ""
-            },
-            "require": {
-                "calebporzio/parental": "^0.11.0",
-                "doctrine/dbal": "^2.10|^3.1",
-                "illuminate/auth": "^7.0|^8.40.0",
-                "illuminate/database": "^7.0|^8.40.0",
-                "php": "^7.3|^8.0"
-            },
-            "require-dev": {
-                "facade/ignition": "^2.3.6",
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "fzaninotto/faker": "^1.4",
-                "laravel/legacy-factories": "1.x-dev",
-                "mockery/mockery": "^1.0",
-                "nunomaduro/collision": "^5.0",
-                "nunomaduro/larastan": "^0.7.12",
-                "orchestra/testbench": "^5.0|^6.0",
-                "phpmd/phpmd": "^2.8",
-                "phpunit/phpunit": "9.4.3",
-                "squizlabs/php_codesniffer": "*"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "IFRS\\IFRSServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "IFRS\\": "src"
-                },
-                "classmap": [
-                    "database/factories"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Edward Mungai",
-                    "email": "emungai@karanjamungai.com"
-                }
-            ],
-            "description": "Eloquent Double Entry Accounting with focus on IFRS Compliant Reporting",
-            "keywords": [
-                "Accounting",
-                "eloquent",
-                "laravel",
-                "lumen",
-                "reporting"
-            ],
-            "support": {
-                "issues": "https://github.com/ekmungai/eloquent-ifrs/issues",
-                "source": "https://github.com/ekmungai/eloquent-ifrs"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/[user1",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/ekmungai] # Replace with up to 4 GitHub Sponsors-enabled usernames e.g.",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/user2",
-                    "type": "github"
-                }
-            ],
-            "time": "2021-08-31T17:35:29+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",

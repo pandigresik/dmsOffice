@@ -17,11 +17,10 @@ use Response;
 class UomCategoryAPIController extends AppBaseController
 {
     /** @var UomCategoryRepository */
-    private $uomCategoryRepository;
+    protected $repository;
 
-    public function __construct(UomCategoryRepository $uomCategoryRepo)
+    public function __construct()
     {
-        $this->uomCategoryRepository = $uomCategoryRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class UomCategoryAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $uomCategories = $this->uomCategoryRepository->all(
+        $uomCategories = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class UomCategoryAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $uomCategory = $this->uomCategoryRepository->create($input);
+        $uomCategory = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new UomCategoryResource($uomCategory), 'Uom Category saved successfully');
     }
@@ -154,7 +153,7 @@ class UomCategoryAPIController extends AppBaseController
     public function show($id)
     {
         /** @var UomCategory $uomCategory */
-        $uomCategory = $this->uomCategoryRepository->find($id);
+        $uomCategory = $this->getRepositoryObj()->find($id);
 
         if (empty($uomCategory)) {
             return $this->sendError('Uom Category not found');
@@ -214,13 +213,13 @@ class UomCategoryAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var UomCategory $uomCategory */
-        $uomCategory = $this->uomCategoryRepository->find($id);
+        $uomCategory = $this->getRepositoryObj()->find($id);
 
         if (empty($uomCategory)) {
             return $this->sendError('Uom Category not found');
         }
 
-        $uomCategory = $this->uomCategoryRepository->update($input, $id);
+        $uomCategory = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new UomCategoryResource($uomCategory), 'UomCategory updated successfully');
     }
@@ -267,7 +266,7 @@ class UomCategoryAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var UomCategory $uomCategory */
-        $uomCategory = $this->uomCategoryRepository->find($id);
+        $uomCategory = $this->getRepositoryObj()->find($id);
 
         if (empty($uomCategory)) {
             return $this->sendError('Uom Category not found');

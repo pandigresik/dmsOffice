@@ -2,14 +2,14 @@
 
 namespace App\Models\Base;
 
-use App\Models\Base as Model;
+use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
  *      definition="City",
- *      required={"name"},
+ *      required={"name", "province"},
  *      @SWG\Property(
  *          property="id",
  *          description="id",
@@ -19,6 +19,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *      @SWG\Property(
  *          property="name",
  *          description="name",
+ *          type="string"
+ *      ),
+ *      @SWG\Property(
+ *          property="province",
+ *          description="province",
  *          type="string"
  *      )
  * )
@@ -36,6 +41,7 @@ class City extends Model
 
     public $fillable = [
         'name',
+        'province',
     ];
 
     /**
@@ -45,6 +51,7 @@ class City extends Model
      */
     public static $rules = [
         'name' => 'required|string|max:50',
+        'province' => 'required|string|max:60',
     ];
 
     protected $dates = ['deleted_at'];
@@ -57,21 +64,6 @@ class City extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
+        'province' => 'string',
     ];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function routeTrips()
-    {
-        return $this->hasMany(\App\Models\Base\RouteTrip::class, 'destination');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function routeTrip1s()
-    {
-        return $this->hasMany(\App\Models\Base\RouteTrip::class, 'origin');
-    }
 }

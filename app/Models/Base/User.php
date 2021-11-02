@@ -4,10 +4,8 @@ namespace App\Models\Base;
 
 use App\Traits\SearchModelTrait;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use IFRS\Interfaces\Recyclable;
-use IFRS\Traits\IFRSUser;
-use IFRS\Traits\Recycling;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasPermissions;
@@ -63,10 +61,8 @@ use Spatie\Permission\Traits\HasRoles;
  *      )
  * )
  */
-class User extends Authenticatable implements Recyclable
+class User extends Authenticatable
 {
-    use IFRSUser;
-    use Recycling;
     use SoftDeletes;
     use HasFactory;
     use HasRoles;
@@ -84,6 +80,7 @@ class User extends Authenticatable implements Recyclable
         'email_verified_at',
         'password',
         'remember_token',
+        'entity_id',
     ];
 
     /**
@@ -116,4 +113,12 @@ class User extends Authenticatable implements Recyclable
         'password' => 'string',
         'remember_token' => 'string',
     ];
+
+    /**
+     * Get the company that owns the User.
+     */
+    public function entity(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'id', 'entity_id');
+    }
 }

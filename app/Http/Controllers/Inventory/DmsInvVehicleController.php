@@ -13,11 +13,11 @@ use Response;
 class DmsInvVehicleController extends AppBaseController
 {
     /** @var DmsInvVehicleRepository */
-    private $dmsInvVehicleRepository;
+    protected $repository;
 
-    public function __construct(DmsInvVehicleRepository $dmsInvVehicleRepo)
+    public function __construct()
     {
-        $this->dmsInvVehicleRepository = $dmsInvVehicleRepo;
+        $this->repository = DmsInvVehicleRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsInvVehicleController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsInvVehicle = $this->dmsInvVehicleRepository->create($input);
+        $dmsInvVehicle = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsInvVehicles.singular')]));
 
@@ -65,7 +65,7 @@ class DmsInvVehicleController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsInvVehicle = $this->dmsInvVehicleRepository->find($id);
+        $dmsInvVehicle = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvVehicle)) {
             Flash::error(__('models/dmsInvVehicles.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsInvVehicleController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsInvVehicle = $this->dmsInvVehicleRepository->find($id);
+        $dmsInvVehicle = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvVehicle)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvVehicles.singular')]));
@@ -105,7 +105,7 @@ class DmsInvVehicleController extends AppBaseController
      */
     public function update($id, UpdateDmsInvVehicleRequest $request)
     {
-        $dmsInvVehicle = $this->dmsInvVehicleRepository->find($id);
+        $dmsInvVehicle = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvVehicle)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvVehicles.singular')]));
@@ -113,7 +113,7 @@ class DmsInvVehicleController extends AppBaseController
             return redirect(route('inventory.dmsInvVehicles.index'));
         }
 
-        $dmsInvVehicle = $this->dmsInvVehicleRepository->update($request->all(), $id);
+        $dmsInvVehicle = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsInvVehicles.singular')]));
 
@@ -129,7 +129,7 @@ class DmsInvVehicleController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsInvVehicle = $this->dmsInvVehicleRepository->find($id);
+        $dmsInvVehicle = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvVehicle)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvVehicles.singular')]));
@@ -137,7 +137,7 @@ class DmsInvVehicleController extends AppBaseController
             return redirect(route('inventory.dmsInvVehicles.index'));
         }
 
-        $this->dmsInvVehicleRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsInvVehicles.singular')]));
 

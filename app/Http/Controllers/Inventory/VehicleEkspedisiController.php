@@ -3,29 +3,27 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\VehicleEkspedisiDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateVehicleEkspedisiRequest;
 use App\Http\Requests\Inventory\UpdateVehicleEkspedisiRequest;
-use App\Repositories\Inventory\VehicleEkspedisiRepository;
 use App\Repositories\Inventory\DmsInvVehicleRepository;
+use App\Repositories\Inventory\VehicleEkspedisiRepository;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class VehicleEkspedisiController extends AppBaseController
 {
-    /** @var  VehicleEkspedisiRepository */
-    private $vehicleEkspedisiRepository;
+    /** @var VehicleEkspedisiRepository */
+    protected $repository;
 
-    public function __construct(VehicleEkspedisiRepository $vehicleEkspedisiRepo)
+    public function __construct()
     {
-        $this->vehicleEkspedisiRepository = $vehicleEkspedisiRepo;
+        $this->repository = VehicleEkspedisiRepository::class;
     }
 
     /**
      * Display a listing of the VehicleEkspedisi.
      *
-     * @param VehicleEkspedisiDataTable $vehicleEkspedisiDataTable
      * @return Response
      */
     public function index(VehicleEkspedisiDataTable $vehicleEkspedisiDataTable)
@@ -46,15 +44,13 @@ class VehicleEkspedisiController extends AppBaseController
     /**
      * Store a newly created VehicleEkspedisi in storage.
      *
-     * @param CreateVehicleEkspedisiRequest $request
-     *
      * @return Response
      */
     public function store(CreateVehicleEkspedisiRequest $request)
     {
         $input = $request->all();
 
-        $vehicleEkspedisi = $this->vehicleEkspedisiRepository->create($input);
+        $vehicleEkspedisi = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/vehicleEkspedisis.singular')]));
 
@@ -64,13 +60,13 @@ class VehicleEkspedisiController extends AppBaseController
     /**
      * Display the specified VehicleEkspedisi.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function show($id)
     {
-        $vehicleEkspedisi = $this->vehicleEkspedisiRepository->find($id);
+        $vehicleEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($vehicleEkspedisi)) {
             Flash::error(__('models/vehicleEkspedisis.singular').' '.__('messages.not_found'));
@@ -84,13 +80,13 @@ class VehicleEkspedisiController extends AppBaseController
     /**
      * Show the form for editing the specified VehicleEkspedisi.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function edit($id)
     {
-        $vehicleEkspedisi = $this->vehicleEkspedisiRepository->find($id);
+        $vehicleEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($vehicleEkspedisi)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vehicleEkspedisis.singular')]));
@@ -104,14 +100,13 @@ class VehicleEkspedisiController extends AppBaseController
     /**
      * Update the specified VehicleEkspedisi in storage.
      *
-     * @param  int              $id
-     * @param UpdateVehicleEkspedisiRequest $request
+     * @param int $id
      *
      * @return Response
      */
     public function update($id, UpdateVehicleEkspedisiRequest $request)
     {
-        $vehicleEkspedisi = $this->vehicleEkspedisiRepository->find($id);
+        $vehicleEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($vehicleEkspedisi)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vehicleEkspedisis.singular')]));
@@ -119,7 +114,7 @@ class VehicleEkspedisiController extends AppBaseController
             return redirect(route('inventory.vehicleEkspedisis.index'));
         }
 
-        $vehicleEkspedisi = $this->vehicleEkspedisiRepository->update($request->all(), $id);
+        $vehicleEkspedisi = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/vehicleEkspedisis.singular')]));
 
@@ -129,13 +124,13 @@ class VehicleEkspedisiController extends AppBaseController
     /**
      * Remove the specified VehicleEkspedisi from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function destroy($id)
     {
-        $vehicleEkspedisi = $this->vehicleEkspedisiRepository->find($id);
+        $vehicleEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($vehicleEkspedisi)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vehicleEkspedisis.singular')]));
@@ -143,7 +138,7 @@ class VehicleEkspedisiController extends AppBaseController
             return redirect(route('inventory.vehicleEkspedisis.index'));
         }
 
-        $this->vehicleEkspedisiRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/vehicleEkspedisis.singular')]));
 
@@ -151,16 +146,18 @@ class VehicleEkspedisiController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model VehicleEkspedisi from storage.         
+     * Provide options item based on relationship model VehicleEkspedisi from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $dmsInvVehicle = new DmsInvVehicleRepository(app());
+
         return [
-            'dmsInvVehicleItems' => ['' => __('crud.option.dmsInvVehicle_placeholder')] + $dmsInvVehicle->pluck()            
+            'dmsInvVehicleItems' => ['' => __('crud.option.dmsInvVehicle_placeholder')] + $dmsInvVehicle->pluck(),
         ];
     }
 }

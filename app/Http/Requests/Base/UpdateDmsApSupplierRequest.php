@@ -45,6 +45,7 @@ class UpdateDmsApSupplierRequest extends FormRequest
         $keys = (new DmsApSupplier())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         $keys = array_merge(['contactSuppliers', 'locationSuppliers'], $keys);
+
         return parent::all($keys);
     }
 }

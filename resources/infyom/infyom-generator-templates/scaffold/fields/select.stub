@@ -2,6 +2,6 @@
 <div class="form-group row">
     {!! Form::label('$FIELD_NAME$', '$FIELD_NAME_TITLE$:', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9">
-    {!! Form::select('$FIELD_NAME$', $INPUT_ARR$, null, ['class' => 'form-control select2']) !!}
+    {!! Form::select('$FIELD_NAME$', $INPUT_ARR$, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
 </div>
 </div>

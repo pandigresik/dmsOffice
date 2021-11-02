@@ -3,38 +3,38 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\ContactCustomerDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateContactCustomerRequest;
 use App\Http\Requests\Base\UpdateContactCustomerRequest;
 use App\Repositories\Base\ContactCustomerRepository;
 use App\Repositories\Base\DmsArCustomerRepository;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Response;
 
 class ContactCustomerController extends AppBaseController
 {
-    /** @var  ContactCustomerRepository */
-    private $contactCustomerRepository;
+    /** @var ContactCustomerRepository */
+    protected $repository;
 
-    public function __construct(ContactCustomerRepository $contactCustomerRepo)
+    public function __construct()
     {
-        $this->contactCustomerRepository = $contactCustomerRepo;
+        $this->repository = ContactCustomerRepository::class;
     }
 
     /**
      * Display a listing of the ContactCustomer.
      *
      * @param ContactCustomerDataTable $contactCustomerDataTable
+     *
      * @return Response
      */
     public function index(Request $request)
     {
-        $contacts = $this->contactCustomerRepository->all(['dms_ar_customer_id' => $request->get('dms_ar_customer_id')]);
+        $contacts = $this->getRepositoryObj()->all(['dms_ar_customer_id' => $request->get('dms_ar_customer_id')]);
         $buttonView = view('base.dms_ar_customers.partials.contact_button', ['json' => [], 'url' => route('base.contactCustomers.create')])->render();
 
-        return view('base.contact_customers.index')->with(['contacts' => $contacts, 'buttonView' => $buttonView]);        
+        return view('base.contact_customers.index')->with(['contacts' => $contacts, 'buttonView' => $buttonView]);
     }
 
     /**
@@ -48,13 +48,11 @@ class ContactCustomerController extends AppBaseController
 
         return view('base.contact_customers.create')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'contactCustomer['.$idForm.']'])
-        ;        
+        ;
     }
 
     /**
      * Store a newly created ContactCustomer in storage.
-     *
-     * @param CreateContactCustomerRequest $request
      *
      * @return Response
      */
@@ -62,7 +60,7 @@ class ContactCustomerController extends AppBaseController
     {
         $input = $request->all();
 
-        $contactCustomer = $this->contactCustomerRepository->create($input);
+        $contactCustomer = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/contactCustomers.singular')]));
 
@@ -72,13 +70,13 @@ class ContactCustomerController extends AppBaseController
     /**
      * Display the specified ContactCustomer.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function show($id)
     {
-        $contactCustomer = $this->contactCustomerRepository->find($id);
+        $contactCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($contactCustomer)) {
             Flash::error(__('models/contactCustomers.singular').' '.__('messages.not_found'));
@@ -92,13 +90,13 @@ class ContactCustomerController extends AppBaseController
     /**
      * Show the form for editing the specified ContactCustomer.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function edit($id)
     {
-        $contactCustomer = $this->contactCustomerRepository->find($id);
+        $contactCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($contactCustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contactCustomers.singular')]));
@@ -112,14 +110,13 @@ class ContactCustomerController extends AppBaseController
     /**
      * Update the specified ContactCustomer in storage.
      *
-     * @param  int              $id
-     * @param UpdateContactCustomerRequest $request
+     * @param int $id
      *
      * @return Response
      */
     public function update($id, UpdateContactCustomerRequest $request)
     {
-        $contactCustomer = $this->contactCustomerRepository->find($id);
+        $contactCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($contactCustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contactCustomers.singular')]));
@@ -127,7 +124,7 @@ class ContactCustomerController extends AppBaseController
             return redirect(route('base.contactCustomers.index'));
         }
 
-        $contactCustomer = $this->contactCustomerRepository->update($request->all(), $id);
+        $contactCustomer = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/contactCustomers.singular')]));
 
@@ -137,13 +134,13 @@ class ContactCustomerController extends AppBaseController
     /**
      * Remove the specified ContactCustomer from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function destroy($id)
     {
-        $contactCustomer = $this->contactCustomerRepository->find($id);
+        $contactCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($contactCustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/contactCustomers.singular')]));
@@ -151,7 +148,7 @@ class ContactCustomerController extends AppBaseController
             return redirect(route('base.contactCustomers.index'));
         }
 
-        $this->contactCustomerRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/contactCustomers.singular')]));
 
@@ -159,16 +156,17 @@ class ContactCustomerController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model ContactCustomer from storage.         
+     * Provide options item based on relationship model ContactCustomer from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         //$dmsArCustomer = new DmsArCustomerRepository(app());
         return [
-            // 'dmsArCustomerItems' => ['' => __('crud.option.dmsArCustomer_placeholder')] + $dmsArCustomer->pluck()            
+            // 'dmsArCustomerItems' => ['' => __('crud.option.dmsArCustomer_placeholder')] + $dmsArCustomer->pluck()
         ];
     }
 }

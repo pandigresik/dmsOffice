@@ -14,11 +14,11 @@ use Response;
 class ProductController extends AppBaseController
 {
     /** @var ProductRepository */
-    private $productRepository;
+    protected $repository;
 
-    public function __construct(ProductRepository $productRepo)
+    public function __construct()
     {
-        $this->productRepository = $productRepo;
+        $this->repository = ProductRepository::class;
     }
 
     /**
@@ -50,7 +50,7 @@ class ProductController extends AppBaseController
     {
         $input = $request->all();
 
-        $product = $this->productRepository->create($input);
+        $product = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/products.singular')]));
 
@@ -66,7 +66,7 @@ class ProductController extends AppBaseController
      */
     public function show($id)
     {
-        $product = $this->productRepository->find($id);
+        $product = $this->getRepositoryObj()->find($id);
 
         if (empty($product)) {
             Flash::error(__('models/products.singular').' '.__('messages.not_found'));
@@ -86,7 +86,7 @@ class ProductController extends AppBaseController
      */
     public function edit($id)
     {
-        $product = $this->productRepository->find($id);
+        $product = $this->getRepositoryObj()->find($id);
 
         if (empty($product)) {
             Flash::error(__('messages.not_found', ['model' => __('models/products.singular')]));
@@ -106,7 +106,7 @@ class ProductController extends AppBaseController
      */
     public function update($id, UpdateProductRequest $request)
     {
-        $product = $this->productRepository->find($id);
+        $product = $this->getRepositoryObj()->find($id);
 
         if (empty($product)) {
             Flash::error(__('messages.not_found', ['model' => __('models/products.singular')]));
@@ -114,7 +114,7 @@ class ProductController extends AppBaseController
             return redirect(route('base.products.index'));
         }
 
-        $product = $this->productRepository->update($request->all(), $id);
+        $product = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/products.singular')]));
 
@@ -130,7 +130,7 @@ class ProductController extends AppBaseController
      */
     public function destroy($id)
     {
-        $product = $this->productRepository->find($id);
+        $product = $this->getRepositoryObj()->find($id);
 
         if (empty($product)) {
             Flash::error(__('messages.not_found', ['model' => __('models/products.singular')]));
@@ -138,7 +138,7 @@ class ProductController extends AppBaseController
             return redirect(route('base.products.index'));
         }
 
-        $this->productRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/products.singular')]));
 

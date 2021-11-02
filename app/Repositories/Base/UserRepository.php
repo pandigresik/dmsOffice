@@ -4,6 +4,7 @@ namespace App\Repositories\Base;
 
 use App\Models\Base\User;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Class UserRepository.
@@ -47,7 +48,8 @@ class UserRepository extends BaseRepository
      * @return Model
      */
     public function create($input)
-    {        
+    {   
+        $input['password'] = Hash::make($input['password']);
         $model = parent::create($input);
         $roles = $input['roles'] ?? [];
         $model->syncRoles($roles);
@@ -63,7 +65,7 @@ class UserRepository extends BaseRepository
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
     public function update($input, $id)
-    {                   
+    {        
         $model = parent::update($input, $id);
         $roles = $input['roles'] ?? [];
         $model->syncRoles($roles);

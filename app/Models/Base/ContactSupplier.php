@@ -2,7 +2,7 @@
 
 namespace App\Models\Base;
 
-use App\Models\Base as Model;
+use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -74,7 +74,6 @@ class ContactSupplier extends Model
     const UPDATED_AT = 'updated_at';
 
     public $table = 'contact_supplier';
-    protected $appends = ['state_form'];
     public $fillable = [
         'dms_ap_supplier_id',
         'name',
@@ -103,6 +102,7 @@ class ContactSupplier extends Model
         'address' => 'nullable|string|max:255',
         'city' => 'required|string|max:50',
     ];
+    protected $appends = ['state_form'];
 
     protected $dates = ['deleted_at'];
 
@@ -133,7 +133,7 @@ class ContactSupplier extends Model
     }
 
     /**
-     * Determine state form
+     * Determine state form.
      *
      * @return bool
      */

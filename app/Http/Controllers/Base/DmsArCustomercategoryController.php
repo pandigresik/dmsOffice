@@ -13,11 +13,11 @@ use Response;
 class DmsArCustomercategoryController extends AppBaseController
 {
     /** @var DmsArCustomercategoryRepository */
-    private $dmsArCustomercategoryRepository;
+    protected $repository;
 
-    public function __construct(DmsArCustomercategoryRepository $dmsArCustomercategoryRepo)
+    public function __construct()
     {
-        $this->dmsArCustomercategoryRepository = $dmsArCustomercategoryRepo;
+        $this->repository = DmsArCustomercategoryRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsArCustomercategoryController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsArCustomercategory = $this->dmsArCustomercategoryRepository->create($input);
+        $dmsArCustomercategory = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsArCustomercategories.singular')]));
 
@@ -65,7 +65,7 @@ class DmsArCustomercategoryController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsArCustomercategory = $this->dmsArCustomercategoryRepository->find($id);
+        $dmsArCustomercategory = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomercategory)) {
             Flash::error(__('models/dmsArCustomercategories.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsArCustomercategoryController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsArCustomercategory = $this->dmsArCustomercategoryRepository->find($id);
+        $dmsArCustomercategory = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomercategory)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomercategories.singular')]));
@@ -105,7 +105,7 @@ class DmsArCustomercategoryController extends AppBaseController
      */
     public function update($id, UpdateDmsArCustomercategoryRequest $request)
     {
-        $dmsArCustomercategory = $this->dmsArCustomercategoryRepository->find($id);
+        $dmsArCustomercategory = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomercategory)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomercategories.singular')]));
@@ -113,7 +113,7 @@ class DmsArCustomercategoryController extends AppBaseController
             return redirect(route('base.dmsArCustomercategories.index'));
         }
 
-        $dmsArCustomercategory = $this->dmsArCustomercategoryRepository->update($request->all(), $id);
+        $dmsArCustomercategory = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsArCustomercategories.singular')]));
 
@@ -129,7 +129,7 @@ class DmsArCustomercategoryController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsArCustomercategory = $this->dmsArCustomercategoryRepository->find($id);
+        $dmsArCustomercategory = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomercategory)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomercategories.singular')]));
@@ -137,7 +137,7 @@ class DmsArCustomercategoryController extends AppBaseController
             return redirect(route('base.dmsArCustomercategories.index'));
         }
 
-        $this->dmsArCustomercategoryRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsArCustomercategories.singular')]));
 

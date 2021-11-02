@@ -61,6 +61,6 @@ class AppServiceProvider extends ServiceProvider
         // register observer
         Menus::observe(MenusObserver::class);
         Product::observe(ProductObserver::class);
-        Warehouse::observe(WarehouseObserver::class);
+        //Warehouse::observe(WarehouseObserver::class);
     }
 }

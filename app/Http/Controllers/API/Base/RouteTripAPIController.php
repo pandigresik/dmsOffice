@@ -17,11 +17,10 @@ use Response;
 class RouteTripAPIController extends AppBaseController
 {
     /** @var RouteTripRepository */
-    private $routeTripRepository;
+    protected $repository;
 
-    public function __construct(RouteTripRepository $routeTripRepo)
+    public function __construct()
     {
-        $this->routeTripRepository = $routeTripRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class RouteTripAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $routeTrips = $this->routeTripRepository->all(
+        $routeTrips = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class RouteTripAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $routeTrip = $this->routeTripRepository->create($input);
+        $routeTrip = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new RouteTripResource($routeTrip), 'Route Trip saved successfully');
     }
@@ -154,7 +153,7 @@ class RouteTripAPIController extends AppBaseController
     public function show($id)
     {
         /** @var RouteTrip $routeTrip */
-        $routeTrip = $this->routeTripRepository->find($id);
+        $routeTrip = $this->getRepositoryObj()->find($id);
 
         if (empty($routeTrip)) {
             return $this->sendError('Route Trip not found');
@@ -214,13 +213,13 @@ class RouteTripAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var RouteTrip $routeTrip */
-        $routeTrip = $this->routeTripRepository->find($id);
+        $routeTrip = $this->getRepositoryObj()->find($id);
 
         if (empty($routeTrip)) {
             return $this->sendError('Route Trip not found');
         }
 
-        $routeTrip = $this->routeTripRepository->update($input, $id);
+        $routeTrip = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new RouteTripResource($routeTrip), 'RouteTrip updated successfully');
     }
@@ -267,7 +266,7 @@ class RouteTripAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var RouteTrip $routeTrip */
-        $routeTrip = $this->routeTripRepository->find($id);
+        $routeTrip = $this->getRepositoryObj()->find($id);
 
         if (empty($routeTrip)) {
             return $this->sendError('Route Trip not found');

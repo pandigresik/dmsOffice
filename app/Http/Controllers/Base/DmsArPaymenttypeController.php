@@ -13,11 +13,11 @@ use Response;
 class DmsArPaymenttypeController extends AppBaseController
 {
     /** @var DmsArPaymenttypeRepository */
-    private $dmsArPaymenttypeRepository;
+    protected $repository;
 
-    public function __construct(DmsArPaymenttypeRepository $dmsArPaymenttypeRepo)
+    public function __construct()
     {
-        $this->dmsArPaymenttypeRepository = $dmsArPaymenttypeRepo;
+        $this->repository = DmsArPaymenttypeRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsArPaymenttypeController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsArPaymenttype = $this->dmsArPaymenttypeRepository->create($input);
+        $dmsArPaymenttype = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsArPaymenttypes.singular')]));
 
@@ -65,7 +65,7 @@ class DmsArPaymenttypeController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsArPaymenttype = $this->dmsArPaymenttypeRepository->find($id);
+        $dmsArPaymenttype = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPaymenttype)) {
             Flash::error(__('models/dmsArPaymenttypes.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsArPaymenttypeController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsArPaymenttype = $this->dmsArPaymenttypeRepository->find($id);
+        $dmsArPaymenttype = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPaymenttype)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArPaymenttypes.singular')]));
@@ -105,7 +105,7 @@ class DmsArPaymenttypeController extends AppBaseController
      */
     public function update($id, UpdateDmsArPaymenttypeRequest $request)
     {
-        $dmsArPaymenttype = $this->dmsArPaymenttypeRepository->find($id);
+        $dmsArPaymenttype = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPaymenttype)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArPaymenttypes.singular')]));
@@ -113,7 +113,7 @@ class DmsArPaymenttypeController extends AppBaseController
             return redirect(route('base.dmsArPaymenttypes.index'));
         }
 
-        $dmsArPaymenttype = $this->dmsArPaymenttypeRepository->update($request->all(), $id);
+        $dmsArPaymenttype = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsArPaymenttypes.singular')]));
 
@@ -129,7 +129,7 @@ class DmsArPaymenttypeController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsArPaymenttype = $this->dmsArPaymenttypeRepository->find($id);
+        $dmsArPaymenttype = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPaymenttype)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArPaymenttypes.singular')]));
@@ -137,7 +137,7 @@ class DmsArPaymenttypeController extends AppBaseController
             return redirect(route('base.dmsArPaymenttypes.index'));
         }
 
-        $this->dmsArPaymenttypeRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsArPaymenttypes.singular')]));
 

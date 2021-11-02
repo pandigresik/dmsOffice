@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\LocationEkspedisi;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateLocationEkspedisiRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateLocationEkspedisiRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'location_ekspedisi-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateLocationEkspedisiRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new LocationEkspedisi)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new LocationEkspedisi())->fillable;
+
         return parent::all($keys);
     }
 }

@@ -17,11 +17,10 @@ use Response;
 class VehicleAPIController extends AppBaseController
 {
     /** @var VehicleRepository */
-    private $vehicleRepository;
+    protected $repository;
 
-    public function __construct(VehicleRepository $vehicleRepo)
+    public function __construct()
     {
-        $this->vehicleRepository = $vehicleRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class VehicleAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $vehicles = $this->vehicleRepository->all(
+        $vehicles = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class VehicleAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $vehicle = $this->vehicleRepository->create($input);
+        $vehicle = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new VehicleResource($vehicle), 'Vehicle saved successfully');
     }
@@ -154,7 +153,7 @@ class VehicleAPIController extends AppBaseController
     public function show($id)
     {
         /** @var Vehicle $vehicle */
-        $vehicle = $this->vehicleRepository->find($id);
+        $vehicle = $this->getRepositoryObj()->find($id);
 
         if (empty($vehicle)) {
             return $this->sendError('Vehicle not found');
@@ -214,13 +213,13 @@ class VehicleAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var Vehicle $vehicle */
-        $vehicle = $this->vehicleRepository->find($id);
+        $vehicle = $this->getRepositoryObj()->find($id);
 
         if (empty($vehicle)) {
             return $this->sendError('Vehicle not found');
         }
 
-        $vehicle = $this->vehicleRepository->update($input, $id);
+        $vehicle = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new VehicleResource($vehicle), 'Vehicle updated successfully');
     }
@@ -267,7 +266,7 @@ class VehicleAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var Vehicle $vehicle */
-        $vehicle = $this->vehicleRepository->find($id);
+        $vehicle = $this->getRepositoryObj()->find($id);
 
         if (empty($vehicle)) {
             return $this->sendError('Vehicle not found');

@@ -9,8 +9,8 @@ use Response;
 
 class SelectAjaxController extends AppBaseController
 {
+    protected $repository;
     private $request;
-    private $repository;
 
     public function __construct(Request $request)
     {

@@ -13,11 +13,11 @@ use Response;
 class DmsArPaymenttermController extends AppBaseController
 {
     /** @var DmsArPaymenttermRepository */
-    private $dmsArPaymenttermRepository;
+    protected $repository;
 
-    public function __construct(DmsArPaymenttermRepository $dmsArPaymenttermRepo)
+    public function __construct()
     {
-        $this->dmsArPaymenttermRepository = $dmsArPaymenttermRepo;
+        $this->repository = DmsArPaymenttermRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsArPaymenttermController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsArPaymentterm = $this->dmsArPaymenttermRepository->create($input);
+        $dmsArPaymentterm = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsArPaymentterms.singular')]));
 
@@ -65,7 +65,7 @@ class DmsArPaymenttermController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsArPaymentterm = $this->dmsArPaymenttermRepository->find($id);
+        $dmsArPaymentterm = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPaymentterm)) {
             Flash::error(__('models/dmsArPaymentterms.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsArPaymenttermController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsArPaymentterm = $this->dmsArPaymenttermRepository->find($id);
+        $dmsArPaymentterm = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPaymentterm)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArPaymentterms.singular')]));
@@ -105,7 +105,7 @@ class DmsArPaymenttermController extends AppBaseController
      */
     public function update($id, UpdateDmsArPaymenttermRequest $request)
     {
-        $dmsArPaymentterm = $this->dmsArPaymenttermRepository->find($id);
+        $dmsArPaymentterm = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPaymentterm)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArPaymentterms.singular')]));
@@ -113,7 +113,7 @@ class DmsArPaymenttermController extends AppBaseController
             return redirect(route('base.dmsArPaymentterms.index'));
         }
 
-        $dmsArPaymentterm = $this->dmsArPaymenttermRepository->update($request->all(), $id);
+        $dmsArPaymentterm = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsArPaymentterms.singular')]));
 
@@ -129,7 +129,7 @@ class DmsArPaymenttermController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsArPaymentterm = $this->dmsArPaymenttermRepository->find($id);
+        $dmsArPaymentterm = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPaymentterm)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArPaymentterms.singular')]));
@@ -137,7 +137,7 @@ class DmsArPaymenttermController extends AppBaseController
             return redirect(route('base.dmsArPaymentterms.index'));
         }
 
-        $this->dmsArPaymenttermRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsArPaymentterms.singular')]));
 

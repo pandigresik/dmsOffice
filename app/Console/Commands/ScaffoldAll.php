@@ -13,7 +13,7 @@ class ScaffoldAll extends Command
      *
      * @var string
      */
-    protected $signature = 'scaffold.all:generate {--filepath=} {--table=} {--module=} ';
+    protected $signature = 'scaffold.all:generate {--filepath=} {--table=} {--module=} {--connection=}';
 
     /**
      * The console command description.
@@ -42,7 +42,7 @@ class ScaffoldAll extends Command
         $filepath = $this->option('filepath');
         $table = $this->option('table');
         $module = $this->option('module');
-
+        $connection = $this->option('connection');
         $jsonData = [];
         if (!empty($filepath)) {
             $this->info($filepath);
@@ -74,6 +74,9 @@ class ScaffoldAll extends Command
                 $tmpJson['module'] = $module;
             }
 
+            if(!empty($connection)){
+                $tmpJson['connection'] = $connection;
+            }
             if (!empty($tmpJson)) {
                 array_push($jsonData, $tmpJson);
             }
@@ -101,6 +104,9 @@ class ScaffoldAll extends Command
                 //infyom:scaffold Departement --fromTable --tableName=departements --ignoreFields= --skip=dump-autoload --prefix=master
                 $model = ucfirst(Str::camel($t));
                 $prefixOption = $json['module'] ? ['--prefix' => $json['module']] : [];
+                if($json['connection']){
+                    $prefixOption['--connection'] = $json['connection'];
+                }                
                 $this->call('infyom:scaffold', array_merge($prefixOption, [
                     'model' => $model,
                     '--fromTable' => true,

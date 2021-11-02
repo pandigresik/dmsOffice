@@ -15,11 +15,10 @@ use stdClass;
 class VendorContactController extends AppBaseController
 {
     /** @var VendorContactRepository */
-    private $vendorContactRepository;
+    protected $repository;
 
-    public function __construct(VendorContactRepository $vendorContactRepo)
+    public function __construct()
     {
-        $this->vendorContactRepository = $vendorContactRepo;
     }
 
     /**
@@ -29,7 +28,7 @@ class VendorContactController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $contacts = $this->vendorContactRepository->all(['vendor_id' => $request->get('vendor_id')]);
+        $contacts = $this->getRepositoryObj()->all(['vendor_id' => $request->get('vendor_id')]);
         $buttonView = view('base.vendors.partials.contact_button', ['json' => [], 'url' => route('base.vendorsContacts.create')])->render();
 
         return view('base.vendor_contacts.index')->with(['contacts' => $contacts, 'buttonView' => $buttonView]);
@@ -58,7 +57,7 @@ class VendorContactController extends AppBaseController
     {
         $input = $request->all();
 
-        $vendorContact = $this->vendorContactRepository->create($input);
+        $vendorContact = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/vendorContacts.singular')]));
 
@@ -74,7 +73,7 @@ class VendorContactController extends AppBaseController
      */
     public function show($id)
     {
-        $vendorContact = $this->vendorContactRepository->find($id);
+        $vendorContact = $this->getRepositoryObj()->find($id);
 
         if (empty($vendorContact)) {
             Flash::error(__('models/vendorContacts.singular').' '.__('messages.not_found'));
@@ -94,7 +93,7 @@ class VendorContactController extends AppBaseController
      */
     public function edit($id)
     {
-        $vendorContact = $this->vendorContactRepository->find($id);
+        $vendorContact = $this->getRepositoryObj()->find($id);
 
         if (empty($vendorContact)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendorContacts.singular')]));
@@ -120,7 +119,7 @@ class VendorContactController extends AppBaseController
      */
     public function update($id, UpdateVendorContactRequest $request)
     {
-        $vendorContact = $this->vendorContactRepository->find($id);
+        $vendorContact = $this->getRepositoryObj()->find($id);
 
         if (empty($vendorContact)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendorContacts.singular')]));
@@ -128,7 +127,7 @@ class VendorContactController extends AppBaseController
             return redirect(route('base.vendorsContacts.index'));
         }
 
-        $vendorContact = $this->vendorContactRepository->update($request->all(), $id);
+        $vendorContact = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/vendorContacts.singular')]));
 
@@ -144,7 +143,7 @@ class VendorContactController extends AppBaseController
      */
     public function destroy($id)
     {
-        $vendorContact = $this->vendorContactRepository->find($id);
+        $vendorContact = $this->getRepositoryObj()->find($id);
 
         if (empty($vendorContact)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendorContacts.singular')]));
@@ -152,7 +151,7 @@ class VendorContactController extends AppBaseController
             return redirect(route('base.vendorsContacts.index'));
         }
 
-        $this->vendorContactRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/vendorContacts.singular')]));
 

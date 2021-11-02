@@ -17,11 +17,10 @@ use Response;
 class StockInventoryAPIController extends AppBaseController
 {
     /** @var StockInventoryRepository */
-    private $stockInventoryRepository;
+    protected $repository;
 
-    public function __construct(StockInventoryRepository $stockInventoryRepo)
+    public function __construct()
     {
-        $this->stockInventoryRepository = $stockInventoryRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class StockInventoryAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $stockInventories = $this->stockInventoryRepository->all(
+        $stockInventories = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class StockInventoryAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $stockInventory = $this->stockInventoryRepository->create($input);
+        $stockInventory = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new StockInventoryResource($stockInventory), 'Stock Inventory saved successfully');
     }
@@ -154,7 +153,7 @@ class StockInventoryAPIController extends AppBaseController
     public function show($id)
     {
         /** @var StockInventory $stockInventory */
-        $stockInventory = $this->stockInventoryRepository->find($id);
+        $stockInventory = $this->getRepositoryObj()->find($id);
 
         if (empty($stockInventory)) {
             return $this->sendError('Stock Inventory not found');
@@ -214,13 +213,13 @@ class StockInventoryAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var StockInventory $stockInventory */
-        $stockInventory = $this->stockInventoryRepository->find($id);
+        $stockInventory = $this->getRepositoryObj()->find($id);
 
         if (empty($stockInventory)) {
             return $this->sendError('Stock Inventory not found');
         }
 
-        $stockInventory = $this->stockInventoryRepository->update($input, $id);
+        $stockInventory = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new StockInventoryResource($stockInventory), 'StockInventory updated successfully');
     }
@@ -267,7 +266,7 @@ class StockInventoryAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var StockInventory $stockInventory */
-        $stockInventory = $this->stockInventoryRepository->find($id);
+        $stockInventory = $this->getRepositoryObj()->find($id);
 
         if (empty($stockInventory)) {
             return $this->sendError('Stock Inventory not found');

@@ -13,11 +13,11 @@ use Response;
 class DmsInvProductController extends AppBaseController
 {
     /** @var DmsInvProductRepository */
-    private $dmsInvProductRepository;
+    protected $repository;
 
-    public function __construct(DmsInvProductRepository $dmsInvProductRepo)
+    public function __construct()
     {
-        $this->dmsInvProductRepository = $dmsInvProductRepo;
+        $this->repository = DmsInvProductRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsInvProductController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsInvProduct = $this->dmsInvProductRepository->create($input);
+        $dmsInvProduct = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsInvProducts.singular')]));
 
@@ -65,7 +65,7 @@ class DmsInvProductController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsInvProduct = $this->dmsInvProductRepository->find($id);
+        $dmsInvProduct = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProduct)) {
             Flash::error(__('models/dmsInvProducts.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsInvProductController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsInvProduct = $this->dmsInvProductRepository->find($id);
+        $dmsInvProduct = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProduct)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvProducts.singular')]));
@@ -105,7 +105,7 @@ class DmsInvProductController extends AppBaseController
      */
     public function update($id, UpdateDmsInvProductRequest $request)
     {
-        $dmsInvProduct = $this->dmsInvProductRepository->find($id);
+        $dmsInvProduct = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProduct)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvProducts.singular')]));
@@ -113,7 +113,7 @@ class DmsInvProductController extends AppBaseController
             return redirect(route('inventory.dmsInvProducts.index'));
         }
 
-        $dmsInvProduct = $this->dmsInvProductRepository->update($request->all(), $id);
+        $dmsInvProduct = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsInvProducts.singular')]));
 
@@ -129,7 +129,7 @@ class DmsInvProductController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsInvProduct = $this->dmsInvProductRepository->find($id);
+        $dmsInvProduct = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProduct)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvProducts.singular')]));
@@ -137,7 +137,7 @@ class DmsInvProductController extends AppBaseController
             return redirect(route('inventory.dmsInvProducts.index'));
         }
 
-        $this->dmsInvProductRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsInvProducts.singular')]));
 

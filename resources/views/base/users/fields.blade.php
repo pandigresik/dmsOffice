@@ -10,6 +10,12 @@
     {!! Form::email('email', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255]) !!}
 </div>
 
+<!-- Entity Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('entity', 'Company:') !!}
+    {!! Form::select('entity_id', $entityItems, null, ['class' => 'form-control select2']) !!}
+</div>
+
 <!-- Password Field -->
 @if (!isset($user))
 <div class="form-group col-sm-6">

@@ -15,11 +15,10 @@ use Response;
 class VendorLocationController extends AppBaseController
 {
     /** @var VendorLocationRepository */
-    private $vendorLocationRepository;
+    protected $repository;
 
-    public function __construct(VendorLocationRepository $vendorLocationRepo)
+    public function __construct()
     {
-        $this->vendorLocationRepository = $vendorLocationRepo;
     }
 
     /**
@@ -29,7 +28,7 @@ class VendorLocationController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $locations = $this->vendorLocationRepository->all(['vendor_id' => $request->get('vendor_id')]);
+        $locations = $this->getRepositoryObj()->all(['vendor_id' => $request->get('vendor_id')]);
         $buttonView = view('base.vendors.partials.location_button', ['json' => [], 'url' => route('base.vendorsLocations.create')])->render();
 
         return view('base.vendor_locations.index')->with(['locations' => $locations, 'buttonView' => $buttonView]);
@@ -58,7 +57,7 @@ class VendorLocationController extends AppBaseController
     {
         $input = $request->all();
 
-        $vendorLocation = $this->vendorLocationRepository->create($input);
+        $vendorLocation = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/vendorLocations.singular')]));
 
@@ -74,7 +73,7 @@ class VendorLocationController extends AppBaseController
      */
     public function show($id)
     {
-        $vendorLocation = $this->vendorLocationRepository->find($id);
+        $vendorLocation = $this->getRepositoryObj()->find($id);
 
         if (empty($vendorLocation)) {
             Flash::error(__('models/vendorLocations.singular').' '.__('messages.not_found'));
@@ -94,7 +93,7 @@ class VendorLocationController extends AppBaseController
      */
     public function edit($id)
     {
-        $vendorLocation = $this->vendorLocationRepository->find($id);
+        $vendorLocation = $this->getRepositoryObj()->find($id);
 
         if (empty($vendorLocation)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendorLocations.singular')]));
@@ -121,7 +120,7 @@ class VendorLocationController extends AppBaseController
      */
     public function update($id, UpdateVendorLocationRequest $request)
     {
-        $vendorLocation = $this->vendorLocationRepository->find($id);
+        $vendorLocation = $this->getRepositoryObj()->find($id);
 
         if (empty($vendorLocation)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendorLocations.singular')]));
@@ -129,7 +128,7 @@ class VendorLocationController extends AppBaseController
             return redirect(route('base.vendors.locations.index'));
         }
 
-        $vendorLocation = $this->vendorLocationRepository->update($request->all(), $id);
+        $vendorLocation = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/vendorLocations.singular')]));
 
@@ -145,7 +144,7 @@ class VendorLocationController extends AppBaseController
      */
     public function destroy($id)
     {
-        $vendorLocation = $this->vendorLocationRepository->find($id);
+        $vendorLocation = $this->getRepositoryObj()->find($id);
 
         if (empty($vendorLocation)) {
             Flash::error(__('messages.not_found', ['model' => __('models/vendorLocations.singular')]));
@@ -153,7 +152,7 @@ class VendorLocationController extends AppBaseController
             return redirect(route('base.vendors.locations.index'));
         }
 
-        $this->vendorLocationRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/vendorLocations.singular')]));
 

@@ -2,7 +2,7 @@
 
 namespace App\Models\Inventory;
 
-use App\Models\Base as Model;
+use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -34,7 +34,6 @@ class ContactEkspedisi extends Model
     const UPDATED_AT = 'updated_at';
 
     public $table = 'contact_ekspedisi';
-    protected $appends = ['state_form'];
     public $fillable = [
         'dms_inv_carrier_id',
         'name',
@@ -63,6 +62,7 @@ class ContactEkspedisi extends Model
         'address' => 'nullable|string|max:255',
         'city' => 'required|string|max:50',
     ];
+    protected $appends = ['state_form'];
 
     protected $dates = ['deleted_at'];
 
@@ -93,7 +93,7 @@ class ContactEkspedisi extends Model
     }
 
     /**
-     * Determine state form
+     * Determine state form.
      *
      * @return bool
      */

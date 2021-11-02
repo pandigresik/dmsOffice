@@ -13,11 +13,11 @@ use Response;
 class DmsInvWarehouseController extends AppBaseController
 {
     /** @var DmsInvWarehouseRepository */
-    private $dmsInvWarehouseRepository;
+    protected $repository;
 
-    public function __construct(DmsInvWarehouseRepository $dmsInvWarehouseRepo)
+    public function __construct()
     {
-        $this->dmsInvWarehouseRepository = $dmsInvWarehouseRepo;
+        $this->repository = DmsInvWarehouseRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsInvWarehouseController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsInvWarehouse = $this->dmsInvWarehouseRepository->create($input);
+        $dmsInvWarehouse = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsInvWarehouses.singular')]));
 
@@ -65,7 +65,7 @@ class DmsInvWarehouseController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsInvWarehouse = $this->dmsInvWarehouseRepository->find($id);
+        $dmsInvWarehouse = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvWarehouse)) {
             Flash::error(__('models/dmsInvWarehouses.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsInvWarehouseController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsInvWarehouse = $this->dmsInvWarehouseRepository->find($id);
+        $dmsInvWarehouse = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvWarehouse)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvWarehouses.singular')]));
@@ -105,7 +105,7 @@ class DmsInvWarehouseController extends AppBaseController
      */
     public function update($id, UpdateDmsInvWarehouseRequest $request)
     {
-        $dmsInvWarehouse = $this->dmsInvWarehouseRepository->find($id);
+        $dmsInvWarehouse = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvWarehouse)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvWarehouses.singular')]));
@@ -113,7 +113,7 @@ class DmsInvWarehouseController extends AppBaseController
             return redirect(route('inventory.dmsInvWarehouses.index'));
         }
 
-        $dmsInvWarehouse = $this->dmsInvWarehouseRepository->update($request->all(), $id);
+        $dmsInvWarehouse = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsInvWarehouses.singular')]));
 
@@ -129,7 +129,7 @@ class DmsInvWarehouseController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsInvWarehouse = $this->dmsInvWarehouseRepository->find($id);
+        $dmsInvWarehouse = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvWarehouse)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvWarehouses.singular')]));
@@ -137,7 +137,7 @@ class DmsInvWarehouseController extends AppBaseController
             return redirect(route('inventory.dmsInvWarehouses.index'));
         }
 
-        $this->dmsInvWarehouseRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsInvWarehouses.singular')]));
 

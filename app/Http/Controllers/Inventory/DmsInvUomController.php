@@ -13,11 +13,11 @@ use Response;
 class DmsInvUomController extends AppBaseController
 {
     /** @var DmsInvUomRepository */
-    private $dmsInvUomRepository;
+    protected $repository;
 
-    public function __construct(DmsInvUomRepository $dmsInvUomRepo)
+    public function __construct()
     {
-        $this->dmsInvUomRepository = $dmsInvUomRepo;
+        $this->repository = DmsInvUomRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsInvUomController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsInvUom = $this->dmsInvUomRepository->create($input);
+        $dmsInvUom = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsInvUoms.singular')]));
 
@@ -65,7 +65,7 @@ class DmsInvUomController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsInvUom = $this->dmsInvUomRepository->find($id);
+        $dmsInvUom = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvUom)) {
             Flash::error(__('models/dmsInvUoms.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsInvUomController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsInvUom = $this->dmsInvUomRepository->find($id);
+        $dmsInvUom = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvUom)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvUoms.singular')]));
@@ -105,7 +105,7 @@ class DmsInvUomController extends AppBaseController
      */
     public function update($id, UpdateDmsInvUomRequest $request)
     {
-        $dmsInvUom = $this->dmsInvUomRepository->find($id);
+        $dmsInvUom = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvUom)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvUoms.singular')]));
@@ -113,7 +113,7 @@ class DmsInvUomController extends AppBaseController
             return redirect(route('inventory.dmsInvUoms.index'));
         }
 
-        $dmsInvUom = $this->dmsInvUomRepository->update($request->all(), $id);
+        $dmsInvUom = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsInvUoms.singular')]));
 
@@ -129,7 +129,7 @@ class DmsInvUomController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsInvUom = $this->dmsInvUomRepository->find($id);
+        $dmsInvUom = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvUom)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvUoms.singular')]));
@@ -137,7 +137,7 @@ class DmsInvUomController extends AppBaseController
             return redirect(route('inventory.dmsInvUoms.index'));
         }
 
-        $this->dmsInvUomRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsInvUoms.singular')]));
 

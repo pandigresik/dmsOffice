@@ -3,38 +3,38 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\LocationCustomerDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateLocationCustomerRequest;
 use App\Http\Requests\Base\UpdateLocationCustomerRequest;
-use App\Repositories\Base\LocationCustomerRepository;
 use App\Repositories\Base\DmsArCustomerRepository;
+use App\Repositories\Base\LocationCustomerRepository;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Response;
 
 class LocationCustomerController extends AppBaseController
 {
-    /** @var  LocationCustomerRepository */
-    private $locationCustomerRepository;
+    /** @var LocationCustomerRepository */
+    protected $repository;
 
-    public function __construct(LocationCustomerRepository $locationCustomerRepo)
+    public function __construct()
     {
-        $this->locationCustomerRepository = $locationCustomerRepo;
+        $this->repository = LocationCustomerRepository::class;
     }
 
     /**
      * Display a listing of the LocationCustomer.
      *
      * @param LocationCustomerDataTable $locationCustomerDataTable
+     *
      * @return Response
      */
     public function index(Request $request)
     {
-        $locations = $this->locationCustomerRepository->all(['dms_ar_customer_id' => $request->get('dms_ar_customer_id')]);
+        $locations = $this->getRepositoryObj()->all(['dms_ar_customer_id' => $request->get('dms_ar_customer_id')]);
         $buttonView = view('base.dms_ar_customers.partials.location_button', ['json' => [], 'url' => route('base.locationCustomers.create')])->render();
 
-        return view('base.location_customers.index')->with(['locations' => $locations, 'buttonView' => $buttonView]);        
+        return view('base.location_customers.index')->with(['locations' => $locations, 'buttonView' => $buttonView]);
     }
 
     /**
@@ -48,13 +48,11 @@ class LocationCustomerController extends AppBaseController
 
         return view('base.location_customers.create')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'locationCustomers['.$idForm.']'])
-        ;        
+        ;
     }
 
     /**
      * Store a newly created LocationCustomer in storage.
-     *
-     * @param CreateLocationCustomerRequest $request
      *
      * @return Response
      */
@@ -62,7 +60,7 @@ class LocationCustomerController extends AppBaseController
     {
         $input = $request->all();
 
-        $locationCustomer = $this->locationCustomerRepository->create($input);
+        $locationCustomer = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/locationCustomers.singular')]));
 
@@ -72,13 +70,13 @@ class LocationCustomerController extends AppBaseController
     /**
      * Display the specified LocationCustomer.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function show($id)
     {
-        $locationCustomer = $this->locationCustomerRepository->find($id);
+        $locationCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($locationCustomer)) {
             Flash::error(__('models/locationCustomers.singular').' '.__('messages.not_found'));
@@ -92,13 +90,13 @@ class LocationCustomerController extends AppBaseController
     /**
      * Show the form for editing the specified LocationCustomer.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function edit($id)
     {
-        $locationCustomer = $this->locationCustomerRepository->find($id);
+        $locationCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($locationCustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/locationCustomers.singular')]));
@@ -112,20 +110,19 @@ class LocationCustomerController extends AppBaseController
 
         return view('base.location_customers.edit')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'locationCustomer' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'locationCustomer['.$idForm.']'])
-        ;        
+        ;
     }
 
     /**
      * Update the specified LocationCustomer in storage.
      *
-     * @param  int              $id
-     * @param UpdateLocationCustomerRequest $request
+     * @param int $id
      *
      * @return Response
      */
     public function update($id, UpdateLocationCustomerRequest $request)
     {
-        $locationCustomer = $this->locationCustomerRepository->find($id);
+        $locationCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($locationCustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/locationCustomers.singular')]));
@@ -133,7 +130,7 @@ class LocationCustomerController extends AppBaseController
             return redirect(route('base.locationCustomers.index'));
         }
 
-        $locationCustomer = $this->locationCustomerRepository->update($request->all(), $id);
+        $locationCustomer = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/locationCustomers.singular')]));
 
@@ -143,13 +140,13 @@ class LocationCustomerController extends AppBaseController
     /**
      * Remove the specified LocationCustomer from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function destroy($id)
     {
-        $locationCustomer = $this->locationCustomerRepository->find($id);
+        $locationCustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($locationCustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/locationCustomers.singular')]));
@@ -157,7 +154,7 @@ class LocationCustomerController extends AppBaseController
             return redirect(route('base.locationCustomers.index'));
         }
 
-        $this->locationCustomerRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/locationCustomers.singular')]));
 
@@ -165,16 +162,17 @@ class LocationCustomerController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model LocationCustomer from storage.         
+     * Provide options item based on relationship model LocationCustomer from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         //$dmsArCustomer = new DmsArCustomerRepository(app());
         return [
-            //'dmsArCustomerItems' => ['' => __('crud.option.dmsArCustomer_placeholder')] + $dmsArCustomer->pluck()            
+            //'dmsArCustomerItems' => ['' => __('crud.option.dmsArCustomer_placeholder')] + $dmsArCustomer->pluck()
         ];
     }
 }

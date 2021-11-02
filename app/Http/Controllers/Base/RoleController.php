@@ -14,11 +14,11 @@ use Response;
 class RoleController extends AppBaseController
 {
     /** @var RoleRepository */
-    private $roleRepository;
+    protected $repository;
 
-    public function __construct(RoleRepository $roleRepo)
+    public function __construct()
     {
-        $this->roleRepository = $roleRepo;
+        $this->repository = RoleRepository::class;
     }
 
     /**
@@ -50,7 +50,7 @@ class RoleController extends AppBaseController
     {
         $input = $request->all();
 
-        $role = $this->roleRepository->create($input);
+        $role = $this->getRepositoryObj()->create($input);
         Flash::success('Role saved successfully.');
 
         return redirect(route('base.roles.index'));
@@ -65,7 +65,7 @@ class RoleController extends AppBaseController
      */
     public function show($id)
     {
-        $role = $this->roleRepository->find($id);
+        $role = $this->getRepositoryObj()->find($id);
 
         if (empty($role)) {
             Flash::error('Role not found');
@@ -85,7 +85,7 @@ class RoleController extends AppBaseController
      */
     public function edit($id)
     {
-        $role = $this->roleRepository->find($id);
+        $role = $this->getRepositoryObj()->find($id);
         if (empty($role)) {
             Flash::error('Role not found');
 
@@ -104,14 +104,14 @@ class RoleController extends AppBaseController
      */
     public function update($id, UpdateRoleRequest $request)
     {
-        $role = $this->roleRepository->find($id);
+        $role = $this->getRepositoryObj()->find($id);
         if (empty($role)) {
             Flash::error('Role not found');
 
             return redirect(route('base.roles.index'));
         }
 
-        $role = $this->roleRepository->update($request->all(), $id);
+        $role = $this->getRepositoryObj()->update($request->all(), $id);
         Flash::success('Role updated successfully.');
 
         return redirect(route('base.roles.index'));
@@ -126,7 +126,7 @@ class RoleController extends AppBaseController
      */
     public function destroy($id)
     {
-        $role = $this->roleRepository->find($id);
+        $role = $this->getRepositoryObj()->find($id);
 
         if (empty($role)) {
             Flash::error('Role not found');
@@ -134,7 +134,7 @@ class RoleController extends AppBaseController
             return redirect(route('base.roles.index'));
         }
 
-        $this->roleRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success('Role deleted successfully.');
 

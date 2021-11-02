@@ -13,11 +13,11 @@ use Response;
 class DmsInvCarrierController extends AppBaseController
 {
     /** @var DmsInvCarrierRepository */
-    private $dmsInvCarrierRepository;
+    protected $repository;
 
-    public function __construct(DmsInvCarrierRepository $dmsInvCarrierRepo)
+    public function __construct()
     {
-        $this->dmsInvCarrierRepository = $dmsInvCarrierRepo;
+        $this->repository = DmsInvCarrierRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsInvCarrierController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsInvCarrier = $this->dmsInvCarrierRepository->create($input);
+        $dmsInvCarrier = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsInvCarriers.singular')]));
 
@@ -65,7 +65,7 @@ class DmsInvCarrierController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsInvCarrier = $this->dmsInvCarrierRepository->find($id);
+        $dmsInvCarrier = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvCarrier)) {
             Flash::error(__('models/dmsInvCarriers.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsInvCarrierController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsInvCarrier = $this->dmsInvCarrierRepository->find($id);
+        $dmsInvCarrier = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvCarrier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvCarriers.singular')]));
@@ -95,11 +95,12 @@ class DmsInvCarrierController extends AppBaseController
         $jsonDefaultSearching = ['dms_ar_carrier_id' => $id];
         $dataTabs = [
             'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('inventory.contactEkspedisis.index', ['dms_inv_carrier_id' => $id]), 'defaultContent' => '', 'class' => ''],
-            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('inventory.locationEkspedisis.index', ['dms_inv_carrier_id' => $id]), 'defaultContent' => '', 'class' => ''],            
+            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('inventory.locationEkspedisis.index', ['dms_inv_carrier_id' => $id]), 'defaultContent' => '', 'class' => ''],
             'vehicle' => ['text' => 'Kendaraan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'defaultContent' => '', 'class' => ''],
             'trip' => ['text' => 'Trip', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'defaultContent' => '', 'class' => ''],
             'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
         ];
+
         return view('inventory.dms_inv_carriers.edit')->with('dataTabs', $dataTabs)->with('dmsInvCarrier', $dmsInvCarrier)->with($this->getOptionItems());
     }
 
@@ -112,7 +113,7 @@ class DmsInvCarrierController extends AppBaseController
      */
     public function update($id, UpdateDmsInvCarrierRequest $request)
     {
-        $dmsInvCarrier = $this->dmsInvCarrierRepository->find($id);
+        $dmsInvCarrier = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvCarrier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvCarriers.singular')]));
@@ -120,7 +121,7 @@ class DmsInvCarrierController extends AppBaseController
             return redirect(route('inventory.dmsInvCarriers.index'));
         }
 
-        $dmsInvCarrier = $this->dmsInvCarrierRepository->update($request->all(), $id);
+        $dmsInvCarrier = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsInvCarriers.singular')]));
 
@@ -136,7 +137,7 @@ class DmsInvCarrierController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsInvCarrier = $this->dmsInvCarrierRepository->find($id);
+        $dmsInvCarrier = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvCarrier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvCarriers.singular')]));
@@ -144,7 +145,7 @@ class DmsInvCarrierController extends AppBaseController
             return redirect(route('inventory.dmsInvCarriers.index'));
         }
 
-        $this->dmsInvCarrierRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsInvCarriers.singular')]));
 

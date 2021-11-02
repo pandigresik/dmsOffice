@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Base;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Base\LocationCustomer;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateLocationCustomerRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateLocationCustomerRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'location_customer-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateLocationCustomerRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new LocationCustomer)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new LocationCustomer())->fillable;
+
         return parent::all($keys);
     }
 }

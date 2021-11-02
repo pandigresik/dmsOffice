@@ -13,11 +13,11 @@ use Response;
 class DmsArDoccustomerController extends AppBaseController
 {
     /** @var DmsArDoccustomerRepository */
-    private $dmsArDoccustomerRepository;
+    protected $repository;
 
-    public function __construct(DmsArDoccustomerRepository $dmsArDoccustomerRepo)
+    public function __construct()
     {
-        $this->dmsArDoccustomerRepository = $dmsArDoccustomerRepo;
+        $this->repository = DmsArDoccustomerRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsArDoccustomerController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsArDoccustomer = $this->dmsArDoccustomerRepository->create($input);
+        $dmsArDoccustomer = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsArDoccustomers.singular')]));
 
@@ -65,7 +65,7 @@ class DmsArDoccustomerController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsArDoccustomer = $this->dmsArDoccustomerRepository->find($id);
+        $dmsArDoccustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArDoccustomer)) {
             Flash::error(__('models/dmsArDoccustomers.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsArDoccustomerController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsArDoccustomer = $this->dmsArDoccustomerRepository->find($id);
+        $dmsArDoccustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArDoccustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArDoccustomers.singular')]));
@@ -105,7 +105,7 @@ class DmsArDoccustomerController extends AppBaseController
      */
     public function update($id, UpdateDmsArDoccustomerRequest $request)
     {
-        $dmsArDoccustomer = $this->dmsArDoccustomerRepository->find($id);
+        $dmsArDoccustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArDoccustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArDoccustomers.singular')]));
@@ -113,7 +113,7 @@ class DmsArDoccustomerController extends AppBaseController
             return redirect(route('base.dmsArDoccustomers.index'));
         }
 
-        $dmsArDoccustomer = $this->dmsArDoccustomerRepository->update($request->all(), $id);
+        $dmsArDoccustomer = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsArDoccustomers.singular')]));
 
@@ -129,7 +129,7 @@ class DmsArDoccustomerController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsArDoccustomer = $this->dmsArDoccustomerRepository->find($id);
+        $dmsArDoccustomer = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArDoccustomer)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArDoccustomers.singular')]));
@@ -137,7 +137,7 @@ class DmsArDoccustomerController extends AppBaseController
             return redirect(route('base.dmsArDoccustomers.index'));
         }
 
-        $this->dmsArDoccustomerRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsArDoccustomers.singular')]));
 

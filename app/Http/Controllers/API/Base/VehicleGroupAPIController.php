@@ -17,11 +17,10 @@ use Response;
 class VehicleGroupAPIController extends AppBaseController
 {
     /** @var VehicleGroupRepository */
-    private $vehicleGroupRepository;
+    protected $repository;
 
-    public function __construct(VehicleGroupRepository $vehicleGroupRepo)
+    public function __construct()
     {
-        $this->vehicleGroupRepository = $vehicleGroupRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class VehicleGroupAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $vehicleGroups = $this->vehicleGroupRepository->all(
+        $vehicleGroups = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class VehicleGroupAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $vehicleGroup = $this->vehicleGroupRepository->create($input);
+        $vehicleGroup = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new VehicleGroupResource($vehicleGroup), 'Vehicle Group saved successfully');
     }
@@ -154,7 +153,7 @@ class VehicleGroupAPIController extends AppBaseController
     public function show($id)
     {
         /** @var VehicleGroup $vehicleGroup */
-        $vehicleGroup = $this->vehicleGroupRepository->find($id);
+        $vehicleGroup = $this->getRepositoryObj()->find($id);
 
         if (empty($vehicleGroup)) {
             return $this->sendError('Vehicle Group not found');
@@ -214,13 +213,13 @@ class VehicleGroupAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var VehicleGroup $vehicleGroup */
-        $vehicleGroup = $this->vehicleGroupRepository->find($id);
+        $vehicleGroup = $this->getRepositoryObj()->find($id);
 
         if (empty($vehicleGroup)) {
             return $this->sendError('Vehicle Group not found');
         }
 
-        $vehicleGroup = $this->vehicleGroupRepository->update($input, $id);
+        $vehicleGroup = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new VehicleGroupResource($vehicleGroup), 'VehicleGroup updated successfully');
     }
@@ -267,7 +266,7 @@ class VehicleGroupAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var VehicleGroup $vehicleGroup */
-        $vehicleGroup = $this->vehicleGroupRepository->find($id);
+        $vehicleGroup = $this->getRepositoryObj()->find($id);
 
         if (empty($vehicleGroup)) {
             return $this->sendError('Vehicle Group not found');

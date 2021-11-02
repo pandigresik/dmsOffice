@@ -33,7 +33,7 @@ abstract class BaseRepository
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->makeModel();
+        $this->makeModel();        
     }
 
     /**
@@ -60,11 +60,10 @@ abstract class BaseRepository
     public function makeModel()
     {
         $model = $this->app->make($this->model());
-
+        
         if (!$model instanceof Model) {
             throw new \Exception("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
-        }
-
+        }        
         return $this->model = $model;
     }
 
@@ -267,6 +266,20 @@ abstract class BaseRepository
                 $this->model->with($relation);
             }
         }
+
+        return $this;
+    }    
+
+    /**
+     * Set the value of model
+     *
+     * @param  Model  $model
+     *
+     * @return  self
+     */ 
+    public function setModel(Model $model)
+    {
+        $this->model = $model;
 
         return $this;
     }

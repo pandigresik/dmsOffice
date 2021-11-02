@@ -17,11 +17,10 @@ use Response;
 class WarehouseAPIController extends AppBaseController
 {
     /** @var WarehouseRepository */
-    private $warehouseRepository;
+    protected $repository;
 
-    public function __construct(WarehouseRepository $warehouseRepo)
+    public function __construct()
     {
-        $this->warehouseRepository = $warehouseRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class WarehouseAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $warehouses = $this->warehouseRepository->all(
+        $warehouses = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class WarehouseAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $warehouse = $this->warehouseRepository->create($input);
+        $warehouse = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new WarehouseResource($warehouse), 'Warehouse saved successfully');
     }
@@ -154,7 +153,7 @@ class WarehouseAPIController extends AppBaseController
     public function show($id)
     {
         /** @var Warehouse $warehouse */
-        $warehouse = $this->warehouseRepository->find($id);
+        $warehouse = $this->getRepositoryObj()->find($id);
 
         if (empty($warehouse)) {
             return $this->sendError('Warehouse not found');
@@ -214,13 +213,13 @@ class WarehouseAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var Warehouse $warehouse */
-        $warehouse = $this->warehouseRepository->find($id);
+        $warehouse = $this->getRepositoryObj()->find($id);
 
         if (empty($warehouse)) {
             return $this->sendError('Warehouse not found');
         }
 
-        $warehouse = $this->warehouseRepository->update($input, $id);
+        $warehouse = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new WarehouseResource($warehouse), 'Warehouse updated successfully');
     }
@@ -267,7 +266,7 @@ class WarehouseAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var Warehouse $warehouse */
-        $warehouse = $this->warehouseRepository->find($id);
+        $warehouse = $this->getRepositoryObj()->find($id);
 
         if (empty($warehouse)) {
             return $this->sendError('Warehouse not found');

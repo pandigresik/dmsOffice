@@ -40,6 +40,7 @@ class CreateDmsArCustomerRequest extends FormRequest
     {
         $keys = (new DmsArCustomer())->fillable;
         $keys = array_merge(['contactCustomers', 'locationCustomers'], $keys);
+
         return parent::all($keys);
     }
 }

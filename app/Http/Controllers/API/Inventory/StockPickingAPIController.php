@@ -17,11 +17,10 @@ use Response;
 class StockPickingAPIController extends AppBaseController
 {
     /** @var StockPickingRepository */
-    private $stockPickingRepository;
+    protected $repository;
 
-    public function __construct(StockPickingRepository $stockPickingRepo)
+    public function __construct()
     {
-        $this->stockPickingRepository = $stockPickingRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class StockPickingAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $stockPickings = $this->stockPickingRepository->all(
+        $stockPickings = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class StockPickingAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $stockPicking = $this->stockPickingRepository->create($input);
+        $stockPicking = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new StockPickingResource($stockPicking), 'Stock Picking saved successfully');
     }
@@ -154,7 +153,7 @@ class StockPickingAPIController extends AppBaseController
     public function show($id)
     {
         /** @var StockPicking $stockPicking */
-        $stockPicking = $this->stockPickingRepository->find($id);
+        $stockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($stockPicking)) {
             return $this->sendError('Stock Picking not found');
@@ -214,13 +213,13 @@ class StockPickingAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var StockPicking $stockPicking */
-        $stockPicking = $this->stockPickingRepository->find($id);
+        $stockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($stockPicking)) {
             return $this->sendError('Stock Picking not found');
         }
 
-        $stockPicking = $this->stockPickingRepository->update($input, $id);
+        $stockPicking = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new StockPickingResource($stockPicking), 'StockPicking updated successfully');
     }
@@ -267,7 +266,7 @@ class StockPickingAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var StockPicking $stockPicking */
-        $stockPicking = $this->stockPickingRepository->find($id);
+        $stockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($stockPicking)) {
             return $this->sendError('Stock Picking not found');

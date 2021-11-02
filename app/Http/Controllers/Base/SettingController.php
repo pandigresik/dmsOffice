@@ -13,11 +13,11 @@ use Response;
 class SettingController extends AppBaseController
 {
     /** @var SettingRepository */
-    private $settingRepository;
+    protected $repository;
 
-    public function __construct(SettingRepository $settingRepo)
+    public function __construct()
     {
-        $this->settingRepository = $settingRepo;
+        $this->repository = SettingRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class SettingController extends AppBaseController
     {
         $input = $request->all();
 
-        $setting = $this->settingRepository->create($input);
+        $setting = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/settings.singular')]));
 
@@ -65,7 +65,7 @@ class SettingController extends AppBaseController
      */
     public function show($id)
     {
-        $setting = $this->settingRepository->find($id);
+        $setting = $this->getRepositoryObj()->find($id);
 
         if (empty($setting)) {
             Flash::error(__('models/settings.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class SettingController extends AppBaseController
      */
     public function edit($id)
     {
-        $setting = $this->settingRepository->find($id);
+        $setting = $this->getRepositoryObj()->find($id);
 
         if (empty($setting)) {
             Flash::error(__('messages.not_found', ['model' => __('models/settings.singular')]));
@@ -105,7 +105,7 @@ class SettingController extends AppBaseController
      */
     public function update($id, UpdateSettingRequest $request)
     {
-        $setting = $this->settingRepository->find($id);
+        $setting = $this->getRepositoryObj()->find($id);
 
         if (empty($setting)) {
             Flash::error(__('messages.not_found', ['model' => __('models/settings.singular')]));
@@ -113,7 +113,7 @@ class SettingController extends AppBaseController
             return redirect(route('base.settings.index'));
         }
 
-        $setting = $this->settingRepository->update($request->all(), $id);
+        $setting = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/settings.singular')]));
 
@@ -129,7 +129,7 @@ class SettingController extends AppBaseController
      */
     public function destroy($id)
     {
-        $setting = $this->settingRepository->find($id);
+        $setting = $this->getRepositoryObj()->find($id);
 
         if (empty($setting)) {
             Flash::error(__('messages.not_found', ['model' => __('models/settings.singular')]));
@@ -137,7 +137,7 @@ class SettingController extends AppBaseController
             return redirect(route('base.settings.index'));
         }
 
-        $this->settingRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/settings.singular')]));
 

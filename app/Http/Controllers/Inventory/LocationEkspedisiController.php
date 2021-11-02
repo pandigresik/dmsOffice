@@ -3,35 +3,35 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\LocationEkspedisiDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateLocationEkspedisiRequest;
 use App\Http\Requests\Inventory\UpdateLocationEkspedisiRequest;
-use App\Repositories\Inventory\LocationEkspedisiRepository;
 use App\Repositories\Inventory\DmsInvCarrierRepository;
+use App\Repositories\Inventory\LocationEkspedisiRepository;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Response;
 
 class LocationEkspedisiController extends AppBaseController
 {
-    /** @var  LocationEkspedisiRepository */
-    private $locationEkspedisiRepository;
+    /** @var LocationEkspedisiRepository */
+    protected $repository;
 
-    public function __construct(LocationEkspedisiRepository $locationEkspedisiRepo)
+    public function __construct()
     {
-        $this->locationEkspedisiRepository = $locationEkspedisiRepo;
+        $this->repository = LocationEkspedisiRepository::class;
     }
 
     /**
      * Display a listing of the LocationEkspedisi.
      *
      * @param LocationEkspedisiDataTable $locationEkspedisiDataTable
+     *
      * @return Response
      */
     public function index(Request $request)
     {
-        $locations = $this->locationEkspedisiRepository->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')]);
+        $locations = $this->getRepositoryObj()->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')]);
         $buttonView = view('inventory.dms_inv_carriers.partials.location_button', ['json' => [], 'url' => route('inventory.locationEkspedisis.create')])->render();
 
         return view('inventory.location_ekspedisis.index')->with(['locations' => $locations, 'buttonView' => $buttonView]);
@@ -48,13 +48,11 @@ class LocationEkspedisiController extends AppBaseController
 
         return view('inventory.location_ekspedisis.create')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'locationEkspedisis['.$idForm.']'])
-        ;        
+        ;
     }
 
     /**
      * Store a newly created LocationEkspedisi in storage.
-     *
-     * @param CreateLocationEkspedisiRequest $request
      *
      * @return Response
      */
@@ -62,7 +60,7 @@ class LocationEkspedisiController extends AppBaseController
     {
         $input = $request->all();
 
-        $locationEkspedisi = $this->locationEkspedisiRepository->create($input);
+        $locationEkspedisi = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/locationEkspedisis.singular')]));
 
@@ -72,13 +70,13 @@ class LocationEkspedisiController extends AppBaseController
     /**
      * Display the specified LocationEkspedisi.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function show($id)
     {
-        $locationEkspedisi = $this->locationEkspedisiRepository->find($id);
+        $locationEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($locationEkspedisi)) {
             Flash::error(__('models/locationEkspedisis.singular').' '.__('messages.not_found'));
@@ -92,13 +90,13 @@ class LocationEkspedisiController extends AppBaseController
     /**
      * Show the form for editing the specified LocationEkspedisi.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function edit($id)
     {
-        $locationEkspedisi = $this->locationEkspedisiRepository->find($id);
+        $locationEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($locationEkspedisi)) {
             Flash::error(__('messages.not_found', ['model' => __('models/locationEkspedisis.singular')]));
@@ -114,20 +112,18 @@ class LocationEkspedisiController extends AppBaseController
         return view('inventory.location_ekspedisis.edit')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'locationEkspedisi' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'locationEkspedisi['.$idForm.']'])
         ;
-        
     }
 
     /**
      * Update the specified LocationEkspedisi in storage.
      *
-     * @param  int              $id
-     * @param UpdateLocationEkspedisiRequest $request
+     * @param int $id
      *
      * @return Response
      */
     public function update($id, UpdateLocationEkspedisiRequest $request)
     {
-        $locationEkspedisi = $this->locationEkspedisiRepository->find($id);
+        $locationEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($locationEkspedisi)) {
             Flash::error(__('messages.not_found', ['model' => __('models/locationEkspedisis.singular')]));
@@ -135,7 +131,7 @@ class LocationEkspedisiController extends AppBaseController
             return redirect(route('inventory.locationEkspedisis.index'));
         }
 
-        $locationEkspedisi = $this->locationEkspedisiRepository->update($request->all(), $id);
+        $locationEkspedisi = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/locationEkspedisis.singular')]));
 
@@ -145,13 +141,13 @@ class LocationEkspedisiController extends AppBaseController
     /**
      * Remove the specified LocationEkspedisi from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function destroy($id)
     {
-        $locationEkspedisi = $this->locationEkspedisiRepository->find($id);
+        $locationEkspedisi = $this->getRepositoryObj()->find($id);
 
         if (empty($locationEkspedisi)) {
             Flash::error(__('messages.not_found', ['model' => __('models/locationEkspedisis.singular')]));
@@ -159,7 +155,7 @@ class LocationEkspedisiController extends AppBaseController
             return redirect(route('inventory.locationEkspedisis.index'));
         }
 
-        $this->locationEkspedisiRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/locationEkspedisis.singular')]));
 
@@ -167,16 +163,17 @@ class LocationEkspedisiController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model LocationEkspedisi from storage.         
+     * Provide options item based on relationship model LocationEkspedisi from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         // $dmsInvCarrier = new DmsInvCarrierRepository(app());
-         return [
-        //     'dmsInvCarrierItems' => ['' => __('crud.option.dmsInvCarrier_placeholder')] + $dmsInvCarrier->pluck()            
-         ];
+        return [
+            //     'dmsInvCarrierItems' => ['' => __('crud.option.dmsInvCarrier_placeholder')] + $dmsInvCarrier->pluck()
+        ];
     }
 }

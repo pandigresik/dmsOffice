@@ -13,11 +13,11 @@ use Response;
 class DmsSdRouteController extends AppBaseController
 {
     /** @var DmsSdRouteRepository */
-    private $dmsSdRouteRepository;
+    protected $repository;
 
-    public function __construct(DmsSdRouteRepository $dmsSdRouteRepo)
+    public function __construct()
     {
-        $this->dmsSdRouteRepository = $dmsSdRouteRepo;
+        $this->repository = DmsSdRouteRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsSdRouteController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsSdRoute = $this->dmsSdRouteRepository->create($input);
+        $dmsSdRoute = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsSdRoutes.singular')]));
 
@@ -65,7 +65,7 @@ class DmsSdRouteController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsSdRoute = $this->dmsSdRouteRepository->find($id);
+        $dmsSdRoute = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsSdRoute)) {
             Flash::error(__('models/dmsSdRoutes.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsSdRouteController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsSdRoute = $this->dmsSdRouteRepository->find($id);
+        $dmsSdRoute = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsSdRoute)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsSdRoutes.singular')]));
@@ -105,7 +105,7 @@ class DmsSdRouteController extends AppBaseController
      */
     public function update($id, UpdateDmsSdRouteRequest $request)
     {
-        $dmsSdRoute = $this->dmsSdRouteRepository->find($id);
+        $dmsSdRoute = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsSdRoute)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsSdRoutes.singular')]));
@@ -113,7 +113,7 @@ class DmsSdRouteController extends AppBaseController
             return redirect(route('sales.dmsSdRoutes.index'));
         }
 
-        $dmsSdRoute = $this->dmsSdRouteRepository->update($request->all(), $id);
+        $dmsSdRoute = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsSdRoutes.singular')]));
 
@@ -129,7 +129,7 @@ class DmsSdRouteController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsSdRoute = $this->dmsSdRouteRepository->find($id);
+        $dmsSdRoute = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsSdRoute)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsSdRoutes.singular')]));
@@ -137,7 +137,7 @@ class DmsSdRouteController extends AppBaseController
             return redirect(route('sales.dmsSdRoutes.index'));
         }
 
-        $this->dmsSdRouteRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsSdRoutes.singular')]));
 

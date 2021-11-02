@@ -13,11 +13,11 @@ use Response;
 class BtbViewTmpController extends AppBaseController
 {
     /** @var BtbViewTmpRepository */
-    private $btbViewTmpRepository;
+    protected $repository;
 
-    public function __construct(BtbViewTmpRepository $btbViewTmpRepo)
+    public function __construct()
     {
-        $this->btbViewTmpRepository = $btbViewTmpRepo;
+        $this->repository = BtbViewTmpRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class BtbViewTmpController extends AppBaseController
     {
         $input = $request->all();
 
-        $btbViewTmp = $this->btbViewTmpRepository->create($input);
+        $btbViewTmp = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/btbViewTmps.singular')]));
 
@@ -65,7 +65,7 @@ class BtbViewTmpController extends AppBaseController
      */
     public function show($id)
     {
-        $btbViewTmp = $this->btbViewTmpRepository->find($id);
+        $btbViewTmp = $this->getRepositoryObj()->find($id);
 
         if (empty($btbViewTmp)) {
             Flash::error(__('models/btbViewTmps.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class BtbViewTmpController extends AppBaseController
      */
     public function edit($id)
     {
-        $btbViewTmp = $this->btbViewTmpRepository->find($id);
+        $btbViewTmp = $this->getRepositoryObj()->find($id);
 
         if (empty($btbViewTmp)) {
             Flash::error(__('messages.not_found', ['model' => __('models/btbViewTmps.singular')]));
@@ -105,7 +105,7 @@ class BtbViewTmpController extends AppBaseController
      */
     public function update($id, UpdateBtbViewTmpRequest $request)
     {
-        $btbViewTmp = $this->btbViewTmpRepository->find($id);
+        $btbViewTmp = $this->getRepositoryObj()->find($id);
 
         if (empty($btbViewTmp)) {
             Flash::error(__('messages.not_found', ['model' => __('models/btbViewTmps.singular')]));
@@ -113,7 +113,7 @@ class BtbViewTmpController extends AppBaseController
             return redirect(route('inventory.btbViewTmps.index'));
         }
 
-        $btbViewTmp = $this->btbViewTmpRepository->update($request->all(), $id);
+        $btbViewTmp = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/btbViewTmps.singular')]));
 
@@ -129,7 +129,7 @@ class BtbViewTmpController extends AppBaseController
      */
     public function destroy($id)
     {
-        $btbViewTmp = $this->btbViewTmpRepository->find($id);
+        $btbViewTmp = $this->getRepositoryObj()->find($id);
 
         if (empty($btbViewTmp)) {
             Flash::error(__('messages.not_found', ['model' => __('models/btbViewTmps.singular')]));
@@ -137,7 +137,7 @@ class BtbViewTmpController extends AppBaseController
             return redirect(route('inventory.btbViewTmps.index'));
         }
 
-        $this->btbViewTmpRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/btbViewTmps.singular')]));
 

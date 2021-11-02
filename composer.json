@@ -18,7 +18,6 @@
         "cache/filesystem-adapter": "^1.1",
         "cache/redis-adapter": "^1.1",
         "digitalcloud/laravel-blameable": "^1.1",
-        "ekmungai/eloquent-ifrs": "^4.2",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "genealabs/laravel-model-caching": "^0.11.3",
@@ -86,15 +85,13 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "InfyOm\\Generator\\Generators\\": "overrides/laravel-generator/src/Generators/",
-            "InfyOm\\Generator\\Commands\\": "overrides/laravel-generator/src/Commands/",
-            "IFRS\\Scopes\\": "overrides/eloquent-ifrs/src/Scopes/"            
+            "InfyOm\\Generator\\Commands\\": "overrides/laravel-generator/src/Commands/"                       
         },
         "exclude-from-classmap": [
             "vendor/infyomlabs/laravel-generator/src/Generators/Scaffold/ControllerGenerator.php",
             "vendor/infyomlabs/laravel-generator/src/Generators/Scaffold/ViewGenerator.php",
             "vendor/infyomlabs/laravel-generator/src/Generators/FactoryGenerator.php",
-            "vendor/infyomlabs/laravel-generator/src/Commands/BaseCommand.php",
-            "vendor/ekmungai/eloquent-ifrs/src/Scopes/EntityScope.php"            
+            "vendor/infyomlabs/laravel-generator/src/Commands/BaseCommand.php"                   
         ],
         "files": [
             "app/Http/helpers.php"

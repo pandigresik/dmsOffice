@@ -13,11 +13,11 @@ use Response;
 class DmsArCustomerrouteinfoController extends AppBaseController
 {
     /** @var DmsArCustomerrouteinfoRepository */
-    private $dmsArCustomerrouteinfoRepository;
+    protected $repository;
 
-    public function __construct(DmsArCustomerrouteinfoRepository $dmsArCustomerrouteinfoRepo)
+    public function __construct()
     {
-        $this->dmsArCustomerrouteinfoRepository = $dmsArCustomerrouteinfoRepo;
+        $this->repository = DmsArCustomerrouteinfoRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsArCustomerrouteinfo = $this->dmsArCustomerrouteinfoRepository->create($input);
+        $dmsArCustomerrouteinfo = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsArCustomerrouteinfos.singular')]));
 
@@ -65,7 +65,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsArCustomerrouteinfo = $this->dmsArCustomerrouteinfoRepository->find($id);
+        $dmsArCustomerrouteinfo = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomerrouteinfo)) {
             Flash::error(__('models/dmsArCustomerrouteinfos.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsArCustomerrouteinfo = $this->dmsArCustomerrouteinfoRepository->find($id);
+        $dmsArCustomerrouteinfo = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomerrouteinfo)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomerrouteinfos.singular')]));
@@ -105,7 +105,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
      */
     public function update($id, UpdateDmsArCustomerrouteinfoRequest $request)
     {
-        $dmsArCustomerrouteinfo = $this->dmsArCustomerrouteinfoRepository->find($id);
+        $dmsArCustomerrouteinfo = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomerrouteinfo)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomerrouteinfos.singular')]));
@@ -113,7 +113,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
             return redirect(route('base.dmsArCustomerrouteinfos.index'));
         }
 
-        $dmsArCustomerrouteinfo = $this->dmsArCustomerrouteinfoRepository->update($request->all(), $id);
+        $dmsArCustomerrouteinfo = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsArCustomerrouteinfos.singular')]));
 
@@ -129,7 +129,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsArCustomerrouteinfo = $this->dmsArCustomerrouteinfoRepository->find($id);
+        $dmsArCustomerrouteinfo = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArCustomerrouteinfo)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArCustomerrouteinfos.singular')]));
@@ -137,7 +137,7 @@ class DmsArCustomerrouteinfoController extends AppBaseController
             return redirect(route('base.dmsArCustomerrouteinfos.index'));
         }
 
-        $this->dmsArCustomerrouteinfoRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsArCustomerrouteinfos.singular')]));
 

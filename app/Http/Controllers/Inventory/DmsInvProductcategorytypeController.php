@@ -13,11 +13,11 @@ use Response;
 class DmsInvProductcategorytypeController extends AppBaseController
 {
     /** @var DmsInvProductcategorytypeRepository */
-    private $dmsInvProductcategorytypeRepository;
+    protected $repository;
 
-    public function __construct(DmsInvProductcategorytypeRepository $dmsInvProductcategorytypeRepo)
+    public function __construct()
     {
-        $this->dmsInvProductcategorytypeRepository = $dmsInvProductcategorytypeRepo;
+        $this->repository = DmsInvProductcategorytypeRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsInvProductcategorytype = $this->dmsInvProductcategorytypeRepository->create($input);
+        $dmsInvProductcategorytype = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsInvProductcategorytypes.singular')]));
 
@@ -65,7 +65,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsInvProductcategorytype = $this->dmsInvProductcategorytypeRepository->find($id);
+        $dmsInvProductcategorytype = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProductcategorytype)) {
             Flash::error(__('models/dmsInvProductcategorytypes.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsInvProductcategorytype = $this->dmsInvProductcategorytypeRepository->find($id);
+        $dmsInvProductcategorytype = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProductcategorytype)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvProductcategorytypes.singular')]));
@@ -105,7 +105,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
      */
     public function update($id, UpdateDmsInvProductcategorytypeRequest $request)
     {
-        $dmsInvProductcategorytype = $this->dmsInvProductcategorytypeRepository->find($id);
+        $dmsInvProductcategorytype = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProductcategorytype)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvProductcategorytypes.singular')]));
@@ -113,7 +113,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
             return redirect(route('inventory.dmsInvProductcategorytypes.index'));
         }
 
-        $dmsInvProductcategorytype = $this->dmsInvProductcategorytypeRepository->update($request->all(), $id);
+        $dmsInvProductcategorytype = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsInvProductcategorytypes.singular')]));
 
@@ -129,7 +129,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsInvProductcategorytype = $this->dmsInvProductcategorytypeRepository->find($id);
+        $dmsInvProductcategorytype = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProductcategorytype)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvProductcategorytypes.singular')]));
@@ -137,7 +137,7 @@ class DmsInvProductcategorytypeController extends AppBaseController
             return redirect(route('inventory.dmsInvProductcategorytypes.index'));
         }
 
-        $this->dmsInvProductcategorytypeRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsInvProductcategorytypes.singular')]));
 

@@ -17,11 +17,10 @@ use Response;
 class BtbViewTmpAPIController extends AppBaseController
 {
     /** @var BtbViewTmpRepository */
-    private $btbViewTmpRepository;
+    protected $repository;
 
-    public function __construct(BtbViewTmpRepository $btbViewTmpRepo)
+    public function __construct()
     {
-        $this->btbViewTmpRepository = $btbViewTmpRepo;
     }
 
     /**
@@ -57,7 +56,7 @@ class BtbViewTmpAPIController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $btbViewTmps = $this->btbViewTmpRepository->all(
+        $btbViewTmps = $this->getRepositoryObj()->all(
             $request->except(['skip', 'limit']),
             $request->get('skip'),
             $request->get('limit')
@@ -107,7 +106,7 @@ class BtbViewTmpAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $btbViewTmp = $this->btbViewTmpRepository->create($input);
+        $btbViewTmp = $this->getRepositoryObj()->create($input);
 
         return $this->sendResponse(new BtbViewTmpResource($btbViewTmp), 'Btb View Tmp saved successfully');
     }
@@ -154,7 +153,7 @@ class BtbViewTmpAPIController extends AppBaseController
     public function show($id)
     {
         /** @var BtbViewTmp $btbViewTmp */
-        $btbViewTmp = $this->btbViewTmpRepository->find($id);
+        $btbViewTmp = $this->getRepositoryObj()->find($id);
 
         if (empty($btbViewTmp)) {
             return $this->sendError('Btb View Tmp not found');
@@ -214,13 +213,13 @@ class BtbViewTmpAPIController extends AppBaseController
         $input = $request->all();
 
         /** @var BtbViewTmp $btbViewTmp */
-        $btbViewTmp = $this->btbViewTmpRepository->find($id);
+        $btbViewTmp = $this->getRepositoryObj()->find($id);
 
         if (empty($btbViewTmp)) {
             return $this->sendError('Btb View Tmp not found');
         }
 
-        $btbViewTmp = $this->btbViewTmpRepository->update($input, $id);
+        $btbViewTmp = $this->getRepositoryObj()->update($input, $id);
 
         return $this->sendResponse(new BtbViewTmpResource($btbViewTmp), 'BtbViewTmp updated successfully');
     }
@@ -267,7 +266,7 @@ class BtbViewTmpAPIController extends AppBaseController
     public function destroy($id)
     {
         /** @var BtbViewTmp $btbViewTmp */
-        $btbViewTmp = $this->btbViewTmpRepository->find($id);
+        $btbViewTmp = $this->getRepositoryObj()->find($id);
 
         if (empty($btbViewTmp)) {
             return $this->sendError('Btb View Tmp not found');

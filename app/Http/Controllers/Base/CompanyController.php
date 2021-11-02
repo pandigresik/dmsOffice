@@ -13,11 +13,11 @@ use Response;
 class CompanyController extends AppBaseController
 {
     /** @var CompanyRepository */
-    private $companyRepository;
+    protected $repository;
 
-    public function __construct(CompanyRepository $companyRepo)
+    public function __construct()
     {
-        $this->companyRepository = $companyRepo;
+        $this->repository = CompanyRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class CompanyController extends AppBaseController
     {
         $input = $request->all();
 
-        $company = $this->companyRepository->create($input);
+        $company = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/companies.singular')]));
 
@@ -65,7 +65,7 @@ class CompanyController extends AppBaseController
      */
     public function show($id)
     {
-        $company = $this->companyRepository->find($id);
+        $company = $this->getRepositoryObj()->find($id);
 
         if (empty($company)) {
             Flash::error(__('models/companies.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class CompanyController extends AppBaseController
      */
     public function edit($id)
     {
-        $company = $this->companyRepository->find($id);
+        $company = $this->getRepositoryObj()->find($id);
 
         if (empty($company)) {
             Flash::error(__('messages.not_found', ['model' => __('models/companies.singular')]));
@@ -105,7 +105,7 @@ class CompanyController extends AppBaseController
      */
     public function update($id, UpdateCompanyRequest $request)
     {
-        $company = $this->companyRepository->find($id);
+        $company = $this->getRepositoryObj()->find($id);
 
         if (empty($company)) {
             Flash::error(__('messages.not_found', ['model' => __('models/companies.singular')]));
@@ -113,7 +113,7 @@ class CompanyController extends AppBaseController
             return redirect(route('base.companies.index'));
         }
 
-        $company = $this->companyRepository->update($request->all(), $id);
+        $company = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/companies.singular')]));
 
@@ -129,7 +129,7 @@ class CompanyController extends AppBaseController
      */
     public function destroy($id)
     {
-        $company = $this->companyRepository->find($id);
+        $company = $this->getRepositoryObj()->find($id);
 
         if (empty($company)) {
             Flash::error(__('messages.not_found', ['model' => __('models/companies.singular')]));
@@ -137,7 +137,7 @@ class CompanyController extends AppBaseController
             return redirect(route('base.companies.index'));
         }
 
-        $this->companyRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/companies.singular')]));
 

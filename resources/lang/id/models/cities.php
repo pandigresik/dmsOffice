@@ -7,5 +7,6 @@ return array (
   array (
     'id' => 'Id',
     'name' => 'Name',
+    'province' => 'Province',
   ),
 );

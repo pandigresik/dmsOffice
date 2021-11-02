@@ -3,29 +3,27 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\LocationSupplierDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateLocationSupplierRequest;
 use App\Http\Requests\Base\UpdateLocationSupplierRequest;
-use App\Repositories\Base\LocationSupplierRepository;
 use App\Repositories\Base\DmsApSupplierRepository;
+use App\Repositories\Base\LocationSupplierRepository;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class LocationSupplierController extends AppBaseController
 {
-    /** @var  LocationSupplierRepository */
-    private $locationSupplierRepository;
+    /** @var LocationSupplierRepository */
+    protected $repository;
 
-    public function __construct(LocationSupplierRepository $locationSupplierRepo)
+    public function __construct()
     {
-        $this->locationSupplierRepository = $locationSupplierRepo;
+        $this->repository = LocationSupplierRepository::class;
     }
 
     /**
      * Display a listing of the LocationSupplier.
      *
-     * @param LocationSupplierDataTable $locationSupplierDataTable
      * @return Response
      */
     public function index(LocationSupplierDataTable $locationSupplierDataTable)
@@ -46,15 +44,13 @@ class LocationSupplierController extends AppBaseController
     /**
      * Store a newly created LocationSupplier in storage.
      *
-     * @param CreateLocationSupplierRequest $request
-     *
      * @return Response
      */
     public function store(CreateLocationSupplierRequest $request)
     {
         $input = $request->all();
 
-        $locationSupplier = $this->locationSupplierRepository->create($input);
+        $locationSupplier = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/locationSuppliers.singular')]));
 
@@ -64,13 +60,13 @@ class LocationSupplierController extends AppBaseController
     /**
      * Display the specified LocationSupplier.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function show($id)
     {
-        $locationSupplier = $this->locationSupplierRepository->find($id);
+        $locationSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($locationSupplier)) {
             Flash::error(__('models/locationSuppliers.singular').' '.__('messages.not_found'));
@@ -84,13 +80,13 @@ class LocationSupplierController extends AppBaseController
     /**
      * Show the form for editing the specified LocationSupplier.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function edit($id)
     {
-        $locationSupplier = $this->locationSupplierRepository->find($id);
+        $locationSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($locationSupplier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/locationSuppliers.singular')]));
@@ -105,20 +101,18 @@ class LocationSupplierController extends AppBaseController
         return view('base.location_suppliers.edit')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'locationSupplier' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'locationSupplier['.$idForm.']'])
         ;
-        
     }
 
     /**
      * Update the specified LocationSupplier in storage.
      *
-     * @param  int              $id
-     * @param UpdateLocationSupplierRequest $request
+     * @param int $id
      *
      * @return Response
      */
     public function update($id, UpdateLocationSupplierRequest $request)
     {
-        $locationSupplier = $this->locationSupplierRepository->find($id);
+        $locationSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($locationSupplier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/locationSuppliers.singular')]));
@@ -126,7 +120,7 @@ class LocationSupplierController extends AppBaseController
             return redirect(route('base.locationSuppliers.index'));
         }
 
-        $locationSupplier = $this->locationSupplierRepository->update($request->all(), $id);
+        $locationSupplier = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/locationSuppliers.singular')]));
 
@@ -136,13 +130,13 @@ class LocationSupplierController extends AppBaseController
     /**
      * Remove the specified LocationSupplier from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
     public function destroy($id)
     {
-        $locationSupplier = $this->locationSupplierRepository->find($id);
+        $locationSupplier = $this->getRepositoryObj()->find($id);
 
         if (empty($locationSupplier)) {
             Flash::error(__('messages.not_found', ['model' => __('models/locationSuppliers.singular')]));
@@ -150,7 +144,7 @@ class LocationSupplierController extends AppBaseController
             return redirect(route('base.locationSuppliers.index'));
         }
 
-        $this->locationSupplierRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/locationSuppliers.singular')]));
 
@@ -158,16 +152,17 @@ class LocationSupplierController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model LocationSupplier from storage.         
+     * Provide options item based on relationship model LocationSupplier from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         //$dmsApSupplier = new DmsApSupplierRepository(app());
         return [
-           // 'dmsApSupplierItems' => ['' => __('crud.option.dmsApSupplier_placeholder')] + $dmsApSupplier->pluck()            
+            // 'dmsApSupplierItems' => ['' => __('crud.option.dmsApSupplier_placeholder')] + $dmsApSupplier->pluck()
         ];
     }
 }

@@ -13,11 +13,11 @@ use Response;
 class SynchronizeInStockPickingController extends AppBaseController
 {
     /** @var SynchronizeInStockPickingRepository */
-    private $synchronizeInStockPickingRepository;
+    protected $repository;
 
-    public function __construct(SynchronizeInStockPickingRepository $synchronizeInStockPickingRepo)
+    public function __construct()
     {
-        $this->synchronizeInStockPickingRepository = $synchronizeInStockPickingRepo;
+        $this->repository = SynchronizeInStockPickingRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class SynchronizeInStockPickingController extends AppBaseController
     {
         $input = $request->all();
 
-        $synchronizeInStockPicking = $this->synchronizeInStockPickingRepository->create($input);
+        $synchronizeInStockPicking = $this->getRepositoryObj()->create($input);
 
         Flash::success('Synchronize In Stock Picking saved successfully.');
 
@@ -65,7 +65,7 @@ class SynchronizeInStockPickingController extends AppBaseController
      */
     public function show($id)
     {
-        $synchronizeInStockPicking = $this->synchronizeInStockPickingRepository->find($id);
+        $synchronizeInStockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($synchronizeInStockPicking)) {
             Flash::error('Synchronize In Stock Picking not found');
@@ -85,7 +85,7 @@ class SynchronizeInStockPickingController extends AppBaseController
      */
     public function edit($id)
     {
-        $synchronizeInStockPicking = $this->synchronizeInStockPickingRepository->find($id);
+        $synchronizeInStockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($synchronizeInStockPicking)) {
             Flash::error('Synchronize In Stock Picking not found');
@@ -105,7 +105,7 @@ class SynchronizeInStockPickingController extends AppBaseController
      */
     public function update($id, UpdateSynchronizeInStockPickingRequest $request)
     {
-        $synchronizeInStockPicking = $this->synchronizeInStockPickingRepository->find($id);
+        $synchronizeInStockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($synchronizeInStockPicking)) {
             Flash::error('Synchronize In Stock Picking not found');
@@ -113,7 +113,7 @@ class SynchronizeInStockPickingController extends AppBaseController
             return redirect(route('inventory.synchronizeInStockPickings.index'));
         }
 
-        $synchronizeInStockPicking = $this->synchronizeInStockPickingRepository->update($request->all(), $id);
+        $synchronizeInStockPicking = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success('Synchronize In Stock Picking updated successfully.');
 
@@ -129,7 +129,7 @@ class SynchronizeInStockPickingController extends AppBaseController
      */
     public function destroy($id)
     {
-        $synchronizeInStockPicking = $this->synchronizeInStockPickingRepository->find($id);
+        $synchronizeInStockPicking = $this->getRepositoryObj()->find($id);
 
         if (empty($synchronizeInStockPicking)) {
             Flash::error('Synchronize In Stock Picking not found');
@@ -137,7 +137,7 @@ class SynchronizeInStockPickingController extends AppBaseController
             return redirect(route('inventory.synchronizeInStockPickings.index'));
         }
 
-        $this->synchronizeInStockPickingRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success('Synchronize In Stock Picking deleted successfully.');
 

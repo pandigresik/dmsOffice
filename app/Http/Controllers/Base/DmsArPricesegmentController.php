@@ -13,11 +13,11 @@ use Response;
 class DmsArPricesegmentController extends AppBaseController
 {
     /** @var DmsArPricesegmentRepository */
-    private $dmsArPricesegmentRepository;
+    protected $repository;
 
-    public function __construct(DmsArPricesegmentRepository $dmsArPricesegmentRepo)
+    public function __construct()
     {
-        $this->dmsArPricesegmentRepository = $dmsArPricesegmentRepo;
+        $this->repository = DmsArPricesegmentRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsArPricesegmentController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsArPricesegment = $this->dmsArPricesegmentRepository->create($input);
+        $dmsArPricesegment = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsArPricesegments.singular')]));
 
@@ -65,7 +65,7 @@ class DmsArPricesegmentController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsArPricesegment = $this->dmsArPricesegmentRepository->find($id);
+        $dmsArPricesegment = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPricesegment)) {
             Flash::error(__('models/dmsArPricesegments.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsArPricesegmentController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsArPricesegment = $this->dmsArPricesegmentRepository->find($id);
+        $dmsArPricesegment = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPricesegment)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArPricesegments.singular')]));
@@ -105,7 +105,7 @@ class DmsArPricesegmentController extends AppBaseController
      */
     public function update($id, UpdateDmsArPricesegmentRequest $request)
     {
-        $dmsArPricesegment = $this->dmsArPricesegmentRepository->find($id);
+        $dmsArPricesegment = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPricesegment)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArPricesegments.singular')]));
@@ -113,7 +113,7 @@ class DmsArPricesegmentController extends AppBaseController
             return redirect(route('base.dmsArPricesegments.index'));
         }
 
-        $dmsArPricesegment = $this->dmsArPricesegmentRepository->update($request->all(), $id);
+        $dmsArPricesegment = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsArPricesegments.singular')]));
 
@@ -129,7 +129,7 @@ class DmsArPricesegmentController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsArPricesegment = $this->dmsArPricesegmentRepository->find($id);
+        $dmsArPricesegment = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsArPricesegment)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsArPricesegments.singular')]));
@@ -137,7 +137,7 @@ class DmsArPricesegmentController extends AppBaseController
             return redirect(route('base.dmsArPricesegments.index'));
         }
 
-        $this->dmsArPricesegmentRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsArPricesegments.singular')]));
 

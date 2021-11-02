@@ -13,11 +13,11 @@ use Response;
 class DmsInvProductkitinfoController extends AppBaseController
 {
     /** @var DmsInvProductkitinfoRepository */
-    private $dmsInvProductkitinfoRepository;
+    protected $repository;
 
-    public function __construct(DmsInvProductkitinfoRepository $dmsInvProductkitinfoRepo)
+    public function __construct()
     {
-        $this->dmsInvProductkitinfoRepository = $dmsInvProductkitinfoRepo;
+        $this->repository = DmsInvProductkitinfoRepository::class;
     }
 
     /**
@@ -49,7 +49,7 @@ class DmsInvProductkitinfoController extends AppBaseController
     {
         $input = $request->all();
 
-        $dmsInvProductkitinfo = $this->dmsInvProductkitinfoRepository->create($input);
+        $dmsInvProductkitinfo = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/dmsInvProductkitinfos.singular')]));
 
@@ -65,7 +65,7 @@ class DmsInvProductkitinfoController extends AppBaseController
      */
     public function show($id)
     {
-        $dmsInvProductkitinfo = $this->dmsInvProductkitinfoRepository->find($id);
+        $dmsInvProductkitinfo = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProductkitinfo)) {
             Flash::error(__('models/dmsInvProductkitinfos.singular').' '.__('messages.not_found'));
@@ -85,7 +85,7 @@ class DmsInvProductkitinfoController extends AppBaseController
      */
     public function edit($id)
     {
-        $dmsInvProductkitinfo = $this->dmsInvProductkitinfoRepository->find($id);
+        $dmsInvProductkitinfo = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProductkitinfo)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvProductkitinfos.singular')]));
@@ -105,7 +105,7 @@ class DmsInvProductkitinfoController extends AppBaseController
      */
     public function update($id, UpdateDmsInvProductkitinfoRequest $request)
     {
-        $dmsInvProductkitinfo = $this->dmsInvProductkitinfoRepository->find($id);
+        $dmsInvProductkitinfo = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProductkitinfo)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvProductkitinfos.singular')]));
@@ -113,7 +113,7 @@ class DmsInvProductkitinfoController extends AppBaseController
             return redirect(route('inventory.dmsInvProductkitinfos.index'));
         }
 
-        $dmsInvProductkitinfo = $this->dmsInvProductkitinfoRepository->update($request->all(), $id);
+        $dmsInvProductkitinfo = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/dmsInvProductkitinfos.singular')]));
 
@@ -129,7 +129,7 @@ class DmsInvProductkitinfoController extends AppBaseController
      */
     public function destroy($id)
     {
-        $dmsInvProductkitinfo = $this->dmsInvProductkitinfoRepository->find($id);
+        $dmsInvProductkitinfo = $this->getRepositoryObj()->find($id);
 
         if (empty($dmsInvProductkitinfo)) {
             Flash::error(__('messages.not_found', ['model' => __('models/dmsInvProductkitinfos.singular')]));
@@ -137,7 +137,7 @@ class DmsInvProductkitinfoController extends AppBaseController
             return redirect(route('inventory.dmsInvProductkitinfos.index'));
         }
 
-        $this->dmsInvProductkitinfoRepository->delete($id);
+        $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/dmsInvProductkitinfos.singular')]));
 
