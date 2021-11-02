@@ -23,6 +23,7 @@ class RolesTableSeeder extends Seeder
             array (
                 'created_at' => '2021-10-26 22:21:21',
                 'guard_name' => 'web',
+                'id' => 1,
                 'name' => 'administrator',
                 'updated_at' => '2021-10-26 22:21:21',
             ),
@@ -30,6 +31,7 @@ class RolesTableSeeder extends Seeder
             array (
                 'created_at' => '2021-11-01 06:31:19',
                 'guard_name' => 'web',
+                'id' => 2,
                 'name' => 'Admin Company',
                 'updated_at' => '2021-11-01 06:31:19',
             ),

@@ -14,7 +14,7 @@ class AlterUserAddEntity extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('entity_id');
+            $table->unsignedBigInteger('entity_id')->nullable();
             $table->foreign('entity_id', 'fk_user_entity')->references('id')->on('entity');
         });
     }
@@ -27,7 +27,7 @@ class AlterUserAddEntity extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign('entity_id');
+            $table->dropForeign('fk_user_entity');
         });
     }
 }

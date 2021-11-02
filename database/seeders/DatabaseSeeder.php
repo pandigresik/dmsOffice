@@ -14,12 +14,12 @@ class DatabaseSeeder extends Seeder
     {        
         $this->call(UsersTableSeeder::class);
         $this->call(PermissionsTableSeeder::class);
-        $this->call(MenusTableSeeder::class);
-        $this->call(MenuPermissionsTableSeeder::class);
+        $this->call(MenusTableSeeder::class);        
         $this->call(RoleHasPermissionsTableSeeder::class);
         $this->call(RolesTableSeeder::class);
         $this->call(SettingTableSeeder::class);
         $this->call(ModelHasRolesTableSeeder::class);
+        $this->call(MenuPermissionsTableSeeder::class);
 
         \App\Models\Base\MenusTree::fixTree();        
     }
