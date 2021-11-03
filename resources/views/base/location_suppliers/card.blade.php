@@ -26,14 +26,14 @@
             <div class="card-content">                
                 <div>{{ $dataCard['address'] ?? '{locationAddress}' }}</div>
                 <div>{{ $dataCard['city'] ?? '{locationCity}' }}</div>
-                <div>{{ $dataCard['state'] ?? '{locationState}' }}</div>                
+                
                 <div class="row">
                     <div class="col-md-3">Jenis Trip</div>
                     <div class="col-md-9">{locationTrip}</div>
                 </div>
                 <div class="row">
                     <div class="col-md-3">Biaya Tambahan</div>
-                    <div class="col-md-9">{locationAdditionalCost}</div>
+                    <div class="col-md-9">{{ {{ $dataCard['additional_cost'] ?? '{locationAdditionalCost}' }}</div>
                 </div>
             </div>
             <div class="form-hidden collapse">{locationForm}</div>

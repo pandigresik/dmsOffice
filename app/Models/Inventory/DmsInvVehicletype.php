@@ -122,4 +122,14 @@ class DmsInvVehicletype extends Model
         'dtmCreated' => 'datetime',
         'dtmLastUpdated' => 'datetime',
     ];
+
+    public function getDecWeightAttribute($value)
+    {
+        return localNumberFormat($value);
+    }
+
+    public function getDecVolumeAttribute($value)
+    {
+        return localNumberFormat($value);
+    }
 }

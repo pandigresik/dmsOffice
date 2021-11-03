@@ -32,10 +32,18 @@ class DmsInvVehicletypeDataTable extends DataTable
         if (!empty($this->columnFilterOperator)) {
             foreach ($this->columnFilterOperator as $column => $operator) {
                 $columnSearch = $this->mapColumnSearch[$column] ?? $column;
-                $dataTable->filterColumn($column, new $operator($columnSearch));                
+                $dataTable->filterColumn($column, new $operator($columnSearch));
             }
         }
-        return $dataTable->addColumn('action', 'inventory.dms_inv_vehicletypes.datatables_actions');
+        return $dataTable
+                    ->editColumn('decVolume', function($q){
+                        return '<div class="text-right">'.$q->decVolume.'</div>';
+                    })
+                    ->editColumn('decWeight', function($q){
+                        return '<div class="text-right">'.$q->decWeight.'</div>';
+                    })
+                    ->addColumn('action', 'inventory.dms_inv_vehicletypes.datatables_actions')
+                    ->escapeColumns([]);
     }
 
     /**
@@ -119,8 +127,8 @@ class DmsInvVehicletypeDataTable extends DataTable
             'szId' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
             'szName' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szName'), 'data' => 'szName', 'searchable' => true, 'elmsearch' => 'text']),
             'szDescription' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
-            'decWeight' => new Column(['title' => __('models/dmsInvVehicletypes.fields.decWeight'), 'data' => 'decWeight', 'searchable' => true, 'elmsearch' => 'text']),
-            'decVolume' => new Column(['title' => __('models/dmsInvVehicletypes.fields.decVolume'), 'data' => 'decVolume', 'searchable' => true, 'elmsearch' => 'text']),
+            'decWeight' => new Column(['title' => __('models/dmsInvVehicletypes.fields.decWeight'), 'data' => 'decWeight', 'searchable' => false, 'elmsearch' => 'text']),
+            'decVolume' => new Column(['title' => __('models/dmsInvVehicletypes.fields.decVolume'), 'data' => 'decVolume', 'searchable' => false, 'elmsearch' => 'text']),
             // 'szUserCreatedId' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
             // 'szUserUpdatedId' => new Column(['title' => __('models/dmsInvVehicletypes.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
             // 'dtmCreated' => new Column(['title' => __('models/dmsInvVehicletypes.fields.dtmCreated'), 'data' => // 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),

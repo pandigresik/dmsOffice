@@ -7,5 +7,6 @@ return array (
   array (
     'id' => 'Id',
     'dms_inv_vehicle_id' => 'Dms Inv Vehicle Id',
+    'vehicle' => 'Kendaraan'
   ),
 );

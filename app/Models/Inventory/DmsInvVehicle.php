@@ -71,6 +71,7 @@ class DmsInvVehicle extends Model
     public $table = 'dms_inv_vehicle';
 
     public $primaryKey = 'iInternalId';
+    protected $showColumnOption = 'szName';
     public $fillable = [
         'iId',
         'szId',

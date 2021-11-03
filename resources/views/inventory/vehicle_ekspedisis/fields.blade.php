@@ -1,7 +1,6 @@
-<!-- Dms Inv Vehicle Id Field -->
-<div class="form-group row">
-    {!! Form::label('dms_inv_vehicle_id', __('models/vehicleEkspedisis.fields.dms_inv_vehicle_id').':', ['class' => 'col-md-3 col-form-label']) !!}
+{!! Form::hidden($prefixName.'[stateForm]', $stateForm) !!}
+{!! Form::label('vehicle', __('models/vehicleEkspedisis.fields.vehicle').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('dms_inv_vehicle_id', $dmsInvVehicleItems, null, ['class' => 'form-control select2']) !!}
+    {!! Form::select($prefixName.'[vehicle]',$dmsInvVehicleItems, null,['class' => 'form-control select2', 'required' => 'required', 'multiple' => 'multiple']) !!}    
 </div>
 </div>

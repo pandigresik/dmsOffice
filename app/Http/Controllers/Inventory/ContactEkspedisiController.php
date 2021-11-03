@@ -104,6 +104,15 @@ class ContactEkspedisiController extends AppBaseController
             return redirect(route('inventory.contactEkspedisis.index'));
         }
 
+        $idForm = $id;
+        $contactEkspedisi->stateForm = 'update';
+        $obj = new \stdClass();
+        $obj->contactEkspedisi = [$id => $contactEkspedisi];
+
+        return view('inventory.contact_ekspedisis.edit')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'contactEkspedisi' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'contactEkspedisis['.$idForm.']'])
+        ;
+
         return view('inventory.contact_ekspedisis.edit')->with('contactEkspedisi', $contactEkspedisi)->with($this->getOptionItems());
     }
 

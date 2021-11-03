@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Inventory;
 
-use App\DataTables\Inventory\LocationEkspedisiDataTable;
+use Flash;
+use Response;
+use Illuminate\Http\Request;
+use App\Repositories\Base\CityRepository;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\Inventory\DmsInvCarrierRepository;
+use App\DataTables\Inventory\LocationEkspedisiDataTable;
+use App\Repositories\Inventory\LocationEkspedisiRepository;
 use App\Http\Requests\Inventory\CreateLocationEkspedisiRequest;
 use App\Http\Requests\Inventory\UpdateLocationEkspedisiRequest;
-use App\Repositories\Inventory\DmsInvCarrierRepository;
-use App\Repositories\Inventory\LocationEkspedisiRepository;
-use Flash;
-use Illuminate\Http\Request;
-use Response;
 
 class LocationEkspedisiController extends AppBaseController
 {
@@ -110,7 +111,7 @@ class LocationEkspedisiController extends AppBaseController
         $obj->locationEkspedisi = [$id => $locationEkspedisi];
 
         return view('inventory.location_ekspedisis.edit')->with($this->getOptionItems())
-            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'locationEkspedisi' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'locationEkspedisi['.$idForm.']'])
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'locationEkspedisi' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'locationEkspedisis['.$idForm.']'])
         ;
     }
 
@@ -171,9 +172,10 @@ class LocationEkspedisiController extends AppBaseController
      */
     private function getOptionItems()
     {
-        // $dmsInvCarrier = new DmsInvCarrierRepository(app());
+        $city = new CityRepository(app());
+
         return [
-            //     'dmsInvCarrierItems' => ['' => __('crud.option.dmsInvCarrier_placeholder')] + $dmsInvCarrier->pluck()
+            'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck([], null, null, 'name', 'name'),
         ];
     }
 }

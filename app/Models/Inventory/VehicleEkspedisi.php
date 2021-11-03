@@ -65,6 +65,6 @@ class VehicleEkspedisi extends Model
      */
     public function dmsInvVehicle()
     {
-        return $this->belongsTo(\App\Models\Inventory\DmsInvVehicle::class, 'dms_inv_vehicle_id');
+        return $this->belongsTo(\App\Models\Inventory\DmsInvVehicle::class, 'dms_inv_vehicle_id','iInternalId');
     }
 }

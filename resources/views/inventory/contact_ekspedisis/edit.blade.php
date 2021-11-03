@@ -2,7 +2,7 @@
           <div class="animated fadeIn">                
                 <div class="row">
                     <div class="col-lg-12">
-                        {!! Form::model($locationCustomer,['data-submitable' => 0]) !!}
+                        {!! Form::model($contactEkspedisi,['data-submitable' => 0]) !!}
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>

@@ -92,11 +92,11 @@ class DmsInvCarrierController extends AppBaseController
 
             return redirect(route('inventory.dmsInvCarriers.index'));
         }
-        $jsonDefaultSearching = ['dms_ar_carrier_id' => $id];
+        $jsonDefaultSearching = ['dms_inv_carrier_id' => $id];
         $dataTabs = [
             'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('inventory.contactEkspedisis.index', ['dms_inv_carrier_id' => $id]), 'defaultContent' => '', 'class' => ''],
             'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('inventory.locationEkspedisis.index', ['dms_inv_carrier_id' => $id]), 'defaultContent' => '', 'class' => ''],
-            'vehicle' => ['text' => 'Kendaraan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'defaultContent' => '', 'class' => ''],
+            'vehicle' => ['text' => 'Kendaraan', 'json' => $jsonDefaultSearching, 'url' => route('inventory.vehicleEkspedisis.index', ['dms_inv_carrier_id' => $id]), 'defaultContent' => '', 'class' => ''],
             'trip' => ['text' => 'Trip', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'defaultContent' => '', 'class' => ''],
             'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
         ];

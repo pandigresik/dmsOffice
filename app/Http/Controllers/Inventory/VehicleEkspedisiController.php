@@ -9,6 +9,7 @@ use App\Http\Requests\Inventory\UpdateVehicleEkspedisiRequest;
 use App\Repositories\Inventory\DmsInvVehicleRepository;
 use App\Repositories\Inventory\VehicleEkspedisiRepository;
 use Flash;
+use Illuminate\Http\Request;
 use Response;
 
 class VehicleEkspedisiController extends AppBaseController
@@ -26,9 +27,12 @@ class VehicleEkspedisiController extends AppBaseController
      *
      * @return Response
      */
-    public function index(VehicleEkspedisiDataTable $vehicleEkspedisiDataTable)
+    public function index(Request $request)
     {
-        return $vehicleEkspedisiDataTable->render('inventory.vehicle_ekspedisis.index');
+        $vehicles = $this->getRepositoryObj()->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')]);
+        $buttonView = view('inventory.dms_inv_carriers.partials.vehicle_button', ['json' => [], 'url' => route('inventory.vehicleEkspedisis.create')])->render();
+
+        return view('inventory.vehicle_ekspedisis.index')->with(['vehicles' => $vehicles, 'buttonView' => $buttonView]);        
     }
 
     /**
@@ -38,7 +42,11 @@ class VehicleEkspedisiController extends AppBaseController
      */
     public function create()
     {
-        return view('inventory.vehicle_ekspedisis.create')->with($this->getOptionItems());
+        $idForm = \Carbon\Carbon::now()->timestamp;
+
+        return view('inventory.vehicle_ekspedisis.create')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'vehicleEkspedisis['.$idForm.']'])
+        ;
     }
 
     /**
@@ -94,6 +102,14 @@ class VehicleEkspedisiController extends AppBaseController
             return redirect(route('inventory.vehicleEkspedisis.index'));
         }
 
+        $idForm = $id;
+        $vehicleEkspedisi->stateForm = 'update';
+        $obj = new \stdClass();
+        $obj->vehicleEkspedisi = [$id => $vehicleEkspedisi];
+
+        return view('inventory.vehicle_ekspedisis.edit')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'vehicleEkspedisi' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'vehicleEkspedisis['.$idForm.']'])
+        ;
         return view('inventory.vehicle_ekspedisis.edit')->with('vehicleEkspedisi', $vehicleEkspedisi)->with($this->getOptionItems());
     }
 
