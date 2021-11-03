@@ -182,4 +182,9 @@ class Trip extends Model
     {
         return localNumberFormat($value);
     }
+
+    public function getFullIdentityAttribute($value)
+    {
+        return implode(' | ',[$this->attributes['code'],$this->attributes['name'],$this->attributes['price'],$this->attributes['distance']]);
+    }
 }

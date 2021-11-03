@@ -1,4 +1,4 @@
-<div class="card card-accent-info">
+<div class="card card-accent-info col-md-6">
     <div class="card-header">Contact
         <div class="card-header-actions">
             <a class="card-header-action btn-setting" href="#">

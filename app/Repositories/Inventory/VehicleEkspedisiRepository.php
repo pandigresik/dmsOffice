@@ -17,7 +17,8 @@ class VehicleEkspedisiRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [
-        'dms_inv_vehicle_id'
+        'dms_inv_vehicle_id',
+        'dms_inv_carrier_id'
     ];
 
     /**

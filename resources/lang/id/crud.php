@@ -23,6 +23,7 @@ return [
     'state_nonactive' => 'Non Aktif',    
     'option' => [
         'vehicleGroup_placeholder' => 'Pilih group kendaraan',
+        'dmsInvVehicle_placeholder' => 'Pilih kendaraan',
         'Vendor_placeholder' => 'Pilih vendor',
         'city_placeholder_origin' => 'Pilih kota asal',
         'city_placeholder_destination' => 'Pilih kota tujuan',

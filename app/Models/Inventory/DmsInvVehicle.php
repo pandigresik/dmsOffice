@@ -166,4 +166,9 @@ class DmsInvVehicle extends Model
     {
         return localFormatDate($value);
     }
+
+    public function getFullIdentityAttribute($value)
+    {
+        return implode(' | ',[$this->attributes['szId'],$this->attributes['szPoliceNo']]);
+    }    
 }

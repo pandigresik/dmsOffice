@@ -29,13 +29,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('users', App\Http\Controllers\Base\UserController::class, ['as' => 'base']);
         Route::resource('menus', App\Http\Controllers\Base\MenusController::class, ['as' => 'base']);
         // Route::resource('menuPermissions', App\Http\Controllers\Base\MenuPermissionsController::class, ["as" => 'base']);
-        Route::resource('vehicleGroups', App\Http\Controllers\Base\VehicleGroupController::class, ['as' => 'base']);
-        Route::resource('vendors', App\Http\Controllers\Base\VendorController::class, ['as' => 'base']);
-        Route::resource('vendorsContacts', App\Http\Controllers\Base\VendorContactController::class, ["as" => 'base']);
+        // Route::resource('vehicleGroups', App\Http\Controllers\Base\VehicleGroupController::class, ['as' => 'base']);
+        // Route::resource('vendors', App\Http\Controllers\Base\VendorController::class, ['as' => 'base']);
+        // Route::resource('vendorsContacts', App\Http\Controllers\Base\VendorContactController::class, ["as" => 'base']);
         //Route::get('vendors/contacts/form/{json?}', 'App\Http\Controllers\Base\VendorContactController@form')->name('base.vendors.contacts.form');
-        Route::resource('vendorsLocations', App\Http\Controllers\Base\VendorLocationController::class, ["as" => 'base']);
+        //Route::resource('vendorsLocations', App\Http\Controllers\Base\VendorLocationController::class, ["as" => 'base']);
         //Route::get('vendors/locations/form/{json?}', 'App\Http\Controllers\Base\VendorLocationController@form')->name('base.vendors.locations.form');
-        Route::resource('vendorsVehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
+        //Route::resource('vendorsVehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
         //Route::get('vendors/vehicles/form/{json?}', 'App\Http\Controllers\Base\VehicleController@form')->name('base.vendors.vehicles.form');
         //Route::resource('vehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
         Route::resource('cities', App\Http\Controllers\Base\CityController::class, ['as' => 'base']);
@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('entities', App\Http\Controllers\Base\EntityController::class, ["as" => 'base']);
                 
         Route::resource('settings', App\Http\Controllers\Base\SettingController::class, ['as' => 'base']);
-        Route::resource('products', App\Http\Controllers\Base\ProductController::class, ['as' => 'base']);
+        //Route::resource('products', App\Http\Controllers\Base\ProductController::class, ['as' => 'base']);
 
         /** DMS Table */            
         Route::resource('dmsApSuppliers', App\Http\Controllers\Base\DmsApSupplierController::class, ["as" => 'base']);
@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('vehicleEkspedisis', App\Http\Controllers\Inventory\VehicleEkspedisiController::class, ["as" => 'inventory']);
         Route::resource('contactEkspedisis', App\Http\Controllers\Inventory\ContactEkspedisiController::class, ["as" => 'inventory']);
         Route::resource('locationEkspedisis', App\Http\Controllers\Inventory\LocationEkspedisiController::class, ["as" => 'inventory']);
+        Route::resource('tripEkspedisis', App\Http\Controllers\Inventory\TripEkspedisiController::class, ["as" => 'inventory']);
     });
 
     Route::group(['prefix' => 'accounting'], function () {        
@@ -114,3 +115,6 @@ Route::post('generator_builder/rollback', '\InfyOm\GeneratorBuilder\Controllers\
 )->name('io_generator_builder_generate_from_file');
 
 Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');
+
+Route::resource('synchronizes', App\Http\Controllers\SynchronizeController::class);
+

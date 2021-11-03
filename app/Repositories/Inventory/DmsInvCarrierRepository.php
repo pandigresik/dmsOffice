@@ -2,11 +2,13 @@
 
 namespace App\Repositories\Inventory;
 
-use App\Models\Inventory\ContactEkspedisi;
-use App\Models\Inventory\DmsInvCarrier;
-use App\Models\Inventory\LocationEkspedisi;
-use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
+use App\Repositories\BaseRepository;
+use App\Models\Inventory\DmsInvCarrier;
+use App\Models\Inventory\TripEkspedisi;
+use App\Models\Inventory\ContactEkspedisi;
+use App\Models\Inventory\VehicleEkspedisi;
+use App\Models\Inventory\LocationEkspedisi;
 /**
  * Class DmsInvCarrierRepository
  * @package App\Repositories\Inventory
@@ -54,6 +56,8 @@ class DmsInvCarrierRepository extends BaseRepository
         try {
             $contactEkspedisis = $input['contactEkspedisis'] ?? [];
             $locationEkspedisis = $input['locationEkspedisis'] ?? [];
+            $vehicleEkspedisis = $input['vehicleEkspedisis'] ?? [];            
+            $tripEkspedisis = $input['tripEkspedisis'] ?? [];
             $model = parent::update($input, $id);
             if (!empty($contactEkspedisis)) {                
                 foreach ($contactEkspedisis as $key => $vc) {
@@ -76,7 +80,7 @@ class DmsInvCarrierRepository extends BaseRepository
                 }
             }
             if (!empty($locationEkspedisis)) {
-                foreach ($locationEkspedisis as $key => $vc) {
+                foreach ($locationEkspedisis as $key => $vc) {                    
                     $stateForm = $vc['stateForm'];
                     switch ($stateForm) {
                         case 'insert':
@@ -96,6 +100,38 @@ class DmsInvCarrierRepository extends BaseRepository
                 }
             }
 
+            if (!empty($vehicleEkspedisis)) {
+                foreach ($vehicleEkspedisis as $key => $vc) {
+                    $stateForm = $vc['stateForm'];
+                    switch ($stateForm) {
+                        case 'insert':
+                            $model->vehicleEkspedisis()->create($vc);                         
+                            break;
+                        
+                        case 'delete':
+                            VehicleEkspedisi::where(['dms_inv_vehicle_id' => $key, 'dms_inv_carrier_id' => $id])->delete();
+
+                            break;
+                    }
+                }
+            }
+
+            if (!empty($tripEkspedisis)) {
+                foreach ($tripEkspedisis as $key => $vc) {
+                    $stateForm = $vc['stateForm'];
+                    switch ($stateForm) {
+                        case 'insert':
+                            $model->tripEkspedisis()->create($vc);
+
+                            break;
+                        
+                        case 'delete':
+                            TripEkspedisi::where(['trip_id' => $key, 'dms_inv_carrier_id' => $id])->delete();
+
+                            break;
+                    }
+                }
+            }
             DB::commit();
 
             return $model;

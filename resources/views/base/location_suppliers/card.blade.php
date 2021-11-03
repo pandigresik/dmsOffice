@@ -1,4 +1,4 @@
-<div class="card card-accent-info">
+<div class="card card-accent-info col-md-6">
     <div class="card-header">Contact
         <div class="card-header-actions">
             <a class="card-header-action btn-setting" href="#">
@@ -33,7 +33,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-3">Biaya Tambahan</div>
-                    <div class="col-md-9">{{ {{ $dataCard['additional_cost'] ?? '{locationAdditionalCost}' }}</div>
+                    <div class="col-md-9">{{  $dataCard['additional_cost'] ?? '{locationAdditionalCost}' }}</div>
                 </div>
             </div>
             <div class="form-hidden collapse">{locationForm}</div>

@@ -29,7 +29,11 @@ class VehicleEkspedisiController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $vehicles = $this->getRepositoryObj()->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')]);
+        $vehicles = $this->getRepositoryObj()->with(['dmsInvVehicle'])
+            ->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->map(function($q){
+
+                return $q->dmsInvVehicle;
+        });
         $buttonView = view('inventory.dms_inv_carriers.partials.vehicle_button', ['json' => [], 'url' => route('inventory.vehicleEkspedisis.create')])->render();
 
         return view('inventory.vehicle_ekspedisis.index')->with(['vehicles' => $vehicles, 'buttonView' => $buttonView]);        
@@ -169,11 +173,11 @@ class VehicleEkspedisiController extends AppBaseController
      * @return Response
      */
     private function getOptionItems()
-    {
+    {   
         $dmsInvVehicle = new DmsInvVehicleRepository(app());
-
+        
         return [
-            'dmsInvVehicleItems' => ['' => __('crud.option.dmsInvVehicle_placeholder')] + $dmsInvVehicle->pluck(),
+            'dmsInvVehicleItems' => ['' => __('crud.option.dmsInvVehicle_placeholder')] + $dmsInvVehicle->all()->pluck('full_identity', 'iInternalId')->toArray(),
         ];
     }
 }

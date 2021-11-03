@@ -29,15 +29,19 @@
             const _template = `@include('inventory.vehicle_ekspedisis.card')`
             const _form = $(elm).closest('form');
             if(_form.valid()){                                
-                const _idForm = '{{ $idForm }}'
+                let _idForm = '{{ $idForm }}'
                 const _divWrapper = $('.button-caller').closest('div').find('.content-info')
                 const _json = _form.serializeJSON()['vehicleEkspedisis'][_idForm]
-                _divWrapper.append(
-                    _template.replace('{vehicleName}', _json['name'])
-                            .replace('{vehiclePosition}', _json['position'])
-                            .replace('{vehicleMobile}', _json['mobile'])                            
-                            .replace('{vehicleForm}', main.generateFormField(`vehicleEkspedisis[${_idForm}]`, _json).join(''))
+                let _optionSelected
+                _json['vehicle'].forEach(element => {
+                    _optionSelected = _form.find('option[value='+element+']').text().split(' | ')
+                    _divWrapper.append(
+                    _template.replace('{vehicleId}', _optionSelected[0])
+                            .replace('{vehiclePoliceNo}', _optionSelected[1])
+                            .replace('{vehicleForm}', main.generateFormField(`vehicleEkspedisis[${_idForm++}]`, {'dms_inv_vehicle_id' : element, 'stateForm' : _json['stateForm']}).join(''))
                 )
+                });
+                
                 _form.closest('.bootbox').find('button.bootbox-close-button').click()
             }
         }        

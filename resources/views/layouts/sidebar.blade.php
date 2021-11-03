@@ -6,7 +6,10 @@
     </nav>
     <button class="c-sidebar-minimizer brand-minimizer" type="button"></button>
 </div>
+<!--
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
+-->
+<div class="c-sidebar c-sidebar-dark c-sidebar-fixed" id="sidebar">
         <div class="c-sidebar-brand d-lg-down-none">
             <svg class="c-sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
                 <use xlink:href="assets/brand/coreui.svg#full"></use>

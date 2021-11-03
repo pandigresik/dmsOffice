@@ -19,7 +19,7 @@ class $MODEL_NAME$Controller extends AppBaseController
 
     public function __construct()
     {
-        $this->repository = $$MODEL_NAME_CAMEL$Repository::class;
+        $this->repository = $MODEL_NAME$Repository::class;
     }
 
     /**
