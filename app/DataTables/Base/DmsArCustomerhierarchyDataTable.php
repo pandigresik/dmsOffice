@@ -57,11 +57,11 @@ class DmsArCustomerhierarchyDataTable extends DataTable
     public function html()
     {
         $buttons = [
-                    [
-                       'extend' => 'create',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-                    ],
+                    // [
+                    //    'extend' => 'create',
+                    //    'className' => 'btn btn-default btn-sm no-corner',
+                    //    'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
+                    // ],
                     [
                        'extend' => 'export',
                        'className' => 'btn btn-default btn-sm no-corner',

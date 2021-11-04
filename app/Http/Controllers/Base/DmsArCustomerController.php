@@ -96,7 +96,7 @@ class DmsArCustomerController extends AppBaseController
         $dataTabs = [
             'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('base.contactCustomers.index', ['dms_ar_customer_id' => $id]), 'defaultContent' => '', 'class' => ''],
             'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.locationCustomers.index', ['dms_ar_customer_id' => $id]), 'defaultContent' => '', 'class' => ''],
-            'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
+            //'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
         ];
 
         return view('base.dms_ar_customers.edit')->with('dataTabs', $dataTabs)->with('dmsArCustomer', $dmsArCustomer)->with($this->getOptionItems());

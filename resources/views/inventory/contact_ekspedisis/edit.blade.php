@@ -35,7 +35,10 @@
                 _divWrapper.append(
                     _template.replace('{contactName}', _json['name'])
                             .replace('{contactPosition}', _json['position'])
-                            .replace('{contactMobile}', _json['mobile'])                            
+                            .replace('{contactEmail}', _json['email'])
+                            .replace('{contactMobile}', _json['mobile'])
+                            .replace('{contactAddress}', _json['address'])
+                            .replace('{contactCity}', _json['city'])                            
                             .replace('{contactForm}', main.generateFormField(`contactEkspedisis[${_idForm}]`, _json).join(''))
                 )
                 _form.closest('.bootbox').find('button.bootbox-close-button').click()

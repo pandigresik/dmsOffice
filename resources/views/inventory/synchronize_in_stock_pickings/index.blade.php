@@ -15,7 +15,7 @@
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
                              SynchronizeInStockPickings
-                             <a class="pull-right" href="{{ route('inventory.synchronizeInStockPickings.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                             
                          </div>
                          {!! Form::open(['route' => 'inventory.synchronizeInStockPickings.store']) !!}
                          <div class="card-body">                             

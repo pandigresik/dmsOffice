@@ -13,7 +13,7 @@ class DmsArCustomerDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'bHasDifferentCollectAddress' => \App\DataTables\FilterClass\MatchKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -57,11 +57,11 @@ class DmsArCustomerDataTable extends DataTable
     public function html()
     {
         $buttons = [
-                    [
-                       'extend' => 'create',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-                    ],
+                    // [
+                    //    'extend' => 'create',
+                    //    'className' => 'btn btn-default btn-sm no-corner',
+                    //    'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
+                    // ],
                     [
                        'extend' => 'export',
                        'className' => 'btn btn-default btn-sm no-corner',
@@ -121,8 +121,8 @@ class DmsArCustomerDataTable extends DataTable
             //'szDescription' => new Column(['title' => __('models/dmsArCustomers.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
             'szHierarchyId' => new Column(['title' => __('models/dmsArCustomers.fields.szHierarchyId'), 'data' => 'szHierarchyId', 'searchable' => true, 'elmsearch' => 'text']),
             'szHierarchyFull' => new Column(['title' => __('models/dmsArCustomers.fields.szHierarchyFull'), 'data' => 'szHierarchyFull', 'searchable' => true, 'elmsearch' => 'text']),
-            'szIDCard' => new Column(['title' => __('models/dmsArCustomers.fields.szIDCard'), 'data' => 'szIDCard', 'searchable' => true, 'elmsearch' => 'text']),
-            'bHasDifferentCollectAddress' => new Column(['title' => __('models/dmsArCustomers.fields.bHasDifferentCollectAddress'), 'data' => 'bHasDifferentCollectAddress', 'searchable' => true, 'elmsearch' => 'text']),
+            //'szIDCard' => new Column(['title' => __('models/dmsArCustomers.fields.szIDCard'), 'data' => 'szIDCard', 'searchable' => true, 'elmsearch' => 'text']),
+            'bHasDifferentCollectAddress' => new Column(['title' => __('models/dmsArCustomers.fields.bHasDifferentCollectAddress'), 'data' => 'bHasDifferentCollectAddress', 'searchable' => true, 'elmsearch' => 'dropdown','listItem' => [['text' => 'Pilih status', 'value' => ''],['text' => 'true', 'value' => 1 ],['text' => 'false', 'value' => 0 ] ] ]),
             'szCode' => new Column(['title' => __('models/dmsArCustomers.fields.szCode'), 'data' => 'szCode', 'searchable' => true, 'elmsearch' => 'text']),
             // 'szUserCreatedId' => new Column(['title' => __('models/dmsArCustomers.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
             // 'szUserUpdatedId' => new Column(['title' => __('models/dmsArCustomers.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),

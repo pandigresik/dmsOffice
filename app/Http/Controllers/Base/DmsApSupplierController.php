@@ -95,8 +95,8 @@ class DmsApSupplierController extends AppBaseController
         $jsonDefaultSearching = ['dms_ap_supplier_id' => $id];
         $dataTabs = [
             'contact' => ['text' => 'Contact Person', 'json' => $jsonDefaultSearching, 'url' => route('base.contactSuppliers.index', ['dms_ap_supplier_id' => $id]), 'defaultContent' => '', 'class' => ''],
-            'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.locationSuppliers.index', ['dms_ap_supplier_id' => $id]), 'defaultContent' => '', 'class' => ''],
-            'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
+            //'destination' => ['text' => 'Tujuan Pengiriman', 'json' => $jsonDefaultSearching, 'url' => route('base.locationSuppliers.index', ['dms_ap_supplier_id' => $id]), 'defaultContent' => '', 'class' => ''],
+            //'description' => ['text' => 'Keterangan', 'json' => $jsonDefaultSearching, 'url' => 'tes.php', 'class' => '', 'defaultContent' => 'Isi dengan keterangan'],
         ];
 
         return view('base.dms_ap_suppliers.edit')->with('dataTabs', $dataTabs)->with('dmsApSupplier', $dmsApSupplier)->with($this->getOptionItems());

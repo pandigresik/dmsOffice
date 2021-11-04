@@ -34,9 +34,7 @@
                 const _json = _form.serializeJSON()['locationEkspedisis'][_idForm]
                 _divWrapper.append(
                     _template.replace('{locationAddress}', _json['address'])
-                            .replace('{locationCity}', _json['city'])
-                            .replace('{locationState}', _json['state'])
-                            .replace('{locationTrip}', _json['route_trip_id'])                        
+                            .replace('{locationCity}', _json['city'])                            
                             .replace('{locationAdditionalCost}', _json['additional_cost'])                            
                             .replace('{contactForm}', main.generateFormField(`locationEkspedisis[${_idForm}]`, _json).join(''))
                 )

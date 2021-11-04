@@ -15,7 +15,7 @@
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
                              @lang('models/dmsArCustomerrouteinfos.plural')
-                             <a class="pull-right" href="{{ route('base.dmsArCustomerrouteinfos.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                             
                          </div>
                          <div class="card-body">
                              @include('base.dms_ar_customerrouteinfos.table')

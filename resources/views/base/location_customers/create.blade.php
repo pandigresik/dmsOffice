@@ -31,12 +31,10 @@
             if(_form.valid()){                                
                 const _idForm = '{{ $idForm }}'
                 const _divWrapper = $('.button-caller').closest('div').find('.content-info')
-                const _json = _form.serializeJSON()['vendorLocation'][_idForm]
+                const _json = _form.serializeJSON()['locationCustomers'][_idForm]
                 _divWrapper.append(
                     _template.replace('{locationAddress}', _json['address'])
-                            .replace('{locationCity}', _json['city'])
-                            .replace('{locationState}', _json['state'])
-                            .replace('{locationTrip}', _json['route_trip_id'])                        
+                            .replace('{locationCity}', _json['city'])                            
                             .replace('{locationAdditionalCost}', _json['additional_cost'])
                             .replace('{locationForm}', main.generateFormField(`locationCustomers[${_idForm}]`, _json).join(''))
                 )

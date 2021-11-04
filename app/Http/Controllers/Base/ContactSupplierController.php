@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Base;
 
-use App\DataTables\Base\ContactSupplierDataTable;
+use Flash;
+use Response;
+use Illuminate\Http\Request;
+use App\Repositories\Base\CityRepository;
 use App\Http\Controllers\AppBaseController;
+use App\DataTables\Base\ContactSupplierDataTable;
+use App\Repositories\Base\DmsApSupplierRepository;
+use App\Repositories\Base\ContactSupplierRepository;
 use App\Http\Requests\Base\CreateContactSupplierRequest;
 use App\Http\Requests\Base\UpdateContactSupplierRequest;
-use App\Repositories\Base\ContactSupplierRepository;
-use App\Repositories\Base\DmsApSupplierRepository;
-use Flash;
-use Illuminate\Http\Request;
-use Response;
 
 class ContactSupplierController extends AppBaseController
 {
     /** @var ContactSupplierRepository */
     protected $repository;
-
+        private $prefixName = 'contactSuppliers';
     public function __construct()
     {
         $this->repository = ContactSupplierRepository::class;
@@ -47,7 +48,7 @@ class ContactSupplierController extends AppBaseController
         $idForm = \Carbon\Carbon::now()->timestamp;
 
         return view('base.contact_suppliers.create')->with($this->getOptionItems())
-            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'contactSupplier['.$idForm.']'])
+            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => $this->prefixName.'['.$idForm.']'])
         ;
     }
 
@@ -104,7 +105,15 @@ class ContactSupplierController extends AppBaseController
             return redirect(route('base.contactSuppliers.index'));
         }
 
-        return view('base.contact_suppliers.edit')->with('contactSupplier', $contactSupplier)->with($this->getOptionItems());
+        $idForm = $id;
+        $contactSupplier->stateForm = 'update';
+        $obj = new \stdClass();
+        $obj->{$this->prefixName} = [$id => $contactSupplier];
+
+        return view('base.contact_suppliers.edit')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'contactSupplier' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => $this->prefixName.'['.$idForm.']'])
+        ;
+                
     }
 
     /**
@@ -164,9 +173,10 @@ class ContactSupplierController extends AppBaseController
      */
     private function getOptionItems()
     {
-        //$dmsApSupplier = new DmsApSupplierRepository(app());
+        $city = new CityRepository(app());
+
         return [
-            // 'dmsApSupplierItems' => ['' => __('crud.option.dmsApSupplier_placeholder')] + $dmsApSupplier->pluck()
+            'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck([], null, null, 'name', 'name'),
         ];
     }
 }

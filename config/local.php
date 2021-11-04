@@ -8,6 +8,8 @@ return [
     ],
     'textmask' => [
         'nopol' => ['mask' => 'a{1,2}9{1,4}a{1,3}'],
+        'phone' => ['mask' => '9{3,4}-9{4,8}'],
+        'mobile' => ['mask' => '62999-9999-9999']
     ],
     'select2' => [
         'ajax' => ['data-ajax' => 1],

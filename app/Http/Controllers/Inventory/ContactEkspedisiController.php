@@ -16,7 +16,7 @@ class ContactEkspedisiController extends AppBaseController
 {
     /** @var ContactEkspedisiRepository */
     protected $repository;
-
+    private $prefixName = 'contactEkspedisis';
     public function __construct()
     {
         $this->repository = ContactEkspedisiRepository::class;
@@ -47,7 +47,7 @@ class ContactEkspedisiController extends AppBaseController
         $idForm = \Carbon\Carbon::now()->timestamp;
 
         return view('inventory.contact_ekspedisis.create')->with($this->getOptionItems())
-            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'contactEkspedisis['.$idForm.']'])
+            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => $this->prefixName.'['.$idForm.']'])
         ;
     }
 
@@ -107,13 +107,12 @@ class ContactEkspedisiController extends AppBaseController
         $idForm = $id;
         $contactEkspedisi->stateForm = 'update';
         $obj = new \stdClass();
-        $obj->contactEkspedisi = [$id => $contactEkspedisi];
+        $obj->{$this->prefixName} = [$id => $contactEkspedisi];
 
         return view('inventory.contact_ekspedisis.edit')->with($this->getOptionItems())
-            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'contactEkspedisi' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'contactEkspedisis['.$idForm.']'])
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'contactEkspedisi' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => $this->prefixName.'['.$idForm.']'])
         ;
-
-        return view('inventory.contact_ekspedisis.edit')->with('contactEkspedisi', $contactEkspedisi)->with($this->getOptionItems());
+        
     }
 
     /**

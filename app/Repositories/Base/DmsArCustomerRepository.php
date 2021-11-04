@@ -60,7 +60,8 @@ class DmsArCustomerRepository extends BaseRepository
         try {
             $contactCustomers = $input['contactCustomers'] ?? [];
             $locationCustomers = $input['locationCustomers'] ?? [];
-            $model = parent::update($input, $id);
+            //$model = parent::update($input, $id);
+            $model = $this->model->find($id);
             if (!empty($contactCustomers)) {                
                 foreach ($contactCustomers as $key => $vc) {
                     $stateForm = $vc['stateForm'];

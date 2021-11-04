@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Base;
 
-use App\DataTables\Base\LocationCustomerDataTable;
+use Flash;
+use Response;
+use Illuminate\Http\Request;
+use App\Repositories\Base\CityRepository;
 use App\Http\Controllers\AppBaseController;
+use App\DataTables\Base\LocationCustomerDataTable;
+use App\Repositories\Base\LocationCustomerRepository;
 use App\Http\Requests\Base\CreateLocationCustomerRequest;
 use App\Http\Requests\Base\UpdateLocationCustomerRequest;
-use App\Repositories\Base\DmsArCustomerRepository;
-use App\Repositories\Base\LocationCustomerRepository;
-use Flash;
-use Illuminate\Http\Request;
-use Response;
 
 class LocationCustomerController extends AppBaseController
 {
@@ -109,7 +109,7 @@ class LocationCustomerController extends AppBaseController
         $obj->locationCustomer = [$id => $locationCustomer];
 
         return view('base.location_customers.edit')->with($this->getOptionItems())
-            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'locationCustomer' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'locationCustomer['.$idForm.']'])
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'locationCustomer' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'locationCustomers['.$idForm.']'])
         ;
     }
 
@@ -170,9 +170,10 @@ class LocationCustomerController extends AppBaseController
      */
     private function getOptionItems()
     {
-        //$dmsArCustomer = new DmsArCustomerRepository(app());
+        $city = new CityRepository(app());
+
         return [
-            //'dmsArCustomerItems' => ['' => __('crud.option.dmsArCustomer_placeholder')] + $dmsArCustomer->pluck()
+            'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck([], null, null, 'name', 'name'),
         ];
     }
 }

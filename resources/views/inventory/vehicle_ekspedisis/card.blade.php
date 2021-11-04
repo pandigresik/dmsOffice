@@ -1,9 +1,8 @@
-<div class="card card-accent-info col-md-6">
+<div class="col-md-6">
+<div class="card card-accent-info">
     <div class="card-header">Vehicle
         <div class="card-header-actions">
-            <a class="card-header-action btn-setting" href="#">
-                <i class="fa fa-gear"></i>
-            </a>
+            
             @if ($dataCard['stateForm'] == 'update')                        
             <a class="card-header-action btn-close" href="#" 
                 onclick="$(this).closest('div.card').fadeOut();$(this).closest('div.card').find('.form-hidden').append('<input type=\'hidden\' name=\'vehicleEkspedisis[{{ $dataCard['iInternalId'] }}][stateForm]\' value=\'delete\' >');return false">
@@ -30,4 +29,5 @@
             <div class="form-hidden collapse">{vehicleForm}</div>
         </div>
     </div>
+</div>
 </div>

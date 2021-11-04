@@ -1,9 +1,8 @@
-<div class="card card-accent-info col-md-6">
+<div class="col-md-6">
+<div class="card card-accent-info">
     <div class="card-header">Contact
         <div class="card-header-actions">
-            <a class="card-header-action btn-setting" href="#">
-                <i class="fa fa-gear"></i>
-            </a>
+            
             @if ($dataCard['stateForm'] == 'update')            
             <a class="card-header-action button-caller" href="#" data-json="[]" data-url="{{route('base.locationSuppliers.edit', $dataCard['id']) }}" onclick="main.setButtonCaller(this);main.popupModal(this,'get');return false">
                 <i class="fa fa-pencil"></i>
@@ -39,4 +38,5 @@
             <div class="form-hidden collapse">{locationForm}</div>
         </div>
     </div>
+</div>
 </div>

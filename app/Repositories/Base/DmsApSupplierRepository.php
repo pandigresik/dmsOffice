@@ -54,7 +54,8 @@ class DmsApSupplierRepository extends BaseRepository
         try {
             $contactSuppliers = $input['contactSuppliers'] ?? [];
             $locationSuppliers = $input['locationSuppliers'] ?? [];
-            $model = parent::update($input, $id);
+            //$model = parent::update($input, $id);
+            $model = $this->model->find($id);
             if (!empty($contactSuppliers)) {                
                 foreach ($contactSuppliers as $key => $vc) {
                     $stateForm = $vc['stateForm'];

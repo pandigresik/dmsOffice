@@ -91,11 +91,11 @@ class DmsArCustomercategorytype extends Model
         'iId' => 'required|string|max:50',
         'szId' => 'required|string|max:50',
         'szName' => 'required|string|max:50',
-        'szDescription' => 'required|string|max:200',
-        'szUserCreatedId' => 'required|string|max:20',
-        'szUserUpdatedId' => 'required|string|max:20',
-        'dtmCreated' => 'required',
-        'dtmLastUpdated' => 'required',
+        // 'szDescription' => 'required|string|max:200',
+        // 'szUserCreatedId' => 'required|string|max:20',
+        // 'szUserUpdatedId' => 'required|string|max:20',
+        // 'dtmCreated' => 'required',
+        // 'dtmLastUpdated' => 'required',
     ];
 
     protected $dates = ['deleted_at'];

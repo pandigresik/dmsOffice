@@ -1,9 +1,8 @@
-<div class="card card-accent-info col-md-6">
+<div class="col-md-6">
+<div class="card card-accent-info">
     <div class="card-header">Contact
         <div class="card-header-actions">
-            <a class="card-header-action btn-setting" href="#">
-                <i class="fa fa-gear"></i>
-            </a>
+            
             @if ($dataCard['stateForm'] == 'update')            
             <a class="card-header-action button-caller" href="#" data-json="[]" data-url="{{route('inventory.locationEkspedisis.edit', $dataCard['id']) }}" onclick="main.setButtonCaller(this);main.popupModal(this,'get');return false">
                 <i class="fa fa-pencil"></i>
@@ -26,11 +25,7 @@
             <div class="card-content">                
                 <div>{{ $dataCard['address'] ?? '{locationAddress}' }}</div>
                 <div>{{ $dataCard['city'] ?? '{locationCity}' }}</div>
-                
-                <div class="row">
-                    <div class="col-md-3">Jenis Trip</div>
-                    <div class="col-md-9">{locationTrip}</div>
-                </div>
+                                
                 <div class="row">
                     <div class="col-md-3">Biaya Tambahan</div>
                     <div class="col-md-9">{{  $dataCard['additional_cost'] ?? '{locationAdditionalCost}' }}</div>
@@ -39,4 +34,5 @@
             <div class="form-hidden collapse">{locationForm}</div>
         </div>
     </div>
+</div>
 </div>

@@ -11,15 +11,7 @@
 <div class="form-group row">
     {!! Form::label('city', __('models/locationSuppliers.fields.city').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text($prefixName.'[city]', null, ['class' => 'form-control','maxlength' => 50,'maxlength' => 50]) !!}
-</div>
-</div>
-
-<!-- State Field -->
-<div class="form-group row">
-    {!! Form::label('state', __('models/locationSuppliers.fields.state').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-9"> 
-    {!! Form::text($prefixName.'[state]', null, ['class' => 'form-control','maxlength' => 50,'maxlength' => 50]) !!}
+    {!! Form::select($prefixName.'[city]',$cityItems, null,['class' => 'form-control select2', 'required' => 'required']) !!}    
 </div>
 </div>
 

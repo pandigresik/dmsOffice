@@ -58,7 +58,8 @@ class DmsInvCarrierRepository extends BaseRepository
             $locationEkspedisis = $input['locationEkspedisis'] ?? [];
             $vehicleEkspedisis = $input['vehicleEkspedisis'] ?? [];            
             $tripEkspedisis = $input['tripEkspedisis'] ?? [];
-            $model = parent::update($input, $id);
+            //$model = parent::update($input, $id);
+            $model = $this->model->find($id);
             if (!empty($contactEkspedisis)) {                
                 foreach ($contactEkspedisis as $key => $vc) {
                     $stateForm = $vc['stateForm'];

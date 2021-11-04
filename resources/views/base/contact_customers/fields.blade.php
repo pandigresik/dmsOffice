@@ -28,7 +28,7 @@
 <div class="form-group row">
     {!! Form::label('phone', __('models/contactCustomers.fields.phone').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        {!! Form::text($prefixName.'[phone]', null, ['class' => 'form-control','maxlength' => 50,'maxlength' => 50, 'required' => 'required' ]) !!}
+        {!! Form::text($prefixName.'[phone]', null, ['class' => 'form-control inputmask','maxlength' => 50,'maxlength' => 50, 'data-optionmask' => json_encode(config('local.textmask.phone')) ]) !!}
     </div>
 </div>
 
@@ -37,7 +37,7 @@
     {!! Form::label('mobile', __('models/contactCustomers.fields.mobile').':', ['class' => 'col-md-3 col-form-label'])
     !!}
     <div class="col-md-9">
-        {!! Form::text($prefixName.'[mobile]', null, ['class' => 'form-control','maxlength' => 50,'maxlength' => 50]) !!}
+        {!! Form::text($prefixName.'[mobile]', null, ['class' => 'form-control inputmask','maxlength' => 50,'maxlength' => 50, 'data-optionmask' => json_encode(config('local.textmask.mobile'))]) !!}
     </div>
 </div>
 
@@ -63,6 +63,6 @@
 <div class="form-group row">
     {!! Form::label('city', __('models/contactCustomers.fields.city').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        {!! Form::text($prefixName.'[city]', null, ['class' => 'form-control','maxlength' => 50,'maxlength' => 50, 'required' => 'required' ]) !!}
+        {!! Form::select($prefixName.'[city]',$cityItems, null,['class' => 'form-control select2', 'required' => 'required']) !!}
     </div>
 </div>

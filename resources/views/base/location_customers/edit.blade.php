@@ -35,8 +35,6 @@
                 _divWrapper.append(
                     _template.replace('{locationAddress}', _json['address'])
                             .replace('{locationCity}', _json['city'])
-                            .replace('{locationState}', _json['state'])
-                            .replace('{locationTrip}', _json['route_trip_id'])                        
                             .replace('{locationAdditionalCost}', _json['additional_cost'])
                             .replace('{locationForm}', main.generateFormField(`locationCustomers[${_idForm}]`, _json).join(''))
                 )

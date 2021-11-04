@@ -15,7 +15,7 @@
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
                              @lang('models/dmsFinSubaccounts.plural')
-                             <a class="pull-right" href="{{ route('accounting.dmsFinSubaccounts.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                             
                          </div>
                          <div class="card-body">
                              @include('accounting.dms_fin_subaccounts.table')

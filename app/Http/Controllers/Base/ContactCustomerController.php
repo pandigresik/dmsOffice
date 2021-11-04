@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Base;
 
-use App\DataTables\Base\ContactCustomerDataTable;
+use Flash;
+use Response;
+use Illuminate\Http\Request;
+use App\Repositories\Base\CityRepository;
 use App\Http\Controllers\AppBaseController;
+use App\DataTables\Base\ContactCustomerDataTable;
+use App\Repositories\Base\DmsArCustomerRepository;
+use App\Repositories\Base\ContactCustomerRepository;
 use App\Http\Requests\Base\CreateContactCustomerRequest;
 use App\Http\Requests\Base\UpdateContactCustomerRequest;
-use App\Repositories\Base\ContactCustomerRepository;
-use App\Repositories\Base\DmsArCustomerRepository;
-use Flash;
-use Illuminate\Http\Request;
-use Response;
 
 class ContactCustomerController extends AppBaseController
 {
     /** @var ContactCustomerRepository */
     protected $repository;
-
+    private $prefixName = 'contactCustomers';
     public function __construct()
     {
         $this->repository = ContactCustomerRepository::class;
@@ -47,7 +48,7 @@ class ContactCustomerController extends AppBaseController
         $idForm = \Carbon\Carbon::now()->timestamp;
 
         return view('base.contact_customers.create')->with($this->getOptionItems())
-            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'contactCustomer['.$idForm.']'])
+            ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => $this->prefixName.'['.$idForm.']'])
         ;
     }
 
@@ -104,7 +105,15 @@ class ContactCustomerController extends AppBaseController
             return redirect(route('base.contactCustomers.index'));
         }
 
-        return view('base.contact_customers.edit')->with('contactCustomer', $contactCustomer)->with($this->getOptionItems());
+        $idForm = $id;
+        $contactCustomer->stateForm = 'update';
+        $obj = new \stdClass();
+        $obj->{$this->prefixName} = [$id => $contactCustomer];
+
+        return view('base.contact_customers.edit')->with($this->getOptionItems())
+            ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'contactCustomer' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => $this->prefixName.'['.$idForm.']'])
+        ;
+        
     }
 
     /**
@@ -164,9 +173,10 @@ class ContactCustomerController extends AppBaseController
      */
     private function getOptionItems()
     {
-        //$dmsArCustomer = new DmsArCustomerRepository(app());
+        $city = new CityRepository(app());
+
         return [
-            // 'dmsArCustomerItems' => ['' => __('crud.option.dmsArCustomer_placeholder')] + $dmsArCustomer->pluck()
+            'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck([], null, null, 'name', 'name'),
         ];
     }
 }
