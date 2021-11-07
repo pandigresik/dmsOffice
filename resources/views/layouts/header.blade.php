@@ -72,7 +72,7 @@
         </li>
     </ul>
     
-    <div class="c-subheader px-3">
+    <div class="c-subheader px-3">        
         @stack('breadcrumb')        
     </div>
     

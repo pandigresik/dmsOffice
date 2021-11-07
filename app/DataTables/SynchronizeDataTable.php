@@ -35,7 +35,7 @@ class SynchronizeDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', 'synchronizes.datatables_actions');
+        return $dataTable; //->addColumn('action', 'synchronizes.datatables_actions');
     }
 
     /**
@@ -115,7 +115,8 @@ class SynchronizeDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'table_name' => new Column(['title' => __('models/synchronizes.fields.table_name'), 'data' => 'table_name', 'searchable' => true, 'elmsearch' => 'text'])
+            'table_name' => new Column(['title' => __('models/synchronizes.fields.table_name'), 'data' => 'table_name', 'searchable' => true, 'elmsearch' => 'text']),
+            'updated_at' => new Column(['title' => __('models/synchronizes.fields.updated_at'), 'data' => 'updated_at', 'searchable' => false])
         ];
     }
 

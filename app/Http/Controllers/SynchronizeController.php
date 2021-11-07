@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Flash;
-use Response;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
+use App\Console\Commands\DatabaseSynchronizer;
 use App\DataTables\SynchronizeDataTable;
-use App\Repositories\SynchronizeRepository;
 use App\Http\Requests\CreateSynchronizeRequest;
-use App\Http\Requests\UpdateSynchronizeRequest;
+use App\Models\LogSynchronize;
+use App\Models\Synchronize;
+use App\Repositories\SynchronizeRepository;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Response;
 
 class SynchronizeController extends AppBaseController
 {
     /** @var SynchronizeRepository */
     protected $repository;
+    private $cacheIdentity;
 
     public function __construct()
     {
@@ -38,11 +43,10 @@ class SynchronizeController extends AppBaseController
      */
     public function create()
     {
-        $listTables = config('synchronize-table.dms.table');
-        $filter = config('synchronize-table.dms.filter');
+        $listTables = $this->getTables();
 
         return view('synchronizes.create')
-            ->with(['listTables' => $listTables, 'filter' => $filter])
+            ->with(['listTables' => $listTables])
             ->with($this->getOptionItems())
         ;
     }
@@ -56,13 +60,44 @@ class SynchronizeController extends AppBaseController
      */
     public function store(Request $request)
     {
-        if(! defined('STDIN')) define('STDIN', fopen("php://stdin","r"));
-        $input = $request->all();
-        Artisan::call('db:syncCustom',['--from' => 'mysql_sejati', '--to' => 'mysql_sejati_origin', '--tables' => $input['tables'], '--filter' => $input['filter']]);
-        return Artisan::output();
-        Flash::success(__('messages.saved', ['model' => __('models/synchronizes.singular')]));
+        ini_set('max_execution_time', 180);
+        $user = Auth::user();
+        $connectionStr = config('entity.entityConnection')[$user->entity_id];
 
-        //return redirect(route('synchronizes.index'));
+        // $from = $connectionStr.'_origin';
+        // $to = $connectionStr;
+        $to = $connectionStr.'_origin';
+        $from = $connectionStr;
+        $cacheIdentity = $this->getCacheIdentity($connectionStr);
+        $synchronize = Synchronize::max('updated_at') ?? '2021-09-01 01:01:01';
+        $lastSinkron = $synchronize;
+        $lastSinkron = '2021-09-01 01:01:01';
+
+        try {
+            (new DatabaseSynchronizer(
+                $from,
+                $to,
+                $cacheIdentity
+            ))
+                ->setTables($this->getTables())
+                ->setSkipTables($this->getSkipTables())
+                //->setLimit((int) $this->getLimit())
+                ->setFilter($this->getTableConditions($lastSinkron))
+                ->run()
+            ;
+            foreach ($this->getTables() as $table) {
+                Synchronize::updateOrCreate(['table_name' => $table]);
+                LogSynchronize::Create(['table_name' => $table]);
+            }
+
+            // set last sinkron
+        } catch (Exception $e) {
+            \Log::error($e->getMessage());
+
+            return;
+        }
+
+        return new JsonResponse(['state' => 'done']);
     }
 
     /**
@@ -72,85 +107,16 @@ class SynchronizeController extends AppBaseController
      *
      * @return Response
      */
-    public function show($id)
+    public function progress()
     {
-        $synchronize = $this->getRepositoryObj()->find($id);
-
-        if (empty($synchronize)) {
-            Flash::error(__('models/synchronizes.singular').' '.__('messages.not_found'));
-
-            return redirect(route('synchronizes.index'));
+        $tagName = DatabaseSynchronizer::CACHE_NAME;
+        $caches = [];
+        foreach ($this->getTables() as $table) {
+            $caches[$table] = Cache::tags($tagName.$this->getCacheIdentity())->get($table, ['progress' => 0]);
         }
+        $state = Cache::tags($tagName.$this->getCacheIdentity())->get('state');
 
-        return view('synchronizes.show')->with('synchronize', $synchronize);
-    }
-
-    /**
-     * Show the form for editing the specified Synchronize.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
-    {
-        $synchronize = $this->getRepositoryObj()->find($id);
-
-        if (empty($synchronize)) {
-            Flash::error(__('messages.not_found', ['model' => __('models/synchronizes.singular')]));
-
-            return redirect(route('synchronizes.index'));
-        }
-
-        return view('synchronizes.edit')->with('synchronize', $synchronize)->with($this->getOptionItems());
-    }
-
-    /**
-     * Update the specified Synchronize in storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function update($id, UpdateSynchronizeRequest $request)
-    {
-        $synchronize = $this->getRepositoryObj()->find($id);
-
-        if (empty($synchronize)) {
-            Flash::error(__('messages.not_found', ['model' => __('models/synchronizes.singular')]));
-
-            return redirect(route('synchronizes.index'));
-        }
-
-        $synchronize = $this->getRepositoryObj()->update($request->all(), $id);
-
-        Flash::success(__('messages.updated', ['model' => __('models/synchronizes.singular')]));
-
-        return redirect(route('synchronizes.index'));
-    }
-
-    /**
-     * Remove the specified Synchronize from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        $synchronize = $this->getRepositoryObj()->find($id);
-
-        if (empty($synchronize)) {
-            Flash::error(__('messages.not_found', ['model' => __('models/synchronizes.singular')]));
-
-            return redirect(route('synchronizes.index'));
-        }
-
-        $this->getRepositoryObj()->delete($id);
-
-        Flash::success(__('messages.deleted', ['model' => __('models/synchronizes.singular')]));
-
-        return redirect(route('synchronizes.index'));
+        return new JsonResponse(['state' => $state, 'caches' => $caches]);
     }
 
     /**
@@ -164,5 +130,47 @@ class SynchronizeController extends AppBaseController
     {
         return [
         ];
+    }
+
+    private function getTables()
+    {
+        return config('database-synchronizer.tables');
+    }
+
+    private function getSkipTables()
+    {
+        return config('database-synchronizer.skip_tables');
+    }
+
+    private function getLimit()
+    {
+        return config('database-synchronizer.limit', DatabaseSynchronizer::DEFAULT_LIMIT);
+    }
+
+    private function getTableConditions(string $lastSinkron): array
+    {
+        $resultCondition = [];
+        $columnCondition = config('database-synchronizer.conditions', []);
+        if (!empty($columnCondition)) {
+            foreach ($columnCondition as $table => $column) {
+                $resultCondition[$table] = $column.' >= \''.$lastSinkron.'\'';
+            }
+        }
+
+        return $resultCondition;
+    }
+
+    private function getCacheIdentity(string $connectionStr = null)
+    {
+        if (empty($connectionStr)) {
+            $user = Auth::user();
+            $connectionStr = $connectionStr ?? config('entity.entityConnection')[$user->entity_id];
+        }
+
+        $to = $connectionStr;
+
+        $this->cacheIdentity = $this->cacheIdentity ?? 'progress_'.$to;
+
+        return $this->cacheIdentity;
     }
 }

@@ -26,7 +26,7 @@ class Main {
   }
 
   executeWorkflow() {
-    if (_.isEmpty(this.workflow)) {
+    if (!_.isEmpty(this.workflow)) {
       const _target = this.workflow.shift()
       $(_target.element).trigger('click')
     }

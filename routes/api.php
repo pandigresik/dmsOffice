@@ -22,12 +22,4 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('route_trips', Base\RouteTripAPIController::class);
     Route::resource('vehicle_groups', Base\VehicleGroupAPIController::class);
     Route::resource('vehicles', Base\VehicleAPIController::class);
-
-    Route::resource('ifrs_accounts', Accounting\IfrsAccountsAPIController::class);
-    Route::resource('ifrs_categories', Accounting\IfrsCategoriesAPIController::class);
-    Route::resource('ifrs_entities', Accounting\IfrsEntitiesAPIController::class);
-    Route::resource('ifrs_currencies', Accounting\IfrsCurrenciesAPIController::class);
-    Route::resource('ifrs_exchange_rates', Accounting\IfrsExchangeRatesAPIController::class);
-    Route::resource('ifrs_reporting_periods', Accounting\IfrsReportingPeriodsAPIController::class);
-    Route::resource('ifrs_vats', Accounting\IfrsVatsAPIController::class);
 });

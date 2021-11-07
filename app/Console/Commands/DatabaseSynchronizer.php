@@ -2,19 +2,19 @@
 
 namespace App\Console\Commands;
 
-use PDOException;
+use Exception;
+use Illuminate\Database\ConnectionInterface;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\ConnectionInterface;
-use mtolhuijs\LDS\Exceptions\DatabaseConnectionException;
+use PDOException;
 
 class DatabaseSynchronizer
 {
     public const DEFAULT_LIMIT = 5000;
-
-    public $cli;
+    public const CACHE_NAME = 'synchronize-table_';
     public $limit = self::DEFAULT_LIMIT;
     public $tables;
     public $skipTables;
@@ -22,22 +22,23 @@ class DatabaseSynchronizer
     public $from;
     public $to;
     public $truncate;
-    public $filter;
+    public $filter = [];
+    private $cacheIdentity;
 
     private $fromDB;
     private $toDB;
 
-    public function __construct(string $from, string $to, $cli = false)
+    public function __construct(string $from, string $to, string $cacheIdentity)
     {
         $this->from = $from;
         $this->to = $to;
-        $this->cli = $cli;
+        $this->cacheIdentity = $cacheIdentity;
 
         try {
             $this->fromDB = DB::connection($this->from);
             $this->toDB = DB::connection($this->to);
         } catch (\Exception $e) {
-            throw new DatabaseConnectionException($e->getMessage());
+            throw new Exception($e->getMessage());
         }
     }
 
@@ -46,60 +47,26 @@ class DatabaseSynchronizer
         $originHost = $this->fromDB->getConfig()['host'];
         $targetHost = $this->toDB->getConfig()['host'];
 
-        if ($this->cli->confirm("Target host is set to $targetHost, continue?")) {
-            $this->feedback("origin($originHost) => target($targetHost)", 'line');
-        } else {
-            $this->feedback('Canceled!', 'warn');
-
-            return;
-        }
-        
         if ($this->migrate) {
             Artisan::call('migrate'.($this->truncate ? ':refresh' : ''), [
                 '--database' => $this->to,
             ]);
         }
-
+        Cache::tags(self::CACHE_NAME.$this->cacheIdentity)->put('state', 'progress');
         foreach ($this->getTables() as $table) {
-            $this->feedback(PHP_EOL.PHP_EOL."Table: $table", 'line');
+            $this->feedback(PHP_EOL.PHP_EOL."Table: {$table}", 'line');
 
-            if (! Schema::connection($this->from)->hasTable($table)) {
-                $this->feedback("Table '$table' does not exist in $this->from", 'error');
+            if (!Schema::connection($this->from)->hasTable($table)) {
+                $this->feedback("Table '{$table}' does not exist in {$this->from}", 'error');
 
                 continue;
             }
 
-            $this->syncTable($table);
-            $this->syncRows($table);
+            //$this->syncTable($table);
+            $this->syncRows($table, $this->getFilterTable($table));
         }
-
+        Cache::tags(self::CACHE_NAME.$this->cacheIdentity)->put('state', 'done');
         $this->feedback('Synchronization done!', 'info');
-    }
-
-    private function createTable(string $table, array $columns): void
-    {
-        $this->feedback("Creating '$this->to.$table' table", 'warn');
-
-        Schema::connection($this->to)->create($table, function (Blueprint $table_bp) use ($table, $columns) {
-            foreach ($columns as $column) {
-                $type = Schema::connection($this->from)->getColumnType($table, $column);
-
-                $table_bp->{$type}($column)->nullable();
-
-                $this->feedback("Added {$type}('$column')->nullable()");
-            }
-        });
-    }
-
-    private function updateTable(string $table, string $column): void
-    {
-        Schema::connection($this->to)->table($table, function (Blueprint $table_bp) use ($table, $column) {
-            $type = Schema::connection($this->from)->getColumnType($table, $column);
-
-            $table_bp->{$type}($column)->nullable();
-
-            $this->feedback("Added {$type}('$column')->nullable()");
-        });
     }
 
     public function setSkipTables(array $skipTables)
@@ -126,30 +93,12 @@ class DatabaseSynchronizer
     public function setOptions(array $options)
     {
         foreach ($options as $option => $value) {
-            if (! isset($this->{$option})) {
+            if (!isset($this->{$option})) {
                 $this->{$option} = $value;
             }
         }
 
         return $this;
-    }
-
-    protected function getFromDb(): ConnectionInterface
-    {
-        if ($this->fromDB === null) {
-            $this->fromDB = DB::connection($this->from);
-        }
-
-        return $this->fromDB;
-    }
-
-    protected function getToDb(): ConnectionInterface
-    {
-        if ($this->toDB === null) {
-            $this->toDB = DB::connection($this->to);
-        }
-
-        return $this->toDB;
     }
 
     public function getTables(): array
@@ -159,15 +108,13 @@ class DatabaseSynchronizer
         }
 
         return array_filter($this->tables, function ($table) {
-            return ! in_array($table, $this->skipTables, true);
+            return !in_array($table, $this->skipTables, true);
         });
     }
 
     /**
      * Check if tables and columns are present
      * Create or update them if not.
-     *
-     * @param string $table
      */
     public function syncTable(string $table): void
     {
@@ -191,75 +138,147 @@ class DatabaseSynchronizer
 
     /**
      * Fetch all rows in $this->from and insert or update $this->to.
+     *
      * @todo need to get the real primary key
      * @todo add limit offset setup
      * @todo investigate: insert into on duplicate key update
-     *
-     * @param string $table
      */
-    public function syncRows(string $table): void
+    public function syncRows(string $table, string $condition): void
     {
         $queryColumn = Schema::connection($this->from)->getColumnListing($table)[0];
-        $statement = $this->prepareForInserts($table);
+        $prepare = $this->prepareForInserts($table, $condition);
+        $statement = $prepare['statement'];
+        $amount = $prepare['amount'];
+        $counter = 0;
+        if(!empty($amount)){
+            while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
+                $exists = $this->getToDb()->table($table)->where($queryColumn, $row->{$queryColumn})->first();
 
-        while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
-            $exists = $this->getToDb()->table($table)->where($queryColumn, $row->{$queryColumn})->first();
+                if (!$exists) {
+                    $this->getToDb()->table($table)->insert((array) $row);
+                } else {
+                    $this->getToDb()->table($table)->where($queryColumn, $row->{$queryColumn})->update((array) $row);
+                }
+                ++$counter;
 
-            if (! $exists) {
-                $this->getToDb()->table($table)->insert((array) $row);
-            } else {
-                $this->getToDb()->table($table)->where($queryColumn, $row->{$queryColumn})->update((array) $row);
+                if (0 == $counter % 50) {
+                    $this->updateProgress($table, $amount, $counter);
+                }
             }
-
-            if ($this->cli) {
-                $this->cli->progressBar->advance();
-            }
+            $this->updateProgress($table, $amount, $counter);
+        }else{
+            $this->updateProgress($table, 100, 100);
         }
-
-        if ($this->cli) {
-            $this->cli->progressBar->finish();
-        }
+        
     }
 
     /**
-     * @param string $table
+     * Get the value of filter.
+     */
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
+    /**
+     * Get the value of filter.
+     *
+     * @param mixed $table
+     */
+    public function getFilterTable($table)
+    {
+        return $this->filter[$table] ?? null;
+    }
+
+    /**
+     * Set the value of filter.
+     *
+     * @param mixed $filter
+     *
+     * @return self
+     */
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
+
+        return $this;
+    }
+
+    protected function getFromDb(): ConnectionInterface
+    {
+        if (null === $this->fromDB) {
+            $this->fromDB = DB::connection($this->from);
+        }
+
+        return $this->fromDB;
+    }
+
+    protected function getToDb(): ConnectionInterface
+    {
+        if (null === $this->toDB) {
+            $this->toDB = DB::connection($this->to);
+        }
+
+        return $this->toDB;
+    }
+
+    private function createTable(string $table, array $columns): void
+    {
+        $this->feedback("Creating '{$this->to}.{$table}' table", 'warn');
+
+        Schema::connection($this->to)->create($table, function (Blueprint $table_bp) use ($table, $columns) {
+            foreach ($columns as $column) {
+                $type = Schema::connection($this->from)->getColumnType($table, $column);
+
+                $table_bp->{$type}($column)->nullable();
+
+                $this->feedback("Added {$type}('{$column}')->nullable()");
+            }
+        });
+    }
+
+    private function updateTable(string $table, string $column): void
+    {
+        Schema::connection($this->to)->table($table, function (Blueprint $table_bp) use ($table, $column) {
+            $type = Schema::connection($this->from)->getColumnType($table, $column);
+
+            $table_bp->{$type}($column)->nullable();
+
+            $this->feedback("Added {$type}('{$column}')->nullable()");
+        });
+    }
+
+    /**
      * @return \PDOStatement
      */
-    private function prepareForInserts(string $table): \PDOStatement
+    private function prepareForInserts(string $table, string $condition): array
     {
         $pdo = $this->getFromDb()->getPdo();
-        $builder = $this->fromDB->table($table);        
-        $statement = $this->filter ? $pdo->prepare($builder->whereRaw($this->filter)->toSql()) : $pdo->prepare($builder->toSql());
+        $builder = $this->fromDB->table($table);
+        
+        $statement = $condition ? $pdo->prepare($builder->whereRaw($condition)->toSql()) : $pdo->prepare($builder->toSql());
 
-        if (! $statement instanceof \PDOStatement) {
-            throw new PDOException("Could not prepare PDOStatement for $table");
+        if (!$statement instanceof \PDOStatement) {
+            throw new PDOException("Could not prepare PDOStatement for {$table}");
         }
 
         $statement->execute($builder->getBindings());
         $amount = $statement->rowCount();
 
-        if ($this->cli) {
-            if ($amount > 0) {
-                $this->feedback("Synchronizing '$this->to.$table' rows", 'comment');
-                $this->cli->progressBar = $this->cli->getOutput()->createProgressBar($amount);
-            } else {
-                $this->feedback('No rows...', 'comment');
-            }
-        }
-
         if ($this->truncate) {
             $this->getToDb()->table($table)->truncate();
         }
 
-        return $statement;
+        return ['statement' => $statement, 'amount' => $amount];
+    }
+
+    private function updateProgress(string $table, int $amount, int $counter)
+    {   
+        Cache::tags(self::CACHE_NAME.$this->cacheIdentity)->put($table, ['progress' => ((int) ($counter / $amount) * 100)]);
     }
 
     private function feedback(string $msg, $type = 'info'): void
     {
-        if ($this->cli) {
-            $this->cli->{$type}($msg);
-        } else {
-            echo PHP_EOL.$msg.PHP_EOL;
-        }
+        // echo PHP_EOL.$msg.PHP_EOL;
     }
 }

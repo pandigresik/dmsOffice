@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -25,23 +24,31 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class LogSynchronize extends Model
 {
-    use SoftDeletes;
-
     use HasFactory;
 
-    public $table = 'log_synchronize';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
+    public $table = 'log_synchronize';
 
-    protected $dates = ['deleted_at'];
-
-    public $connection = "mysql_sejati";
+    public $connection = 'mysql_sejati';
 
     public $fillable = [
-        'table_name'
+        'table_name',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'table_name' => 'required|string|max:60',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -50,17 +57,6 @@ class LogSynchronize extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'table_name' => 'string'
+        'table_name' => 'string',
     ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'table_name' => 'required|string|max:60'
-    ];
-
-    
 }
