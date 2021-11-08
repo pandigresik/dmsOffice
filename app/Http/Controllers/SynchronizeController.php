@@ -64,10 +64,10 @@ class SynchronizeController extends AppBaseController
         $user = Auth::user();
         $connectionStr = config('entity.entityConnection')[$user->entity_id];
 
-        // $from = $connectionStr.'_origin';
-        // $to = $connectionStr;
-        $to = $connectionStr.'_origin';
-        $from = $connectionStr;
+        $from = $connectionStr.'_origin';
+        $to = $connectionStr;
+        // $to = $connectionStr.'_origin';
+        // $from = $connectionStr;
         $cacheIdentity = $this->getCacheIdentity($connectionStr);
         $synchronize = Synchronize::max('updated_at') ?? '2021-09-01 01:01:01';
         $lastSinkron = $synchronize;
