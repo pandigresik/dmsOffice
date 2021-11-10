@@ -81,10 +81,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('dmsInvUoms', App\Http\Controllers\Inventory\DmsInvUomController::class, ["as" => 'inventory']);
         Route::resource('dmsInvVehicles', App\Http\Controllers\Inventory\DmsInvVehicleController::class, ["as" => 'inventory']);
         Route::resource('dmsInvVehicletypes', App\Http\Controllers\Inventory\DmsInvVehicletypeController::class, ["as" => 'inventory']);
-        Route::resource('dmsInvWarehouses', App\Http\Controllers\Inventory\DmsInvWarehouseController::class, ["as" => 'inventory']);
+        Route::resource('dmsSmBranches.dmsInvWarehouses', App\Http\Controllers\Inventory\DmsInvWarehouseController::class, ["as" => 'inventory'])->only(['index','show','edit']);
 
         Route::resource('productCategories', App\Http\Controllers\Inventory\ProductCategoriesController::class, ["as" => 'inventory']);
         Route::resource('productCategoriesProducts', App\Http\Controllers\Inventory\ProductCategoriesProductController::class, ["as" => 'inventory']);
+        Route::resource('productPrices', App\Http\Controllers\Inventory\ProductPriceController::class, ["as" => 'inventory'])->only(['index','create','edit','store']);
+        Route::resource('dmsInvProducts.productPriceLogs', App\Http\Controllers\Inventory\ProductPriceLogController::class, ["as" => 'inventory'])->only(['index']);
         Route::resource('vehicleEkspedisis', App\Http\Controllers\Inventory\VehicleEkspedisiController::class, ["as" => 'inventory']);
         Route::resource('contactEkspedisis', App\Http\Controllers\Inventory\ContactEkspedisiController::class, ["as" => 'inventory']);
         Route::resource('locationEkspedisis', App\Http\Controllers\Inventory\LocationEkspedisiController::class, ["as" => 'inventory']);
@@ -121,4 +123,4 @@ Route::post(
 // Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');
 
 Route::resource('synchronizes', App\Http\Controllers\SynchronizeController::class)->except(['destroy','update', 'edit', 'show']);
-Route::get('synchronizes/progress', [App\Http\Controllers\SynchronizeController::class, 'progress'])->name('synchronizes.progress');
+Route::get('synchronizes/progress', [App\Http\Controllers\SynchronizeController::class, 'progress'])->name('synchronizes.progress');    

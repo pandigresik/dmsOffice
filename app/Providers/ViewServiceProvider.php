@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+use App\Models\Inventory\DmsInvProduct;
 use App\Models\Inventory\ProductCategory;
 use App\Models\Inventory\Product;
 use App\Models\Inventory\Trip;
@@ -26,7 +27,6 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {        
-        
         // View::composer(['base.location_customer.fields'], function ($view) {
         //     $dmsArCustomerItems = DmsArCustomer::pluck('id')->toArray();
         //     $view->with('dmsArCustomerItems', $dmsArCustomerItems);

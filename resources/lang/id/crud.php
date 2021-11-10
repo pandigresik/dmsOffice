@@ -29,6 +29,7 @@ return [
         'city_placeholder_origin' => 'Pilih kota asal',
         'city_placeholder_destination' => 'Pilih kota tujuan',
         'product_categories_placeholder' => 'Pilih jenis produk',
-        'trip_placeholder' => 'Pilih Trip'
+        'trip_placeholder' => 'Pilih Trip',
+        'dmsInvProduct_placeholder' => 'Pilih produk',
     ]
 ];

@@ -11,6 +11,13 @@ if (!function_exists('localFormatDate')) {
     }
 }
 
+if (!function_exists('localFormatDateTime')) {
+    function localFormatDateTime($value)
+    {
+        return Date::parse($value)->format(config('local.datetime_format'));
+    }
+}
+
 if (!function_exists('createLocalFormatDate')) {
     function createLocalFormatDate($value)
     {

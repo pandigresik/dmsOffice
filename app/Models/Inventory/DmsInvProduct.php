@@ -3,6 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\BaseEntity as Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -147,5 +149,25 @@ class DmsInvProduct extends Model
     public function getFullIdentityAttribute($value)
     {
         return implode(' | ',[$this->attributes['szId'],$this->attributes['szName'],$this->attributes['szUomId']]);
+    }
+
+    /**
+     * Get the ProductCategories that owns the DmsInvProduct
+     *
+     * @return \Illuminate\ProductCategoriesbase\Eloquent\Relations\BelongsTo
+     */
+    public function productCategoriesProduct(): BelongsTo
+    {
+        return $this->belongsTo(ProductCategoriesProduct::class, 'iInternalId', 'product_id');
+    }
+
+    /**
+     * Get all of the logProductPrice for the DmsInvProduct
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function logProductPrice(): HasMany
+    {
+        return $this->hasMany(ProductPriceLog::class, 'iInternalId', 'dms_inv_product_id');
     }
 }
