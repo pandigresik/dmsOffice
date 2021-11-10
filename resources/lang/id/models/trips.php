@@ -17,5 +17,6 @@ return array (
     'price' => 'Tarif',
     'distance' => 'Jarak',
     'description' => 'Keterangan',
+    'product_categories_id' => 'Jenis Produk'
   ),
 );

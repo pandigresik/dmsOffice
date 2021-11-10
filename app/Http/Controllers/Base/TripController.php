@@ -8,6 +8,7 @@ use App\Http\Requests\Base\CreateTripRequest;
 use App\Http\Requests\Base\UpdateTripRequest;
 use App\Repositories\Base\CityRepository;
 use App\Repositories\Base\TripRepository;
+use App\Repositories\Inventory\ProductCategoriesRepository;
 use Flash;
 use Response;
 
@@ -155,11 +156,11 @@ class TripController extends AppBaseController
     private function getOptionItems()
     {
         $city = new CityRepository(app());
-        $city = new CityRepository(app());
+        $productCategories = new ProductCategoriesRepository(app());
 
         return [
             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
-            'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
+            'productCategoriesItems' => ['' => __('crud.option.product_categories_placeholder')] + $productCategories->pluck(),
         ];
     }
 }

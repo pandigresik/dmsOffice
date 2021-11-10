@@ -33,7 +33,7 @@ class Synchronize extends Model
 
     public $table = 'synchronize';
 
-    public $connection = 'mysql_sejati';
+    
 
     public $fillable = [
         'table_name',

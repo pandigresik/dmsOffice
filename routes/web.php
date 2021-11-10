@@ -45,7 +45,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('settings', App\Http\Controllers\Base\SettingController::class, ['as' => 'base']);
         //Route::resource('products', App\Http\Controllers\Base\ProductController::class, ['as' => 'base']);
 
-        /** DMS Table */            
+        /** DMS Table */
+        Route::resource('dmsSmBranches', App\Http\Controllers\Base\DmsSmBranchController::class, ["as" => 'base']);            
         Route::resource('dmsApSuppliers', App\Http\Controllers\Base\DmsApSupplierController::class, ["as" => 'base']);
         Route::resource('dmsArCustomers', App\Http\Controllers\Base\DmsArCustomerController::class, ["as" => 'base']);
         Route::resource('dmsArCustomercategories', App\Http\Controllers\Base\DmsArCustomercategoryController::class, ["as" => 'base']);
@@ -70,18 +71,19 @@ Route::group(['middleware' => ['auth']], function () {
 
         /** DMS Table */
         Route::resource('dmsInvCarriers', App\Http\Controllers\Inventory\DmsInvCarrierController::class, ["as" => 'inventory']);
-        Route::resource('dmsInvCarrierdrivers', App\Http\Controllers\Inventory\DmsInvCarrierdriverController::class, ["as" => 'inventory']);
-        Route::resource('dmsInvCarriervehicles', App\Http\Controllers\Inventory\DmsInvCarriervehicleController::class, ["as" => 'inventory']);
+        // Route::resource('dmsInvCarrierdrivers', App\Http\Controllers\Inventory\DmsInvCarrierdriverController::class, ["as" => 'inventory']);
+        // Route::resource('dmsInvCarriervehicles', App\Http\Controllers\Inventory\DmsInvCarriervehicleController::class, ["as" => 'inventory']);
         Route::resource('dmsInvProducts', App\Http\Controllers\Inventory\DmsInvProductController::class, ["as" => 'inventory']);
-        Route::resource('dmsInvProductcategories', App\Http\Controllers\Inventory\DmsInvProductcategoryController::class, ["as" => 'inventory']);
-        Route::resource('dmsInvProductcategorytypes', App\Http\Controllers\Inventory\DmsInvProductcategorytypeController::class, ["as" => 'inventory']);
-        Route::resource('dmsInvProductitemcategories', App\Http\Controllers\Inventory\DmsInvProductitemcategoryController::class, ["as" => 'inventory']);
-        Route::resource('dmsInvProductkitinfos', App\Http\Controllers\Inventory\DmsInvProductkitinfoController::class, ["as" => 'inventory']);
+        // Route::resource('dmsInvProductcategories', App\Http\Controllers\Inventory\DmsInvProductcategoryController::class, ["as" => 'inventory']);
+        // Route::resource('dmsInvProductcategorytypes', App\Http\Controllers\Inventory\DmsInvProductcategorytypeController::class, ["as" => 'inventory']);
+        // Route::resource('dmsInvProductitemcategories', App\Http\Controllers\Inventory\DmsInvProductitemcategoryController::class, ["as" => 'inventory']);
+        // Route::resource('dmsInvProductkitinfos', App\Http\Controllers\Inventory\DmsInvProductkitinfoController::class, ["as" => 'inventory']);
         Route::resource('dmsInvUoms', App\Http\Controllers\Inventory\DmsInvUomController::class, ["as" => 'inventory']);
         Route::resource('dmsInvVehicles', App\Http\Controllers\Inventory\DmsInvVehicleController::class, ["as" => 'inventory']);
         Route::resource('dmsInvVehicletypes', App\Http\Controllers\Inventory\DmsInvVehicletypeController::class, ["as" => 'inventory']);
         Route::resource('dmsInvWarehouses', App\Http\Controllers\Inventory\DmsInvWarehouseController::class, ["as" => 'inventory']);
 
+        Route::resource('productCategories', App\Http\Controllers\Inventory\ProductCategoriesController::class, ["as" => 'inventory']);
         Route::resource('vehicleEkspedisis', App\Http\Controllers\Inventory\VehicleEkspedisiController::class, ["as" => 'inventory']);
         Route::resource('contactEkspedisis', App\Http\Controllers\Inventory\ContactEkspedisiController::class, ["as" => 'inventory']);
         Route::resource('locationEkspedisis', App\Http\Controllers\Inventory\LocationEkspedisiController::class, ["as" => 'inventory']);
@@ -115,8 +117,7 @@ Route::post(
     '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@generateFromFile'
 )->name('io_generator_builder_generate_from_file');
 
-Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');
+// Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');
 
 Route::resource('synchronizes', App\Http\Controllers\SynchronizeController::class)->except(['destroy','update', 'edit', 'show']);
 Route::get('synchronizes/progress', [App\Http\Controllers\SynchronizeController::class, 'progress'])->name('synchronizes.progress');
-

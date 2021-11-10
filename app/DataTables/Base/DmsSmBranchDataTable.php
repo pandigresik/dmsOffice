@@ -1,19 +1,19 @@
 <?php
 
-namespace App\DataTables\Inventory;
+namespace App\DataTables\Base;
 
-use App\Models\Inventory\DmsInvWarehouse;
+use App\Models\Base\DmsSmBranch;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class DmsInvWarehouseDataTable extends DataTable
+class DmsSmBranchDataTable extends DataTable
 {
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        'branch.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class
+        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -35,18 +35,25 @@ class DmsInvWarehouseDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', 'inventory.dms_inv_warehouses.datatables_actions');
+        $dataTable->editColumn('szDistrict',function($p){
+
+            return '<div class="text-wrap" style="width:200px;">'.$p->szDistrict.'</div>';
+        })->editColumn('szCity',function($p){
+
+            return '<div class="text-wrap" style="width:150px;">'.$p->szCity.'</div>';
+        })->escapeColumns([]);;
+        return $dataTable->addColumn('action', 'base.dms_sm_branches.datatables_actions');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\DmsInvWarehouse $model
+     * @param \App\Models\DmsSmBranch $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(DmsInvWarehouse $model)
+    public function query(DmsSmBranch $model)
     {
-        return $model->with(['branch'])->newQuery();
+        return $model->newQuery();
     }
 
     /**
@@ -101,7 +108,7 @@ class DmsInvWarehouseDataTable extends DataTable
                  'language' => [
                    'url' => url('vendor/datatables/i18n/en-gb.json'),
                  ],
-                 'responsive' => true,
+                 //'responsive' => true,
                  'fixedHeader' => true,
                  'orderCellsTop' => true     
             ]);
@@ -115,16 +122,19 @@ class DmsInvWarehouseDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            // 'iId' => new Column(['title' => __('models/dmsInvWarehouses.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szId' => new Column(['title' => __('models/dmsInvWarehouses.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szName' => new Column(['title' => __('models/dmsInvWarehouses.fields.szName'), 'data' => 'szName', 'searchable' => true, 'elmsearch' => 'text']),
-            'szDescription' => new Column(['title' => __('models/dmsInvWarehouses.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
-            'szBranchId' => new Column(['title' => __('models/dmsInvWarehouses.fields.szBranchId'), 'data' => 'branch.szName', 'searchable' => true, 'elmsearch' => 'text']),
-            'bAllowForSalesTransaction' => new Column(['title' => __('models/dmsInvWarehouses.fields.bAllowForSalesTransaction'), 'data' => 'bAllowForSalesTransaction', 'searchable' => false, 'elmsearch' => 'text']),
-            // 'szUserCreatedId' => new Column(['title' => __('models/dmsInvWarehouses.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            // 'szUserUpdatedId' => new Column(['title' => __('models/dmsInvWarehouses.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            // 'dtmCreated' => new Column(['title' => __('models/dmsInvWarehouses.fields.dtmCreated'), 'data' => // 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
-            // 'dtmLastUpdated' => new Column(['title' => __('models/dmsInvWarehouses.fields.dtmLastUpdated'), 'data' => // 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
+            'szId' => new Column(['title' => __('models/dmsSmBranches.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
+            'szName' => new Column(['title' => __('models/dmsSmBranches.fields.szName'), 'data' => 'szName', 'searchable' => true, 'elmsearch' => 'text']),
+            //'szDescription' => new Column(['title' => __('models/dmsSmBranches.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szCompanyId' => new Column(['title' => __('models/dmsSmBranches.fields.szCompanyId'), 'data' => 'szCompanyId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szLangitude' => new Column(['title' => __('models/dmsSmBranches.fields.szLangitude'), 'data' => 'szLangitude', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szLongitude' => new Column(['title' => __('models/dmsSmBranches.fields.szLongitude'), 'data' => 'szLongitude', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szTaxEntityId' => new Column(['title' => __('models/dmsSmBranches.fields.szTaxEntityId'), 'data' => 'szTaxEntityId', 'searchable' => true, 'elmsearch' => 'text']),
+            //'szProvince' => new Column(['title' => __('models/dmsSmBranches.fields.szProvince'), 'data' => 'szProvince', 'searchable' => true, 'elmsearch' => 'text']),
+            'szCity' => new Column(['title' => __('models/dmsSmBranches.fields.szCity'), 'data' => 'szCity', 'searchable' => true, 'elmsearch' => 'text']),
+            'szDistrict' => new Column(['title' => __('models/dmsSmBranches.fields.szDistrict'), 'data' => 'szDistrict', 'searchable' => false, 'elmsearch' => 'text']),
+            // 'szSubDistrict' => new Column(['title' => __('models/dmsSmBranches.fields.szSubDistrict'), 'data' => 'szSubDistrict', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szUserCreatedId' => new Column(['title' => __('models/dmsSmBranches.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'szUserUpdatedId' => new Column(['title' => __('models/dmsSmBranches.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 
@@ -135,6 +145,6 @@ class DmsInvWarehouseDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'dms_inv_warehouses_datatable_' . time();
+        return 'dms_sm_branches_datatable_' . time();
     }
 }

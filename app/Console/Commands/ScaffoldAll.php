@@ -111,7 +111,7 @@ class ScaffoldAll extends Command
                     'model' => $model,
                     '--fromTable' => true,
                     '--tableName' => $t,
-                    '--ignoreFields' => 'created_at,updated_at,deleted_at,created_by,updated_by',
+                    '--ignoreFields' => 'created_at,updated_at,deleted_at,created_by,updated_by,iId,dtmCreated,dtmLastUpdated',
                     '--skip' => 'dump-autoload,migration',
                     '--paginate' => 10,
                     //'--jqueryDT' => true,

@@ -33,7 +33,7 @@ class LogSynchronize extends Model
 
     public $table = 'log_synchronize';
 
-    public $connection = 'mysql_sejati';
+    
 
     public $fillable = [
         'table_name',

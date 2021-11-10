@@ -10,7 +10,7 @@ return array (
     'szId' => 'Id',
     'szName' => 'Nama',
     'szDescription' => 'Deskripsi',
-    'szBranchId' => 'Id Cabang',
+    'szBranchId' => 'Cabang',
     'bAllowForSalesTransaction' => 'Bisa Trasnsaksi Penjualan',
     'szUserCreatedId' => 'Dibuat Oleh',
     'szUserUpdatedId' => 'Diupdate Oleh',

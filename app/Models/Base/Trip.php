@@ -3,8 +3,10 @@
 namespace App\Models\Base;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Inventory\ProductCategories;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @SWG\Definition(
@@ -90,7 +92,7 @@ class Trip extends Model
 
     public $table = 'trip';
 
-    public $connection = 'mysql_sejati';
+    
 
     public $fillable = [
         'code',
@@ -104,6 +106,7 @@ class Trip extends Model
         'price',
         'distance',
         'description',
+        'product_categories_id'
     ];
 
     /**
@@ -145,6 +148,7 @@ class Trip extends Model
         'price' => 'decimal:2',
         'distance' => 'decimal:2',
         'description' => 'string',
+        'product_categories_id' => 'integer'
     ];
 
     /**
@@ -186,5 +190,15 @@ class Trip extends Model
     public function getFullIdentityAttribute($value)
     {
         return implode(' | ',[$this->attributes['code'],$this->attributes['name'],$this->attributes['price'],$this->attributes['distance']]);
+    }
+
+    /**
+     * Get the productCategories that owns the Trip
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function productCategories(): BelongsTo
+    {
+        return $this->belongsTo(ProductCategories::class, 'product_categories_id', 'id');
     }
 }

@@ -4,6 +4,7 @@ username : admin@admin.com/12345
 php artisan generate:migrations
 php artisan generate:migrations --path=database/migrations
 php artisan generate:migrations --connection=mysql2
+php artisan generate:migrations --connection=mysql_sejati --path=database/migrations/dms --table=dms_sm_branch
 ```
 You can also clear the directory with the `--empty-path` option:
 ```bash
