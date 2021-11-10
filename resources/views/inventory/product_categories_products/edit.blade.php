@@ -2,14 +2,14 @@
           <div class="animated fadeIn">                
                 <div class="row">
                     <div class="col-lg-12">
-                        {!! Form::open(['data-submitable' => 0]) !!}
+                        {!! Form::model($contactEkspedisi,['data-submitable' => 0]) !!}
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
-                                <strong>Create @lang('models/tripEkspedisis.singular')</strong>
+                                <strong>Create @lang('models/productCategoriesProducts.singular')</strong>
                             </div>
                             <div class="card-body">                                
-                                   @include('inventory.trip_ekspedisis.fields')                                
+                                   @include('inventory.product_categories_products.fields')                                
                             </div>
                             <div class="card-footer">
                                 <!-- Submit Field -->
@@ -26,25 +26,19 @@
     </div>
     <script type="text/javascript">
         function generateCard(elm){
-            const _template = `@include('inventory.trip_ekspedisis.card')`
+            const _template = `@include('inventory.product_categories_products.card')`
             const _form = $(elm).closest('form');
             if(_form.valid()){                                
-                let _idForm = '{{ $idForm }}'
+                const _idForm = '{{ $idForm }}'
                 const _divWrapper = $('.button-caller').closest('div').find('.content-info')
-                const _json = _form.serializeJSON()['tripEkspedisis'][_idForm]
-                let _optionSelected
-                _json['trip'].forEach(element => {
-                    _optionSelected = _form.find('option[value='+element+']').text().split(' | ')
-                    _divWrapper.append(
-                    _template.replace('{tripCode}', _optionSelected[0])
-                            .replace('{tripName}', _optionSelected[1])
-                            .replace('{tripPrice}', _optionSelected[2])
-                            .replace('{tripDistance}', _optionSelected[3])
-                            .replace('{tripProductCategories}', _optionSelected[4])
-                            .replace('{tripForm}', main.generateFormField(`tripEkspedisis[${_idForm++}]`, {'trip_id' : element, 'stateForm' : _json['stateForm']}).join(''))
+                const _json = _form.serializeJSON()['productCategoriesProducts'][_idForm]
+                const _optionSelected = _form.find('select option:selected').text().split(' | ')
+                _divWrapper.append(
+                    _template.replace('{productId}', _optionSelected[0])
+                            .replace('{productName}', _optionSelected[1])
+                            .replace('{productUom}', _optionSelected[2])                       
+                            .replace('{contactForm}', main.generateFormField(`productCategoriesProducts[${_idForm}]`, _json).join(''))
                 )
-                });
-                
                 _form.closest('.bootbox').find('button.bootbox-close-button').click()
             }
         }        

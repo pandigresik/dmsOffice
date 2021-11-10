@@ -45,6 +45,7 @@ class UpdateProductCategoriesRequest extends FormRequest
     public function all($keys = null){
         $keys = (new ProductCategories)->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+        $keys = array_merge(['productCategoriesProducts'], $keys);
         return parent::all($keys);
     }
 }

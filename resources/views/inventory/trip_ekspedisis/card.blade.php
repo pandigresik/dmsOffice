@@ -26,7 +26,8 @@
                 <div>{{ $dataCard['code'] ?? '{tripCode}' }}</div>
                 <div>{{ $dataCard['name'] ?? '{tripName}' }}</div>                
                 <div>{{ $dataCard['distance'] ?? '{tripDistance}' }}</div>                
-                <div>{{ $dataCard['price'] ?? '{tripPrice}' }}</div>                
+                <div>{{ $dataCard['price'] ?? '{tripPrice}' }}</div>
+                <div>{{ $dataCard['productCategories']['name'] ?? '{tripProductCategories}' }}</div>                
             </div>
             <div class="form-hidden collapse">{tripForm}</div>
         </div>

@@ -25,7 +25,7 @@ class ViewServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot()
-    {
+    {        
         
         // View::composer(['base.location_customer.fields'], function ($view) {
         //     $dmsArCustomerItems = DmsArCustomer::pluck('id')->toArray();

@@ -45,7 +45,7 @@ class TripEkspedisi extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $connection = "mysql_sejati";
+    
 
     public $fillable = [
         'dms_inv_carrier_id',

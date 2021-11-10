@@ -84,6 +84,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('dmsInvWarehouses', App\Http\Controllers\Inventory\DmsInvWarehouseController::class, ["as" => 'inventory']);
 
         Route::resource('productCategories', App\Http\Controllers\Inventory\ProductCategoriesController::class, ["as" => 'inventory']);
+        Route::resource('productCategoriesProducts', App\Http\Controllers\Inventory\ProductCategoriesProductController::class, ["as" => 'inventory']);
         Route::resource('vehicleEkspedisis', App\Http\Controllers\Inventory\VehicleEkspedisiController::class, ["as" => 'inventory']);
         Route::resource('contactEkspedisis', App\Http\Controllers\Inventory\ContactEkspedisiController::class, ["as" => 'inventory']);
         Route::resource('locationEkspedisis', App\Http\Controllers\Inventory\LocationEkspedisiController::class, ["as" => 'inventory']);

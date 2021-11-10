@@ -23,7 +23,7 @@
                           <div class="card-body">                              
 
                               @include('inventory.product_categories.fields')
-
+                              <x-tabs :data="$dataTabs"/>
                               
                             </div>
                           <div class="card-footer">

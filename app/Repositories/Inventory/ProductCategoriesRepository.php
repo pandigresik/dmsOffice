@@ -2,8 +2,10 @@
 
 namespace App\Repositories\Inventory;
 
-use App\Models\Inventory\ProductCategories;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\BaseRepository;
+use App\Models\Inventory\ProductCategories;
+use App\Models\Inventory\ProductCategoriesProduct;
 
 /**
  * Class ProductCategoriesRepository
@@ -37,5 +39,76 @@ class ProductCategoriesRepository extends BaseRepository
     public function model()
     {
         return ProductCategories::class;
+    }
+    public function update($input, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            $productCategoriesProducts = $input['productCategoriesProducts'] ?? [];            
+            $model = parent::update($input, $id); 
+            
+            if (!empty($productCategoriesProducts)) {                
+                foreach ($productCategoriesProducts as $key => $vc) {
+                    $stateForm = $vc['stateForm'];                    
+                    switch ($stateForm) {
+                        case 'insert':
+                            $model->productCategoriesProducts()->create($vc);
+
+                            break;
+                        case 'update':
+                            $obj = ProductCategoriesProduct::find($key);
+                            $obj->fill($vc)->save();
+
+                            break;
+                        case 'delete':
+                            ProductCategoriesProduct ::whereId($key)->delete();
+
+                            break;
+                    }
+                }
+            }
+            
+            DB::commit();
+
+            return $model;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error($e);
+
+            return $e;
+        }        
+    }
+
+    public function create($input)
+    {
+        DB::beginTransaction();
+
+
+        try {
+            $productCategoriesProducts = $input['productCategoriesProducts'] ?? [];            
+            $model = parent::create($input);            
+            if (!empty($productCategoriesProducts)) {                
+                foreach ($productCategoriesProducts as $key => $vc) {
+                    $stateForm = $vc['stateForm'];
+                    switch ($stateForm) {
+                        case 'insert':
+                            $model->productCategoriesProducts()->create($vc);
+
+                            break;                        
+                    }
+                }
+            }
+            
+            
+            DB::commit();
+
+            return $model;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error($e);
+
+            return $e;
+        }        
     }
 }

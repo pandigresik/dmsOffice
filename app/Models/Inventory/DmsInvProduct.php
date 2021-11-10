@@ -143,4 +143,9 @@ class DmsInvProduct extends Model
         'dtmCreated' => 'datetime',
         'dtmLastUpdated' => 'datetime',
     ];
+
+    public function getFullIdentityAttribute($value)
+    {
+        return implode(' | ',[$this->attributes['szId'],$this->attributes['szName'],$this->attributes['szUomId']]);
+    }
 }

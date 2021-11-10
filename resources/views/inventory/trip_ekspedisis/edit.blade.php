@@ -32,12 +32,18 @@
                 const _idForm = '{{ $idForm }}'
                 const _divWrapper = $('.button-caller').closest('div').find('.content-info')
                 const _json = _form.serializeJSON()['tripEkspedisis'][_idForm]
-                _divWrapper.append(
-                    _template.replace('{tripName}', _json['name'])
-                            .replace('{tripPosition}', _json['position'])
-                            .replace('{tripMobile}', _json['mobile'])                            
-                            .replace('{tripForm}', main.generateFormField(`tripEkspedisis[${_idForm}]`, _json).join(''))
+                let _optionSelected
+                _json['trip'].forEach(element => {
+                    _optionSelected = _form.find('option[value='+element+']').text().split(' | ')
+                    _divWrapper.append(
+                    _template.replace('{tripCode}', _optionSelected[0])
+                            .replace('{tripName}', _optionSelected[1])
+                            .replace('{tripPrice}', _optionSelected[2])
+                            .replace('{tripDistance}', _optionSelected[3])
+                            .replace('{tripProductCategories}', _optionSelected[4])
+                            .replace('{tripForm}', main.generateFormField(`tripEkspedisis[${_idForm++}]`, {'trip_id' : element, 'stateForm' : _json['stateForm']}).join(''))
                 )
+                });
                 _form.closest('.bootbox').find('button.bootbox-close-button').click()
             }
         }        

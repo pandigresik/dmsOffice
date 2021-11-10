@@ -189,7 +189,7 @@ class Trip extends Model
 
     public function getFullIdentityAttribute($value)
     {
-        return implode(' | ',[$this->attributes['code'],$this->attributes['name'],$this->attributes['price'],$this->attributes['distance']]);
+        return implode(' | ',[$this->attributes['code'],$this->attributes['name'],$this->attributes['price'],$this->attributes['distance'], $this->productCategories->name]);
     }
 
     /**

@@ -23,10 +23,10 @@ class CreateDmsSmBranchTable extends Migration
             $table->string('szLangitude', 50);
             $table->string('szLongitude', 50);
             $table->string('szTaxEntityId', 50)->default('')->index('IX_DMS_SM_Branch_1');
-            $table->string('szProvince', 5000)->default('');
-            $table->string('szCity', 5000)->default('');
-            $table->string('szDistrict', 5000)->default('');
-            $table->string('szSubDistrict', 5000)->default('');
+            $table->string('szProvince', 500)->default('');
+            $table->string('szCity', 500)->default('');
+            $table->string('szDistrict', 1000)->default('');
+            $table->string('szSubDistrict', 1000)->default('');
             $table->string('szUserCreatedId', 20);
             $table->string('szUserUpdatedId', 20);
             $table->dateTime('dtmCreated')->default('2000-01-01 00:00:00');

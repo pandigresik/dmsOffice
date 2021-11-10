@@ -42,8 +42,6 @@ class ProductCategories extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $connection = "mysql_sejati";
-
     public $fillable = [
         'name',
         'description'
@@ -73,8 +71,8 @@ class ProductCategories extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      **/
-    public function productCategories()
+    public function productCategoriesProducts()
     {
-        return $this->hasMany(\App\Models\Inventory\ProductCategory::class, 'product_categories_id');
+        return $this->hasMany(\App\Models\Inventory\ProductCategoriesProduct::class, 'product_categories_id');
     }
 }

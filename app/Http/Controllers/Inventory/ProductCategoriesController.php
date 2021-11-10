@@ -40,7 +40,11 @@ class ProductCategoriesController extends AppBaseController
      */
     public function create()
     {
-        return view('inventory.product_categories.create')->with($this->getOptionItems());
+        $dataTabs = [
+            'product' => ['text' => 'Product', 'json' => [], 'url' => route('inventory.productCategoriesProducts.index'), 'defaultContent' => '', 'class' => ''],
+        ];
+
+        return view('inventory.product_categories.create')->with('dataTabs', $dataTabs)->with($this->getOptionItems());        
     }
 
     /**
@@ -97,8 +101,13 @@ class ProductCategoriesController extends AppBaseController
 
             return redirect(route('inventory.productCategories.index'));
         }
+        $jsonDefaultSearching = ['product_categories_id' => $id];
+        $dataTabs = [
+            'product' => ['text' => 'Produk', 'json' => $jsonDefaultSearching, 'url' => route('inventory.productCategoriesProducts.index', ['product_categories_id' => $id]), 'defaultContent' => '', 'class' => ''],
+        ];
 
-        return view('inventory.product_categories.edit')->with('productCategories', $productCategories)->with($this->getOptionItems());
+        return view('inventory.product_categories.edit')->with('dataTabs', $dataTabs)->with('productCategories', $productCategories)->with($this->getOptionItems());
+        
     }
 
     /**
