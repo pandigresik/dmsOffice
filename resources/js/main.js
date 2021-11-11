@@ -2,6 +2,7 @@ import _ from 'lodash'
 import $ from 'jquery'
 import 'jquery-validation'
 import 'jquery.redirect/jquery.redirect'
+import 'jquery-serializejson'
 import './basePath.js'
 import 'ckeditor'
 import 'ckeditor/adapters/jquery'
@@ -306,10 +307,10 @@ class Main {
     _target.find('.select2').each(function() {
       const _optionSelect = $(this).data('optionselect') || {}
       const _firstOption = $(this).find('option').eq(0)
-      let _placeholder = 'Choose option'
-      if (_.isEmpty(_firstOption.val())) {
-        _placeholder = _firstOption.text()
-      }
+      let _placeholder = $(this).attr('placeholder') || 'Choose option'
+      // if (_.isEmpty(_firstOption.val())) {
+      //   _placeholder = _firstOption.text()
+      // }
       const _defaultOption = {
         width: '100%',
         allowClear: true,
@@ -353,9 +354,14 @@ class Main {
         }
       }
       const _hasIcon = $(this).data('hasicon') || false
+      const _asTable = $(this).data('astable') || false
       if (_hasIcon) {
         _option.templateSelection = _ini.formatText
         _option.templateResult = _ini.formatText
+      }
+      if(_asTable){
+        _option.templateSelection = _ini.formatTable
+        _option.templateResult = _ini.formatTable
       }
       $(this).select2(_option)
     })
@@ -364,6 +370,21 @@ class Main {
   formatText(icon) {
     const _icon = $(icon.element).data('icon') ?? icon.text
     return $('<span><i class="' + _icon + '"></i> ' + icon.text + '</span>')
+  }
+
+  formatTable(item) {
+    const _item = item.text.split(' | ')
+    let _maxWidth = Math.ceil(12  / _item.length)
+    if(_maxWidth < 2){
+      _maxWidth = 2
+    }
+    const _classColumn = 'col-md-'+_maxWidth
+    const _child = []
+    for(let i in _item){
+      _child.push(`<div class="${_classColumn}">${_item[i]}</div>`)
+    }    
+
+    return $(`<div class="row">${_child.join('')}</div>`)
   }
 
   initCalendar(_target) {
