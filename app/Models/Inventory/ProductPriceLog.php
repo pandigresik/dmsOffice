@@ -48,6 +48,7 @@ class ProductPriceLog extends Model
         'dms_inv_product_id',
         'price',
         'start_date',
+        'end_date'
     ];
 
     /**
@@ -58,7 +59,7 @@ class ProductPriceLog extends Model
     public static $rules = [
         'dms_inv_product_id' => 'required|integer',
         'price' => 'required|numeric',
-        'start_date' => 'nullable',
+        'start_date' => 'required',
     ];
 
     protected $dates = ['deleted_at'];
@@ -73,6 +74,7 @@ class ProductPriceLog extends Model
         'dms_inv_product_id' => 'integer',
         'price' => 'decimal:2',
         'start_date' => 'date',
+        'end_date' => 'date',
     ];
 
     /**
@@ -91,6 +93,11 @@ class ProductPriceLog extends Model
     public function getStartDateAttribute($value)
     {
         return localFormatDate($value);
+    }
+
+    public function getEndDateAttribute($value)
+    {
+        return $value ? localFormatDate($value) : null;
     }
 
     public function getCreatedAtAttribute($value)

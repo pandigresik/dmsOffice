@@ -8,6 +8,7 @@ use App\Http\Requests\Inventory\CreateDmsInvWarehouseRequest;
 use App\Http\Requests\Inventory\UpdateDmsInvWarehouseRequest;
 use App\Repositories\Inventory\DmsInvWarehouseRepository;
 use Flash;
+use Illuminate\Http\Request;
 use Response;
 
 class DmsInvWarehouseController extends AppBaseController
@@ -25,9 +26,10 @@ class DmsInvWarehouseController extends AppBaseController
      *
      * @return Response
      */
-    public function index(DmsInvWarehouseDataTable $dmsInvWarehouseDataTable)
+    public function index(DmsInvWarehouseDataTable $dmsInvWarehouseDataTable, Request $request)
     {
-        return $dmsInvWarehouseDataTable->render('inventory.dms_inv_warehouses.index');
+        $branchId = $request->route('dmsSmBranch');
+        return $dmsInvWarehouseDataTable->setDefaultFilter(['szBranchId' => $branchId])->render('inventory.dms_inv_warehouses.index');
     }
 
     /**

@@ -2,19 +2,18 @@
 
 namespace App\DataTables\Inventory;
 
-use App\Models\Inventory\DmsInvWarehouse;
+use App\Models\Inventory\MasterDiscount;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class DmsInvWarehouseDataTable extends DataTable
+class MasterDiscountDataTable extends DataTable
 {
-    private $defaultFilter = [];
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        'branch.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class
+        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -36,18 +35,18 @@ class DmsInvWarehouseDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', 'inventory.dms_inv_warehouses.datatables_actions');
+        return $dataTable->addColumn('action', 'inventory.master_discounts.datatables_actions');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\DmsInvWarehouse $model
+     * @param \App\Models\MasterDiscount $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(DmsInvWarehouse $model)
+    public function query(MasterDiscount $model)
     {
-        return empty($this->getDefaultFilter()) ? $model->with(['branch'])->newQuery() : $model->where($this->getDefaultFilter())->with(['branch'])->newQuery();
+        return $model->newQuery();
     }
 
     /**
@@ -58,11 +57,11 @@ class DmsInvWarehouseDataTable extends DataTable
     public function html()
     {
         $buttons = [
-                    // [
-                    //    'extend' => 'create',
-                    //    'className' => 'btn btn-default btn-sm no-corner',
-                    //    'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-                    // ],
+                    [
+                       'extend' => 'create',
+                       'className' => 'btn btn-default btn-sm no-corner',
+                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
+                    ],
                     [
                        'extend' => 'export',
                        'className' => 'btn btn-default btn-sm no-corner',
@@ -116,16 +115,12 @@ class DmsInvWarehouseDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            // 'iId' => new Column(['title' => __('models/dmsInvWarehouses.fields.iId'), 'data' => 'iId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szId' => new Column(['title' => __('models/dmsInvWarehouses.fields.szId'), 'data' => 'szId', 'searchable' => true, 'elmsearch' => 'text']),
-            'szName' => new Column(['title' => __('models/dmsInvWarehouses.fields.szName'), 'data' => 'szName', 'searchable' => true, 'elmsearch' => 'text']),
-            'szDescription' => new Column(['title' => __('models/dmsInvWarehouses.fields.szDescription'), 'data' => 'szDescription', 'searchable' => true, 'elmsearch' => 'text']),
-            'szBranchId' => new Column(['title' => __('models/dmsInvWarehouses.fields.szBranchId'), 'data' => 'branch.szName', 'searchable' => true, 'elmsearch' => 'text']),
-            'bAllowForSalesTransaction' => new Column(['title' => __('models/dmsInvWarehouses.fields.bAllowForSalesTransaction'), 'data' => 'bAllowForSalesTransaction', 'searchable' => false, 'elmsearch' => 'text']),
-            // 'szUserCreatedId' => new Column(['title' => __('models/dmsInvWarehouses.fields.szUserCreatedId'), 'data' => 'szUserCreatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            // 'szUserUpdatedId' => new Column(['title' => __('models/dmsInvWarehouses.fields.szUserUpdatedId'), 'data' => 'szUserUpdatedId', 'searchable' => true, 'elmsearch' => 'text']),
-            // 'dtmCreated' => new Column(['title' => __('models/dmsInvWarehouses.fields.dtmCreated'), 'data' => // 'dtmCreated', 'searchable' => true, 'elmsearch' => 'text']),
-            // 'dtmLastUpdated' => new Column(['title' => __('models/dmsInvWarehouses.fields.dtmLastUpdated'), 'data' => // 'dtmLastUpdated', 'searchable' => true, 'elmsearch' => 'text'])
+            'code' => new Column(['title' => __('models/masterDiscounts.fields.code'), 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
+            'name' => new Column(['title' => __('models/masterDiscounts.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
+            'amount_value' => new Column(['title' => __('models/masterDiscounts.fields.amount_value'), 'data' => 'amount_value', 'searchable' => true, 'elmsearch' => 'text']),
+            'amount_procent' => new Column(['title' => __('models/masterDiscounts.fields.amount_procent'), 'data' => 'amount_procent', 'searchable' => true, 'elmsearch' => 'text']),
+            'start_date' => new Column(['title' => __('models/masterDiscounts.fields.start_date'), 'data' => 'start_date', 'searchable' => true, 'elmsearch' => 'text']),
+            'end_date' => new Column(['title' => __('models/masterDiscounts.fields.end_date'), 'data' => 'end_date', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 
@@ -136,26 +131,6 @@ class DmsInvWarehouseDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'dms_inv_warehouses_datatable_' . time();
-    }
-
-    /**
-     * Get the value of defaultFilter
-     */ 
-    public function getDefaultFilter()
-    {
-        return $this->defaultFilter;
-    }
-
-    /**
-     * Set the value of defaultFilter
-     *
-     * @return  self
-     */ 
-    public function setDefaultFilter($defaultFilter)
-    {
-        $this->defaultFilter = $defaultFilter;
-
-        return $this;
+        return 'master_discounts_datatable_' . time();
     }
 }

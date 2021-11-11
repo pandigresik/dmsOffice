@@ -23,4 +23,20 @@ class BaseEntity extends Base
         parent::__construct($attributes);
         
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function createdBy()
+    {
+        return $this->setConnection(config('database.default'))->belongsTo(\App\Models\Base\User::class, static::CREATED_BY);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function updatedBy()
+    {
+        return $this->setConnection(config('database.default'))->belongsTo(\App\Models\Base\User::class, static::UPDATED_BY);
+    }
 }

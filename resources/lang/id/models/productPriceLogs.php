@@ -9,5 +9,8 @@ return array (
     'dms_inv_product_id' => 'Produk',
     'price' => 'Harga',
     'start_date' => 'Tanggal Mulai',
+    'end_date' => 'Tanggal Akhir',
+    'created_at' => 'Dibuat Pada',
+    'created_by' => 'Diupdate Oleh'
   ),
 );

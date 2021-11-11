@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Inventory;
 
-use App\DataTables\Inventory\ProductPriceLogDataTable;
+use Flash;
+use Response;
+use Illuminate\Http\Request;
 use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
+use App\DataTables\Inventory\ProductPriceLogDataTable;
+use App\Repositories\Inventory\DmsInvProductRepository;
+use App\Repositories\Inventory\ProductPriceLogRepository;
 use App\Http\Requests\Inventory\CreateProductPriceLogRequest;
 use App\Http\Requests\Inventory\UpdateProductPriceLogRequest;
-use App\Repositories\Inventory\ProductPriceLogRepository;
-use App\Repositories\Inventory\DmsInvProductRepository;
-use Flash;
-use App\Http\Controllers\AppBaseController;
-use Response;
 
 class ProductPriceLogController extends AppBaseController
 {
@@ -28,9 +29,10 @@ class ProductPriceLogController extends AppBaseController
      * @param ProductPriceLogDataTable $productPriceLogDataTable
      * @return Response
      */
-    public function index(ProductPriceLogDataTable $productPriceLogDataTable)
+    public function index(ProductPriceLogDataTable $productPriceLogDataTable, Request $request)
     {
-        return $productPriceLogDataTable->render('inventory.product_price_logs.index');
+        $dmsInvProduct = $request->route('dmsInvProduct');
+        return $productPriceLogDataTable->setDefaultFilter(['dms_inv_product_id' => $dmsInvProduct])->render('inventory.product_price_logs.index');
     }
 
     /**

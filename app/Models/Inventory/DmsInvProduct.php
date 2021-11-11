@@ -6,6 +6,7 @@ use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 /**
  * @SWG\Definition(
@@ -159,6 +160,16 @@ class DmsInvProduct extends Model
     public function productCategoriesProduct(): BelongsTo
     {
         return $this->belongsTo(ProductCategoriesProduct::class, 'iInternalId', 'product_id');
+    }
+
+    /**
+     * Get the ProductCategories associated with the DmsInvProduct
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function productCategories(): HasOneThrough
+    {
+        return $this->hasOneThrough(ProductCategories::class, ProductCategoriesProduct::class, 'product_id', 'id' ,'iInternalId');
     }
 
     /**

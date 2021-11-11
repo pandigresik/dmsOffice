@@ -68,7 +68,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('synchronizeInStockPickings', App\Http\Controllers\Inventory\SynchronizeInStockPickingController::class, ['as' => 'inventory']);
         Route::resource('synchronizeOutStockPickings', App\Http\Controllers\Inventory\SynchronizeOutStockPickingController::class, ['as' => 'inventory']);
         Route::resource('btbViewTmps', App\Http\Controllers\Inventory\BtbViewTmpController::class, ["as" => 'inventory']);
-
+        
         /** DMS Table */
         Route::resource('dmsInvCarriers', App\Http\Controllers\Inventory\DmsInvCarrierController::class, ["as" => 'inventory']);
         // Route::resource('dmsInvCarrierdrivers', App\Http\Controllers\Inventory\DmsInvCarrierdriverController::class, ["as" => 'inventory']);
@@ -91,6 +91,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('contactEkspedisis', App\Http\Controllers\Inventory\ContactEkspedisiController::class, ["as" => 'inventory']);
         Route::resource('locationEkspedisis', App\Http\Controllers\Inventory\LocationEkspedisiController::class, ["as" => 'inventory']);
         Route::resource('tripEkspedisis', App\Http\Controllers\Inventory\TripEkspedisiController::class, ["as" => 'inventory']);
+
+        /** master discount */
+        Route::resource('masterDiscounts', App\Http\Controllers\Inventory\MasterDiscountController::class, ["as" => 'inventory']);
     });
 
     Route::group(['prefix' => 'accounting'], function () {        
@@ -124,3 +127,8 @@ Route::post(
 
 Route::resource('synchronizes', App\Http\Controllers\SynchronizeController::class)->except(['destroy','update', 'edit', 'show']);
 Route::get('synchronizes/progress', [App\Http\Controllers\SynchronizeController::class, 'progress'])->name('synchronizes.progress');    
+
+
+Route::group(['prefix' => 'inventory'], function () {
+    
+});

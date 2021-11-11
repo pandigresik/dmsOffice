@@ -3,10 +3,7 @@
 @section('content')
     @push('breadcrumb')
     <ol class="breadcrumb border-0 m-0">
-        <li class="breadcrumb-item">
-            <a href="{!! route('base.dmsSmBranches.index') !!}">@lang('models/dmsSmBranches.singular')</a>
-        </li>
-        <li class="breadcrumb-item">@lang('models/dmsInvWarehouses.plural')</li>
+        <li class="breadcrumb-item">@lang('models/masterDiscounts.plural')</li>
     </ol>
     @endpush
     <div class="container-fluid">
@@ -17,11 +14,11 @@
                      <div class="card">
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
-                             @lang('models/dmsInvWarehouses.plural')
-                             
+                             @lang('models/masterDiscounts.plural')
+                             <a class="pull-right" href="{{ route('inventory.masterDiscounts.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
                          </div>
                          <div class="card-body">
-                             @include('inventory.dms_inv_warehouses.table')
+                             @include('inventory.master_discounts.table')
                               <div class="pull-right mr-3">
                                      
                               </div>
