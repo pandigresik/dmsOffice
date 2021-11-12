@@ -89,10 +89,10 @@ class DmsInvCarrier extends Model
      * @var array
      */
     public static $rules = [
-        'iId' => 'required|string|max:50',
+        // 'iId' => 'required|string|max:50',
         'szId' => 'required|string|max:50',
         'szName' => 'required|string|max:50',
-        'szDescription' => 'required|string|max:200',
+        // 'szDescription' => 'required|string|max:200',
         // 'szUserCreatedId' => 'required|string|max:20',
         // 'szUserUpdatedId' => 'required|string|max:20',
         // 'dtmCreated' => 'required',
