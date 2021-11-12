@@ -2,19 +2,19 @@
 
 namespace App\Repositories\Inventory;
 
-use Illuminate\Support\Facades\DB;
-use App\Repositories\BaseRepository;
-use App\Models\Inventory\DmsInvCarrier;
-use App\Models\Inventory\TripEkspedisi;
 use App\Models\Inventory\ContactEkspedisi;
-use App\Models\Inventory\VehicleEkspedisi;
+use App\Models\Inventory\DmsInvCarrier;
 use App\Models\Inventory\LocationEkspedisi;
-/**
- * Class DmsInvCarrierRepository
- * @package App\Repositories\Inventory
- * @version October 29, 2021, 6:54 am UTC
-*/
+use App\Models\Inventory\TripEkspedisi;
+use App\Models\Inventory\VehicleEkspedisi;
+use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\DB;
 
+/**
+ * Class DmsInvCarrierRepository.
+ *
+ * @version October 29, 2021, 6:54 am UTC
+ */
 class DmsInvCarrierRepository extends BaseRepository
 {
     /**
@@ -28,11 +28,11 @@ class DmsInvCarrierRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -42,8 +42,8 @@ class DmsInvCarrierRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsInvCarrier::class;
@@ -56,11 +56,11 @@ class DmsInvCarrierRepository extends BaseRepository
         try {
             $contactEkspedisis = $input['contactEkspedisis'] ?? [];
             $locationEkspedisis = $input['locationEkspedisis'] ?? [];
-            $vehicleEkspedisis = $input['vehicleEkspedisis'] ?? [];            
+            $vehicleEkspedisis = $input['vehicleEkspedisis'] ?? [];
             $tripEkspedisis = $input['tripEkspedisis'] ?? [];
             //$model = parent::update($input, $id);
             $model = $this->model->find($id);
-            if (!empty($contactEkspedisis)) {                
+            if (!empty($contactEkspedisis)) {
                 foreach ($contactEkspedisis as $key => $vc) {
                     $stateForm = $vc['stateForm'];
                     switch ($stateForm) {
@@ -81,7 +81,7 @@ class DmsInvCarrierRepository extends BaseRepository
                 }
             }
             if (!empty($locationEkspedisis)) {
-                foreach ($locationEkspedisis as $key => $vc) {                    
+                foreach ($locationEkspedisis as $key => $vc) {
                     $stateForm = $vc['stateForm'];
                     switch ($stateForm) {
                         case 'insert':
@@ -106,9 +106,9 @@ class DmsInvCarrierRepository extends BaseRepository
                     $stateForm = $vc['stateForm'];
                     switch ($stateForm) {
                         case 'insert':
-                            $model->vehicleEkspedisis()->create($vc);                         
+                            $model->vehicleEkspedisis()->create($vc);
+
                             break;
-                        
                         case 'delete':
                             VehicleEkspedisi::where(['dms_inv_vehicle_id' => $key, 'dms_inv_carrier_id' => $id])->delete();
 
@@ -125,7 +125,6 @@ class DmsInvCarrierRepository extends BaseRepository
                             $model->tripEkspedisis()->create($vc);
 
                             break;
-                        
                         case 'delete':
                             TripEkspedisi::where(['trip_id' => $key, 'dms_inv_carrier_id' => $id])->delete();
 
@@ -141,6 +140,6 @@ class DmsInvCarrierRepository extends BaseRepository
             \Log::error($e);
 
             return $e;
-        }        
+        }
     }
 }

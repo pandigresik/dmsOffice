@@ -6,11 +6,10 @@ use App\Models\Inventory\ProductCategoriesProduct;
 use App\Repositories\BaseRepository;
 
 /**
- * Class ProductCategoriesProductRepository
- * @package App\Repositories\Inventory
+ * Class ProductCategoriesProductRepository.
+ *
  * @version November 10, 2021, 12:48 pm UTC
-*/
-
+ */
 class ProductCategoriesProductRepository extends BaseRepository
 {
     /**

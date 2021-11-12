@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\ProductPrice;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateProductPriceRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateProductPriceRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'product_price-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateProductPriceRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new ProductPrice)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new ProductPrice())->fillable;
+
         return parent::all($keys);
     }
 }

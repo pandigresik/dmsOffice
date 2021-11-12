@@ -6,11 +6,10 @@ use App\Models\Base\DmsArPricesegment;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsArPricesegmentRepository
- * @package App\Repositories\Base
+ * Class DmsArPricesegmentRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsArPricesegmentRepository extends BaseRepository
 {
     /**
@@ -24,11 +23,11 @@ class DmsArPricesegmentRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -38,8 +37,8 @@ class DmsArPricesegmentRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsArPricesegment::class;

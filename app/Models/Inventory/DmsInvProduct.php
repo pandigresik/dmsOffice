@@ -3,9 +3,9 @@
 namespace App\Models\Inventory;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 /**
@@ -149,11 +149,11 @@ class DmsInvProduct extends Model
 
     public function getFullIdentityAttribute($value)
     {
-        return implode(' | ',[$this->attributes['szId'],$this->attributes['szName'],$this->attributes['szUomId']]);
+        return implode(' | ', [$this->attributes['szId'], $this->attributes['szName'], $this->attributes['szUomId']]);
     }
 
     /**
-     * Get the ProductCategories that owns the DmsInvProduct
+     * Get the ProductCategories that owns the DmsInvProduct.
      *
      * @return \Illuminate\ProductCategoriesbase\Eloquent\Relations\BelongsTo
      */
@@ -163,19 +163,17 @@ class DmsInvProduct extends Model
     }
 
     /**
-     * Get the ProductCategories associated with the DmsInvProduct
+     * Get the ProductCategories associated with the DmsInvProduct.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function productCategories(): HasOneThrough
     {
-        return $this->hasOneThrough(ProductCategories::class, ProductCategoriesProduct::class, 'product_id', 'id' ,'iInternalId');
+        return $this->hasOneThrough(ProductCategories::class, ProductCategoriesProduct::class, 'product_id', 'id', 'iInternalId');
     }
 
     /**
-     * Get all of the logProductPrice for the DmsInvProduct
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the logProductPrice for the DmsInvProduct.
      */
     public function logProductPrice(): HasMany
     {

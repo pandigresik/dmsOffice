@@ -6,11 +6,10 @@ use App\Models\Base\Company;
 use App\Repositories\BaseRepository;
 
 /**
- * Class CompanyRepository
- * @package App\Repositories\Base
+ * Class CompanyRepository.
+ *
  * @version August 15, 2021, 3:20 pm UTC
-*/
-
+ */
 class CompanyRepository extends BaseRepository
 {
     /**
@@ -18,11 +17,11 @@ class CompanyRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'name',
-        'internal_code'
+        'internal_code',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -32,8 +31,8 @@ class CompanyRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Company::class;

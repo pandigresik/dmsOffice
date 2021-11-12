@@ -48,11 +48,12 @@ class UserRepository extends BaseRepository
      * @return Model
      */
     public function create($input)
-    {   
+    {
         $input['password'] = Hash::make($input['password']);
         $model = parent::create($input);
         $roles = $input['roles'] ?? [];
         $model->syncRoles($roles);
+
         return $model;
     }
 
@@ -65,10 +66,11 @@ class UserRepository extends BaseRepository
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
     public function update($input, $id)
-    {        
+    {
         $model = parent::update($input, $id);
         $roles = $input['roles'] ?? [];
         $model->syncRoles($roles);
+
         return $model;
     }
 }

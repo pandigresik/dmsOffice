@@ -6,11 +6,10 @@ use App\Models\Inventory\SynchronizeInStockPicking;
 use App\Repositories\BaseRepository;
 
 /**
- * Class SynchronizeInStockPickingRepository
- * @package App\Repositories\Inventory
+ * Class SynchronizeInStockPickingRepository.
+ *
  * @version October 3, 2021, 1:40 pm UTC
-*/
-
+ */
 class SynchronizeInStockPickingRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class SynchronizeInStockPickingRepository extends BaseRepository
         'No_DN',
         'Tgl_sjp',
         'Depo',
-        'Nama_Produk'
+        'Nama_Produk',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class SynchronizeInStockPickingRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return SynchronizeInStockPicking::class;

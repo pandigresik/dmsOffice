@@ -27,14 +27,11 @@ class VendorDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->editColumn('is_supplier', function($m){
-
+        return $dataTable->editColumn('is_supplier', function ($m) {
             return $m->is_supplier ? 'Ya' : 'Tidak';
-        })->editColumn('is_customer', function($m){
-
+        })->editColumn('is_customer', function ($m) {
             return $m->is_customer ? 'Ya' : 'Tidak';
-        })->editColumn('is_expedition', function($m){
-
+        })->editColumn('is_expedition', function ($m) {
             return $m->is_expedition ? 'Ya' : 'Tidak';
         })->addColumn('action', 'base.vendors.datatables_actions');
     }
@@ -117,7 +114,6 @@ class VendorDataTable extends DataTable
             'is_supplier' => new Column(['title' => __('models/vendors.fields.is_supplier'), 'data' => 'is_supplier', 'searchable' => true, 'elmsearch' => 'text']),
             'is_expedition' => new Column(['title' => __('models/vendors.fields.is_expedition'), 'data' => 'is_expedition', 'searchable' => true, 'elmsearch' => 'text']),
             'is_customer' => new Column(['title' => __('models/vendors.fields.is_customer'), 'data' => 'is_customer', 'searchable' => true, 'elmsearch' => 'text']),
-
         ];
     }
 

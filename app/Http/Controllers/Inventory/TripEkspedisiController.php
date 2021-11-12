@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\TripEkspedisiDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateTripEkspedisiRequest;
 use App\Http\Requests\Inventory\UpdateTripEkspedisiRequest;
-use App\Repositories\Inventory\TripEkspedisiRepository;
-use App\Repositories\Inventory\DmsInvCarrierRepository;
-use Flash;
-use App\Http\Controllers\AppBaseController;
 use App\Repositories\Base\TripRepository;
+use App\Repositories\Inventory\TripEkspedisiRepository;
+use Flash;
 use Illuminate\Http\Request;
 use Response;
 
 class TripEkspedisiController extends AppBaseController
 {
-    /** @var  TripEkspedisiRepository */
+    /** @var TripEkspedisiRepository */
     protected $repository;
 
     public function __construct()
@@ -28,18 +26,18 @@ class TripEkspedisiController extends AppBaseController
      * Display a listing of the TripEkspedisi.
      *
      * @param TripEkspedisiDataTable $tripEkspedisiDataTable
+     *
      * @return Response
      */
     public function index(Request $request)
     {
         $trips = $this->getRepositoryObj()->with(['trip'])
-            ->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->map(function($q){
-
+            ->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->map(function ($q) {
                 return $q->trip;
-        });
+            });
         $buttonView = view('inventory.dms_inv_carriers.partials.trip_button', ['json' => [], 'url' => route('inventory.tripEkspedisis.create')])->render();
 
-        return view('inventory.trip_ekspedisis.index')->with(['trips' => $trips, 'buttonView' => $buttonView]);        
+        return view('inventory.trip_ekspedisis.index')->with(['trips' => $trips, 'buttonView' => $buttonView]);
     }
 
     /**
@@ -59,8 +57,6 @@ class TripEkspedisiController extends AppBaseController
     /**
      * Store a newly created TripEkspedisi in storage.
      *
-     * @param CreateTripEkspedisiRequest $request
-     *
      * @return Response
      */
     public function store(CreateTripEkspedisiRequest $request)
@@ -77,7 +73,7 @@ class TripEkspedisiController extends AppBaseController
     /**
      * Display the specified TripEkspedisi.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -97,7 +93,7 @@ class TripEkspedisiController extends AppBaseController
     /**
      * Show the form for editing the specified TripEkspedisi.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -117,8 +113,7 @@ class TripEkspedisiController extends AppBaseController
     /**
      * Update the specified TripEkspedisi in storage.
      *
-     * @param  int              $id
-     * @param UpdateTripEkspedisiRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -142,7 +137,7 @@ class TripEkspedisiController extends AppBaseController
     /**
      * Remove the specified TripEkspedisi from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -164,16 +159,18 @@ class TripEkspedisiController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model TripEkspedisi from storage.         
+     * Provide options item based on relationship model TripEkspedisi from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $trip = new TripRepository(app());
+
         return [
-            'tripItems' => ['' => __('crud.option.trip_placeholder')] + $trip->allQuery()->with(['productCategories'])->get()->pluck('full_identity', 'id')->toArray()
+            'tripItems' => ['' => __('crud.option.trip_placeholder')] + $trip->allQuery()->with(['productCategories'])->get()->pluck('full_identity', 'id')->toArray(),
         ];
     }
 }

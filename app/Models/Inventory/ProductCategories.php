@@ -3,8 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -34,18 +34,27 @@ class ProductCategories extends Model
 
     use HasFactory;
 
-    public $table = 'product_categories';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
+    public $table = 'product_categories';
 
     public $fillable = [
         'name',
-        'description'
+        'description',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'name' => 'required|string|max:50',
+        'description' => 'nullable|string|max:100',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -55,22 +64,12 @@ class ProductCategories extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'description' => 'string'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'name' => 'required|string|max:50',
-        'description' => 'nullable|string|max:100'
+        'description' => 'string',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function productCategoriesProducts()
     {
         return $this->hasMany(\App\Models\Inventory\ProductCategoriesProduct::class, 'product_categories_id');

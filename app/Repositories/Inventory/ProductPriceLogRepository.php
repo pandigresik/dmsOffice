@@ -49,6 +49,7 @@ class ProductPriceLogRepository extends BaseRepository
             $lastPriceLog->end_date = $endDate;
             $lastPriceLog->save();
         }
+
         return parent::create($input);
     }
 }

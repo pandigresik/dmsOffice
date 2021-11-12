@@ -17,6 +17,7 @@ class ContactEkspedisiController extends AppBaseController
     /** @var ContactEkspedisiRepository */
     protected $repository;
     private $prefixName = 'contactEkspedisis';
+
     public function __construct()
     {
         $this->repository = ContactEkspedisiRepository::class;
@@ -112,7 +113,6 @@ class ContactEkspedisiController extends AppBaseController
         return view('inventory.contact_ekspedisis.edit')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'contactEkspedisi' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => $this->prefixName.'['.$idForm.']'])
         ;
-        
     }
 
     /**

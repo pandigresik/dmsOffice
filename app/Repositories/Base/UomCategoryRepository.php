@@ -6,22 +6,21 @@ use App\Models\Base\UomCategory;
 use App\Repositories\BaseRepository;
 
 /**
- * Class UomCategoryRepository
- * @package App\Repositories\Base
+ * Class UomCategoryRepository.
+ *
  * @version August 15, 2021, 3:20 pm UTC
-*/
-
+ */
 class UomCategoryRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'name'
+        'name',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -31,8 +30,8 @@ class UomCategoryRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return UomCategory::class;

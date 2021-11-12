@@ -6,11 +6,10 @@ use App\Models\Inventory\VehicleEkspedisi;
 use App\Repositories\BaseRepository;
 
 /**
- * Class VehicleEkspedisiRepository
- * @package App\Repositories\Inventory
+ * Class VehicleEkspedisiRepository.
+ *
  * @version October 30, 2021, 5:57 am UTC
-*/
-
+ */
 class VehicleEkspedisiRepository extends BaseRepository
 {
     /**
@@ -18,11 +17,11 @@ class VehicleEkspedisiRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'dms_inv_vehicle_id',
-        'dms_inv_carrier_id'
+        'dms_inv_carrier_id',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -32,8 +31,8 @@ class VehicleEkspedisiRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return VehicleEkspedisi::class;

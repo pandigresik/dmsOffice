@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Base;
 
-use Flash;
-use Response;
-use Illuminate\Http\Request;
-use App\Repositories\Base\CityRepository;
-use App\Http\Controllers\AppBaseController;
 use App\DataTables\Base\ContactSupplierDataTable;
-use App\Repositories\Base\DmsApSupplierRepository;
-use App\Repositories\Base\ContactSupplierRepository;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateContactSupplierRequest;
 use App\Http\Requests\Base\UpdateContactSupplierRequest;
+use App\Repositories\Base\CityRepository;
+use App\Repositories\Base\ContactSupplierRepository;
+use Flash;
+use Illuminate\Http\Request;
+use Response;
 
 class ContactSupplierController extends AppBaseController
 {
     /** @var ContactSupplierRepository */
     protected $repository;
-        private $prefixName = 'contactSuppliers';
+    private $prefixName = 'contactSuppliers';
+
     public function __construct()
     {
         $this->repository = ContactSupplierRepository::class;
@@ -113,7 +113,6 @@ class ContactSupplierController extends AppBaseController
         return view('base.contact_suppliers.edit')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'contactSupplier' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => $this->prefixName.'['.$idForm.']'])
         ;
-                
     }
 
     /**

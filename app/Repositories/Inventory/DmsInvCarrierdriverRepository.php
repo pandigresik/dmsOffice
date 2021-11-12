@@ -6,11 +6,10 @@ use App\Models\Inventory\DmsInvCarrierdriver;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsInvCarrierdriverRepository
- * @package App\Repositories\Inventory
+ * Class DmsInvCarrierdriverRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsInvCarrierdriverRepository extends BaseRepository
 {
     /**
@@ -20,11 +19,11 @@ class DmsInvCarrierdriverRepository extends BaseRepository
         'iId',
         'szId',
         'intItemNumber',
-        'szDriverName'
+        'szDriverName',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -34,8 +33,8 @@ class DmsInvCarrierdriverRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsInvCarrierdriver::class;

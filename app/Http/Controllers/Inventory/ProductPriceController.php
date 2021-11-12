@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\ProductPriceDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateProductPriceRequest;
 use App\Http\Requests\Inventory\UpdateProductPriceRequest;
-use App\Repositories\Inventory\ProductPriceRepository;
 use App\Repositories\Inventory\DmsInvProductRepository;
+use App\Repositories\Inventory\ProductPriceRepository;
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class ProductPriceController extends AppBaseController
 {
-    /** @var  ProductPriceRepository */
+    /** @var ProductPriceRepository */
     protected $repository;
 
     public function __construct()
@@ -25,7 +24,6 @@ class ProductPriceController extends AppBaseController
     /**
      * Display a listing of the ProductPrice.
      *
-     * @param ProductPriceDataTable $productPriceDataTable
      * @return Response
      */
     public function index(ProductPriceDataTable $productPriceDataTable)
@@ -46,8 +44,6 @@ class ProductPriceController extends AppBaseController
     /**
      * Store a newly created ProductPrice in storage.
      *
-     * @param CreateProductPriceRequest $request
-     *
      * @return Response
      */
     public function store(CreateProductPriceRequest $request)
@@ -64,7 +60,7 @@ class ProductPriceController extends AppBaseController
     /**
      * Display the specified ProductPrice.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +80,7 @@ class ProductPriceController extends AppBaseController
     /**
      * Show the form for editing the specified ProductPrice.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +100,7 @@ class ProductPriceController extends AppBaseController
     /**
      * Update the specified ProductPrice in storage.
      *
-     * @param  int              $id
-     * @param UpdateProductPriceRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +124,7 @@ class ProductPriceController extends AppBaseController
     /**
      * Remove the specified ProductPrice from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +146,18 @@ class ProductPriceController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model ProductPrice from storage.         
+     * Provide options item based on relationship model ProductPrice from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $dmsInvProduct = new DmsInvProductRepository(app());
+
         return [
-            'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->whereHas('productCategoriesProduct')->get()->pluck('szName','iInternalId')->toArray()
+            'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->whereHas('productCategoriesProduct')->get()->pluck('szName', 'iInternalId')->toArray(),
         ];
     }
 }

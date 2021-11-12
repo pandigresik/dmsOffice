@@ -3,23 +3,24 @@
 namespace App\DataTables\Base;
 
 use App\Models\Base\UomCategory;
-use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Services\DataTable;
 
 class UomCategoryDataTable extends DataTable
 {
     /**
-    * example mapping filter column to search by keyword, default use %keyword%
-    */
+     * example mapping filter column to search by keyword, default use %keyword%.
+     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
-    
+
     /**
      * Build DataTable class.
      *
-     * @param mixed $query Results from query() method.
+     * @param mixed $query results from query() method
+     *
      * @return \Yajra\DataTables\DataTableAbstract
      */
     public function dataTable($query)
@@ -30,6 +31,7 @@ class UomCategoryDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($column));
             }
         }
+
         return $dataTable->addColumn('action', 'base.uom_categories.datatables_actions');
     }
 
@@ -37,6 +39,7 @@ class UomCategoryDataTable extends DataTable
      * Get query source of dataTable.
      *
      * @param \App\Models\UomCategory $model
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(UomCategory $model)
@@ -56,43 +59,44 @@ class UomCategoryDataTable extends DataTable
             ->minifiedAjax()
             ->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')])
             ->parameters([
-                'dom'       => 'Brtip',
+                'dom' => 'Brtip',
                 'stateSave' => true,
-                'order'     => [[0, 'desc']],
-                'buttons'   => [
+                'order' => [[0, 'desc']],
+                'buttons' => [
                     [
-                       'extend' => 'create',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
+                        'extend' => 'create',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-plus"></i> '.__('auth.app.create').'',
                     ],
                     [
-                       'extend' => 'export',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
+                        'extend' => 'export',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
                     ],
                     [
-                       'extend' => 'print',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
+                        'extend' => 'print',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-print"></i> '.__('auth.app.print').'',
                     ],
                     [
-                       'extend' => 'reset',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-undo"></i> ' .__('auth.app.reset').''
+                        'extend' => 'reset',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-undo"></i> '.__('auth.app.reset').'',
                     ],
                     [
-                       'extend' => 'reload',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
+                        'extend' => 'reload',
+                        'className' => 'btn btn-default btn-sm no-corner',
+                        'text' => '<i class="fa fa-refresh"></i> '.__('auth.app.reload').'',
                     ],
                 ],
-                 'language' => [
-                   'url' => url('vendor/datatables/i18n/en-gb.json'),
-                 ],
-                 'responsive' => true,
-                 'fixedHeader' => true,
-                 'orderCellsTop' => true     
-            ]);
+                'language' => [
+                    'url' => url('vendor/datatables/i18n/en-gb.json'),
+                ],
+                'responsive' => true,
+                'fixedHeader' => true,
+                'orderCellsTop' => true,
+            ])
+        ;
     }
 
     /**
@@ -103,7 +107,7 @@ class UomCategoryDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'name' => new Column(['title' => __('models/uomCategories.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text'])
+            'name' => new Column(['title' => __('models/uomCategories.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
         ];
     }
 
@@ -114,6 +118,6 @@ class UomCategoryDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'uom_categories_datatable_' . time();
+        return 'uom_categories_datatable_'.time();
     }
 }

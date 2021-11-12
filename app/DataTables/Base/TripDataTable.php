@@ -157,6 +157,7 @@ class TripDataTable extends DataTable
             'product_categories_id' => new Column(['title' => __('models/trips.fields.product_categories_id'), 'data' => 'product_categories.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $dropDownProductCategories]),
         ];
     }
+
     /**
      * Get filename for export.
      *

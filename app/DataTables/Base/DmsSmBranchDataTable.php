@@ -3,19 +3,19 @@
 namespace App\DataTables\Base;
 
 use App\Models\Base\DmsSmBranch;
-use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Services\DataTable;
 
 class DmsSmBranchDataTable extends DataTable
 {
     /**
-    * example mapping filter column to search by keyword, default use %keyword%
-    */
+     * example mapping filter column to search by keyword, default use %keyword%.
+     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
-    
+
     private $mapColumnSearch = [
         //'entity.name' => 'entity_id',
     ];
@@ -23,7 +23,8 @@ class DmsSmBranchDataTable extends DataTable
     /**
      * Build DataTable class.
      *
-     * @param mixed $query Results from query() method.
+     * @param mixed $query results from query() method
+     *
      * @return \Yajra\DataTables\DataTableAbstract
      */
     public function dataTable($query)
@@ -32,16 +33,15 @@ class DmsSmBranchDataTable extends DataTable
         if (!empty($this->columnFilterOperator)) {
             foreach ($this->columnFilterOperator as $column => $operator) {
                 $columnSearch = $this->mapColumnSearch[$column] ?? $column;
-                $dataTable->filterColumn($column, new $operator($columnSearch));                
+                $dataTable->filterColumn($column, new $operator($columnSearch));
             }
         }
-        $dataTable->editColumn('szDistrict',function($p){
-
+        $dataTable->editColumn('szDistrict', function ($p) {
             return '<div class="text-wrap" style="width:200px;">'.$p->szDistrict.'</div>';
-        })->editColumn('szCity',function($p){
-
+        })->editColumn('szCity', function ($p) {
             return '<div class="text-wrap" style="width:150px;">'.$p->szCity.'</div>';
-        })->escapeColumns([]);;
+        })->escapeColumns([]);
+
         return $dataTable->addColumn('action', 'base.dms_sm_branches.datatables_actions');
     }
 
@@ -49,6 +49,7 @@ class DmsSmBranchDataTable extends DataTable
      * Get query source of dataTable.
      *
      * @param \App\Models\DmsSmBranch $model
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(DmsSmBranch $model)
@@ -64,54 +65,55 @@ class DmsSmBranchDataTable extends DataTable
     public function html()
     {
         $buttons = [
-                    // [
-                    //    'extend' => 'create',
-                    //    'className' => 'btn btn-default btn-sm no-corner',
-                    //    'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-                    // ],
-                    [
-                       'extend' => 'export',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
-                    ],
-                    [
-                       'extend' => 'import',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    ],
-                    [
-                       'extend' => 'print',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
-                    ],
-                    [
-                       'extend' => 'reset',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-undo"></i> ' .__('auth.app.reset').''
-                    ],
-                    [
-                       'extend' => 'reload',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
-                    ],
-                ];
-                
+            // [
+            //    'extend' => 'create',
+            //    'className' => 'btn btn-default btn-sm no-corner',
+            //    'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
+            // ],
+            [
+                'extend' => 'export',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
+            ],
+            [
+                'extend' => 'import',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-upload"></i> '.__('auth.app.import').'',
+            ],
+            [
+                'extend' => 'print',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-print"></i> '.__('auth.app.print').'',
+            ],
+            [
+                'extend' => 'reset',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-undo"></i> '.__('auth.app.reset').'',
+            ],
+            [
+                'extend' => 'reload',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-refresh"></i> '.__('auth.app.reload').'',
+            ],
+        ];
+
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')])
             ->parameters([
-                'dom'       => 'Brtip',
+                'dom' => 'Brtip',
                 'stateSave' => true,
-                'order'     => [[0, 'desc']],
-                'buttons'   => $buttons,
-                 'language' => [
-                   'url' => url('vendor/datatables/i18n/en-gb.json'),
-                 ],
-                 //'responsive' => true,
-                 'fixedHeader' => true,
-                 'orderCellsTop' => true     
-            ]);
+                'order' => [[0, 'desc']],
+                'buttons' => $buttons,
+                'language' => [
+                    'url' => url('vendor/datatables/i18n/en-gb.json'),
+                ],
+                //'responsive' => true,
+                'fixedHeader' => true,
+                'orderCellsTop' => true,
+            ])
+        ;
     }
 
     /**
@@ -145,6 +147,6 @@ class DmsSmBranchDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'dms_sm_branches_datatable_' . time();
+        return 'dms_sm_branches_datatable_'.time();
     }
 }

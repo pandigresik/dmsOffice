@@ -6,11 +6,10 @@ use App\Models\Inventory\DmsInvProductcategorytype;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsInvProductcategorytypeRepository
- * @package App\Repositories\Inventory
+ * Class DmsInvProductcategorytypeRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsInvProductcategorytypeRepository extends BaseRepository
 {
     /**
@@ -25,11 +24,11 @@ class DmsInvProductcategorytypeRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -39,8 +38,8 @@ class DmsInvProductcategorytypeRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsInvProductcategorytype::class;

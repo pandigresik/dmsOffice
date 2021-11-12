@@ -157,7 +157,7 @@ class MasterDiscountController extends AppBaseController
         $dmsInvProduct = new ProductPriceRepository(app());
 
         return [
-            'productItems' => $dmsInvProduct->with(['dmsInvProduct' => function($q){
+            'productItems' => $dmsInvProduct->with(['dmsInvProduct' => function ($q) {
                 $q->with(['productCategories']);
             }])->allQuery()->get()->pluck('full_identity', 'dms_inv_product_id')->toArray(),
         ];

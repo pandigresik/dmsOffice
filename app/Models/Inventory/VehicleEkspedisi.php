@@ -32,8 +32,8 @@ class VehicleEkspedisi extends Model
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    const CREATED_BY = NULL;
-    const UPDATED_BY = NULL;
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
     public $table = 'vehicle_ekspedisi';
 
@@ -67,6 +67,6 @@ class VehicleEkspedisi extends Model
      */
     public function dmsInvVehicle()
     {
-        return $this->belongsTo(\App\Models\Inventory\DmsInvVehicle::class, 'dms_inv_vehicle_id','iInternalId');
+        return $this->belongsTo(\App\Models\Inventory\DmsInvVehicle::class, 'dms_inv_vehicle_id', 'iInternalId');
     }
 }

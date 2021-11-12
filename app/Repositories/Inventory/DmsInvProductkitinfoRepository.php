@@ -6,11 +6,10 @@ use App\Models\Inventory\DmsInvProductkitinfo;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsInvProductkitinfoRepository
- * @package App\Repositories\Inventory
+ * Class DmsInvProductkitinfoRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsInvProductkitinfoRepository extends BaseRepository
 {
     /**
@@ -21,11 +20,11 @@ class DmsInvProductkitinfoRepository extends BaseRepository
         'szId',
         'szProductId',
         'decQty',
-        'szUomId'
+        'szUomId',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -35,8 +34,8 @@ class DmsInvProductkitinfoRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsInvProductkitinfo::class;

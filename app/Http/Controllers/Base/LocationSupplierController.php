@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Base;
 
-use Flash;
-use Response;
-use Illuminate\Http\Request;
-use App\Repositories\Base\CityRepository;
 use App\Http\Controllers\AppBaseController;
-use App\DataTables\Base\LocationSupplierDataTable;
-use App\Repositories\Base\DmsApSupplierRepository;
-use App\Repositories\Base\LocationSupplierRepository;
 use App\Http\Requests\Base\CreateLocationSupplierRequest;
 use App\Http\Requests\Base\UpdateLocationSupplierRequest;
+use App\Repositories\Base\CityRepository;
+use App\Repositories\Base\LocationSupplierRepository;
+use Flash;
+use Illuminate\Http\Request;
+use Response;
 
 class LocationSupplierController extends AppBaseController
 {
@@ -28,14 +26,13 @@ class LocationSupplierController extends AppBaseController
      *
      * @return Response
      */
-    
     public function index(Request $request)
     {
         $locations = $this->getRepositoryObj()->all(['dms_ap_supplier_id' => $request->get('dms_ap_supplier_id')]);
         $buttonView = view('base.dms_ap_suppliers.partials.location_button', ['json' => [], 'url' => route('base.locationSuppliers.create')])->render();
 
         return view('base.location_suppliers.index')->with(['locations' => $locations, 'buttonView' => $buttonView]);
-    }    
+    }
 
     /**
      * Show the form for creating a new LocationSupplier.
@@ -44,11 +41,11 @@ class LocationSupplierController extends AppBaseController
      */
     public function create()
     {
-         $idForm = \Carbon\Carbon::now()->timestamp;
+        $idForm = \Carbon\Carbon::now()->timestamp;
 
         return view('base.location_suppliers.create')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'locationSupplier['.$idForm.']'])
-        ;        
+        ;
     }
 
     /**

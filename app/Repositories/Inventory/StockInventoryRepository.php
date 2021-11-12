@@ -99,11 +99,12 @@ class StockInventoryRepository extends BaseRepository
                     $quant->save();
                 }
             }
-            $model->stockInventoryLines()->saveMany($stockInventoryLine);            
+            $model->stockInventoryLines()->saveMany($stockInventoryLine);
             $this->model->getConnection()->commit();
-        } catch (\Exception $e) {            
+        } catch (\Exception $e) {
             \Log::error($e->getMessage());
             $this->model->getConnection()->rollBack();
+
             return $e;
         }
 

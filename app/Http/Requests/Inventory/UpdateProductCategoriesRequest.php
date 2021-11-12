@@ -2,14 +2,12 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\ProductCategories;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateProductCategoriesRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = [];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -19,6 +17,7 @@ class UpdateProductCategoriesRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'product_categories-update';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -30,9 +29,8 @@ class UpdateProductCategoriesRequest extends FormRequest
     public function rules()
     {
         $rules = ProductCategories::$rules;
-        
-        $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
-        return $rules;
+
+        return $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
     }
 
     /**
@@ -41,11 +39,13 @@ class UpdateProductCategoriesRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new ProductCategories)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new ProductCategories())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         $keys = array_merge(['productCategoriesProducts'], $keys);
+
         return parent::all($keys);
     }
 }

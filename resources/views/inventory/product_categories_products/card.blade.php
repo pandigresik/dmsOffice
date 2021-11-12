@@ -4,15 +4,12 @@
         <div class="card-header-actions">
             
             @if ($dataCard['stateForm'] == 'update')            
-            <a class="card-header-action button-caller" href="#" data-json="[]" data-url="{{route('inventory.productCategoriesProducts.edit', $dataCard['id']) }}" onclick="main.setButtonCaller(this);main.popupModal(this,'get');return false">
-                <i class="fa fa-pencil"></i>
-            </a>
             <a class="card-header-action btn-close" href="#" 
                 onclick="$(this).closest('div.card').fadeOut();$(this).closest('div.card').find('.form-hidden').append('<input type=\'hidden\' name=\'productCategoriesProducts[{{ $dataCard['id'] }}][stateForm]\' value=\'delete\' >');return false">
                 <i class="fa fa-trash"></i>
             </a>
             @endif
-            @if ($dataCard['stateForm'] == 'insert')                            
+            @if ($dataCard['stateForm'] == 'insert')
             <a class="card-header-action btn-close" href="#" onclick="$(this).closest('div.card').remove();return false">
                 <i class="fa fa-trash"></i>
             </a>    

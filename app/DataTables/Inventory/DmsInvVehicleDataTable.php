@@ -3,19 +3,19 @@
 namespace App\DataTables\Inventory;
 
 use App\Models\Inventory\DmsInvVehicle;
-use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Services\DataTable;
 
 class DmsInvVehicleDataTable extends DataTable
 {
     /**
-    * example mapping filter column to search by keyword, default use %keyword%
-    */
+     * example mapping filter column to search by keyword, default use %keyword%.
+     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
-    
+
     private $mapColumnSearch = [
         //'entity.name' => 'entity_id',
     ];
@@ -23,7 +23,8 @@ class DmsInvVehicleDataTable extends DataTable
     /**
      * Build DataTable class.
      *
-     * @param mixed $query Results from query() method.
+     * @param mixed $query results from query() method
+     *
      * @return \Yajra\DataTables\DataTableAbstract
      */
     public function dataTable($query)
@@ -32,24 +33,27 @@ class DmsInvVehicleDataTable extends DataTable
         if (!empty($this->columnFilterOperator)) {
             foreach ($this->columnFilterOperator as $column => $operator) {
                 $columnSearch = $this->mapColumnSearch[$column] ?? $column;
-                $dataTable->filterColumn($column, new $operator($columnSearch));                
+                $dataTable->filterColumn($column, new $operator($columnSearch));
             }
         }
-        return $dataTable            
-            ->editColumn('decVolume', function($q){
+
+        return $dataTable
+            ->editColumn('decVolume', function ($q) {
                 return '<div class="text-right">'.$q->decVolume.'</div>';
             })
-            ->editColumn('decWeight', function($q){
+            ->editColumn('decWeight', function ($q) {
                 return '<div class="text-right">'.$q->decWeight.'</div>';
             })
             ->addColumn('action', 'inventory.dms_inv_vehicles.datatables_actions')
-            ->escapeColumns([]);
+            ->escapeColumns([])
+        ;
     }
 
     /**
      * Get query source of dataTable.
      *
      * @param \App\Models\DmsInvVehicle $model
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(DmsInvVehicle $model)
@@ -65,54 +69,55 @@ class DmsInvVehicleDataTable extends DataTable
     public function html()
     {
         $buttons = [
-                    // [
-                    //    'extend' => 'create',
-                    //    'className' => 'btn btn-default btn-sm no-corner',
-                    //    'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-                    // ],
-                    [
-                       'extend' => 'export',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
-                    ],
-                    [
-                       'extend' => 'import',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    ],
-                    [
-                       'extend' => 'print',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
-                    ],
-                    [
-                       'extend' => 'reset',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-undo"></i> ' .__('auth.app.reset').''
-                    ],
-                    [
-                       'extend' => 'reload',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
-                    ],
-                ];
-                
+            // [
+            //    'extend' => 'create',
+            //    'className' => 'btn btn-default btn-sm no-corner',
+            //    'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
+            // ],
+            [
+                'extend' => 'export',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
+            ],
+            [
+                'extend' => 'import',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-upload"></i> '.__('auth.app.import').'',
+            ],
+            [
+                'extend' => 'print',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-print"></i> '.__('auth.app.print').'',
+            ],
+            [
+                'extend' => 'reset',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-undo"></i> '.__('auth.app.reset').'',
+            ],
+            [
+                'extend' => 'reload',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-refresh"></i> '.__('auth.app.reload').'',
+            ],
+        ];
+
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')])
             ->parameters([
-                'dom'       => 'Brtip',
+                'dom' => 'Brtip',
                 'stateSave' => true,
-                'order'     => [[0, 'desc']],
-                'buttons'   => $buttons,
-                 'language' => [
-                   'url' => url('vendor/datatables/i18n/en-gb.json'),
-                 ],
-                 'responsive' => true,
-                 'fixedHeader' => true,
-                 'orderCellsTop' => true     
-            ]);
+                'order' => [[0, 'desc']],
+                'buttons' => $buttons,
+                'language' => [
+                    'url' => url('vendor/datatables/i18n/en-gb.json'),
+                ],
+                'responsive' => true,
+                'fixedHeader' => true,
+                'orderCellsTop' => true,
+            ])
+        ;
     }
 
     /**
@@ -149,6 +154,6 @@ class DmsInvVehicleDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'dms_inv_vehicles_datatable_' . time();
+        return 'dms_inv_vehicles_datatable_'.time();
     }
 }

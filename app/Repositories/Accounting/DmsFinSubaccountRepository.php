@@ -6,11 +6,10 @@ use App\Models\Accounting\DmsFinSubaccount;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsFinSubaccountRepository
- * @package App\Repositories\Accounting
+ * Class DmsFinSubaccountRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsFinSubaccountRepository extends BaseRepository
 {
     /**
@@ -24,11 +23,11 @@ class DmsFinSubaccountRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -38,8 +37,8 @@ class DmsFinSubaccountRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsFinSubaccount::class;

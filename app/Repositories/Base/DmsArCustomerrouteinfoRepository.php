@@ -6,11 +6,10 @@ use App\Models\Base\DmsArCustomerrouteinfo;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsArCustomerrouteinfoRepository
- * @package App\Repositories\Base
+ * Class DmsArCustomerrouteinfoRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsArCustomerrouteinfoRepository extends BaseRepository
 {
     /**
@@ -36,11 +35,11 @@ class DmsArCustomerrouteinfoRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -50,8 +49,8 @@ class DmsArCustomerrouteinfoRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsArCustomerrouteinfo::class;

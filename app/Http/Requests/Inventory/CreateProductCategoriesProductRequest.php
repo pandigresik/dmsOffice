@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\ProductCategoriesProduct;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateProductCategoriesProductRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateProductCategoriesProductRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'product_categories_product-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,10 +35,11 @@ class CreateProductCategoriesProductRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new ProductCategoriesProduct)->fillable;
-        $keys = array_merge(['productCategoriesProducts'], $keys);
+     */
+    public function all($keys = null)
+    {
+        $keys = (new ProductCategoriesProduct())->fillable;
+
         return parent::all($keys);
     }
 }

@@ -6,11 +6,10 @@ use App\Models\Inventory\StockPicking;
 use App\Repositories\BaseRepository;
 
 /**
- * Class StockPickingRepository
- * @package App\Repositories\Inventory
+ * Class StockPickingRepository.
+ *
  * @version August 15, 2021, 3:22 pm UTC
-*/
-
+ */
 class StockPickingRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class StockPickingRepository extends BaseRepository
         'table_references',
         'external_references',
         'vendor_id',
-        'note'
+        'note',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class StockPickingRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return StockPicking::class;

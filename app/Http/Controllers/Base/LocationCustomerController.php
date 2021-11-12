@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Base;
 
-use Flash;
-use Response;
-use Illuminate\Http\Request;
-use App\Repositories\Base\CityRepository;
-use App\Http\Controllers\AppBaseController;
 use App\DataTables\Base\LocationCustomerDataTable;
-use App\Repositories\Base\LocationCustomerRepository;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateLocationCustomerRequest;
 use App\Http\Requests\Base\UpdateLocationCustomerRequest;
+use App\Repositories\Base\CityRepository;
+use App\Repositories\Base\LocationCustomerRepository;
+use Flash;
+use Illuminate\Http\Request;
+use Response;
 
 class LocationCustomerController extends AppBaseController
 {

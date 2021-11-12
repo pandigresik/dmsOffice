@@ -3,19 +3,19 @@
 namespace App\DataTables;
 
 use App\Models\Synchronize;
-use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Services\DataTable;
 
 class SynchronizeDataTable extends DataTable
 {
     /**
-    * example mapping filter column to search by keyword, default use %keyword%
-    */
+     * example mapping filter column to search by keyword, default use %keyword%.
+     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
-    
+
     private $mapColumnSearch = [
         //'entity.name' => 'entity_id',
     ];
@@ -23,7 +23,8 @@ class SynchronizeDataTable extends DataTable
     /**
      * Build DataTable class.
      *
-     * @param mixed $query Results from query() method.
+     * @param mixed $query results from query() method
+     *
      * @return \Yajra\DataTables\DataTableAbstract
      */
     public function dataTable($query)
@@ -32,16 +33,16 @@ class SynchronizeDataTable extends DataTable
         if (!empty($this->columnFilterOperator)) {
             foreach ($this->columnFilterOperator as $column => $operator) {
                 $columnSearch = $this->mapColumnSearch[$column] ?? $column;
-                $dataTable->filterColumn($column, new $operator($columnSearch));                
+                $dataTable->filterColumn($column, new $operator($columnSearch));
             }
         }
+
         return $dataTable; //->addColumn('action', 'synchronizes.datatables_actions');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Synchronize $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(Synchronize $model)
@@ -57,54 +58,55 @@ class SynchronizeDataTable extends DataTable
     public function html()
     {
         $buttons = [
-                    [
-                       'extend' => 'create',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-                    ],
-                    [
-                       'extend' => 'export',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
-                    ],
-                    [
-                       'extend' => 'import',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    ],
-                    [
-                       'extend' => 'print',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
-                    ],
-                    [
-                       'extend' => 'reset',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-undo"></i> ' .__('auth.app.reset').''
-                    ],
-                    [
-                       'extend' => 'reload',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
-                    ],
-                ];
-                
+            [
+                'extend' => 'create',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-plus"></i> '.__('auth.app.create').'',
+            ],
+            [
+                'extend' => 'export',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
+            ],
+            [
+                'extend' => 'import',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-upload"></i> '.__('auth.app.import').'',
+            ],
+            [
+                'extend' => 'print',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-print"></i> '.__('auth.app.print').'',
+            ],
+            [
+                'extend' => 'reset',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-undo"></i> '.__('auth.app.reset').'',
+            ],
+            [
+                'extend' => 'reload',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-refresh"></i> '.__('auth.app.reload').'',
+            ],
+        ];
+
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')])
             ->parameters([
-                'dom'       => 'Brtip',
+                'dom' => 'Brtip',
                 'stateSave' => true,
-                'order'     => [[0, 'desc']],
-                'buttons'   => $buttons,
-                 'language' => [
-                   'url' => url('vendor/datatables/i18n/en-gb.json'),
-                 ],
-                 'responsive' => true,
-                 'fixedHeader' => true,
-                 'orderCellsTop' => true     
-            ]);
+                'order' => [[0, 'desc']],
+                'buttons' => $buttons,
+                'language' => [
+                    'url' => url('vendor/datatables/i18n/en-gb.json'),
+                ],
+                'responsive' => true,
+                'fixedHeader' => true,
+                'orderCellsTop' => true,
+            ])
+        ;
     }
 
     /**
@@ -116,7 +118,7 @@ class SynchronizeDataTable extends DataTable
     {
         return [
             'table_name' => new Column(['title' => __('models/synchronizes.fields.table_name'), 'data' => 'table_name', 'searchable' => true, 'elmsearch' => 'text']),
-            'updated_at' => new Column(['title' => __('models/synchronizes.fields.updated_at'), 'data' => 'updated_at', 'searchable' => false])
+            'updated_at' => new Column(['title' => __('models/synchronizes.fields.updated_at'), 'data' => 'updated_at', 'searchable' => false]),
         ];
     }
 
@@ -127,6 +129,6 @@ class SynchronizeDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'synchronizes_datatable_' . time();
+        return 'synchronizes_datatable_'.time();
     }
 }

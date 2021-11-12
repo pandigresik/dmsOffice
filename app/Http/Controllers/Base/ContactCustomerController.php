@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Base;
 
-use Flash;
-use Response;
-use Illuminate\Http\Request;
-use App\Repositories\Base\CityRepository;
-use App\Http\Controllers\AppBaseController;
 use App\DataTables\Base\ContactCustomerDataTable;
-use App\Repositories\Base\DmsArCustomerRepository;
-use App\Repositories\Base\ContactCustomerRepository;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateContactCustomerRequest;
 use App\Http\Requests\Base\UpdateContactCustomerRequest;
+use App\Repositories\Base\CityRepository;
+use App\Repositories\Base\ContactCustomerRepository;
+use Flash;
+use Illuminate\Http\Request;
+use Response;
 
 class ContactCustomerController extends AppBaseController
 {
     /** @var ContactCustomerRepository */
     protected $repository;
     private $prefixName = 'contactCustomers';
+
     public function __construct()
     {
         $this->repository = ContactCustomerRepository::class;
@@ -113,7 +113,6 @@ class ContactCustomerController extends AppBaseController
         return view('base.contact_customers.edit')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'contactCustomer' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => $this->prefixName.'['.$idForm.']'])
         ;
-        
     }
 
     /**

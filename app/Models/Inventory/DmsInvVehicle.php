@@ -71,7 +71,6 @@ class DmsInvVehicle extends Model
     public $table = 'dms_inv_vehicle';
 
     public $primaryKey = 'iInternalId';
-    protected $showColumnOption = 'szName';
     public $fillable = [
         'iId',
         'szId',
@@ -114,6 +113,7 @@ class DmsInvVehicle extends Model
         'dtmCreated' => 'required',
         'dtmLastUpdated' => 'required',
     ];
+    protected $showColumnOption = 'szName';
 
     protected $dates = ['deleted_at'];
 
@@ -169,6 +169,6 @@ class DmsInvVehicle extends Model
 
     public function getFullIdentityAttribute($value)
     {
-        return implode(' | ',[$this->attributes['szId'],$this->attributes['szPoliceNo']]);
-    }    
+        return implode(' | ', [$this->attributes['szId'], $this->attributes['szPoliceNo']]);
+    }
 }

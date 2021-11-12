@@ -3,25 +3,23 @@
 namespace App\Repositories;
 
 use App\Models\Synchronize;
-use App\Repositories\BaseRepository;
 
 /**
- * Class SynchronizeRepository
- * @package App\Repositories
+ * Class SynchronizeRepository.
+ *
  * @version November 3, 2021, 7:32 am UTC
-*/
-
+ */
 class SynchronizeRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'table_name'
+        'table_name',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -31,8 +29,8 @@ class SynchronizeRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Synchronize::class;

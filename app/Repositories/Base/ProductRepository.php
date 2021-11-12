@@ -6,11 +6,10 @@ use App\Models\Base\Product;
 use App\Repositories\BaseRepository;
 
 /**
- * Class ProductRepository
- * @package App\Repositories\Base
+ * Class ProductRepository.
+ *
  * @version August 15, 2021, 3:20 pm UTC
-*/
-
+ */
 class ProductRepository extends BaseRepository
 {
     /**
@@ -18,11 +17,11 @@ class ProductRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'name',
-        'internal_code'
+        'internal_code',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -32,8 +31,8 @@ class ProductRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Product::class;

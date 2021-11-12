@@ -3,10 +3,8 @@
 namespace App\Models\Inventory;
 
 use App\Models\BaseEntity as Model;
-use App\Models\Inventory\TripEkspedisi;
-use App\Models\Inventory\VehicleEkspedisi;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @SWG\Definition(
@@ -139,11 +137,10 @@ class DmsInvCarrier extends Model
     public function vehicleEkspedisis(): HasMany
     {
         return $this->hasMany(VehicleEkspedisi::class, 'dms_inv_carrier_id', 'iInternalId');
-    }    
+    }
 
     public function tripEkspedisis(): HasMany
     {
         return $this->hasMany(TripEkspedisi::class, 'dms_inv_carrier_id', 'iInternalId');
     }
-    
 }

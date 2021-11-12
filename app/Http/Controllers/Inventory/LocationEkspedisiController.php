@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Inventory;
 
-use Flash;
-use Response;
-use Illuminate\Http\Request;
-use App\Repositories\Base\CityRepository;
-use App\Http\Controllers\AppBaseController;
-use App\Repositories\Inventory\DmsInvCarrierRepository;
 use App\DataTables\Inventory\LocationEkspedisiDataTable;
-use App\Repositories\Inventory\LocationEkspedisiRepository;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateLocationEkspedisiRequest;
 use App\Http\Requests\Inventory\UpdateLocationEkspedisiRequest;
+use App\Repositories\Base\CityRepository;
+use App\Repositories\Inventory\LocationEkspedisiRepository;
+use Flash;
+use Illuminate\Http\Request;
+use Response;
 
 class LocationEkspedisiController extends AppBaseController
 {

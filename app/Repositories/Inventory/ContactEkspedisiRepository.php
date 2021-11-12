@@ -6,11 +6,10 @@ use App\Models\Inventory\ContactEkspedisi;
 use App\Repositories\BaseRepository;
 
 /**
- * Class ContactEkspedisiRepository
- * @package App\Repositories\Inventory
+ * Class ContactEkspedisiRepository.
+ *
  * @version October 30, 2021, 5:57 am UTC
-*/
-
+ */
 class ContactEkspedisiRepository extends BaseRepository
 {
     /**
@@ -25,11 +24,11 @@ class ContactEkspedisiRepository extends BaseRepository
         'mobile',
         'description',
         'address',
-        'city'
+        'city',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -39,8 +38,8 @@ class ContactEkspedisiRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return ContactEkspedisi::class;

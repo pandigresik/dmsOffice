@@ -6,11 +6,10 @@ use App\Models\Base\LocationSupplier;
 use App\Repositories\BaseRepository;
 
 /**
- * Class LocationSupplierRepository
- * @package App\Repositories\Base
+ * Class LocationSupplierRepository.
+ *
  * @version October 30, 2021, 5:59 am UTC
-*/
-
+ */
 class LocationSupplierRepository extends BaseRepository
 {
     /**
@@ -21,11 +20,11 @@ class LocationSupplierRepository extends BaseRepository
         'address',
         'city',
         'state',
-        'additional_cost'
+        'additional_cost',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -35,8 +34,8 @@ class LocationSupplierRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return LocationSupplier::class;

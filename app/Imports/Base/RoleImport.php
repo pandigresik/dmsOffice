@@ -3,27 +3,25 @@
 namespace App\Imports\Base;
 
 use App\Models\Base\Role;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
-use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-
-class RoleImport implements ToModel,WithHeadingRow,WithBatchInserts,WithChunkReading
+class RoleImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading
 {
     use Importable;
+
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @return null|\Illuminate\Database\Eloquent\Model
+     */
     public function model(array $row)
     {
         return new Role([
             'name' => $row['name'],
             'display_name' => $row['display_name'],
-            'description' => $row['description']
+            'description' => $row['description'],
         ]);
     }
 

@@ -4,9 +4,9 @@ namespace App\Models\Base;
 
 use App\Models\BaseEntity as Model;
 use App\Models\Inventory\ProductCategories;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -92,8 +92,6 @@ class Trip extends Model
 
     public $table = 'trip';
 
-    
-
     public $fillable = [
         'code',
         'name',
@@ -106,7 +104,7 @@ class Trip extends Model
         'price',
         'distance',
         'description',
-        'product_categories_id'
+        'product_categories_id',
     ];
 
     /**
@@ -148,7 +146,7 @@ class Trip extends Model
         'price' => 'decimal:2',
         'distance' => 'decimal:2',
         'description' => 'string',
-        'product_categories_id' => 'integer'
+        'product_categories_id' => 'integer',
     ];
 
     /**
@@ -189,13 +187,11 @@ class Trip extends Model
 
     public function getFullIdentityAttribute($value)
     {
-        return implode(' | ',[$this->attributes['code'],$this->attributes['name'],$this->attributes['price'],$this->attributes['distance'], $this->productCategories->name]);
+        return implode(' | ', [$this->attributes['code'], $this->attributes['name'], $this->attributes['price'], $this->attributes['distance'], $this->productCategories->name]);
     }
 
     /**
-     * Get the productCategories that owns the Trip
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the productCategories that owns the Trip.
      */
     public function productCategories(): BelongsTo
     {

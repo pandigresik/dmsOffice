@@ -6,11 +6,10 @@ use App\Models\Inventory\StockQuant;
 use App\Repositories\BaseRepository;
 
 /**
- * Class StockQuantRepository
- * @package App\Repositories\Inventory
+ * Class StockQuantRepository.
+ *
  * @version August 15, 2021, 3:22 pm UTC
-*/
-
+ */
 class StockQuantRepository extends BaseRepository
 {
     /**
@@ -20,11 +19,11 @@ class StockQuantRepository extends BaseRepository
         'product_id',
         'warehouse_id',
         'quantity',
-        'uom_id'
+        'uom_id',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -34,8 +33,8 @@ class StockQuantRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return StockQuant::class;

@@ -6,11 +6,10 @@ use App\Models\Base\Uom;
 use App\Repositories\BaseRepository;
 
 /**
- * Class UomRepository
- * @package App\Repositories\Base
+ * Class UomRepository.
+ *
  * @version August 15, 2021, 3:20 pm UTC
-*/
-
+ */
 class UomRepository extends BaseRepository
 {
     /**
@@ -20,11 +19,11 @@ class UomRepository extends BaseRepository
         'name',
         'uom_category_id',
         'factor',
-        'uom_type'
+        'uom_type',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -34,8 +33,8 @@ class UomRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Uom::class;

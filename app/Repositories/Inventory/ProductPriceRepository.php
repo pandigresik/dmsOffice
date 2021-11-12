@@ -3,15 +3,13 @@
 namespace App\Repositories\Inventory;
 
 use App\Models\Inventory\ProductPrice;
-use App\Models\Inventory\ProductPriceLog;
 use App\Repositories\BaseRepository;
 
 /**
- * Class ProductPriceRepository
- * @package App\Repositories\Inventory
+ * Class ProductPriceRepository.
+ *
  * @version November 10, 2021, 9:37 pm UTC
-*/
-
+ */
 class ProductPriceRepository extends BaseRepository
 {
     /**
@@ -20,11 +18,11 @@ class ProductPriceRepository extends BaseRepository
     protected $fieldSearchable = [
         'dms_inv_product_id',
         'price',
-        'start_date'
+        'start_date',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -34,8 +32,8 @@ class ProductPriceRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return ProductPrice::class;
@@ -45,13 +43,14 @@ class ProductPriceRepository extends BaseRepository
     {
         /** transaction menjadikan cache tidak berjalan dengan baik */
         //$this->model->getConnection()->transaction(function() use ($input){
-            $model = $this->model->firstOrCreate(['dms_inv_product_id' => $input['dms_inv_product_id']]);
-            $model->fill($input);
-            $model->save();            
+        $model = $this->model->firstOrCreate(['dms_inv_product_id' => $input['dms_inv_product_id']]);
+        $model->fill($input);
+        $model->save();
 
-            $priceLog = new ProductPriceLogRepository(app());
-            $priceLog->create($input);
-            return $model;
-        //});        
+        $priceLog = new ProductPriceLogRepository(app());
+        $priceLog->create($input);
+
+        return $model;
+        //});
     }
 }

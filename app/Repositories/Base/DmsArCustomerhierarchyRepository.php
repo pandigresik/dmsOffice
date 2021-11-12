@@ -6,11 +6,10 @@ use App\Models\Base\DmsArCustomerhierarchy;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsArCustomerhierarchyRepository
- * @package App\Repositories\Base
+ * Class DmsArCustomerhierarchyRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsArCustomerhierarchyRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class DmsArCustomerhierarchyRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class DmsArCustomerhierarchyRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsArCustomerhierarchy::class;

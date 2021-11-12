@@ -2,17 +2,16 @@
 
 namespace App\Repositories\Inventory;
 
-use Illuminate\Support\Facades\DB;
-use App\Repositories\BaseRepository;
 use App\Models\Inventory\ProductCategories;
 use App\Models\Inventory\ProductCategoriesProduct;
+use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\DB;
 
 /**
- * Class ProductCategoriesRepository
- * @package App\Repositories\Inventory
+ * Class ProductCategoriesRepository.
+ *
  * @version November 9, 2021, 2:13 pm UTC
-*/
-
+ */
 class ProductCategoriesRepository extends BaseRepository
 {
     /**
@@ -20,11 +19,11 @@ class ProductCategoriesRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'name',
-        'description'
+        'description',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -34,23 +33,24 @@ class ProductCategoriesRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return ProductCategories::class;
     }
+
     public function update($input, $id)
     {
         DB::beginTransaction();
 
         try {
-            $productCategoriesProducts = $input['productCategoriesProducts'] ?? [];            
-            $model = parent::update($input, $id); 
-            
-            if (!empty($productCategoriesProducts)) {                
+            $productCategoriesProducts = $input['productCategoriesProducts'] ?? [];
+            $model = parent::update($input, $id);
+
+            if (!empty($productCategoriesProducts)) {
                 foreach ($productCategoriesProducts as $key => $vc) {
-                    $stateForm = $vc['stateForm'];                    
+                    $stateForm = $vc['stateForm'];
                     switch ($stateForm) {
                         case 'insert':
                             $model->productCategoriesProducts()->create($vc);
@@ -68,7 +68,7 @@ class ProductCategoriesRepository extends BaseRepository
                     }
                 }
             }
-            
+
             DB::commit();
 
             return $model;
@@ -77,30 +77,28 @@ class ProductCategoriesRepository extends BaseRepository
             \Log::error($e);
 
             return $e;
-        }        
+        }
     }
 
     public function create($input)
     {
         DB::beginTransaction();
 
-
         try {
-            $productCategoriesProducts = $input['productCategoriesProducts'] ?? [];            
-            $model = parent::create($input);            
-            if (!empty($productCategoriesProducts)) {                
+            $productCategoriesProducts = $input['productCategoriesProducts'] ?? [];
+            $model = parent::create($input);
+            if (!empty($productCategoriesProducts)) {
                 foreach ($productCategoriesProducts as $key => $vc) {
                     $stateForm = $vc['stateForm'];
                     switch ($stateForm) {
                         case 'insert':
                             $model->productCategoriesProducts()->create($vc);
 
-                            break;                        
+                            break;
                     }
                 }
             }
-            
-            
+
             DB::commit();
 
             return $model;
@@ -109,6 +107,6 @@ class ProductCategoriesRepository extends BaseRepository
             \Log::error($e);
 
             return $e;
-        }        
+        }
     }
 }

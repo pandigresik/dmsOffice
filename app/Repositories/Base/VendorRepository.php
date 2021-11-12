@@ -88,7 +88,7 @@ class VendorRepository extends BaseRepository
             $vendorContact = $input['vendorContact'] ?? [];
             $vendorLocation = $input['vendorLocation'] ?? [];
             $model = parent::update($input, $id);
-            if (!empty($vendorContact)) {                
+            if (!empty($vendorContact)) {
                 foreach ($vendorContact as $key => $vc) {
                     $stateForm = $vc['stateForm'];
                     switch ($stateForm) {

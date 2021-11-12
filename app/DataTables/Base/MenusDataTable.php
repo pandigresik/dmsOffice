@@ -37,10 +37,10 @@ class MenusDataTable extends DataTable
                 //      $query->orderBy('parent_id', $order);
                 // })
             ->editColumn('icon', function ($data) {
-                    $icon = $data->icon ?? '';
+                $icon = $data->icon ?? '';
 
-                    return '<i class="'.$icon.'"> '.$icon.'</i>';
-                })->escapeColumns([]);
+                return '<i class="'.$icon.'"> '.$icon.'</i>';
+            })->escapeColumns([]);
     }
 
     /**

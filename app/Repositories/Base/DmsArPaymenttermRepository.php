@@ -6,11 +6,10 @@ use App\Models\Base\DmsArPaymentterm;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsArPaymenttermRepository
- * @package App\Repositories\Base
+ * Class DmsArPaymenttermRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsArPaymenttermRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class DmsArPaymenttermRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class DmsArPaymenttermRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsArPaymentterm::class;

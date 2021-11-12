@@ -6,11 +6,10 @@ use App\Models\Inventory\Warehouse;
 use App\Repositories\BaseRepository;
 
 /**
- * Class WarehouseRepository
- * @package App\Repositories\Inventory
+ * Class WarehouseRepository.
+ *
  * @version August 15, 2021, 3:22 pm UTC
-*/
-
+ */
 class WarehouseRepository extends BaseRepository
 {
     /**
@@ -19,11 +18,11 @@ class WarehouseRepository extends BaseRepository
     protected $fieldSearchable = [
         'name',
         'internal_code',
-        'company_id'
+        'company_id',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -33,8 +32,8 @@ class WarehouseRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Warehouse::class;

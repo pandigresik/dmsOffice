@@ -6,7 +6,8 @@ trait ShowColumnOptionTrait
 {
     /** this column shown on dropdown, usually name */
     protected $showColumnOption = 'name';
-        /**
+
+    /**
      * Get the value of showColumnOption.
      */
     public function getShowColumnOption()

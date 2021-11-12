@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Base;
 
 use App\DataTables\Base\DmsSmBranchDataTable;
-use App\Http\Requests\Base;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateDmsSmBranchRequest;
 use App\Http\Requests\Base\UpdateDmsSmBranchRequest;
 use App\Repositories\Base\DmsSmBranchRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class DmsSmBranchController extends AppBaseController
 {
-    /** @var  DmsSmBranchRepository */
+    /** @var DmsSmBranchRepository */
     protected $repository;
 
     public function __construct()
@@ -25,7 +23,6 @@ class DmsSmBranchController extends AppBaseController
     /**
      * Display a listing of the DmsSmBranch.
      *
-     * @param DmsSmBranchDataTable $dmsSmBranchDataTable
      * @return Response
      */
     public function index(DmsSmBranchDataTable $dmsSmBranchDataTable)
@@ -46,8 +43,6 @@ class DmsSmBranchController extends AppBaseController
     /**
      * Store a newly created DmsSmBranch in storage.
      *
-     * @param CreateDmsSmBranchRequest $request
-     *
      * @return Response
      */
     public function store(CreateDmsSmBranchRequest $request)
@@ -64,7 +59,7 @@ class DmsSmBranchController extends AppBaseController
     /**
      * Display the specified DmsSmBranch.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class DmsSmBranchController extends AppBaseController
     /**
      * Show the form for editing the specified DmsSmBranch.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class DmsSmBranchController extends AppBaseController
     /**
      * Update the specified DmsSmBranch in storage.
      *
-     * @param  int              $id
-     * @param UpdateDmsSmBranchRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class DmsSmBranchController extends AppBaseController
     /**
      * Remove the specified DmsSmBranch from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class DmsSmBranchController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model DmsSmBranch from storage.         
+     * Provide options item based on relationship model DmsSmBranch from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

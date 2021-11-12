@@ -6,11 +6,10 @@ use App\Models\Base\Entity;
 use App\Repositories\BaseRepository;
 
 /**
- * Class EntityRepository
- * @package App\Repositories\Base
+ * Class EntityRepository.
+ *
  * @version November 1, 2021, 6:13 am UTC
-*/
-
+ */
 class EntityRepository extends BaseRepository
 {
     /**
@@ -19,11 +18,11 @@ class EntityRepository extends BaseRepository
     protected $fieldSearchable = [
         'name',
         'internal_code',
-        'description'
+        'description',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -33,8 +32,8 @@ class EntityRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Entity::class;

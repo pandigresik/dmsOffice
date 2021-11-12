@@ -33,8 +33,6 @@ class LogSynchronize extends Model
 
     public $table = 'log_synchronize';
 
-    
-
     public $fillable = [
         'table_name',
     ];

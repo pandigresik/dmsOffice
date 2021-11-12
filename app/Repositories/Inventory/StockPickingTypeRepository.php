@@ -6,11 +6,10 @@ use App\Models\Inventory\StockPickingType;
 use App\Repositories\BaseRepository;
 
 /**
- * Class StockPickingTypeRepository
- * @package App\Repositories\Inventory
+ * Class StockPickingTypeRepository.
+ *
  * @version August 15, 2021, 3:22 pm UTC
-*/
-
+ */
 class StockPickingTypeRepository extends BaseRepository
 {
     /**
@@ -18,11 +17,11 @@ class StockPickingTypeRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'name',
-        'code'        
+        'code',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -32,8 +31,8 @@ class StockPickingTypeRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return StockPickingType::class;

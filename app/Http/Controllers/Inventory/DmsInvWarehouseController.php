@@ -29,6 +29,7 @@ class DmsInvWarehouseController extends AppBaseController
     public function index(DmsInvWarehouseDataTable $dmsInvWarehouseDataTable, Request $request)
     {
         $branchId = $request->route('dmsSmBranch');
+
         return $dmsInvWarehouseDataTable->setDefaultFilter(['szBranchId' => $branchId])->render('inventory.dms_inv_warehouses.index');
     }
 

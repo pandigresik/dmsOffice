@@ -6,11 +6,10 @@ use App\Models\Base\DmsArCustomercategorytype;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsArCustomercategorytypeRepository
- * @package App\Repositories\Base
+ * Class DmsArCustomercategorytypeRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsArCustomercategorytypeRepository extends BaseRepository
 {
     /**
@@ -24,11 +23,11 @@ class DmsArCustomercategorytypeRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -38,8 +37,8 @@ class DmsArCustomercategorytypeRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsArCustomercategorytype::class;

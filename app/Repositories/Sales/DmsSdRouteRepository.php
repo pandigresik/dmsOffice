@@ -6,11 +6,10 @@ use App\Models\Sales\DmsSdRoute;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsSdRouteRepository
- * @package App\Repositories\Sales
+ * Class DmsSdRouteRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsSdRouteRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class DmsSdRouteRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class DmsSdRouteRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsSdRoute::class;

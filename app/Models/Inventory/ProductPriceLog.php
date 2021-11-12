@@ -48,7 +48,7 @@ class ProductPriceLog extends Model
         'dms_inv_product_id',
         'price',
         'start_date',
-        'end_date'
+        'end_date',
     ];
 
     /**
@@ -83,7 +83,7 @@ class ProductPriceLog extends Model
     public function dmsInvProduct()
     {
         return $this->belongsTo(\App\Models\Inventory\DmsInvProduct::class, 'dms_inv_product_id');
-    }    
+    }
 
     public function getPriceAttribute($value)
     {

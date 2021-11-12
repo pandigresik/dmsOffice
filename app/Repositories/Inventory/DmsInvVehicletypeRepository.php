@@ -6,11 +6,10 @@ use App\Models\Inventory\DmsInvVehicletype;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsInvVehicletypeRepository
- * @package App\Repositories\Inventory
+ * Class DmsInvVehicletypeRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsInvVehicletypeRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class DmsInvVehicletypeRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class DmsInvVehicletypeRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsInvVehicletype::class;

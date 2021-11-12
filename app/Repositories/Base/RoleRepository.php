@@ -46,10 +46,11 @@ class RoleRepository extends BaseRepository
      * @return Model
      */
     public function create($input)
-    {        
+    {
         $model = parent::create($input);
         $permissions = $input['permissions'] ?? [];
         $model->syncPermissions($permissions);
+
         return $model;
     }
 
@@ -62,10 +63,11 @@ class RoleRepository extends BaseRepository
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
     public function update($input, $id)
-    {                   
+    {
         $model = parent::update($input, $id);
         $permissions = $input['permissions'] ?? [];
         $model->syncPermissions($permissions);
+
         return $model;
     }
 }

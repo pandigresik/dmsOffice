@@ -8,8 +8,8 @@ use App\Models\Inventory\Warehouse;
 use App\Observers\MenusObserver;
 use App\Observers\ProductObserver;
 use App\Observers\WarehouseObserver;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if(env('REDIRECT_HTTPS')) {
+        if (env('REDIRECT_HTTPS')) {
             $this->app['request']->server->set('HTTPS', true);
         }
     }
@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
         }
         // code ini hanya akan dijalankan ketika render view menu
         view()->composer('layouts.menu', function ($view) {
-            $items = \App\Models\Base\Menus::with(['permissions'])->orderBy('seq_number')->get();            
+            $items = \App\Models\Base\Menus::with(['permissions'])->orderBy('seq_number')->get();
             $tree = new \Kalnoy\Nestedset\Collection();
             foreach ($items as $item) {
                 $menuTree = new \App\Models\Base\MenusTree();

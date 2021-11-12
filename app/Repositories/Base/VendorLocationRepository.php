@@ -6,11 +6,10 @@ use App\Models\Base\VendorLocation;
 use App\Repositories\BaseRepository;
 
 /**
- * Class VendorLocationRepository
- * @package App\Repositories\Base
+ * Class VendorLocationRepository.
+ *
  * @version October 21, 2021, 2:08 pm UTC
-*/
-
+ */
 class VendorLocationRepository extends BaseRepository
 {
     /**
@@ -21,11 +20,11 @@ class VendorLocationRepository extends BaseRepository
         'city',
         'state',
         'additional_cost',
-        'route_trip_id'
+        'route_trip_id',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -35,8 +34,8 @@ class VendorLocationRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return VendorLocation::class;

@@ -12,16 +12,15 @@ class BaseEntity extends Base
     public function __construct(array $attributes = [])
     {
         $user = Auth::user();
-        
+
         if (!is_null($user) && !is_null($user->entity_id)) {
             $idConnection = config('entity.entityConnection')[$user->entity_id] ?? null;
-        
+
             if (!empty($idConnection)) {
                 $this->setConnection($idConnection);
             }
         }
         parent::__construct($attributes);
-        
     }
 
     /**

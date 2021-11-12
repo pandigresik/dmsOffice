@@ -92,7 +92,7 @@ class DmsSmBranch extends Model
     const UPDATED_BY = null;
 
     public $table = 'dms_sm_branch';
-    
+
     public $primaryKey = 'iInternalId';
     public $fillable = [
         'szId',

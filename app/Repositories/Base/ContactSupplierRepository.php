@@ -6,11 +6,10 @@ use App\Models\Base\ContactSupplier;
 use App\Repositories\BaseRepository;
 
 /**
- * Class ContactSupplierRepository
- * @package App\Repositories\Base
+ * Class ContactSupplierRepository.
+ *
  * @version October 30, 2021, 5:59 am UTC
-*/
-
+ */
 class ContactSupplierRepository extends BaseRepository
 {
     /**
@@ -25,11 +24,11 @@ class ContactSupplierRepository extends BaseRepository
         'mobile',
         'description',
         'address',
-        'city'
+        'city',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -39,8 +38,8 @@ class ContactSupplierRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return ContactSupplier::class;

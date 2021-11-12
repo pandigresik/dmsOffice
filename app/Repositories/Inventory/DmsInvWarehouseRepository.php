@@ -6,11 +6,10 @@ use App\Models\Inventory\DmsInvWarehouse;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsInvWarehouseRepository
- * @package App\Repositories\Inventory
+ * Class DmsInvWarehouseRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsInvWarehouseRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class DmsInvWarehouseRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class DmsInvWarehouseRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsInvWarehouse::class;

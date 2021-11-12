@@ -6,11 +6,10 @@ use App\Models\Base\LocationCustomer;
 use App\Repositories\BaseRepository;
 
 /**
- * Class LocationCustomerRepository
- * @package App\Repositories\Base
+ * Class LocationCustomerRepository.
+ *
  * @version October 30, 2021, 5:59 am UTC
-*/
-
+ */
 class LocationCustomerRepository extends BaseRepository
 {
     /**
@@ -21,11 +20,11 @@ class LocationCustomerRepository extends BaseRepository
         'address',
         'city',
         'state',
-        'additional_cost'
+        'additional_cost',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -35,8 +34,8 @@ class LocationCustomerRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return LocationCustomer::class;

@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\ProductCategoriesDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateProductCategoriesRequest;
 use App\Http\Requests\Inventory\UpdateProductCategoriesRequest;
 use App\Repositories\Inventory\ProductCategoriesRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class ProductCategoriesController extends AppBaseController
 {
-    /** @var  ProductCategoriesRepository */
+    /** @var ProductCategoriesRepository */
     protected $repository;
 
     public function __construct()
@@ -25,7 +23,6 @@ class ProductCategoriesController extends AppBaseController
     /**
      * Display a listing of the ProductCategories.
      *
-     * @param ProductCategoriesDataTable $productCategoriesDataTable
      * @return Response
      */
     public function index(ProductCategoriesDataTable $productCategoriesDataTable)
@@ -44,13 +41,11 @@ class ProductCategoriesController extends AppBaseController
             'product' => ['text' => 'Product', 'json' => [], 'url' => route('inventory.productCategoriesProducts.index'), 'defaultContent' => '', 'class' => ''],
         ];
 
-        return view('inventory.product_categories.create')->with('dataTabs', $dataTabs)->with($this->getOptionItems());        
+        return view('inventory.product_categories.create')->with('dataTabs', $dataTabs)->with($this->getOptionItems());
     }
 
     /**
      * Store a newly created ProductCategories in storage.
-     *
-     * @param CreateProductCategoriesRequest $request
      *
      * @return Response
      */
@@ -68,7 +63,7 @@ class ProductCategoriesController extends AppBaseController
     /**
      * Display the specified ProductCategories.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -88,7 +83,7 @@ class ProductCategoriesController extends AppBaseController
     /**
      * Show the form for editing the specified ProductCategories.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -107,14 +102,12 @@ class ProductCategoriesController extends AppBaseController
         ];
 
         return view('inventory.product_categories.edit')->with('dataTabs', $dataTabs)->with('productCategories', $productCategories)->with($this->getOptionItems());
-        
     }
 
     /**
      * Update the specified ProductCategories in storage.
      *
-     * @param  int              $id
-     * @param UpdateProductCategoriesRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -138,7 +131,7 @@ class ProductCategoriesController extends AppBaseController
     /**
      * Remove the specified ProductCategories from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -160,16 +153,15 @@ class ProductCategoriesController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model ProductCategories from storage.         
+     * Provide options item based on relationship model ProductCategories from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

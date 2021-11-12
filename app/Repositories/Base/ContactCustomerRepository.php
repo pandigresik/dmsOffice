@@ -6,11 +6,10 @@ use App\Models\Base\ContactCustomer;
 use App\Repositories\BaseRepository;
 
 /**
- * Class ContactCustomerRepository
- * @package App\Repositories\Base
+ * Class ContactCustomerRepository.
+ *
  * @version October 30, 2021, 5:59 am UTC
-*/
-
+ */
 class ContactCustomerRepository extends BaseRepository
 {
     /**
@@ -25,11 +24,11 @@ class ContactCustomerRepository extends BaseRepository
         'mobile',
         'description',
         'address',
-        'city'
+        'city',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -39,8 +38,8 @@ class ContactCustomerRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return ContactCustomer::class;

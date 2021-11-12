@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Synchronize;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateSynchronizeRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateSynchronizeRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'synchronize-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateSynchronizeRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new Synchronize)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new Synchronize())->fillable;
+
         return parent::all($keys);
     }
 }

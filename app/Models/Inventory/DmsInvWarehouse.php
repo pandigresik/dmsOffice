@@ -4,8 +4,8 @@ namespace App\Models\Inventory;
 
 use App\Models\Base\DmsSmBranch;
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @SWG\Definition(
@@ -126,9 +126,7 @@ class DmsInvWarehouse extends Model
     ];
 
     /**
-     * Get the branch that owns the DmsInvWarehouse
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the branch that owns the DmsInvWarehouse.
      */
     public function branch(): BelongsTo
     {

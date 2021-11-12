@@ -6,11 +6,10 @@ use App\Models\Base\City;
 use App\Repositories\BaseRepository;
 
 /**
- * Class CityRepository
- * @package App\Repositories\Base
+ * Class CityRepository.
+ *
  * @version November 1, 2021, 6:17 am UTC
-*/
-
+ */
 class CityRepository extends BaseRepository
 {
     /**
@@ -18,11 +17,11 @@ class CityRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'name',
-        'province'
+        'province',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -32,10 +31,10 @@ class CityRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return City::class;
-    }    
+    }
 }

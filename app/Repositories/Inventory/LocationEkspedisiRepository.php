@@ -6,11 +6,10 @@ use App\Models\Inventory\LocationEkspedisi;
 use App\Repositories\BaseRepository;
 
 /**
- * Class LocationEkspedisiRepository
- * @package App\Repositories\Inventory
+ * Class LocationEkspedisiRepository.
+ *
  * @version October 30, 2021, 5:57 am UTC
-*/
-
+ */
 class LocationEkspedisiRepository extends BaseRepository
 {
     /**
@@ -21,11 +20,11 @@ class LocationEkspedisiRepository extends BaseRepository
         'address',
         'city',
         'state',
-        'additional_cost'
+        'additional_cost',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -35,8 +34,8 @@ class LocationEkspedisiRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return LocationEkspedisi::class;

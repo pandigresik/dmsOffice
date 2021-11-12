@@ -48,7 +48,8 @@ class SynchronizeTableWithCondition extends Command
                 ->setSkipTables($this->getSkipTables())
                 ->setLimit((int) $this->getLimit())
                 ->setOptions($this->options())
-                ->run();
+                ->run()
+    ;
         } catch (DatabaseConnectionException $e) {
             $this->error($e->getMessage());
 

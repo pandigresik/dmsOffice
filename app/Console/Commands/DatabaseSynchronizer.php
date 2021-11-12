@@ -150,7 +150,7 @@ class DatabaseSynchronizer
         $statement = $prepare['statement'];
         $amount = $prepare['amount'];
         $counter = 0;
-        if(!empty($amount)){
+        if (!empty($amount)) {
             while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
                 $exists = $this->getToDb()->table($table)->where($queryColumn, $row->{$queryColumn})->first();
 
@@ -166,10 +166,9 @@ class DatabaseSynchronizer
                 }
             }
             $this->updateProgress($table, $amount, $counter);
-        }else{
+        } else {
             $this->updateProgress($table, 100, 100);
         }
-        
     }
 
     /**
@@ -255,7 +254,7 @@ class DatabaseSynchronizer
     {
         $pdo = $this->getFromDb()->getPdo();
         $builder = $this->fromDB->table($table);
-        
+
         $statement = $condition ? $pdo->prepare($builder->whereRaw($condition)->toSql()) : $pdo->prepare($builder->toSql());
 
         if (!$statement instanceof \PDOStatement) {
@@ -273,7 +272,7 @@ class DatabaseSynchronizer
     }
 
     private function updateProgress(string $table, int $amount, int $counter)
-    {   
+    {
         Cache::tags(self::CACHE_NAME.$this->cacheIdentity)->put($table, ['progress' => ((int) ($counter / $amount) * 100)]);
     }
 

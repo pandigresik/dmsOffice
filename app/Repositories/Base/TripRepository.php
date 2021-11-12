@@ -6,11 +6,10 @@ use App\Models\Base\Trip;
 use App\Repositories\BaseRepository;
 
 /**
- * Class TripRepository
- * @package App\Repositories\Base
+ * Class TripRepository.
+ *
  * @version November 1, 2021, 8:26 am UTC
-*/
-
+ */
 class TripRepository extends BaseRepository
 {
     /**
@@ -27,11 +26,11 @@ class TripRepository extends BaseRepository
         'destination_additional_price',
         'price',
         'distance',
-        'description'
+        'description',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -41,8 +40,8 @@ class TripRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Trip::class;

@@ -6,11 +6,10 @@ use App\Models\Base\VendorContact;
 use App\Repositories\BaseRepository;
 
 /**
- * Class VendorContactRepository
- * @package App\Repositories\Base
+ * Class VendorContactRepository.
+ *
  * @version October 21, 2021, 2:08 pm UTC
-*/
-
+ */
 class VendorContactRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class VendorContactRepository extends BaseRepository
         'address',
         'city',
         'state',
-        'vendor_id'
+        'vendor_id',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class VendorContactRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return VendorContact::class;

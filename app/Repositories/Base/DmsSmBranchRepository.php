@@ -6,11 +6,10 @@ use App\Models\Base\DmsSmBranch;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsSmBranchRepository
- * @package App\Repositories\Base
+ * Class DmsSmBranchRepository.
+ *
  * @version November 9, 2021, 2:09 pm UTC
-*/
-
+ */
 class DmsSmBranchRepository extends BaseRepository
 {
     /**
@@ -29,11 +28,11 @@ class DmsSmBranchRepository extends BaseRepository
         'szDistrict',
         'szSubDistrict',
         'szUserCreatedId',
-        'szUserUpdatedId'
+        'szUserUpdatedId',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -43,8 +42,8 @@ class DmsSmBranchRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsSmBranch::class;

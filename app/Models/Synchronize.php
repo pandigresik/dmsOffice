@@ -33,8 +33,6 @@ class Synchronize extends Model
 
     public $table = 'synchronize';
 
-    
-
     public $fillable = [
         'table_name',
     ];

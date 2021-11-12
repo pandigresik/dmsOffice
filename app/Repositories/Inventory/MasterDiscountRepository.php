@@ -6,11 +6,10 @@ use App\Models\Inventory\MasterDiscount;
 use App\Repositories\BaseRepository;
 
 /**
- * Class MasterDiscountRepository
- * @package App\Repositories\Inventory
+ * Class MasterDiscountRepository.
+ *
  * @version November 11, 2021, 9:01 pm WIB
-*/
-
+ */
 class MasterDiscountRepository extends BaseRepository
 {
     /**
@@ -22,11 +21,11 @@ class MasterDiscountRepository extends BaseRepository
         'amount_value',
         'amount_procent',
         'start_date',
-        'end_date'
+        'end_date',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -36,8 +35,8 @@ class MasterDiscountRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return MasterDiscount::class;

@@ -5,25 +5,26 @@ namespace App\View\Components;
 use Illuminate\View\Component;
 
 class Tabs extends Component
-{    
+{
     public $data;
+
     /**
      * Create a new component instance.
      *
-     * @return void
+     * @param mixed $data
      */
     public function __construct($data)
     {
-        $this->data = $data;        
+        $this->data = $data;
     }
 
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return \Closure|\Illuminate\Contracts\View\View|string
      */
     public function render()
     {
-        return view('components.tabs',['data' => $this->data]);
+        return view('components.tabs', ['data' => $this->data]);
     }
 }

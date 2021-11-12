@@ -6,11 +6,10 @@ use App\Models\Inventory\BtbViewTmp;
 use App\Repositories\BaseRepository;
 
 /**
- * Class BtbViewTmpRepository
- * @package App\Repositories\Inventory
+ * Class BtbViewTmpRepository.
+ *
  * @version October 3, 2021, 2:24 pm UTC
-*/
-
+ */
 class BtbViewTmpRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class BtbViewTmpRepository extends BaseRepository
         'No_DN',
         'Tgl_sjp',
         'Depo',
-        'Nama_Produk'
+        'Nama_Produk',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class BtbViewTmpRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return BtbViewTmp::class;

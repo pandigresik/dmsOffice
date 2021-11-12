@@ -2,17 +2,16 @@
 
 namespace App\Repositories\Base;
 
-use App\Models\Base\DmsArCustomer;
-use Illuminate\Support\Facades\DB;
 use App\Models\Base\ContactCustomer;
+use App\Models\Base\DmsArCustomer;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\DB;
 
 /**
- * Class DmsArCustomerRepository
- * @package App\Repositories\Base
+ * Class DmsArCustomerRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsArCustomerRepository extends BaseRepository
 {
     /**
@@ -32,11 +31,11 @@ class DmsArCustomerRepository extends BaseRepository
         'szUserUpdatedId',
         'dtmCreated',
         'dtmLastUpdated',
-        'szMCOId'
+        'szMCOId',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -46,8 +45,8 @@ class DmsArCustomerRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsArCustomer::class;
@@ -62,7 +61,7 @@ class DmsArCustomerRepository extends BaseRepository
             $locationCustomers = $input['locationCustomers'] ?? [];
             //$model = parent::update($input, $id);
             $model = $this->model->find($id);
-            if (!empty($contactCustomers)) {                
+            if (!empty($contactCustomers)) {
                 foreach ($contactCustomers as $key => $vc) {
                     $stateForm = $vc['stateForm'];
                     switch ($stateForm) {
@@ -110,6 +109,6 @@ class DmsArCustomerRepository extends BaseRepository
             \Log::error($e);
 
             return $e;
-        }        
+        }
     }
 }

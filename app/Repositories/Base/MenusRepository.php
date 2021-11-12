@@ -111,6 +111,7 @@ class MenusRepository extends BaseRepository
         $query = $this->model->newQuery();
         $model = $query->findOrFail($id);
         $model->permissions()->detach();
+
         return $model->delete();
     }
 }

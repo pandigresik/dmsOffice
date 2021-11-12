@@ -8,11 +8,10 @@ use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Class DmsApSupplierRepository
- * @package App\Repositories\Base
+ * Class DmsApSupplierRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsApSupplierRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class DmsApSupplierRepository extends BaseRepository
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class DmsApSupplierRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsApSupplier::class;
@@ -56,7 +55,7 @@ class DmsApSupplierRepository extends BaseRepository
             $locationSuppliers = $input['locationSuppliers'] ?? [];
             //$model = parent::update($input, $id);
             $model = $this->model->find($id);
-            if (!empty($contactSuppliers)) {                
+            if (!empty($contactSuppliers)) {
                 foreach ($contactSuppliers as $key => $vc) {
                     $stateForm = $vc['stateForm'];
                     switch ($stateForm) {
@@ -104,6 +103,6 @@ class DmsApSupplierRepository extends BaseRepository
             \Log::error($e);
 
             return $e;
-        }        
+        }
     }
 }

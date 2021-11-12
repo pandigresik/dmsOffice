@@ -6,11 +6,10 @@ use App\Models\Sales\DmsSdRouteitem;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DmsSdRouteitemRepository
- * @package App\Repositories\Sales
+ * Class DmsSdRouteitemRepository.
+ *
  * @version October 29, 2021, 6:54 am UTC
-*/
-
+ */
 class DmsSdRouteitemRepository extends BaseRepository
 {
     /**
@@ -31,11 +30,11 @@ class DmsSdRouteitemRepository extends BaseRepository
         'intWeek1',
         'intWeek2',
         'intWeek3',
-        'intWeek4'
+        'intWeek4',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -45,8 +44,8 @@ class DmsSdRouteitemRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DmsSdRouteitem::class;

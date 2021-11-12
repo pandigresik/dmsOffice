@@ -28,22 +28,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class MasterDiscountProduct extends Model
-{    
-
+{
     use HasFactory;
 
-    public $table = 'master_discount';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];    
+    public $table = 'master_discount';
 
     public $fillable = [
         'dms_inv_product_id',
-        'master_discount_id'        
+        'master_discount_id',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -52,15 +58,6 @@ class MasterDiscountProduct extends Model
      */
     protected $casts = [
         'dms_inv_product_id' => 'integer',
-        'master_discount_id' => 'integer'        
+        'master_discount_id' => 'integer',
     ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        
-    ];    
 }

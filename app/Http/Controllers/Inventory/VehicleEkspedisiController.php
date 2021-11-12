@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Inventory;
 
-use App\DataTables\Inventory\VehicleEkspedisiDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateVehicleEkspedisiRequest;
 use App\Http\Requests\Inventory\UpdateVehicleEkspedisiRequest;
@@ -30,13 +29,12 @@ class VehicleEkspedisiController extends AppBaseController
     public function index(Request $request)
     {
         $vehicles = $this->getRepositoryObj()->with(['dmsInvVehicle'])
-            ->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->map(function($q){
-
+            ->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->map(function ($q) {
                 return $q->dmsInvVehicle;
-        });
+            });
         $buttonView = view('inventory.dms_inv_carriers.partials.vehicle_button', ['json' => [], 'url' => route('inventory.vehicleEkspedisis.create')])->render();
 
-        return view('inventory.vehicle_ekspedisis.index')->with(['vehicles' => $vehicles, 'buttonView' => $buttonView]);        
+        return view('inventory.vehicle_ekspedisis.index')->with(['vehicles' => $vehicles, 'buttonView' => $buttonView]);
     }
 
     /**
@@ -114,6 +112,7 @@ class VehicleEkspedisiController extends AppBaseController
         return view('inventory.vehicle_ekspedisis.edit')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'update', 'id' => $id], 'vehicleEkspedisi' => $obj, 'id' => $id, 'stateForm' => 'update', 'idForm' => $idForm, 'prefixName' => 'vehicleEkspedisis['.$idForm.']'])
         ;
+
         return view('inventory.vehicle_ekspedisis.edit')->with('vehicleEkspedisi', $vehicleEkspedisi)->with($this->getOptionItems());
     }
 
@@ -173,9 +172,9 @@ class VehicleEkspedisiController extends AppBaseController
      * @return Response
      */
     private function getOptionItems()
-    {   
+    {
         $dmsInvVehicle = new DmsInvVehicleRepository(app());
-        
+
         return [
             'dmsInvVehicleItems' => ['' => __('crud.option.dmsInvVehicle_placeholder')] + $dmsInvVehicle->all()->pluck('full_identity', 'iInternalId')->toArray(),
         ];

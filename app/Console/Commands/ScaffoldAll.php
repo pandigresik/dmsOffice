@@ -74,7 +74,7 @@ class ScaffoldAll extends Command
                 $tmpJson['module'] = $module;
             }
 
-            if(!empty($connection)){
+            if (!empty($connection)) {
                 $tmpJson['connection'] = $connection;
             }
             if (!empty($tmpJson)) {
@@ -104,9 +104,9 @@ class ScaffoldAll extends Command
                 //infyom:scaffold Departement --fromTable --tableName=departements --ignoreFields= --skip=dump-autoload --prefix=master
                 $model = ucfirst(Str::camel($t));
                 $prefixOption = $json['module'] ? ['--prefix' => $json['module']] : [];
-                if($json['connection']){
+                if ($json['connection']) {
                     $prefixOption['--connection'] = $json['connection'];
-                }                
+                }
                 $this->call('infyom:scaffold', array_merge($prefixOption, [
                     'model' => $model,
                     '--fromTable' => true,

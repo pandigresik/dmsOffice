@@ -48,8 +48,8 @@ class RoleDataTable extends DataTable
             ->parameters([
                 'dom' => 'Bfrtip',
                 'stateSave' => true,
-                'order' => [[0, 'desc']],                           
-                'buttons' => [                    
+                'order' => [[0, 'desc']],
+                'buttons' => [
                     ['extend' => 'create', 'className' => 'btn btn-default btn-sm no-corner'],
                     ['extend' => 'export', 'className' => 'btn btn-default btn-sm no-corner'],
                     ['extend' => 'import', 'className' => 'btn btn-default btn-sm no-corner'],
