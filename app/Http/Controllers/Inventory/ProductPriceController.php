@@ -157,7 +157,7 @@ class ProductPriceController extends AppBaseController
         $dmsInvProduct = new DmsInvProductRepository(app());
 
         return [
-            'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->whereHas('productCategoriesProduct')->get()->pluck('szName', 'iInternalId')->toArray(),
+            'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->disableModelCaching()->whereHas('productCategoriesProduct')->get()->pluck('szName', 'iInternalId')->toArray(),
         ];
     }
 }
