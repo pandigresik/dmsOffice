@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventory\DmsInvProduct;
+use App\Models\Inventory\ProductPrice;
+use App\Repositories\Inventory\ProductPriceRepository;
+
 class HomeController extends Controller
 {
     /**
@@ -35,5 +39,29 @@ class HomeController extends Controller
         array_push($widgets, \AsyncWidget::run('popularWidget', []));
 
         return view('home')->with(['widgets' => $widgets]);
+    }
+
+    public function tes(){
+        $productPrice = new ProductPrice();
+        $productRepo = new ProductPriceRepository(app());
+        // $product = DmsInvProduct::where('iInternalId',6)->with(['productCategories'])->get();
+        // //dd($product->toArray());
+        // dd( [            
+        //     'productItem' => $productRepo->allQuery()->disableModelCaching()->with(['dmsInvProduct' => function($q){
+        //         $q->whereHas('productCategoriesProduct')->with(['productCategories']);
+        //         //$q->with(['productCategories']);
+        //     }])->get()->toArray(),
+        // ]);
+
+        $productPrice = new ProductPriceRepository(app());
+
+        dd( [
+            'productItems' => $productPrice
+                ->allQuery()->disableModelCaching()
+                ->with(['dmsInvProduct' => function ($q) {
+                    $q->with(['productCategories']);
+                }])
+                ->get()->toArray(),
+        ]);
     }
 }

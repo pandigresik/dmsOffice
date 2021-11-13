@@ -36,11 +36,12 @@
                 _json['trip'].forEach(element => {
                     _optionSelected = _form.find('option[value='+element+']').text().split(' | ')
                     _divWrapper.append(
-                    _template.replace('{tripCode}', _optionSelected[0])
-                            .replace('{tripName}', _optionSelected[1])
-                            .replace('{tripPrice}', _optionSelected[2])
-                            .replace('{tripDistance}', _optionSelected[3])
-                            .replace('{tripProductCategories}', _optionSelected[4])
+                    _template.replace('{tripCode}', _optionSelected[0].split('::')[1])
+                            .replace('{tripName}', _optionSelected[1].split('::')[1])
+                            .replace('{tripPrice}', _optionSelected[2].split('::')[1])
+                            .replace('{tripDistance}', _optionSelected[3].split('::')[1])
+                            .replace('{tripQuantity}', _optionSelected[4].split('::')[1])
+                            .replace('{tripProductCategories}', _optionSelected[5].split('::')[1])
                             .replace('{tripForm}', main.generateFormField(`tripEkspedisis[${_idForm++}]`, {'trip_id' : element, 'stateForm' : _json['stateForm']}).join(''))
                 )
                 });
@@ -48,4 +49,4 @@
                 _form.closest('.bootbox').find('button.bootbox-close-button').click()
             }
         }        
-    </script>
+    </script>    

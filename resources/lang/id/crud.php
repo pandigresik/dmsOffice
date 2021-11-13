@@ -31,5 +31,7 @@ return [
         'product_categories_placeholder' => 'Pilih jenis produk',
         'trip_placeholder' => 'Pilih Trip',
         'dmsInvProduct_placeholder' => 'Pilih produk',
+        'location_type_placeholder' => 'Pilih tipe lokasi',
+        'location_placeholder' => 'Pilih lokasi',
     ]
 ];

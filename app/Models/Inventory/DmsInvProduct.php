@@ -169,7 +169,7 @@ class DmsInvProduct extends Model
      */
     public function productCategories(): HasOneThrough
     {
-        return $this->hasOneThrough(ProductCategories::class, ProductCategoriesProduct::class, 'product_id', 'id', 'iInternalId');
+        return $this->hasOneThrough(ProductCategories::class, ProductCategoriesProduct::class, 'product_id', 'id', 'iInternalId','product_categories_id');
     }
 
     /**

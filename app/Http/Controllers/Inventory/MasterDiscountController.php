@@ -154,12 +154,15 @@ class MasterDiscountController extends AppBaseController
      */
     private function getOptionItems()
     {
-        $dmsInvProduct = new ProductPriceRepository(app());
+        $productPrice = new ProductPriceRepository(app());
 
         return [
-            'productItems' => $dmsInvProduct->with(['dmsInvProduct' => function ($q) {
-                $q->with(['productCategories']);
-            }])->allQuery()->get()->pluck('full_identity', 'dms_inv_product_id')->toArray(),
+            'productItems' => $productPrice
+                ->allQuery()->disableModelCaching()
+                ->with(['dmsInvProduct' => function ($q) {
+                    $q->with(['productCategories']);
+                }])
+                ->get()->pluck('full_identity', 'dms_inv_product_id')->toArray(),
         ];
     }
 }

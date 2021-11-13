@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Base;
 
+use Flash;
+use Response;
 use App\DataTables\Base\TripDataTable;
+use App\Repositories\Base\CityRepository;
+use App\Repositories\Base\TripRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateTripRequest;
 use App\Http\Requests\Base\UpdateTripRequest;
-use App\Repositories\Base\CityRepository;
-use App\Repositories\Base\TripRepository;
+use App\Repositories\Base\LocationRepository;
 use App\Repositories\Inventory\ProductCategoriesRepository;
-use Flash;
-use Response;
 
 class TripController extends AppBaseController
 {
@@ -155,11 +156,12 @@ class TripController extends AppBaseController
      */
     private function getOptionItems()
     {
-        $city = new CityRepository(app());
+        $location = new LocationRepository(app());
         $productCategories = new ProductCategoriesRepository(app());
 
         return [
-            'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck(),
+            'originItems' => ['' => __('crud.option.location_placeholder')] + $location->allQuery(['type' => 'origin'])->get()->pluck('full_identity', 'id')->toArray(),
+            'destinationItems' => ['' => __('crud.option.location_placeholder')] + $location->allQuery(['type' => 'destination'])->get()->pluck('full_identity', 'id')->toArray(),
             'productCategoriesItems' => ['' => __('crud.option.product_categories_placeholder')] + $productCategories->pluck(),
         ];
     }

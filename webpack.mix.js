@@ -85,7 +85,8 @@ mix.webpackConfig({
         '**/*',
         '!index.php',
         '!.htaccess',
-        '!vendor/**/**'
+        '!vendor/**/**',
+        '!images/avatar'
       ]
     }),
     new HtmlWebpackPlugin({

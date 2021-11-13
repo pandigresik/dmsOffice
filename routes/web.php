@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/tes', [App\Http\Controllers\HomeController::class, 'tes']);
 
 //Route::group(['middleware' => ['auth','role:administrator']],function (){
 Route::group(['middleware' => ['auth']], function () {
@@ -44,6 +45,7 @@ Route::group(['middleware' => ['auth']], function () {
                 
         Route::resource('settings', App\Http\Controllers\Base\SettingController::class, ['as' => 'base']);
         //Route::resource('products', App\Http\Controllers\Base\ProductController::class, ['as' => 'base']);
+        Route::resource('locations', App\Http\Controllers\Base\LocationController::class, ["as" => 'base']);
 
         /** DMS Table */
         Route::resource('dmsSmBranches', App\Http\Controllers\Base\DmsSmBranchController::class, ["as" => 'base']);            
@@ -126,9 +128,4 @@ Route::post(
 // Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');
 
 Route::resource('synchronizes', App\Http\Controllers\SynchronizeController::class)->except(['destroy','update', 'edit', 'show']);
-Route::get('synchronizes/progress', [App\Http\Controllers\SynchronizeController::class, 'progress'])->name('synchronizes.progress');    
-
-
-Route::group(['prefix' => 'inventory'], function () {
-    
-});
+Route::get('synchronizes/progress', [App\Http\Controllers\SynchronizeController::class, 'progress'])->name('synchronizes.progress');

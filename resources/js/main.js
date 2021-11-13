@@ -307,7 +307,7 @@ class Main {
     _target.find('.select2').each(function() {
       const _optionSelect = $(this).data('optionselect') || {}
       const _firstOption = $(this).find('option').eq(0)
-      let _placeholder = $(this).attr('placeholder') || 'Choose option'
+      let _placeholder = $(this).data('placeholder') || 'Choose option'
       // if (_.isEmpty(_firstOption.val())) {
       //   _placeholder = _firstOption.text()
       // }
@@ -355,14 +355,23 @@ class Main {
       }
       const _hasIcon = $(this).data('hasicon') || false
       const _asTable = $(this).data('astable') || false
+      const _asCard = $(this).data('ascard') || false
       if (_hasIcon) {
         _option.templateSelection = _ini.formatText
         _option.templateResult = _ini.formatText
       }
+       
       if(_asTable){
+        _firstOption.prop('disabled',1)
         _option.templateSelection = _ini.formatTable
         _option.templateResult = _ini.formatTable
       }
+
+      if(_asCard){        
+        _option.templateSelection = _ini.formatCard
+        _option.templateResult = _ini.formatCard
+      }
+      
       $(this).select2(_option)
     })
   }
@@ -385,6 +394,18 @@ class Main {
     }    
 
     return $(`<div class="row">${_child.join('')}</div>`)
+  }
+
+  formatCard(item) {
+    const _item = item.text.split(' | ')    
+    const _child = []
+    let _keyValue
+    for(let i in _item){
+      _keyValue = _item[i].split('::')
+      _child.push(`<tr><td class="p-2">${_keyValue[0]}</td><td class="text-right p-2">${_keyValue[1]}</td></tr>`)
+    }    
+
+    return $(`<div class="pr-3"><table class="table table-sm table-dark"><tbody>${_child.join('')}</tbody></table></div>`)
   }
 
   initCalendar(_target) {

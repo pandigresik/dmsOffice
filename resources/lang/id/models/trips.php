@@ -13,10 +13,12 @@ return array (
     'origin_additional_price' => 'Biaya Tambahan',
     'destination' => 'Kota Tujuan',
     'destination_place' => 'Tempat Bongkar',
-    'destination_additional_price' => 'Biaya Tambahan',
+    'destination_additional_price' => 'Biaya Tambahan Bongkar',
     'price' => 'Tarif',
     'distance' => 'Jarak',
+
     'description' => 'Keterangan',
-    'product_categories_id' => 'Jenis Produk'
+    'product_categories_id' => 'Jenis Produk',
+    'quantity' => 'Jumlah'
   ),
 );

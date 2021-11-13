@@ -1,3 +1,0 @@
-Entity harus punya currency
-PPn (VAT) jika rate > 0 maka harus punya account penampung, accont_id harus diisi
--- Setiap awal tahun harus buat dulu periode laporan, harus open periode

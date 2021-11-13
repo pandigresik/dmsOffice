@@ -3,7 +3,6 @@
 namespace App\Models\Base;
 
 use App\Models\BaseEntity as Model;
-use App\Models\Inventory\ProductCategories;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @SWG\Definition(
  *      definition="Trip",
- *      required={"code", "name", "origin", "origin_place", "origin_additional_price", "destination", "destination_place", "destination_additional_price", "price", "distance"},
+ *      required={"code", "name", "origin_additional_price", "destination_additional_price", "price", "distance", "quantity", "origin_location_id", "destination_location_id"},
  *      @SWG\Property(
  *          property="id",
  *          description="id",
@@ -29,32 +28,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *          type="string"
  *      ),
  *      @SWG\Property(
- *          property="origin",
- *          description="origin",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="origin_place",
- *          description="origin_place",
- *          type="string"
- *      ),
- *      @SWG\Property(
  *          property="origin_additional_price",
  *          description="origin_additional_price",
  *          type="number",
  *          format="number"
- *      ),
- *      @SWG\Property(
- *          property="destination",
- *          description="destination",
- *          type="integer",
- *          format="int32"
- *      ),
- *      @SWG\Property(
- *          property="destination_place",
- *          description="destination_place",
- *          type="string"
  *      ),
  *      @SWG\Property(
  *          property="destination_additional_price",
@@ -78,6 +55,30 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *          property="description",
  *          description="description",
  *          type="string"
+ *      ),
+ *      @SWG\Property(
+ *          property="product_categories_id",
+ *          description="product_categories_id",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="quantity",
+ *          description="quantity",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="origin_location_id",
+ *          description="origin_location_id",
+ *          type="integer",
+ *          format="int32"
+ *      ),
+ *      @SWG\Property(
+ *          property="destination_location_id",
+ *          description="destination_location_id",
+ *          type="integer",
+ *          format="int32"
  *      )
  * )
  */
@@ -95,16 +96,15 @@ class Trip extends Model
     public $fillable = [
         'code',
         'name',
-        'origin',
-        'origin_place',
         'origin_additional_price',
-        'destination',
-        'destination_place',
         'destination_additional_price',
         'price',
         'distance',
         'description',
         'product_categories_id',
+        'quantity',
+        'origin_location_id',
+        'destination_location_id',
     ];
 
     /**
@@ -115,15 +115,15 @@ class Trip extends Model
     public static $rules = [
         'code' => 'required|string|max:30',
         'name' => 'required|string|max:60',
-        'origin' => 'required',
-        'origin_place' => 'required|string|max:255',
         'origin_additional_price' => 'required|numeric',
-        'destination' => 'required',
-        'destination_place' => 'required|string|max:255',
         'destination_additional_price' => 'required|numeric',
         'price' => 'required|numeric',
         'distance' => 'required|numeric',
         'description' => 'nullable|string|max:60',
+        'product_categories_id' => 'nullable',
+        'quantity' => 'required|integer',
+        'origin_location_id' => 'required',
+        'destination_location_id' => 'required',
     ];
 
     protected $dates = ['deleted_at'];
@@ -137,32 +137,51 @@ class Trip extends Model
         'id' => 'integer',
         'code' => 'string',
         'name' => 'string',
-        'origin' => 'integer',
-        'origin_place' => 'string',
         'origin_additional_price' => 'decimal:2',
-        'destination' => 'integer',
-        'destination_place' => 'string',
         'destination_additional_price' => 'decimal:2',
         'price' => 'decimal:2',
         'distance' => 'decimal:2',
         'description' => 'string',
         'product_categories_id' => 'integer',
+        'quantity' => 'integer',
+        'origin_location_id' => 'integer',
+        'destination_location_id' => 'integer',
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the origin that owns the Trip.
+     *
+     * @return \Illuminate\DatabaLocationloquent\Reations\BelongsTo
      */
-    public function destination()
+    public function origin(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Base\City::class, 'destination', 'id');
+        return $this->belongsTo(Location::class, 'origin_location_id');
+    }
+
+    /**
+     * Get the origin that owns the Trip.
+     *
+     * @return \Illuminate\DatabaLocationloquent\Reations\BelongsTo
+     */
+    public function destination(): BelongsTo
+    {
+        return $this->belongsTo(Location::class, 'destination_location_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function origin()
+    public function productCategories()
     {
-        return $this->belongsTo(\App\Models\Base\City::class, 'origin', 'id');
+        return $this->belongsTo(\App\Models\Inventory\ProductCategories::class, 'product_categories_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tripEkspedisis()
+    {
+        return $this->hasMany(\App\Models\Base\TripEkspedisi::class, 'trip_id');
     }
 
     public function getPriceAttribute($value)
@@ -187,14 +206,6 @@ class Trip extends Model
 
     public function getFullIdentityAttribute($value)
     {
-        return implode(' | ', [$this->attributes['code'], $this->attributes['name'], $this->attributes['price'], $this->attributes['distance'], $this->productCategories->name]);
-    }
-
-    /**
-     * Get the productCategories that owns the Trip.
-     */
-    public function productCategories(): BelongsTo
-    {
-        return $this->belongsTo(ProductCategories::class, 'product_categories_id', 'id');
+        return implode(' | ', ['Code::'.$this->attributes['code'], 'Nama::'.$this->attributes['name'], 'Harga::'.$this->attributes['price'], 'Jarak::'.$this->attributes['distance'],'Jumlah::'.$this->attributes['quantity'], 'Jenis::'.$this->productCategories->name]);
     }
 }

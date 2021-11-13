@@ -23,11 +23,12 @@
     <div class="show">
         <div class="card-body">
             <div class="card-content">
-                <div>{{ $dataCard['code'] ?? '{tripCode}' }}</div>
-                <div>{{ $dataCard['name'] ?? '{tripName}' }}</div>                
-                <div>{{ $dataCard['distance'] ?? '{tripDistance}' }}</div>                
-                <div>{{ $dataCard['price'] ?? '{tripPrice}' }}</div>
-                <div>{{ $dataCard['productCategories']['name'] ?? '{tripProductCategories}' }}</div>                
+                <div>Code - {{ $dataCard['code'] ?? '{tripCode}' }}</div>
+                <div>Nama - {{ $dataCard['name'] ?? '{tripName}' }}</div>                
+                <div>Jarak - {{ $dataCard['distance'] ?? '{tripDistance}' }}</div>                
+                <div>Harga - {{ $dataCard['price'] ?? '{tripPrice}' }}</div>
+                <div>Jumlah - {{ $dataCard['quantity'] ?? '{tripQuantity}' }}</div>
+                <div>Jenis - {{ $dataCard['productCategories']['name'] ?? '{tripProductCategories}' }}</div>                
             </div>
             <div class="form-hidden collapse">{tripForm}</div>
         </div>

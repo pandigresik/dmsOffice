@@ -42,6 +42,6 @@
 <div class="form-group row">
     {!! Form::label('product', __('models/masterDiscounts.fields.product').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select('products[]',$productItems, null, ['class' => 'form-control select2', 'required' => 'required','multiple' => 'multiple', 'data-astable' => 1]) !!}
+    {!! Form::select('products[]',$productItems, null, ['class' => 'form-control select2', 'required' => 'required', 'data-placeholder' => 'Pilih produk','multiple' => 'multiple', 'data-ascard' => 1]) !!}
 </div>
 </div>

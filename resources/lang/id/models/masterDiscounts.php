@@ -13,5 +13,6 @@ return array (
     'start_date' => 'Start Date',
     'end_date' => 'End Date',
     'active_date' => 'Tanggal Berlaku',
+    'product' => 'Produk'
   ),
 );

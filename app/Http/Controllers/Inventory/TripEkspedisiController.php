@@ -170,7 +170,7 @@ class TripEkspedisiController extends AppBaseController
         $trip = new TripRepository(app());
 
         return [
-            'tripItems' => ['' => __('crud.option.trip_placeholder')] + $trip->allQuery()->with(['productCategories'])->get()->pluck('full_identity', 'id')->toArray(),
+            'tripItems' => $trip->allQuery()->with(['productCategories'])->get()->pluck('full_identity', 'id')->toArray(),
         ];
     }
 }

@@ -99,6 +99,6 @@ class ProductPrice extends Model
     public function getFullIdentityAttribute($value)
     {
         // return implode(' | ',[$this->attributes['dms_inv_product']['productCategories']['name'],$this->attributes['dmsInvProduct']['szName'],$this->attributes['price']]);
-        return implode(' | ', [$this->dmsInvProduct->productCategories->name, $this->dmsInvProduct->szName, localNumberFormat($this->attributes['price'])]);
+        return implode(' | ', ['Jenis::'.$this->dmsInvProduct->productCategories->name, 'Nama::'.$this->dmsInvProduct->szName, 'Harga::'.localNumberFormat($this->attributes['price'])]);
     }
 }
