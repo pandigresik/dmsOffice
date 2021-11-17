@@ -60,7 +60,7 @@ class SynchronizeController extends AppBaseController
      */
     public function store(Request $request)
     {
-        ini_set('max_execution_time', 180);
+        ini_set('max_execution_time', 1800);
         $user = Auth::user();
         $connectionStr = config('entity.entityConnection')[$user->entity_id];
 
@@ -71,7 +71,7 @@ class SynchronizeController extends AppBaseController
         $cacheIdentity = $this->getCacheIdentity($connectionStr);
         $synchronize = Synchronize::max('updated_at') ?? '2021-09-01 01:01:01';
         $lastSinkron = $synchronize;
-        $lastSinkron = '2021-09-01 01:01:01';
+        $lastSinkron = '2021-01-01 00:00:01';
 
         try {
             (new DatabaseSynchronizer(

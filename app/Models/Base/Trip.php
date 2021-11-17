@@ -181,7 +181,7 @@ class Trip extends Model
      */
     public function tripEkspedisis()
     {
-        return $this->hasMany(\App\Models\Base\TripEkspedisi::class, 'trip_id');
+        return $this->hasMany(\App\Models\Inventory\TripEkspedisi::class, 'trip_id');
     }
 
     public function getPriceAttribute($value)

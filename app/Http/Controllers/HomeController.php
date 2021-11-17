@@ -24,10 +24,10 @@ class HomeController extends Controller
     public function index()
     {
         $widgets = [];
-        \Widget::group('main')->position(3)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-danger']);
-        \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-warning']);
-        \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-primary']);
-        \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-success']);
+        // \Widget::group('main')->position(3)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-danger']);
+        // \Widget::group('main')->position(5)->addAsyncWidget('revenueWidget', ['bgcolor' => 'bg-gradient-warning']);
+        \Widget::group('main')->position(5)->addAsyncWidget('hutangSupplierWidget', []);
+        \Widget::group('main')->position(5)->addAsyncWidget('hutangEkspedisiWidget', []);
         array_push($widgets, '<div class="row">'.\Widget::group('main')->wrap(function ($content, $index, $total) {
             // $total is a total number of widgets in a group.
             $width = intval(12 / $total);
@@ -35,8 +35,8 @@ class HomeController extends Controller
 
             return "<div class='".$classWidth." widget-{$index}'>{$content}</div>";
         })->display().'</div>');
-        array_push($widgets, \AsyncWidget::run('revenueWidget', ['bgcolor' => 'bg-gradient-danger']));
-        array_push($widgets, \AsyncWidget::run('popularWidget', []));
+        // array_push($widgets, \AsyncWidget::run('revenueWidget', ['bgcolor' => 'bg-gradient-danger']));
+        // array_push($widgets, \AsyncWidget::run('popularWidget', []));
 
         return view('home')->with(['widgets' => $widgets]);
     }

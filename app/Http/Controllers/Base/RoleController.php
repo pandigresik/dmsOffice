@@ -146,6 +146,10 @@ class RoleController extends AppBaseController
         $app = app();
         $permissions = new PermissionRepository($app);
 
-        return $permissions->all();
+        return $permissions->all()->mapToGroups(function($message){
+            list($index, $action) = explode('-', $message->name);
+
+            return [$index => $message];
+        });
     }
 }

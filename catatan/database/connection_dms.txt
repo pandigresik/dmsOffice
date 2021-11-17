@@ -1,0 +1,3 @@
+connection : 163.53.194.250 port : 3307
+User : sejatiacc
+Pass : DISTsejati.@cc

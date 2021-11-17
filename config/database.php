@@ -82,6 +82,12 @@ return [
             ]) : [],
         ],
         'mysql_sejati_origin' => [
+            // 'write' => [
+            //     'host' => env('127.0.0.1'),
+            // ],
+            // 'read' => [
+            //     'host' => env('DB_HOST_SEJATI_ORIGIN', '127.0.0.1'),
+            // ],
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST_SEJATI_ORIGIN', '127.0.0.1'),

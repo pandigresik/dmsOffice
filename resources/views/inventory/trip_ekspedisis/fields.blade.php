@@ -1,5 +1,5 @@
 {!! Form::hidden($prefixName.'[stateForm]', $stateForm) !!}
 {!! Form::label('trip', __('models/tripEkspedisis.fields.trip').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::select($prefixName.'[trip[]]',$tripItems, null,['class' => 'form-control select2', 'required' => 'required', 'multiple' => 'multiple', 'data-ascard' => 1, 'data-optionselect' => json_encode(config('local.select2.tag'))]) !!}    
+    {!! Form::select($prefixName.'[trip[]]',$tripItems, null,['class' => 'form-control select2', 'required' => 'required', 'multiple' => true, 'data-ascard' => 1]) !!}    
 </div>

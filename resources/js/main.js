@@ -162,6 +162,12 @@ class Main {
       }
     }
   }
+
+  checkAll(elm, parent){
+    const _checked = $(elm).is(':checked') ? 1 : 0                
+    $(elm).closest(parent).find(':checkbox').not(elm).prop('checked', _checked)
+  }
+
   initFormatInput(_closestTarget) {
     const _ini = this
     const _tmpTarget = _closestTarget === undefined ? $('form') : _closestTarget
@@ -356,6 +362,7 @@ class Main {
       const _hasIcon = $(this).data('hasicon') || false
       const _asTable = $(this).data('astable') || false
       const _asCard = $(this).data('ascard') || false
+      const _selectAsCard = $(this).data('selectascard') || false
       if (_hasIcon) {
         _option.templateSelection = _ini.formatText
         _option.templateResult = _ini.formatText
@@ -367,8 +374,10 @@ class Main {
         _option.templateResult = _ini.formatTable
       }
 
-      if(_asCard){        
-        _option.templateSelection = _ini.formatCard
+      if(_asCard){
+        if(_selectAsCard){
+          _option.templateSelection = _ini.formatCard
+        }        
         _option.templateResult = _ini.formatCard
       }
       

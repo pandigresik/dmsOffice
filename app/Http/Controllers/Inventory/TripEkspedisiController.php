@@ -16,6 +16,7 @@ class TripEkspedisiController extends AppBaseController
 {
     /** @var TripEkspedisiRepository */
     protected $repository;
+    private $defaultCarrier;
 
     public function __construct()
     {
@@ -35,7 +36,7 @@ class TripEkspedisiController extends AppBaseController
             ->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->map(function ($q) {
                 return $q->trip;
             });
-        $buttonView = view('inventory.dms_inv_carriers.partials.trip_button', ['json' => [], 'url' => route('inventory.tripEkspedisis.create')])->render();
+        $buttonView = view('inventory.dms_inv_carriers.partials.trip_button', ['json' => ['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')], 'url' => route('inventory.tripEkspedisis.create')])->render();
 
         return view('inventory.trip_ekspedisis.index')->with(['trips' => $trips, 'buttonView' => $buttonView]);
     }
@@ -48,7 +49,7 @@ class TripEkspedisiController extends AppBaseController
     public function create()
     {
         $idForm = \Carbon\Carbon::now()->timestamp;
-
+        $this->setDefaultCarrier(request('dms_inv_carrier_id'));
         return view('inventory.trip_ekspedisis.create')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'tripEkspedisis['.$idForm.']'])
         ;
@@ -167,10 +168,35 @@ class TripEkspedisiController extends AppBaseController
      */
     private function getOptionItems()
     {
-        $trip = new TripRepository(app());
-
+        $trip = new TripRepository(app());        
+        $carrierId = $this->getDefaultCarrier();
         return [
-            'tripItems' => $trip->allQuery()->with(['productCategories'])->get()->pluck('full_identity', 'id')->toArray(),
+            'tripItems' => $trip->allQuery()
+                ->disableModelCaching()
+                ->whereDoesntHave('tripEkspedisis', function ($q)use($carrierId){
+                    $q->where(['dms_inv_carrier_id' => $carrierId]);
+                })
+                ->with(['productCategories'])->get()->pluck('full_identity', 'id')->toArray(),
         ];
+    }
+
+    /**
+     * Get the value of defaultCarrier
+     */ 
+    public function getDefaultCarrier()
+    {
+        return $this->defaultCarrier;
+    }
+
+    /**
+     * Set the value of defaultCarrier
+     *
+     * @return  self
+     */ 
+    public function setDefaultCarrier($defaultCarrier)
+    {
+        $this->defaultCarrier = $defaultCarrier;
+
+        return $this;
     }
 }

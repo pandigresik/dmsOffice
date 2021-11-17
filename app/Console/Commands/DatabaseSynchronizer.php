@@ -63,6 +63,7 @@ class DatabaseSynchronizer
             }
 
             //$this->syncTable($table);
+            \Log::error('sinkronisasi table '.$table);
             $this->syncRows($table, $this->getFilterTable($table));
         }
         Cache::tags(self::CACHE_NAME.$this->cacheIdentity)->put('state', 'done');
@@ -143,7 +144,7 @@ class DatabaseSynchronizer
      * @todo add limit offset setup
      * @todo investigate: insert into on duplicate key update
      */
-    public function syncRows(string $table, string $condition): void
+    public function syncRows(string $table, ?string $condition): void
     {
         $queryColumn = Schema::connection($this->from)->getColumnListing($table)[0];
         $prepare = $this->prepareForInserts($table, $condition);
@@ -250,7 +251,7 @@ class DatabaseSynchronizer
     /**
      * @return \PDOStatement
      */
-    private function prepareForInserts(string $table, string $condition): array
+    private function prepareForInserts(string $table, ?string $condition): array
     {
         $pdo = $this->getFromDb()->getPdo();
         $builder = $this->fromDB->table($table);
