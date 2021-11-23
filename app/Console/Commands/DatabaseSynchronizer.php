@@ -54,17 +54,18 @@ class DatabaseSynchronizer
         }
         Cache::tags(self::CACHE_NAME.$this->cacheIdentity)->put('state', 'progress');
         foreach ($this->getTables() as $table) {
-            $this->feedback(PHP_EOL.PHP_EOL."Table: {$table}", 'line');
-
-            if (!Schema::connection($this->from)->hasTable($table)) {
-                $this->feedback("Table '{$table}' does not exist in {$this->from}", 'error');
+            $tableName = $table['name'];
+            $this->feedback(PHP_EOL.PHP_EOL."Table: {$tableName}", 'line');
+            \Log::error('prepare sinkronisasi table '.$tableName);
+            if (!Schema::connection($this->from)->hasTable($tableName)) {
+                $this->feedback("Table '{$tableName}' does not exist in {$this->from}", 'error');
 
                 continue;
             }
 
             //$this->syncTable($table);
-            \Log::error('sinkronisasi table '.$table);
-            $this->syncRows($table, $this->getFilterTable($table));
+            \Log::error('sinkronisasi table '.$tableName);
+            $this->syncRows($table, $this->getFilterTable($tableName));
         }
         Cache::tags(self::CACHE_NAME.$this->cacheIdentity)->put('state', 'done');
         $this->feedback('Synchronization done!', 'info');
@@ -144,31 +145,36 @@ class DatabaseSynchronizer
      * @todo add limit offset setup
      * @todo investigate: insert into on duplicate key update
      */
-    public function syncRows(string $table, ?string $condition): void
+    public function syncRows(array $table, ?string $condition): void
     {
-        $queryColumn = Schema::connection($this->from)->getColumnListing($table)[0];
+        //$queryColumn = Schema::connection($this->from)->getColumnListing($table)[0];
+        $queryColumn = $table['key'];
+        $tableName = $table['name'];
+        $this->updateProgress($tableName, 100, 0);
         $prepare = $this->prepareForInserts($table, $condition);
         $statement = $prepare['statement'];
         $amount = $prepare['amount'];
         $counter = 0;
-        if (!empty($amount)) {
+        if (!empty($amount)) {            
             while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
-                $exists = $this->getToDb()->table($table)->where($queryColumn, $row->{$queryColumn})->first();
+                $exists = $this->getToDb()->table($tableName)->where($queryColumn, $row->{$queryColumn})->first();
+                /** remove iiInternalId because auto increment column */
+                if(isset($row->iInternalId)) unset($row->iInternalId);
 
                 if (!$exists) {
-                    $this->getToDb()->table($table)->insert((array) $row);
+                    $this->getToDb()->table($tableName)->insert((array) $row);
                 } else {
-                    $this->getToDb()->table($table)->where($queryColumn, $row->{$queryColumn})->update((array) $row);
+                    $this->getToDb()->table($tableName)->where($queryColumn, $row->{$queryColumn})->update((array) $row);
                 }
                 ++$counter;
 
-                if (0 == $counter % 50) {
-                    $this->updateProgress($table, $amount, $counter);
+                if (0 == $counter % 10) {
+                    $this->updateProgress($tableName, $amount, $counter);
                 }
             }
-            $this->updateProgress($table, $amount, $counter);
+            $this->updateProgress($tableName, $amount, $counter);
         } else {
-            $this->updateProgress($table, 100, 100);
+            $this->updateProgress($tableName, 100, 100);
         }
     }
 
@@ -251,22 +257,23 @@ class DatabaseSynchronizer
     /**
      * @return \PDOStatement
      */
-    private function prepareForInserts(string $table, ?string $condition): array
+    private function prepareForInserts(array $table, ?string $condition): array
     {
         $pdo = $this->getFromDb()->getPdo();
-        $builder = $this->fromDB->table($table);
+        $tableName = $table['name'];
+        $builder = $this->fromDB->table($tableName);
 
         $statement = $condition ? $pdo->prepare($builder->whereRaw($condition)->toSql()) : $pdo->prepare($builder->toSql());
 
         if (!$statement instanceof \PDOStatement) {
-            throw new PDOException("Could not prepare PDOStatement for {$table}");
+            throw new PDOException("Could not prepare PDOStatement for {$tableName}");
         }
 
         $statement->execute($builder->getBindings());
         $amount = $statement->rowCount();
 
         if ($this->truncate) {
-            $this->getToDb()->table($table)->truncate();
+            $this->getToDb()->table($tableName)->truncate();
         }
 
         return ['statement' => $statement, 'amount' => $amount];
