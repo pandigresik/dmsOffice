@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Providers;
+use App\Models\Purchase\Uom;
+use App\Models\Purchase\Product;
+use App\Models\Purchase\Doc;
 
 use App\Models\Base\DmsApSupplier;
 use App\Models\Base\DmsArCustomer;
@@ -22,6 +25,7 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        
         // View::composer(['base.location_customer.fields'], function ($view) {
         //     $dmsArCustomerItems = DmsArCustomer::pluck('id')->toArray();
         //     $view->with('dmsArCustomerItems', $dmsArCustomerItems);

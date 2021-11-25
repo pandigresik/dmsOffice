@@ -124,6 +124,7 @@ class ProductPriceDataTable extends DataTable
             'product_id' => new Column(['title' => __('models/dmsInvProducts.fields.szId'), 'data' => 'dms_inv_product.szId', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
             'dms_inv_product_id' => new Column(['title' => __('models/productPrices.fields.dms_inv_product_id'), 'data' => 'dms_inv_product.szName', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
             'price' => new Column(['title' => __('models/productPrices.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
+            'dpp_price' => new Column(['title' => __('models/productPrices.fields.dpp_price'), 'data' => 'dpp_price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
             'start_date' => new Column(['title' => __('models/productPrices.fields.start_date'), 'data' => 'start_date', 'searchable' => false, 'elmsearch' => 'text']),
             'product_uom_id' => new Column(['title' => __('models/dmsInvProducts.fields.szUomId'), 'data' => 'dms_inv_product.szUomId', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
         ];

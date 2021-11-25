@@ -50,6 +50,7 @@ class ProductPrice extends Model
     public $fillable = [
         'dms_inv_product_id',
         'price',
+        'dpp_price',
         'start_date',
     ];
 
@@ -61,6 +62,7 @@ class ProductPrice extends Model
     public static $rules = [
         'dms_inv_product_id' => 'required|integer',
         'price' => 'required|numeric',
+        'dpp_price' => 'required|numeric',
         'start_date' => 'nullable',
     ];
 
@@ -87,6 +89,11 @@ class ProductPrice extends Model
     }
 
     public function getPriceAttribute($value)
+    {
+        return localNumberFormat($value);
+    }
+
+    public function getDppPriceAttribute($value)
     {
         return localNumberFormat($value);
     }

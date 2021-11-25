@@ -13,7 +13,7 @@ return [
     ],
     'select2' => [
         'ajax' => ['data-ajax' => 1],
-        'tag' => ['tags' => true, 'multiple' => true, 'tokenSeparators' => [',']]        
+        'tag' => ['tags' => true, 'multiple' => true, 'tokenSeparators' => [',']],        
     ],
     'daterange' => ['singleDatePicker' => false, 'locale' => ['format' => 'DD MMM YYYY']],
     'time' => ['locale' => ['format' => 'HH:mm']],

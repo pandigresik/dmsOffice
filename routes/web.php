@@ -110,6 +110,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('dmsSdRouteitems', App\Http\Controllers\Sales\DmsSdRouteitemController::class, ["as" => 'sales']);
     });
 
+    Route::group(['prefix' => 'purchase'], function () {
+        Route::resource('btbValidates', App\Http\Controllers\Purchase\BtbValidateController::class, ["as" => 'purchase']);
+    });
+
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');
     Route::get('/events', [App\Http\Controllers\EventsController::class, 'index'])->name('events.index');
 });

@@ -26,9 +26,12 @@ if (!function_exists('createLocalFormatDate')) {
 }
 
 if (!function_exists('localNumberFormat')) {
-    function localNumberFormat($value)
+    function localNumberFormat($value, $digitDecimal = null)
     {
-        return number_format($value, config('local.digit_decimal'), config('local.decimal_separator'), config('local.thousand_separator'));
+        if (null === $digitDecimal) {
+            $digitDecimal = config('local.digit_decimal');
+        }
+        return number_format($value, $digitDecimal, config('local.decimal_separator'), config('local.thousand_separator'));
     }
 }
 

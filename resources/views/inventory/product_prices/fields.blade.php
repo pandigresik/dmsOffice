@@ -14,6 +14,14 @@
 </div>
 </div>
 
+<!-- DPP Price Field -->
+<div class="form-group row">
+    {!! Form::label('dpp_price', __('models/productPrices.fields.dpp_price').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-6"> 
+    {!! Form::text('dpp_price', null, ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.decimal'))]) !!}
+</div>
+</div>
+
 <!-- Start Date Field -->
 <div class="form-group row">
     {!! Form::label('start_date', __('models/productPrices.fields.start_date').':', ['class' => 'col-md-3 col-form-label']) !!}
