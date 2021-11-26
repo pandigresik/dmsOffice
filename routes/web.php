@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'purchase'], function () {
         Route::resource('btbValidates', App\Http\Controllers\Purchase\BtbValidateController::class, ["as" => 'purchase']);
+        Route::resource('invoices', App\Http\Controllers\Purchase\InvoiceController::class, ["as" => 'purchase']);
     });
 
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');

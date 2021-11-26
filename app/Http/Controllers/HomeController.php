@@ -42,8 +42,7 @@ class HomeController extends Controller
     }
 
     public function tes(){
-        $productPrice = new ProductPrice();
-        $productRepo = new ProductPriceRepository(app());
+        
         // $product = DmsInvProduct::where('iInternalId',6)->with(['productCategories'])->get();
         // //dd($product->toArray());
         // dd( [            
@@ -53,15 +52,15 @@ class HomeController extends Controller
         //     }])->get()->toArray(),
         // ]);
 
-        $productPrice = new ProductPriceRepository(app());
+        // $productPrice = new ProductPriceRepository(app());
+        // $productPrice = new ProductPrice();
+        $tes = \App\Models\Purchase\BtbValidate::selectRaw('co_reference, sum(qty) - sum(qty_reject) as qty')->whereInvoiced(0)
+                        ->disableModelCaching()
+                        ->groupBy('co_reference')
+                        ->get();
+        // ->pluck('co_reference','co_reference');
+        dd($tes);
 
-        dd( [
-            'productItems' => $productPrice
-                ->allQuery()->disableModelCaching()
-                ->with(['dmsInvProduct' => function ($q) {
-                    $q->with(['productCategories']);
-                }])
-                ->get()->toArray(),
-        ]);
+        
     }
 }
