@@ -155,7 +155,7 @@ class InvoiceController extends AppBaseController
     private function getOptionItems()
     {
         /** show list  */
-        $readyInvoice = BtbValidate::selectRaw('co_reference, szSupplierId as partner_id, sum(qty) - sum(qty_reject) as qtysum')
+        $readyInvoice = BtbValidate::selectRaw('co_reference, szSupplierId as partner_id, sum(qty) as qtysum')
                         ->join('dms_inv_docstockinsupplier',function($join){
                             $join->on('dms_inv_docstockinsupplier.szDocId', '=', 'btb_validate.doc_id');
                         })

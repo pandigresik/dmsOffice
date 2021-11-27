@@ -69,9 +69,8 @@ class SynchronizeController extends AppBaseController
         // $to = $connectionStr.'_origin';
         // $from = $connectionStr;
         $cacheIdentity = $this->getCacheIdentity($connectionStr);
-        $synchronize = Synchronize::max('updated_at') ?? '2021-09-01 01:01:01';
-        $lastSinkron = $synchronize;
-        $lastSinkron = '2021-03-01 00:00:01';
+        $synchronize = Synchronize::max('updated_at') ?? '2021-03-01 01:01:01';
+        $lastSinkron = (\Carbon\Carbon::parse($synchronize))->subHour(1);
 
         try {
             (new DatabaseSynchronizer(
@@ -86,11 +85,11 @@ class SynchronizeController extends AppBaseController
                 ->run()
             ;
             foreach ($this->getTables() as $table) {
-                Synchronize::updateOrCreate(['table_name' => $table]);
-                LogSynchronize::Create(['table_name' => $table]);
+                $tableName = $table['name'];
+                \Log::error($tableName);
+                LogSynchronize::create(['table_name' => $tableName]);
+                Synchronize::updateOrCreate(['table_name' => $tableName]);
             }
-
-            // set last sinkron
         } catch (Exception $e) {
             \Log::error($e->getMessage());
 
@@ -154,16 +153,16 @@ class SynchronizeController extends AppBaseController
         $columnCondition = config('database-synchronizer.tables', []);
         $tables = $this->getTables();
         $tableReferences = [];
-        foreach($tables as $table){
+        foreach ($tables as $table) {
             $tableName = $table['name'];
             $tableReferences[$tableName] = $table;
             $references = $table['references'];
-            if(empty($references)){
+            if (empty($references)) {
                 $resultCondition[$tableName] = $table['filter'].' >= \''.$lastSinkron.'\'';
-            }else{                
+            } else {
                 $resultCondition[$tableName] = $references['column'].' in (select '.$references['column'].' from '.$references['table'].' where '.$tableReferences[$references['table']]['filter'].' >= \''.$lastSinkron.'\')';
             }
-        }        
+        }
 
         return $resultCondition;
     }

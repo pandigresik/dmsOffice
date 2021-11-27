@@ -39,7 +39,8 @@ class InvoiceUser extends Model
     protected $dates = ['deleted_at'];    
 
     public $fillable = [
-        'invoice_id'
+        'invoice_id',
+        'state'
     ];
 
     /**

@@ -9,15 +9,16 @@ use Yajra\DataTables\Html\Column;
 
 class InvoiceDataTable extends DataTable
 {
+    protected $withUpdate = false;
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'partner.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class,        
     ];
     
     private $mapColumnSearch = [
-        //'entity.name' => 'entity_id',
+        //'partner.name' => 'partner_id',
     ];
 
     /**
@@ -35,7 +36,10 @@ class InvoiceDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', 'purchase.invoices.datatables_actions');
+        if($this->withUpdate){
+            $dataTable->addColumn('action', 'purchase.invoices.datatables_actions');
+        }
+        return $dataTable; //->addColumn('action', 'purchase.invoices.datatables_actions');
     }
 
     /**
@@ -46,7 +50,7 @@ class InvoiceDataTable extends DataTable
      */
     public function query(Invoice $model)
     {
-        return $model->newQuery();
+        return $model->with(['partner'])->newQuery();
     }
 
     /**
@@ -89,10 +93,9 @@ class InvoiceDataTable extends DataTable
                     ],
                 ];
                 
-        return $this->builder()
+        $builder = $this->builder()
             ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')])
+            ->minifiedAjax()            
             ->parameters([
                 'dom'       => 'Brtip',
                 'stateSave' => true,
@@ -105,6 +108,10 @@ class InvoiceDataTable extends DataTable
                  'fixedHeader' => true,
                  'orderCellsTop' => true     
             ]);
+        if($this->withUpdate){
+            $builder->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')]);
+        }
+        return $builder;
     }
 
     /**
@@ -116,15 +123,15 @@ class InvoiceDataTable extends DataTable
     {
         return [
             'number' => new Column(['title' => __('models/invoices.fields.number'), 'data' => 'number', 'searchable' => true, 'elmsearch' => 'text']),
-            'type' => new Column(['title' => __('models/invoices.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'type' => new Column(['title' => __('models/invoices.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
             'reference' => new Column(['title' => __('models/invoices.fields.reference'), 'data' => 'reference', 'searchable' => true, 'elmsearch' => 'text']),
-            'qty' => new Column(['title' => __('models/invoices.fields.qty'), 'data' => 'qty', 'searchable' => true, 'elmsearch' => 'text']),
-            'amount' => new Column(['title' => __('models/invoices.fields.amount'), 'data' => 'amount', 'searchable' => true, 'elmsearch' => 'text']),
-            'amount_discount' => new Column(['title' => __('models/invoices.fields.amount_discount'), 'data' => 'amount_discount', 'searchable' => true, 'elmsearch' => 'text']),
+            'qty' => new Column(['title' => __('models/invoices.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
+            'amount' => new Column(['title' => __('models/invoices.fields.amount'), 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'text']),
+            'amount_discount' => new Column(['title' => __('models/invoices.fields.amount_discount'), 'data' => 'amount_discount', 'searchable' => false, 'elmsearch' => 'text']),
             'state' => new Column(['title' => __('models/invoices.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text']),
             'date_invoice' => new Column(['title' => __('models/invoices.fields.date_invoice'), 'data' => 'date_invoice', 'searchable' => true, 'elmsearch' => 'text']),
             'date_due' => new Column(['title' => __('models/invoices.fields.date_due'), 'data' => 'date_due', 'searchable' => true, 'elmsearch' => 'text']),
-            'partner_id' => new Column(['title' => __('models/invoices.fields.partner_id'), 'data' => 'partner_id', 'searchable' => true, 'elmsearch' => 'text'])
+            'partner_id' => new Column(['title' => __('models/invoices.fields.partner_id'), 'data' => 'partner.szName','defaultContent' => '', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

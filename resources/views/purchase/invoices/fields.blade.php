@@ -1,8 +1,8 @@
 <!-- CO Number Field -->
 <div class="form-group row">
-    {!! Form::label('co_reference', __('models/invoices.fields.co_reference').':', ['class' => 'col-md-3 col-form-label']) !!}
+    {!! Form::label('reference', __('models/invoices.fields.reference').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-6"> 
-    {!! Form::select('co_reference', $coItems,null, ['class' => 'form-control select2', 'required' => 'required', 'data-placeholder' => 'Pilih CO'], $coItemOptions) !!}
+    {!! Form::select('reference', $coItems,null, ['class' => 'form-control select2', 'required' => 'required', 'data-placeholder' => 'Pilih CO'], $coItemOptions) !!}
 </div>
 </div>
 
@@ -16,9 +16,9 @@
 
 <!-- Reference Field -->
 <div class="form-group row">
-    {!! Form::label('reference', __('models/invoices.fields.reference').':', ['class' => 'col-md-3 col-form-label']) !!}
+    {!! Form::label('external_reference', __('models/invoices.fields.external_reference').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-6"> 
-    {!! Form::text('reference', null, ['class' => 'form-control','maxlength' => 255, 'required' => 'required']) !!}
+    {!! Form::text('external_reference', null, ['class' => 'form-control','maxlength' => 255, 'required' => 'required']) !!}
     {!! Form::hidden('partner_id') !!}
 </div>
 </div>
@@ -67,7 +67,7 @@
 @push('scripts')
 <script type="text/javascript">
     $(function(){
-        $('select[name=co_reference]').change(function(){
+        $('select[name=reference]').change(function(){
             const _form = $(this).closest('form');
             const _option = $(this).find('option:selected');                        
             const _qtysum = _form.find('input[name=qtysum]');

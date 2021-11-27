@@ -2,6 +2,7 @@
 
 namespace App\Models\Purchase;
 
+use App\Models\Base\DmsApSupplier;
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -83,14 +84,19 @@ class Invoice extends Model
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    const DEFAULT_STATE = 'submit';
+    const SUBMIT = 'submit';
+    const VALIDATE = 'validate';
+    const APPROVE = 'approve';
+    const PAY = 'pay';
 
     protected $dates = ['deleted_at'];    
-
+    public $isCachable = false;
     public $fillable = [
         'number',
         'type',
         'reference',
+        'external_reference',
         'qty',
         'amount',
         'amount_discount',
@@ -125,13 +131,13 @@ class Invoice extends Model
      * @var array
      */
     public static $rules = [
-        'number' => 'required|string|max:30',
-        'type' => 'required|string',
+        // 'number' => 'required|string|max:30',
+        // 'type' => 'required|string',
         'reference' => 'required|string|max:255',
         'qty' => 'required|integer',
         'amount' => 'required|numeric',
         'amount_discount' => 'required|numeric',
-        'state' => 'required|string|max:10',
+        // 'state' => 'required|string|max:10',
         'date_invoice' => 'required',
         'date_due' => 'required',
         'partner_id' => 'required|string|max:20'
@@ -143,5 +149,75 @@ class Invoice extends Model
     public function invoiceUsers()
     {
         return $this->hasMany(\App\Models\Purchase\InvoiceUser::class, 'invoice_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function btb()
+    {
+        return $this->hasMany(\App\Models\Purchase\BtbValidate::class, 'co_reference','reference');
+    }
+
+    /**
+     * Get the partner that owns the Invoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function partner()
+    {
+        return $this->hasOne(DmsApSupplier::class, 'szId','partner_id');
+    }
+
+    public function getNextNumber()
+    {
+        $pattern = 'BILL/'.date('Ym').'/';
+        $columnReference = 'number';
+        $sequenceLength = 5;
+        $nextId = $this->where($columnReference, 'like', $pattern.'%')->max($columnReference);
+        $nextId = !$nextId ? 1 : intval(substr($nextId, strlen($nextId) - $sequenceLength)) + 1;
+        $newId = [$pattern, str_pad($nextId, $sequenceLength, '0', STR_PAD_LEFT)];
+
+        return implode('', $newId);
+    }
+
+    public function scopeSubmit($query){
+
+        return $query->whereState(self::SUBMIT);
+    }
+
+    public function scopeValidate($query){
+
+        return $query->whereState(self::VALIDATE);
+    }
+
+    public function getQtyAttribute($value){
+
+        return localNumberFormat($value, 0);
+    }
+
+    public function getAmountAttribute($value){
+
+        return localNumberFormat($value);
+    }
+
+    public function getAmountTotalAttribute($value){
+
+        return localNumberFormat($value);
+    }
+
+    public function getAmountDiscountAttribute($value){
+
+        return localNumberFormat($value);
+    }
+
+    public function getDateInvoiceAttribute($value){
+
+        return localFormatDate($value);
+    }
+
+    public function getDateDueAttribute($value){
+
+        return localFormatDate($value);
     }
 }
