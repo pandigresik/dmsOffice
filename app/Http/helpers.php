@@ -1,27 +1,27 @@
 <?php
 
-//use Jenssegers\Date\Date;
+use Jenssegers\Date\Date;
 use Spatie\Menu\Laravel\Html;
 use Spatie\Menu\Laravel\Link;
 
 if (!function_exists('localFormatDate')) {
     function localFormatDate($value)
     {
-        return \Carbon\Carbon::parse($value)->format(config('local.date_format'));
+        return Date::parse($value)->format(config('local.date_format'));
     }
 }
 
 if (!function_exists('localFormatDateTime')) {
     function localFormatDateTime($value)
     {
-        return \Carbon\Carbon::parse($value)->format(config('local.datetime_format'));
+        return Date::parse($value)->format(config('local.datetime_format'));
     }
 }
 
 if (!function_exists('createLocalFormatDate')) {
     function createLocalFormatDate($value)
     {
-        return \Carbon\Carbon::createFromFormat(config('local.date_format'), $value);
+        return Date::createFromFormat(config('local.date_format'), $value);
     }
 }
 

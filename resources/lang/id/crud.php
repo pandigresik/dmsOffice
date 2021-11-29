@@ -16,6 +16,7 @@ return [
     'save' => 'Simpan',
     'edit' => 'Edit',
     'sync' => 'Sinkron',
+    'process' => 'Proses',
     'detail' => 'Detail',
     'add_new' => 'Baru',
     'cancel' => 'Batal',

@@ -16,6 +16,7 @@ return array (
     'invoiced' => 'Invoiced',
     'reference_id' => 'Dokumen',
     'co_reference' => 'Nomer CO',
-    'product_name' => 'Nama Barang'
+    'product_name' => 'Nama Barang',
+    'period_range' => 'Periode'
   ),
 );

@@ -2,15 +2,16 @@
 
 namespace App\Repositories\Purchase;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\Purchase\BtbValidate;
 use App\Repositories\BaseRepository;
 
 /**
- * Class BtbValidateRepository
- * @package App\Repositories\Purchase
+ * Class BtbValidateRepository.
+ *
  * @version November 25, 2021, 5:35 am WIB
-*/
-
+ */
 class BtbValidateRepository extends BaseRepository
 {
     /**
@@ -24,11 +25,11 @@ class BtbValidateRepository extends BaseRepository
         'qty',
         'qty_retur',
         'qty_reject',
-        'invoiced'
+        'invoiced',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -38,10 +39,61 @@ class BtbValidateRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return BtbValidate::class;
+    }
+
+    public function mustValidate($startDate, $endDate)
+    {
+        return $this->model->mustValidate($startDate, $endDate);
+    }
+
+    /**
+     * Create model record.
+     *
+     * @param array $input
+     *
+     * @return Model
+     */
+    public function create($input)
+    {
+        DB::beginTransaction();
+
+        try {
+            $btb = $input['btb'] ?? [];
+            $model = null;
+            if (!empty($btb)) {                
+                $groupingBtb = collect($btb)->mapToGroups(function($item){
+                    $arr = json_decode($item, 1);
+
+                    return [$arr['jenis'] => $arr['no_btb']];
+                });
+                
+                foreach ($groupingBtb as $key => $vc) {                    
+                    switch ($key) {
+                        case 'BTB Supplier':                        
+                            $model = $this->model->insertBtbSupplier($vc);
+
+                            break;
+                        case 'BTB Distribusi':                            
+                            $model = $this->model->insertBtbDistribusi($vc);
+
+                            break;
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return $model;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+
+            return $e;
+        }
     }
 }

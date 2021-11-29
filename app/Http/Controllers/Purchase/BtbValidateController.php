@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Purchase;
 
-use App\DataTables\Purchase\BtbValidateDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateBtbValidateRequest;
 use App\Http\Requests\Purchase\UpdateBtbValidateRequest;
@@ -10,6 +9,7 @@ use App\Models\Purchase\BtbValidate;
 use App\Models\Purchase\ListBtbValidate;
 use App\Repositories\Purchase\BtbValidateRepository;
 use Flash;
+use Illuminate\Http\Request;
 use Response;
 
 class BtbValidateController extends AppBaseController
@@ -27,9 +27,13 @@ class BtbValidateController extends AppBaseController
      *
      * @return Response
      */
-    public function index(BtbValidateDataTable $btbValidateDataTable)
+    public function index(Request $request)
     {
-        return $btbValidateDataTable->render('purchase.btb_validates.index');
+        $period = explode(' - ',$request->get('ref'));
+        $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
+        $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
+        $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate);        
+        return view('purchase.btb_validates.list')->with('datas',$datas);
     }
 
     /**
@@ -54,8 +58,7 @@ class BtbValidateController extends AppBaseController
         $btbValidate = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/btbValidates.singular')]));
-
-        // return redirect(route('purchase.btbValidates.index'));
+        
         return redirect(route('purchase.btbValidates.create'));
     }
 
@@ -95,13 +98,14 @@ class BtbValidateController extends AppBaseController
 
             return redirect(route('purchase.btbValidates.index'));
         }
-        $btbDataOptions = $this->getOptionItems(); 
+        $btbDataOptions = $this->getOptionItems();
         $btbValidateArray = $btbValidate->toArray();
         $btbValidateArray['no_btb'] = $btbValidate->doc_id;
         $btbValidateArray['sj_pabrik'] = $btbValidate->ref_doc;
         $btbValidateArray['decqty'] = $btbValidate->getRawOriginal('qty');
         $btbDataOptions['btbDataOptions'][$btbValidate->reference_id] = $btbValidateArray;
-        $btbDataOptions['btbItems'][$btbValidate->reference_id] = implode(' | ',['BTB::'.$btbValidate->doc_id, 'CO::'.$btbValidate->co_reference, 'Product::'.$btbValidate->product_name]);
+        $btbDataOptions['btbItems'][$btbValidate->reference_id] = implode(' | ', ['BTB::'.$btbValidate->doc_id, 'CO::'.$btbValidate->co_reference, 'Product::'.$btbValidate->product_name]);
+
         return view('purchase.btb_validates.edit')->with('btbValidate', $btbValidate)->with($btbDataOptions);
     }
 
@@ -164,9 +168,10 @@ class BtbValidateController extends AppBaseController
     {
         $btbItems = ListBtbValidate::all();
         $btbDataOptions = $btbItems->keyBy('reference_id')->toArray();
+
         return [
-            'btbItems' => [ '' => __('crud.option.btbitems_placeholder')] + $btbItems->pluck('full_identity', 'reference_id')->toArray(),
-            'btbDataOptions' => $btbDataOptions
+            'btbItems' => ['' => __('crud.option.btbitems_placeholder')] + $btbItems->pluck('full_identity', 'reference_id')->toArray(),
+            'btbDataOptions' => $btbDataOptions,
         ];
     }
 }

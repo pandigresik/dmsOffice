@@ -20,10 +20,22 @@
                                 <i class="fa fa-plus-square-o fa-lg"></i>
                                 <strong>Create @lang('models/btbValidates.singular')</strong>
                             </div>
-                            <div class="card-body">                                
+                            <div class="card-body">                   
+                                <!-- Range Period Field -->
+                                <div class="form-group row">
+                                    {!! Form::label('period_range', __('models/btbValidates.fields.period_range').':', ['class' => 'col-md-3 col-form-label']) !!}
+                                    <div class="col-md-6"> 
+                                        {!! Form::text('period_range', null, ['class' => 'form-control datetime', 'data-optiondate' => json_encode( ['singleDatePicker' => false, 'locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'period_range']) !!}
+                                    </div>
+                                    <div class="clo-md-3">
+                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listbtb', 'data-url' => route('purchase.btbValidates.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range]' ,'onclick' => 'main.loadDetailPage(this,\'get\')']) !!}
+                                    </div>
+                                </div>
 
-                                   @include('purchase.btb_validates.fields')
-                                
+                                <div class="form-group row">
+                                    <div id="listbtb"></div>
+                                </div>
+
                             </div>
                             <div class="card-footer">
                                 <!-- Submit Field -->
@@ -33,9 +45,14 @@
                                 </div>
                             </div>
                         </div>
-                        {!! Form::close() !!}
+                        {!! Form::close() !!}                        
                     </div>
                 </div>
            </div>
     </div>
 @endsection
+@push('scripts')
+<script type="text/javascript">
+    
+</script>
+@endpush
