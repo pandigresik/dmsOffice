@@ -1,16 +1,8 @@
 <!-- CO Number Field -->
 <div class="form-group row">
-    {!! Form::label('reference', __('models/invoices.fields.reference').':', ['class' => 'col-md-3 col-form-label']) !!}
+    {!! Form::label('partner_id', __('models/invoices.fields.partner_id').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-6"> 
-    {!! Form::select('reference', $coItems,null, ['class' => 'form-control select2', 'required' => 'required', 'data-placeholder' => 'Pilih CO'], $coItemOptions) !!}
-</div>
-</div>
-
-<!-- Qty Field -->
-<div class="form-group row">
-    {!! Form::label('qtysum', __('models/invoices.fields.qtysum').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-6"> 
-    {!! Form::text('qtysum', null, ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer')), 'readonly' => 'readonly']) !!}
+    {!! Form::select('partner_id', $partnerItem,null, ['class' => 'form-control select2', 'required' => 'required', 'data-placeholder' => 'Pilih Supplier']) !!}
 </div>
 </div>
 
@@ -18,35 +10,10 @@
 <div class="form-group row">
     {!! Form::label('external_reference', __('models/invoices.fields.external_reference').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-6"> 
-    {!! Form::text('external_reference', null, ['class' => 'form-control','maxlength' => 255, 'required' => 'required']) !!}
-    {!! Form::hidden('partner_id') !!}
+    {!! Form::text('external_reference', null, ['class' => 'form-control','maxlength' => 255, 'required' => 'required']) !!}    
 </div>
 </div>
 
-<!-- Qty Field -->
-<div class="form-group row">
-    {!! Form::label('qty', __('models/invoices.fields.qty').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-6"> 
-    {!! Form::text('qty', null, ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer'))]) !!}
-</div>
-</div>
-
-
-<!-- Amount Field -->
-<div class="form-group row">
-    {!! Form::label('amount', __('models/invoices.fields.amount').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-6"> 
-    {!! Form::text('amount', null, ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.decimal'))]) !!}
-</div>
-</div>
-
-<!-- Amount Discount Field -->
-<div class="form-group row">
-    {!! Form::label('amount_discount', __('models/invoices.fields.amount_discount').':', ['class' => 'col-md-3 col-form-label']) !!}
-<div class="col-md-6"> 
-    {!! Form::text('amount_discount', null, ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.decimal'))]) !!}
-</div>
-</div>
 
 <!-- Date Invoice Field -->
 <div class="form-group row">

@@ -87,7 +87,8 @@ class BtbValidateRepository extends BaseRepository
             }
 
             DB::commit();
-
+            // flush cache karena menggunakan from query untuk eksekusi statement insert into
+            $this->model->flushCache();
             return $model;
         } catch (\Exception $e) {
             DB::rollBack();

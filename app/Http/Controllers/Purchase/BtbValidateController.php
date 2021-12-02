@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Purchase;
 
+use App\DataTables\Purchase\BtbValidateDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateBtbValidateRequest;
 use App\Http\Requests\Purchase\UpdateBtbValidateRequest;
@@ -27,13 +28,9 @@ class BtbValidateController extends AppBaseController
      *
      * @return Response
      */
-    public function index(Request $request)
+    public function index(BtbValidateDataTable $btbValidateDataTable)
     {
-        $period = explode(' - ',$request->get('ref'));
-        $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
-        $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-        $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate);        
-        return view('purchase.btb_validates.list')->with('datas',$datas);
+        return $btbValidateDataTable->render('purchase.btb_validates.index');   
     }
 
     /**
@@ -41,8 +38,15 @@ class BtbValidateController extends AppBaseController
      *
      * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        if($request->ajax()){
+            $period = explode(' - ',$request->get('ref'));
+            $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
+            $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
+            $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate);        
+            return view('purchase.btb_validates.list')->with('datas',$datas);
+        }
         return view('purchase.btb_validates.create')->with($this->getOptionItems());
     }
 
@@ -59,7 +63,7 @@ class BtbValidateController extends AppBaseController
 
         Flash::success(__('messages.saved', ['model' => __('models/btbValidates.singular')]));
         
-        return redirect(route('purchase.btbValidates.create'));
+        return redirect(route('purchase.btbValidates.index'));
     }
 
     /**

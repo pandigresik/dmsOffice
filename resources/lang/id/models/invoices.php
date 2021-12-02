@@ -9,6 +9,7 @@ return array (
     'number' => 'Number',
     'type' => 'Type',
     'reference' => 'Reference',
+    'external_reference' => 'Nomer Invoice',
     'qty' => 'Qty',
     'amount' => 'Amount',
     'amount_discount' => 'Amount Discount',

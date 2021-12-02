@@ -127,6 +127,12 @@ class BtbValidate extends Model
     {
         return localNumberFormat($value, 0);
     }    
+
+    public function getBtbDateAttribute($value)
+    {
+
+        return localFormatDate($value);
+    }
     
     public function mustValidate($startDate, $endDate){
         $sql = implode(' union all ', [
@@ -156,7 +162,9 @@ class BtbValidate extends Model
             dms_inv_docstockinsupplier dsd
         join dms_inv_warehouse wh on wh.szId = dsd.szWarehouseId 
         join dms_inv_carrier eks on eks.szId  = dsd.szCarrierId 
-        where dsd.szDocStatus = 'Applied' and dsd.dtmCreated between '${startDate}' and '${endDate}'
+        left join btb_validate bv on bv.doc_id = dsd.szDocId and bv.deleted_at is null 
+        where dsd.szDocStatus = 'Applied' and bv.reference_id is null 
+        and dsd.dtmCreated between '${startDate}' and '${endDate}'
         SQL;
     }
 
@@ -180,7 +188,9 @@ class BtbValidate extends Model
             dms_inv_docstockindistribution dsd
         join dms_inv_warehouse wh on wh.szId = dsd.szWarehouseId 
         join dms_inv_vehicle eks on eks.szId  = dsd.szVehicleId 
-        where dsd.szDocStatus = 'Applied' and dsd.dtmCreated between '${startDate}' and '${endDate}'
+        left join btb_validate bv on bv.doc_id = dsd.szDocId and bv.deleted_at is null
+        where dsd.szDocStatus = 'Applied' and bv.reference_id is null        
+        and dsd.dtmCreated between '${startDate}' and '${endDate}'
         SQL;
     }
 
@@ -189,7 +199,7 @@ class BtbValidate extends Model
         $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');        
         $btbStr = implode("','", $btbs->flatten()->all());
         $sql = <<<SQL
-        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at )
+        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id )
         select
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
@@ -206,7 +216,8 @@ class BtbValidate extends Model
             dsd.szWarehouseId,
             dsd.szVehicle2 as nopol,
             ${userId} as created_by ,
-            '${now}' as created_at 
+            '${now}' as created_at,
+            dsd.szSupplierId 
             
         from
             dms_inv_docstockinsupplier dsd
@@ -223,9 +234,9 @@ class BtbValidate extends Model
         $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');
         $btbStr = implode("','", $btbs->flatten()->all());
         $sql = <<<SQL
-        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at )
+        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id )
         select
-            'BTB Supplier' as jenis,
+            'BTB Distribusi' as jenis,
             dsd.szDocId AS no_btb,
             dsd.dtmCreated as tgl_btb,
             dsdi.iId as reference_id,
@@ -236,11 +247,12 @@ class BtbValidate extends Model
             dsdi.szUomId, 
             '-' AS sj_ekspedisi,
             dsdi.decQty,
-            dsd.szCarrierId,
+            'Internal',
             dsd.szWarehouseId,
             eks.szPoliceNo as nopol,
             ${userId} as created_by ,
-            '${now}' as created_at 
+            '${now}' as created_at,
+            NULL as partner_id 
             
         from
             dms_inv_docstockindistribution dsd

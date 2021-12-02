@@ -7,6 +7,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateInvoiceRequest;
 use App\Http\Requests\Purchase\UpdateInvoiceRequest;
 use App\Models\Purchase\BtbValidate;
+use App\Repositories\Base\DmsApSupplierRepository;
 use App\Repositories\Purchase\InvoiceRepository;
 use Flash;
 use Response;
@@ -154,20 +155,10 @@ class InvoiceController extends AppBaseController
      */
     private function getOptionItems()
     {
-        /** show list  */
-        $readyInvoice = BtbValidate::selectRaw('co_reference, szSupplierId as partner_id, sum(qty) as qtysum')
-                        ->join('dms_inv_docstockinsupplier',function($join){
-                            $join->on('dms_inv_docstockinsupplier.szDocId', '=', 'btb_validate.doc_id');
-                        })
-                        ->whereInvoiced(0)
-                        ->disableModelCaching()
-                        ->groupBy(['co_reference','szSupplierId'])
-                        ->get();
-        
+        $supplier = new DmsApSupplierRepository(app());
 
         return [
-            'coItems' => ['' => __('crud.option.btbitems_placeholder')] + $readyInvoice->pluck('co_reference','co_reference')->toArray(),
-            'coItemOptions' => $readyInvoice->keyBy('co_reference')->toArray()
+            'partnerItem' => ['' => __('crud.option.supplier_placeholder')] + $supplier->pluck(),            
         ];
     }
 }

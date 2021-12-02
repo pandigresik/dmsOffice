@@ -70,7 +70,7 @@ class DmsApSupplier extends Model
     const UPDATED_BY = null;
 
     public $table = 'dms_ap_supplier';
-
+    protected $showColumnOption = 'szName';
     public $primaryKey = 'iInternalId';
     public $fillable = [
         'iId',

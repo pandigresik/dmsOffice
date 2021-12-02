@@ -46,7 +46,7 @@ class BtbValidateDataTable extends DataTable
      */
     public function query(BtbValidate $model)
     {
-        return $model->newQuery();
+        return $model->whereInvoiced(0)->newQuery();
     }
 
     /**
@@ -120,9 +120,9 @@ class BtbValidateDataTable extends DataTable
             'product_name' => new Column(['title' => __('models/btbValidates.fields.product_name'), 'data' => 'product_name', 'searchable' => true, 'elmsearch' => 'text']),
             'uom_id' => new Column(['title' => __('models/btbValidates.fields.uom_id'), 'data' => 'uom_id', 'searchable' => false, 'elmsearch' => 'text']),
             'ref_doc' => new Column(['title' => __('models/btbValidates.fields.ref_doc'), 'data' => 'ref_doc', 'searchable' => true, 'elmsearch' => 'text']),
-            'qty' => new Column(['title' => __('models/btbValidates.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
-            'qty_retur' => new Column(['title' => __('models/btbValidates.fields.qty_retur'), 'data' => 'qty_retur', 'searchable' => false, 'elmsearch' => 'text']),
-            'qty_reject' => new Column(['title' => __('models/btbValidates.fields.qty_reject'), 'data' => 'qty_reject', 'searchable' => false, 'elmsearch' => 'text']),            
+            'btb_type' => new Column(['title' => __('models/btbValidates.fields.btb_type'), 'data' => 'btb_type', 'searchable' => true, 'elmsearch' => 'text']),
+            'btb_date' => new Column(['title' => __('models/btbValidates.fields.btb_date'), 'data' => 'btb_date', 'searchable' => true, 'elmsearch' => 'text']),
+            'qty' => new Column(['title' => __('models/btbValidates.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),            
         ];
     }
 

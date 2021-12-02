@@ -15,7 +15,7 @@ class Base extends Model
     use Cachable;
     use SearchModelTrait;
     use ShowColumnOptionTrait;
-    use LogsActivity;
+    // use LogsActivity;
     use Blameable, BlameableCustomTrait{
         BlameableCustomTrait::bootBlameable insteadof Blameable;
     }
