@@ -112,7 +112,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'purchase'], function () {
         Route::resource('btbValidates', App\Http\Controllers\Purchase\BtbValidateController::class, ["as" => 'purchase']);
-        Route::resource('invoices', App\Http\Controllers\Purchase\InvoiceSubmitController::class, ["as" => 'purchase']);
+        Route::resource('invoices', App\Http\Controllers\Purchase\InvoiceSubmitController::class, ["as" => 'purchase']);        
+        Route::resource('invoiceLines', App\Http\Controllers\Purchase\InvoiceLineController::class, ["as" => 'purchase']);
         Route::resource('invoiceValidates', App\Http\Controllers\Purchase\InvoiceValidateController::class, ["as" => 'purchase']);
     });
 

@@ -14,12 +14,19 @@
 </div>
 </div>
 
-
 <!-- Date Invoice Field -->
 <div class="form-group row">
     {!! Form::label('date_invoice', __('models/invoices.fields.date_invoice').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-6"> 
     {!! Form::text('date_invoice', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'date_invoice']) !!}
+</div>
+</div>
+
+<!-- Date Invoice Field -->
+<div class="form-group row">
+    {!! Form::label('amount', __('models/invoices.fields.amount').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-6"> 
+    {!! Form::text('amount', null, ['class' => 'form-control inputmask', 'readonly' => 'readonly','required' => 'required', 'id' => 'amount', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer'))]) !!}
 </div>
 </div>
 
@@ -31,33 +38,36 @@
 </div>
 </div>
 
+<!-- Date Due Field -->
+<div class="form-group row">    
+    <div class="col-md-6 col-offset-md-3"> 
+        <button type='button' id="btn-add-items" class='btn btn-primary' data-url='{{ route('purchase.invoiceLines.create') }}' onclick='addListDoc(this);main.setButtonCaller(this);main.popupModal(this,"get")'>Add Item</button>
+    </div>
+    <div class="col-md-12 table-responsive" id="invoice-lines">
+    
+    </div>
+</div>
+
 @push('scripts')
 <script type="text/javascript">
-    $(function(){
-        $('select[name=reference]').change(function(){
-            const _form = $(this).closest('form');
-            const _option = $(this).find('option:selected');                        
-            const _qtysum = _form.find('input[name=qtysum]');
-            const _partner_id = _form.find('input[name=partner_id]');            
-            
-            _partner_id.val('');
-            _qtysum.val('');
-            
-            if(!_.isEmpty($(this).val())){
-                _partner_id.val(_option.attr('partner_id'));                
-                _qtysum.val(parseInt(_option.attr('qtysum')));                
-            }            
-        });
-
-        $('input[name=qty]').blur(function(){
-            const _form = $(this).closest('form');
-            const _qtysum = _form.find('input[name=qtysum]');
-            const _elm = $(this);
-            if($(this).val() != _qtysum.val()){
-                main.alertDialog('Warning', 'Nilai quantity harus sama dengan total quantity CO', function(){
-                    _elm.val('');
-                });
+    function addListDoc(elm){
+            const _invoiceLines = $('#invoice-lines')
+            let _invoiceLinesTable = _invoiceLines.find('table')
+            let _docId = []
+            if(_invoiceLinesTable.length){
+                _invoiceLinesTable.find('tbody>tr>td>input[name^=invoice_line]').each(function(){
+                    _docId.push($(this).data('docid'))
+                })
+                let _json = $(elm).data('json')
+                _json.listdoc = _docId
+                
+                $(elm).data('json', _json)
             }
+        }
+    $(function(){        
+        $('select[name=partner_id]').change(function(){        
+            $('#invoice-lines').empty();
+            $('#btn-add-items').data('json',{type : 'supplier', partner_id : $(this).val()});
         })
     })
 </script>

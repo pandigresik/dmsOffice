@@ -158,7 +158,7 @@ class InvoiceController extends AppBaseController
         $supplier = new DmsApSupplierRepository(app());
 
         return [
-            'partnerItem' => ['' => __('crud.option.supplier_placeholder')] + $supplier->pluck(),            
+            'partnerItem' => ['' => __('crud.option.supplier_placeholder')] + $supplier->all()->pluck('szName','szId')->toArray(),            
         ];
     }
 }

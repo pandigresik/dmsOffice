@@ -97,4 +97,20 @@ class BtbValidateRepository extends BaseRepository
             return $e;
         }
     }
+
+    /**
+     * @param int $id
+     *
+     * @throws \Exception
+     *
+     * @return null|bool|mixed
+     */
+    public function delete($id)
+    {
+        $query = $this->model->newQuery();
+
+        $model = $query->findOrFail($id);
+
+        return $model->forceDelete();
+    }
 }

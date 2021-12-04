@@ -86,7 +86,10 @@ class BtbValidate extends Model
         'uom_id',
         'ref_doc',
         'qty',        
-        'btb'        
+        'btb_date',
+        'invoiced',
+        'invoiced_expedition',
+        'price'        
     ];
 
     /**
@@ -118,7 +121,7 @@ class BtbValidate extends Model
         return localNumberFormat($value, 0);
     }
 
-    public function getQtyReturAttribute($value)
+    public function getPriceAttribute($value)
     {
         return localNumberFormat($value, 0);
     }
@@ -140,6 +143,30 @@ class BtbValidate extends Model
             $this->btbDistribusiSql($startDate, $endDate),
         ]);
         return $this->fromQuery($sql);
+    }
+
+    public function scopeCanInvoiced($query){
+
+        return $query->whereInvoiced(false);
+    }
+
+    public function scopeCanInvoicedExpedition($query){
+
+        return $query->whereInvoicedExpedition(false);
+    }
+
+    public function scopeCanInvoicedSupplier($query, $supplierId, $listDoc = []){
+        if(empty($listDoc)){
+            return $query->canInvoiced()->wherePartnerId($supplierId);
+        }
+        return $query->canInvoiced()->wherePartnerId($supplierId)->whereNotIn('doc_id',$listDoc);
+    }
+
+    public function scopeCanInvoicedEkspedisi($query, $supplierId, $listDoc = []){
+        if(empty($listDoc)){
+            return $query->canInvoicedExpedition()->wherePartnerId($supplierId);
+        }
+        return $query->canInvoicedExpedition()->wherePartnerId($supplierId)->whereNotIn('doc_id',$listDoc);
     }
 
     private function btbSupplierSql($startDate, $endDate){
@@ -199,7 +226,7 @@ class BtbValidate extends Model
         $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');        
         $btbStr = implode("','", $btbs->flatten()->all());
         $sql = <<<SQL
-        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id )
+        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price )
         select
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
@@ -217,12 +244,14 @@ class BtbValidate extends Model
             dsd.szVehicle2 as nopol,
             ${userId} as created_by ,
             '${now}' as created_at,
-            dsd.szSupplierId 
+            dsd.szSupplierId,
+            coalesce(pp.price, 0) as price
             
         from
             dms_inv_docstockinsupplier dsd
         join dms_inv_docstockinsupplieritem dsdi on dsdi.szDocId = dsd.szDocId
         join dms_inv_product divi on divi.szId = dsdi.szProductId
+        left join product_price pp on pp.dms_inv_product_id = divi.iInternalId
         where dsd.szDocStatus = 'Applied' and dsd.szDocId in ('${btbStr}') 
         SQL;
         // DB::statement($sql);
@@ -234,7 +263,7 @@ class BtbValidate extends Model
         $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');
         $btbStr = implode("','", $btbs->flatten()->all());
         $sql = <<<SQL
-        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id )
+        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price )
         select
             'BTB Distribusi' as jenis,
             dsd.szDocId AS no_btb,
@@ -252,13 +281,15 @@ class BtbValidate extends Model
             eks.szPoliceNo as nopol,
             ${userId} as created_by ,
             '${now}' as created_at,
-            NULL as partner_id 
+            'Internal' as partner_id,
+            coalesce(pp.price, 0) as price
             
         from
             dms_inv_docstockindistribution dsd
         join dms_inv_docstockindistributionitem dsdi on dsdi.szDocId = dsd.szDocId
         join dms_inv_product divi on divi.szId = dsdi.szProductId
         join dms_inv_vehicle eks on eks.szId  = dsd.szVehicleId
+        left join product_price pp on pp.dms_inv_product_id = divi.iInternalId
         where dsd.szDocStatus = 'Applied' and dsd.szDocId in ('${btbStr}') 
         SQL;
         //DB::statement($sql);
