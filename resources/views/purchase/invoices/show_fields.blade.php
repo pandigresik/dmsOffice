@@ -6,11 +6,11 @@
     </div>
 </div>
 
-<!-- Type Field -->
+<!-- Partner Id Field -->
 <div class="form-group row">
-    {!! Form::label('type', __('models/invoices.fields.type').':', ['class' => 'col-md-3 col-form-label']) !!}
+    {!! Form::label('partner_id', __('models/invoices.fields.partner_id').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        <p>{{ $invoice->type }}</p>
+        <p>{{ $invoice->partner->szName }}</p>
     </div>
 </div>
 
@@ -18,15 +18,7 @@
 <div class="form-group row">
     {!! Form::label('reference', __('models/invoices.fields.reference').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        <p>{{ $invoice->reference }}</p>
-    </div>
-</div>
-
-<!-- Qty Field -->
-<div class="form-group row">
-    {!! Form::label('qty', __('models/invoices.fields.qty').':', ['class' => 'col-md-3 col-form-label']) !!}
-    <div class="col-md-9">
-        <p>{{ $invoice->qty }}</p>
+        <p>{{ $invoice->external_reference }}</p>
     </div>
 </div>
 
@@ -35,22 +27,6 @@
     {!! Form::label('amount', __('models/invoices.fields.amount').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
         <p>{{ $invoice->amount }}</p>
-    </div>
-</div>
-
-<!-- Amount Discount Field -->
-<div class="form-group row">
-    {!! Form::label('amount_discount', __('models/invoices.fields.amount_discount').':', ['class' => 'col-md-3 col-form-label']) !!}
-    <div class="col-md-9">
-        <p>{{ $invoice->amount_discount }}</p>
-    </div>
-</div>
-
-<!-- State Field -->
-<div class="form-group row">
-    {!! Form::label('state', __('models/invoices.fields.state').':', ['class' => 'col-md-3 col-form-label']) !!}
-    <div class="col-md-9">
-        <p>{{ $invoice->state }}</p>
     </div>
 </div>
 
@@ -70,11 +46,6 @@
     </div>
 </div>
 
-<!-- Partner Id Field -->
-<div class="form-group row">
-    {!! Form::label('partner_id', __('models/invoices.fields.partner_id').':', ['class' => 'col-md-3 col-form-label']) !!}
-    <div class="col-md-9">
-        <p>{{ $invoice->partner_id }}</p>
-    </div>
+<div class="form-group row">       
+    @include('purchase.invoices.list')
 </div>
-

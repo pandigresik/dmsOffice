@@ -95,7 +95,8 @@ class InvoiceDataTable extends DataTable
                 
         $builder = $this->builder()
             ->columns($this->getColumns())
-            ->minifiedAjax()            
+            ->minifiedAjax()
+            ->initComplete('function( settings, json ){ $(this).find(\'[data-toggle=tooltip]\').tooltip()}')
             ->parameters([
                 'dom'       => 'Brtip',
                 'stateSave' => true,

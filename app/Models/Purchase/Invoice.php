@@ -4,8 +4,8 @@ namespace App\Models\Purchase;
 
 use App\Models\Base\DmsApSupplier;
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -80,8 +80,6 @@ class Invoice extends Model
 
     use HasFactory;
 
-    public $table = 'invoice';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const DEFAULT_STATE = 'submit';
@@ -90,7 +88,7 @@ class Invoice extends Model
     const APPROVE = 'approve';
     const PAY = 'pay';
 
-    protected $dates = ['deleted_at'];    
+    public $table = 'invoice';
     public $isCachable = false;
     public $fillable = [
         'number',
@@ -103,8 +101,28 @@ class Invoice extends Model
         'state',
         'date_invoice',
         'date_due',
-        'partner_id'
+        'partner_id',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        // 'number' => 'required|string|max:30',
+        // 'type' => 'required|string',
+        'external_reference' => 'required|string|max:255',
+        //'qty' => 'required|integer',
+        'amount' => 'required|numeric',
+        //'amount_discount' => 'required|numeric',
+        // 'state' => 'required|string|max:10',
+        'date_invoice' => 'required',
+        'date_due' => 'required',
+        'partner_id' => 'required|string|max:20',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -122,30 +140,12 @@ class Invoice extends Model
         'state' => 'string',
         'date_invoice' => 'date',
         'date_due' => 'date',
-        'partner_id' => 'string'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        // 'number' => 'required|string|max:30',
-        // 'type' => 'required|string',
-        'reference' => 'required|string|max:255',
-        'qty' => 'required|integer',
-        'amount' => 'required|numeric',
-        'amount_discount' => 'required|numeric',
-        // 'state' => 'required|string|max:10',
-        'date_invoice' => 'required',
-        'date_due' => 'required',
-        'partner_id' => 'required|string|max:20'
+        'partner_id' => 'string',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function invoiceUsers()
     {
         return $this->hasMany(\App\Models\Purchase\InvoiceUser::class, 'invoice_id');
@@ -153,20 +153,28 @@ class Invoice extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
-    public function btb()
+     */
+    public function invoiceLines()
     {
-        return $this->hasMany(\App\Models\Purchase\BtbValidate::class, 'co_reference','reference');
+        return $this->hasMany(\App\Models\Purchase\InvoiceLine::class, 'invoice_id');
     }
 
     /**
-     * Get the partner that owns the Invoice
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function btb()
+    {
+        return $this->hasManyThrough(\App\Models\Purchase\BtbValidate::class, \App\Models\Purchase\InvoiceLine::class, 'doc_id', 'doc_id');
+    }
+
+    /**
+     * Get the partner that owns the Invoice.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function partner()
     {
-        return $this->hasOne(DmsApSupplier::class, 'szId','partner_id');
+        return $this->hasOne(DmsApSupplier::class, 'szId', 'partner_id');
     }
 
     public function getNextNumber()
@@ -181,43 +189,43 @@ class Invoice extends Model
         return implode('', $newId);
     }
 
-    public function scopeSubmit($query){
-
+    public function scopeSubmit($query)
+    {
         return $query->whereState(self::SUBMIT);
     }
 
-    public function scopeValidate($query){
-
+    public function scopeValidate($query)
+    {
         return $query->whereState(self::VALIDATE);
     }
 
-    public function getQtyAttribute($value){
-
+    public function getQtyAttribute($value)
+    {
         return localNumberFormat($value, 0);
     }
 
-    public function getAmountAttribute($value){
-
+    public function getAmountAttribute($value)
+    {
         return localNumberFormat($value);
     }
 
-    public function getAmountTotalAttribute($value){
-
+    public function getAmountTotalAttribute($value)
+    {
         return localNumberFormat($value);
     }
 
-    public function getAmountDiscountAttribute($value){
-
+    public function getAmountDiscountAttribute($value)
+    {
         return localNumberFormat($value);
     }
 
-    public function getDateInvoiceAttribute($value){
-
+    public function getDateInvoiceAttribute($value)
+    {
         return localFormatDate($value);
     }
 
-    public function getDateDueAttribute($value){
-
+    public function getDateDueAttribute($value)
+    {
         return localFormatDate($value);
     }
 }

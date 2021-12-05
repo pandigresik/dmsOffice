@@ -14,6 +14,7 @@ return [
     */
 
     'save' => 'Simpan',
+    'validate' => 'Validasi',
     'edit' => 'Edit',
     'sync' => 'Sinkron',
     'process' => 'Proses',

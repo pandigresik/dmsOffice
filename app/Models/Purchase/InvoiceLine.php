@@ -3,8 +3,9 @@
 namespace App\Models\Purchase;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -67,13 +68,10 @@ class InvoiceLine extends Model
 
     use HasFactory;
 
-    public $table = 'invoice_line';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];    
+    public $table = 'invoice_line';
 
     public $fillable = [
         'invoice_id',
@@ -83,8 +81,26 @@ class InvoiceLine extends Model
         'product_name',
         'uom_id',
         'qty',
-        'price'
+        'price',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'invoice_id' => 'required',
+        'doc_id' => 'required|string|max:50',
+        'reference_id' => 'required|string|max:50',
+        'product_id' => 'required|string|max:50',
+        'product_name' => 'required|string|max:70',
+        'uom_id' => 'required|string|max:50',
+        'qty' => 'required|integer',
+        'price' => 'required|numeric',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -100,24 +116,16 @@ class InvoiceLine extends Model
         'product_name' => 'string',
         'uom_id' => 'string',
         'qty' => 'integer',
-        'price' => 'decimal:2'
+        'price' => 'decimal:2',
     ];
 
     /**
-     * Validation rules
+     * Get the btb associated with the InvoiceLine.
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\RBtbValidateions\HasOne
      */
-    public static $rules = [
-        'invoice_id' => 'required',
-        'doc_id' => 'required|string|max:50',
-        'reference_id' => 'required|string|max:50',
-        'product_id' => 'required|string|max:50',
-        'product_name' => 'required|string|max:70',
-        'uom_id' => 'required|string|max:50',
-        'qty' => 'required|integer',
-        'price' => 'required|numeric'
-    ];
-
-    
+    public function btb(): HasOne
+    {
+        return $this->hasOne(BtbValidate::class, 'doc_id', 'doc_id');
+    }
 }

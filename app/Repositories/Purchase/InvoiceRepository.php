@@ -56,26 +56,61 @@ class InvoiceRepository extends BaseRepository
      */
     public function create($input)
     {
-        $model = $this->model->newInstance($input);
+        $model = $this->model->newInstance($input);        
+        $invoiceLine = $input['invoice_line'];
         $model->number = $model->getNextNumber();
         $model->type = 'in';
         $model->state = Invoice::DEFAULT_STATE;
-        $model->amount_total = $model->amount - $model->amount_discount;
+        $model->amount_discount = 0;
+        $model->qty = $invoiceLine ? count($invoiceLine) : 0;
+        $model->reference = $model->external_reference;
+        $model->amount_total = $model->getRawOriginal('amount') - $model->getRawOriginal('amount_discount');
         $model->save();
         $model->invoiceUsers()->create([
             'state' => $model->getRawOriginal('state')
         ]);
+        $this->setInvoiceLines($invoiceLine, $model);
+        
         $model->btb()->update(['invoiced' => 1]);
         return $model;
     }
 
+    private function setInvoiceLines($invoiceLine, $model){
+        if(!empty($invoiceLine)){
+            $model->invoiceLines()->forceDelete();
+            foreach($invoiceLine as $line){
+                $model->invoiceLines()->create(json_decode($line, 1));
+            }
+        }
+    }
+
     public function update($input, $id)
     {
-        $model = parent::update($input, $id);
+        $invoiceLine = $input['invoice_line'];
+        $model = parent::update($input, $id);        
+        $this->setInvoiceLines($invoiceLine, $model);
         $model->invoiceUsers()->create([
             'state' => $model->getRawOriginal('state')
         ]);
         return $model;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @throws \Exception
+     *
+     * @return null|bool|mixed
+     */
+    public function delete($id)
+    {
+        $query = $this->model->newQuery();
+
+        $model = $query->findOrFail($id);
+        $model->btb()->update(['invoiced' => 0]);
+        $model->invoiceLines()->forceDelete();
+        $model->invoiceUsers()->forceDelete();
+        return $model->forceDelete();
     }
 
     public function billSubmit(){

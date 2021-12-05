@@ -88,7 +88,7 @@ class InvoiceController extends AppBaseController
     public function edit($id)
     {
         $invoice = $this->getRepositoryObj()->find($id);
-
+        
         if (empty($invoice)) {
             Flash::error(__('messages.not_found', ['model' => __('models/invoices.singular')]));
 

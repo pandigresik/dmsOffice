@@ -40,16 +40,32 @@
 
 <!-- Date Due Field -->
 <div class="form-group row">    
-    <div class="col-md-6 col-offset-md-3"> 
+    <div class="col-md-6 col-offset-md-3 mb-2"> 
         <button type='button' id="btn-add-items" class='btn btn-primary' data-url='{{ route('purchase.invoiceLines.create') }}' onclick='addListDoc(this);main.setButtonCaller(this);main.popupModal(this,"get")'>Add Item</button>
     </div>
-    <div class="col-md-12 table-responsive" id="invoice-lines">
+    <div class="col-md-12 table-responsive" id="invoice-lines" onchange="updateAmount(this)">
     
     </div>
 </div>
 
 @push('scripts')
 <script type="text/javascript">
+    function updateAmount(elm){
+        const _table = $(elm).find('table')
+        if(_table.length){
+            const _items = _table.find('tbody input[name^=invoice_line]')
+            let _amount = 0, _item
+            if(_items.length){
+                _items.each(function(){
+                    _item = JSON.parse($(this).val())
+                    _amount += parseInt(_item.price * _item.qty)
+                })
+            }
+            $('#amount').val(_amount)
+            $('#amount').trigger('change')
+        }
+    }
+
     function addListDoc(elm){
             const _invoiceLines = $('#invoice-lines')
             let _invoiceLinesTable = _invoiceLines.find('table')

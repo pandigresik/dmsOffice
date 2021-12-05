@@ -75,7 +75,7 @@
                         <td><i class="btn text-danger fa fa-trash" onclick="$(this).closest('tr').remove()"></i></td>
                     </tr>`).appendTo(_tbody)
                 })          
-                
+                _invoiceLines.trigger('change')
             }
                 
             _form.closest('.bootbox').find('button.bootbox-close-button').click()
