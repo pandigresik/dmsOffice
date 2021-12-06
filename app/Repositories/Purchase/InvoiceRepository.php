@@ -56,7 +56,7 @@ class InvoiceRepository extends BaseRepository
      */
     public function create($input)
     {
-        $model = $this->model->newInstance($input);        
+        $model = $this->model->newInstance($input);
         $invoiceLine = $input['invoice_line'];
         $model->number = $model->getNextNumber();
         $model->type = 'in';
@@ -64,7 +64,7 @@ class InvoiceRepository extends BaseRepository
         $model->amount_discount = 0;
         $model->qty = $invoiceLine ? count($invoiceLine) : 0;
         $model->reference = $model->external_reference;
-        $model->amount_total = $model->getRawOriginal('amount') - $model->getRawOriginal('amount_discount');
+        $model->amount_total = $input['amount'] - $model->getRawOriginal('amount_discount');
         $model->save();
         $model->invoiceUsers()->create([
             'state' => $model->getRawOriginal('state')
@@ -95,6 +95,15 @@ class InvoiceRepository extends BaseRepository
         return $model;
     }
 
+    public function validate($id)
+    {           
+        $model = parent::update(['state' => 'validate'], $id);        
+        $model->invoiceUsers()->create([
+            'state' => $model->getRawOriginal('state')
+        ]);
+        return $model;
+    }
+
     /**
      * @param int $id
      *
@@ -114,11 +123,11 @@ class InvoiceRepository extends BaseRepository
     }
 
     public function billSubmit(){
-
         return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount_total) amount')->submit()->first();
     }
 
     public function billValidate(){
         return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount_total) amount')->validate()->first();
     }
+    
 }

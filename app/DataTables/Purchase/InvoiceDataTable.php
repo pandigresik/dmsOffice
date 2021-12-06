@@ -71,16 +71,16 @@ class InvoiceDataTable extends DataTable
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
                     ],
-                    [
-                       'extend' => 'import',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    ],
-                    [
-                       'extend' => 'print',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
-                    ],
+                    // [
+                    //    'extend' => 'import',
+                    //    'className' => 'btn btn-default btn-sm no-corner',
+                    //    'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
+                    // ],
+                    // [
+                    //    'extend' => 'print',
+                    //    'className' => 'btn btn-default btn-sm no-corner',
+                    //    'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
+                    // ],
                     [
                        'extend' => 'reset',
                        'className' => 'btn btn-default btn-sm no-corner',

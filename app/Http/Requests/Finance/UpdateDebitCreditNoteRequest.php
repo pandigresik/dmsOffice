@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Purchase;
+namespace App\Http\Requests\Finance;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\Purchase\Invoice;
+use App\Models\Finance\DebitCreditNote;
 
-class UpdateInvoiceRequest extends FormRequest
+class UpdateDebitCreditNoteRequest extends FormRequest
 {
     private $excludeKeys = []; 
 
@@ -18,7 +18,7 @@ class UpdateInvoiceRequest extends FormRequest
      */
     public function authorize()
     {
-        $permissionName = 'invoice-update';
+        $permissionName = 'debit_credit_note-update';
         return \Auth::user()->can($permissionName);
     }
 
@@ -29,9 +29,8 @@ class UpdateInvoiceRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = Invoice::$rules;
-        /** if request from  InvoiceValidateController set rules as [] */
-        if($this->route()->getController() instanceof \App\Http\Controllers\Purchase\InvoiceValidateController ) return [];
+        $rules = DebitCreditNote::$rules;
+        
         $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
         return $rules;
     }
@@ -44,9 +43,8 @@ class UpdateInvoiceRequest extends FormRequest
      * @return array
     */
     public function all($keys = null){
-        $keys = (new Invoice)->fillable;
+        $keys = (new DebitCreditNote)->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
-        $keys = array_merge(['invoice_line'], $keys);
         return parent::all($keys);
     }
 }

@@ -1,12 +1,8 @@
 <?php
 
 namespace App\Providers;
-use App\Models\Purchase\Uom;
-use App\Models\Purchase\Product;
-use App\Models\Purchase\Reference;
-use App\Models\Purchase\Doc;
-use App\Models\Purchase\Invoice;
 
+use App\Models\Finance\Partner;
 use Illuminate\Support\ServiceProvider;
 
 class ViewServiceProvider extends ServiceProvider
@@ -23,5 +19,9 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // View::composer(['finance.debit_credit_note.fields'], function ($view) {
+        //     $partnerItems = Partner::pluck('id')->toArray();
+        //     $view->with('partnerItems', $partnerItems);
+        // });
     }
 }

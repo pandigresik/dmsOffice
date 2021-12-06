@@ -117,6 +117,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('invoiceValidates', App\Http\Controllers\Purchase\InvoiceValidateController::class, ["as" => 'purchase']);
     });
 
+    Route::group(['prefix' => 'finance'], function () {
+        Route::resource('debitCreditNotes', App\Http\Controllers\Finance\DebitCreditNoteController::class, ["as" => 'finance']);
+    });
+
     Route::get('/selectAjax', [App\Http\Controllers\SelectAjaxController::class, 'index'])->name('selectAjax');
     Route::get('/events', [App\Http\Controllers\EventsController::class, 'index'])->name('events.index');
 });
@@ -136,3 +140,6 @@ Route::post(
 
 Route::resource('synchronizes', App\Http\Controllers\SynchronizeController::class)->except(['destroy','update', 'edit', 'show']);
 Route::get('synchronizes/progress', [App\Http\Controllers\SynchronizeController::class, 'progress'])->name('synchronizes.progress');
+
+
+

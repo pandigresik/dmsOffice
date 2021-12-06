@@ -153,7 +153,7 @@ class InvoiceController extends AppBaseController
      *
      * @return Response
      */
-    private function getOptionItems()
+    protected function getOptionItems()
     {
         $supplier = new DmsApSupplierRepository(app());
 
