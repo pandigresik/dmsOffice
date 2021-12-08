@@ -17,6 +17,7 @@ return array (
     'reference_id' => 'Dokumen',
     'co_reference' => 'Nomer CO',
     'product_name' => 'Nama Barang',
-    'period_range' => 'Periode'
+    'period_range' => 'Periode',
+    'price' => 'Harga'
   ),
 );

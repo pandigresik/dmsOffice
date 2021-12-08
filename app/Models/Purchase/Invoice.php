@@ -164,7 +164,7 @@ class Invoice extends Model
      */
     public function btb()
     {
-        return $this->hasManyThrough(\App\Models\Purchase\BtbValidate::class, \App\Models\Purchase\InvoiceLine::class, 'doc_id', 'doc_id');
+        return $this->hasManyThrough(\App\Models\Purchase\BtbValidate::class, \App\Models\Purchase\InvoiceLine::class, 'invoice_id','doc_id','id', 'doc_id');
     }
 
     /**

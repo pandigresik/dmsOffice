@@ -1,13 +1,13 @@
 <?php
 
-namespace App\DataTables\Purchase;
+namespace App\DataTables\Finance;
 
-use App\Models\Purchase\BtbValidate;
+use App\Models\Finance\Payment;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class BtbValidateDataTable extends DataTable
+class PaymentDataTable extends DataTable
 {
     /**
     * example mapping filter column to search by keyword, default use %keyword%
@@ -35,18 +35,18 @@ class BtbValidateDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', 'purchase.btb_validates.datatables_actions');
+        return $dataTable->addColumn('action', 'finance.payments.datatables_actions');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\BtbValidate $model
+     * @param \App\Models\Payment $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(BtbValidate $model)
+    public function query(Payment $model)
     {
-        return $model->whereInvoiced(0)->newQuery();
+        return $model->newQuery();
     }
 
     /**
@@ -67,16 +67,16 @@ class BtbValidateDataTable extends DataTable
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
                     ],
-                    // [
-                    //    'extend' => 'import',
-                    //    'className' => 'btn btn-default btn-sm no-corner',
-                    //    'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    // ],
-                    // [
-                    //    'extend' => 'print',
-                    //    'className' => 'btn btn-default btn-sm no-corner',
-                    //    'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
-                    // ],
+                    [
+                       'extend' => 'import',
+                       'className' => 'btn btn-default btn-sm no-corner',
+                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
+                    ],
+                    [
+                       'extend' => 'print',
+                       'className' => 'btn btn-default btn-sm no-corner',
+                       'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
+                    ],
                     [
                        'extend' => 'reset',
                        'className' => 'btn btn-default btn-sm no-corner',
@@ -115,15 +115,13 @@ class BtbValidateDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'doc_id' => new Column(['title' => __('models/btbValidates.fields.doc_id'), 'data' => 'doc_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'co_reference' => new Column(['title' => __('models/btbValidates.fields.co_reference'), 'data' => 'co_reference', 'searchable' => true, 'elmsearch' => 'text']),
-            'product_name' => new Column(['title' => __('models/btbValidates.fields.product_name'), 'data' => 'product_name', 'searchable' => true, 'elmsearch' => 'text']),
-            'uom_id' => new Column(['title' => __('models/btbValidates.fields.uom_id'), 'data' => 'uom_id', 'searchable' => false, 'elmsearch' => 'text']),
-            'ref_doc' => new Column(['title' => __('models/btbValidates.fields.ref_doc'), 'data' => 'ref_doc', 'searchable' => true, 'elmsearch' => 'text']),
-            'btb_type' => new Column(['title' => __('models/btbValidates.fields.btb_type'), 'data' => 'btb_type', 'searchable' => true, 'elmsearch' => 'text']),
-            'btb_date' => new Column(['title' => __('models/btbValidates.fields.btb_date'), 'data' => 'btb_date', 'searchable' => true, 'elmsearch' => 'text']),
-            'qty' => new Column(['title' => __('models/btbValidates.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
-            'price' => new Column(['title' => __('models/btbValidates.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text']),
+            'number' => new Column(['title' => __('models/payments.fields.number'), 'data' => 'number', 'searchable' => true, 'elmsearch' => 'text']),
+            'type' => new Column(['title' => __('models/payments.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
+            'reference' => new Column(['title' => __('models/payments.fields.reference'), 'data' => 'reference', 'searchable' => true, 'elmsearch' => 'text']),
+            'state' => new Column(['title' => __('models/payments.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text']),
+            'estimate_date' => new Column(['title' => __('models/payments.fields.estimate_date'), 'data' => 'estimate_date', 'searchable' => true, 'elmsearch' => 'text']),
+            'pay_date' => new Column(['title' => __('models/payments.fields.pay_date'), 'data' => 'pay_date', 'searchable' => true, 'elmsearch' => 'text']),
+            'amount' => new Column(['title' => __('models/payments.fields.amount'), 'data' => 'amount', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 
@@ -134,6 +132,6 @@ class BtbValidateDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'btb_validates_datatable_' . time();
+        return 'payments_datatable_' . time();
     }
 }

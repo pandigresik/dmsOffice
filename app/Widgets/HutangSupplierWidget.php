@@ -22,10 +22,10 @@ class HutangSupplierWidget extends AbstractWidget
     public function run()
     {
         $bill = new InvoiceRepository(app());
-        $billToValidate = $bill->billSubmit();
+        $billToValidate = $bill->billValidate();
         $billToPay = $bill->billValidate();
         $data = [
-            ['text' => ( $billToValidate->qty ?? 0 ).' Bill to validate', 'amount' => Money::IDR($billToValidate->amount ?? 0 , true), 'url' => route('purchase.invoiceValidates.index')],
+            ['text' => ( $billToValidate->qty ?? 0 ).' Bill to validate', 'amount' => Money::IDR($billToValidate->amount ?? 0 , true), 'url' => route('finance.payments.create')],
             ['text' => ( $billToPay->qty ?? 0 ).' Bill to pay', 'amount' => Money::IDR($billToPay->amount ?? 0 , true), 'url' => ''],
         ];
         return view('widgets.hutang_supplier_widget', [

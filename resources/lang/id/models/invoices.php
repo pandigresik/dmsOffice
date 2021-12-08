@@ -15,6 +15,7 @@ return array (
     'amount_discount' => 'Amount Discount',
     'state' => 'State',
     'date_invoice' => 'Date Invoice',
+    'period' => 'Periode',
     'date_due' => 'Date Due',
     'partner_id' => 'Partner Id',
   ),

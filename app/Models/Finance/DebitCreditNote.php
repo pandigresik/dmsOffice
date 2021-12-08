@@ -70,18 +70,16 @@ class DebitCreditNote extends Model
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+    const PARTNER_TYPE = ['supplier' => 'supplier', 'ekspedisi' => 'ekspedisi', 'customer' => 'customer', 'other' => 'lainnya'];
 
+    protected $dates = ['deleted_at'];    
 
-    protected $dates = ['deleted_at'];
-
-    public $connection = "mysql_sejati";
-
-    public $fillable = [
-        'number',
+    public $fillable = [        
         'type',
         'partner_type',
         'partner_id',
         'issue_date',
+        'amount',
         'reference',
         'invoice_id',
         'description'
@@ -109,8 +107,7 @@ class DebitCreditNote extends Model
      *
      * @var array
      */
-    public static $rules = [
-        'number' => 'required|string|max:30',
+    public static $rules = [        
         'type' => 'required|string',
         'partner_type' => 'required|string',
         'partner_id' => 'required|string|max:30',
@@ -125,6 +122,31 @@ class DebitCreditNote extends Model
      **/
     public function invoice()
     {
-        return $this->belongsTo(\App\Models\Finance\Invoice::class, 'invoice_id');
+        return $this->belongsTo(\App\Models\Purchase\Invoice::class, 'invoice_id');
+    }    
+
+    /**
+    * $type = CN or DN
+     */
+    public function getNextNumber($type)
+    {
+        $pattern = $type.'/'.date('Ym').'/';
+        $columnReference = 'number';
+        $sequenceLength = 5;
+        $nextId = $this->where($columnReference, 'like', $pattern.'%')->max($columnReference);
+        $nextId = !$nextId ? 1 : intval(substr($nextId, strlen($nextId) - $sequenceLength)) + 1;
+        $newId = [$pattern, str_pad($nextId, $sequenceLength, '0', STR_PAD_LEFT)];
+
+        return implode('', $newId);
+    }
+
+    public function getIssueDateAttribute($value)
+    {
+        return localFormatDate($value);
+    }
+
+    public function getAmountAttribute($value)
+    {
+        return localNumberFormat($value);
     }
 }

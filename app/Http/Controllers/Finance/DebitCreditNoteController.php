@@ -6,6 +6,7 @@ use App\DataTables\Finance\DebitCreditNoteDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Finance\CreateDebitCreditNoteRequest;
 use App\Http\Requests\Finance\UpdateDebitCreditNoteRequest;
+use App\Models\Finance\DebitCreditNote;
 use App\Models\Purchase\Invoice;
 use App\Repositories\Finance\DebitCreditNoteRepository;
 use App\Repositories\Purchase\InvoiceRepository;
@@ -160,7 +161,7 @@ class DebitCreditNoteController extends AppBaseController
         return [
             'invoiceItems' => ['' => __('crud.option.invoice_placeholder')] + $invoiceData->pluck('reference','id')->toArray(),
             'invoiceItemOptions' => $invoiceData->keyBy('id')->toArray(),
-            'partnerTypeItems' => ['' => __('crud.option.invoice_placeholder'), 'supplier' => 'supplier', 'ekspedisi' => 'ekspedisi','customer' => 'customer', 'other' => 'lainnya'],
+            'partnerTypeItems' => array_merge(['' => __('crud.option.invoice_placeholder')], DebitCreditNote::PARTNER_TYPE),
             'typeItems' => ['' => __('crud.option.invoice_placeholder'), 'CN' => 'CN', 'DN' => 'DN']
         ];
     }

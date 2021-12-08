@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Purchase;
 
-use Response;
 use App\DataTables\Purchase\InvoiceDataTable;
 use App\Repositories\Purchase\InvoiceRepository;
-use App\DataTables\Purchase\InvoiceSubmitDataTable;
+use Response;
 
 class InvoiceSubmitController extends InvoiceController
 {
@@ -23,7 +22,7 @@ class InvoiceSubmitController extends InvoiceController
      * @return Response
      */
     public function index(InvoiceDataTable $invoiceDataTable)
-    {        
+    {
         return $invoiceDataTable->render('purchase.invoices.index');
     }
 }

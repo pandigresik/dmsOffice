@@ -44,4 +44,20 @@ class DebitCreditNoteRepository extends BaseRepository
     {
         return DebitCreditNote::class;
     }
+
+    /**
+     * Create model record.
+     *
+     * @param array $input
+     *
+     * @return Model
+     */
+    public function create($input)
+    {
+        $model = $this->model->newInstance($input);        
+        $model->number = $model->getNextNumber($input['type']);        
+        $model->save();        
+
+        return $model;
+    }
 }

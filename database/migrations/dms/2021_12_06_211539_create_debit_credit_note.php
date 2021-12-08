@@ -20,6 +20,7 @@ class CreateDebitCreditNote extends Migration
             $table->enum('partner_type',['supplier', 'ekspedisi', 'customer', 'other']);
             $table->string('partner_id', 30);
             $table->date('issue_date');
+            $table->decimal('amount', 15, 2, true);
             $table->string('reference', 30)->nullable();
             $table->unsignedBigInteger('invoice_id');
             $table->text('description')->nullable();

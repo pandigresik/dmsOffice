@@ -73,4 +73,28 @@ class InvoiceValidateController extends InvoiceController
 
         return redirect(route('purchase.invoiceValidates.index'));
     }
+
+    /**
+     * Remove the specified Invoice from storage.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        $invoice = $this->getRepositoryObj()->find($id);
+
+        if (empty($invoice)) {
+            Flash::error(__('messages.not_found', ['model' => __('models/invoices.singular')]));
+
+            return redirect(route('purchase.invoiceValidates.index'));
+        }
+
+        $this->getRepositoryObj()->delete($id);
+
+        Flash::success(__('messages.deleted', ['model' => __('models/invoices.singular')]));
+
+        return redirect(route('purchase.invoiceValidates.index'));
+    }
 }

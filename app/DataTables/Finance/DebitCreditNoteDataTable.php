@@ -13,7 +13,8 @@ class DebitCreditNoteDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'partner_type' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'invoice.number' => \App\DataTables\FilterClass\RelationContainKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -46,7 +47,7 @@ class DebitCreditNoteDataTable extends DataTable
      */
     public function query(DebitCreditNote $model)
     {
-        return $model->newQuery();
+        return $model->with(['invoice'])->newQuery();
     }
 
     /**
@@ -67,16 +68,16 @@ class DebitCreditNoteDataTable extends DataTable
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
                     ],
-                    [
-                       'extend' => 'import',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    ],
-                    [
-                       'extend' => 'print',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
-                    ],
+                    // [
+                    //    'extend' => 'import',
+                    //    'className' => 'btn btn-default btn-sm no-corner',
+                    //    'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
+                    // ],
+                    // [
+                    //    'extend' => 'print',
+                    //    'className' => 'btn btn-default btn-sm no-corner',
+                    //    'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
+                    // ],
                     [
                        'extend' => 'reset',
                        'className' => 'btn btn-default btn-sm no-corner',
@@ -114,15 +115,17 @@ class DebitCreditNoteDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $dropDownPartnerType = array_merge([['value' => '', 'text' => __('crud.option.partner_type_placeholder')]], convertArrayPairValueWithKey(DebitCreditNote::PARTNER_TYPE));
         return [
             'number' => new Column(['title' => __('models/debitCreditNotes.fields.number'), 'data' => 'number', 'searchable' => true, 'elmsearch' => 'text']),
-            'type' => new Column(['title' => __('models/debitCreditNotes.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
-            'partner_type' => new Column(['title' => __('models/debitCreditNotes.fields.partner_type'), 'data' => 'partner_type', 'searchable' => true, 'elmsearch' => 'text']),
-            'partner_id' => new Column(['title' => __('models/debitCreditNotes.fields.partner_id'), 'data' => 'partner_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'issue_date' => new Column(['title' => __('models/debitCreditNotes.fields.issue_date'), 'data' => 'issue_date', 'searchable' => true, 'elmsearch' => 'text']),
+            //'type' => new Column(['title' => __('models/debitCreditNotes.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
+            'partner_type' => new Column(['title' => __('models/debitCreditNotes.fields.partner_type'), 'data' => 'partner_type', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $dropDownPartnerType]),
+            //'partner_id' => new Column(['title' => __('models/debitCreditNotes.fields.partner_id'), 'data' => 'partner_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'issue_date' => new Column(['title' => __('models/debitCreditNotes.fields.issue_date'), 'data' => 'issue_date', 'searchable' => true, 'elmsearch' => 'datesingle']),
             'reference' => new Column(['title' => __('models/debitCreditNotes.fields.reference'), 'data' => 'reference', 'searchable' => true, 'elmsearch' => 'text']),
-            'invoice_id' => new Column(['title' => __('models/debitCreditNotes.fields.invoice_id'), 'data' => 'invoice_id', 'searchable' => true, 'elmsearch' => 'text']),
-            'description' => new Column(['title' => __('models/debitCreditNotes.fields.description'), 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text'])
+            'invoice_id' => new Column(['title' => __('models/debitCreditNotes.fields.invoice_id'), 'data' => 'invoice.number', 'searchable' => true, 'elmsearch' => 'text']),
+            'amount' => new Column(['title' => __('models/debitCreditNotes.fields.amount'), 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'text']),
+            'description' => new Column(['title' => __('models/debitCreditNotes.fields.description'), 'data' => 'description', 'searchable' => false, 'elmsearch' => 'text'])
         ];
     }
 

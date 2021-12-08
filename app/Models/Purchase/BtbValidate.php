@@ -147,12 +147,12 @@ class BtbValidate extends Model
 
     public function scopeCanInvoiced($query){
 
-        return $query->whereInvoiced(false);
+        return $query->whereInvoiced(0);
     }
 
     public function scopeCanInvoicedExpedition($query){
 
-        return $query->whereInvoicedExpedition(false);
+        return $query->whereInvoicedExpedition(0);
     }
 
     public function scopeCanInvoicedSupplier($query, $supplierId, $listDoc = []){

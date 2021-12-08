@@ -22,6 +22,14 @@
 </div>
 </div>
 
+<!-- Date Due Field -->
+<div class="form-group row">
+    {!! Form::label('date_due', __('models/invoices.fields.date_due').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-6"> 
+    {!! Form::text('date_due', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'date_due']) !!}
+</div>
+</div>
+
 <!-- Date Invoice Field -->
 <div class="form-group row">
     {!! Form::label('amount', __('models/invoices.fields.amount').':', ['class' => 'col-md-3 col-form-label']) !!}
@@ -32,9 +40,9 @@
 
 <!-- Date Due Field -->
 <div class="form-group row">
-    {!! Form::label('date_due', __('models/invoices.fields.date_due').':', ['class' => 'col-md-3 col-form-label']) !!}
+    {!! Form::label('period', __('models/invoices.fields.period').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-6"> 
-    {!! Form::text('date_due', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'date_due']) !!}
+    {!! Form::text('period', null, ['class' => 'form-control datetime', 'required' => 'required' ,'data-optiondate' => json_encode( ['singleDatePicker' => false, 'locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'period']) !!}
 </div>
 </div>
 
@@ -70,15 +78,19 @@
             const _invoiceLines = $('#invoice-lines')
             let _invoiceLinesTable = _invoiceLines.find('table')
             let _docId = []
+            let _json = $(elm).data('json')
+            let _period = $('#period').data('daterangepicker')
+            let _format = 'YYYY-MM-DD'
+            _json.startDate = _period.startDate.format(_format)
+            _json.endDate = _period.endDate.format(_format)
             if(_invoiceLinesTable.length){
                 _invoiceLinesTable.find('tbody>tr>td>input[name^=invoice_line]').each(function(){
                     _docId.push($(this).data('docid'))
                 })
-                let _json = $(elm).data('json')
-                _json.listdoc = _docId
-                
-                $(elm).data('json', _json)
+                                
+                _json.listdoc = _docId                                
             }
+            $(elm).data('json', _json)
         }
     $(function(){        
         $('select[name=partner_id]').change(function(){        

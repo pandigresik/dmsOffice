@@ -45,9 +45,11 @@ class InvoiceLineController extends AppBaseController
     {
         $invoiceId = $request->get('invoice_id');
         $type = $request->get('type');
-        $partnerId = $request->get('partner_id');        
+        $partnerId = $request->get('partner_id');
+        $startDate = $request->get('startDate');
+        $endDate = $request->get('endDate');
         $listdoc = $request->get('listdoc') ?? [];
-        $btbValidated = $type == 'supplier' ? BtbValidate::canInvoicedSupplier($partnerId, $listdoc)->disableModelCaching()->get() : BtbValidate::canInvoicedEkspedisi($partnerId, $listdoc)->get();
+        $btbValidated = $type == 'supplier' ? BtbValidate::whereBetween('btb_date',[$startDate, $endDate])->canInvoicedSupplier($partnerId, $listdoc)->disableModelCaching()->get() : BtbValidate::whereBetween('btb_date',[$startDate, $endDate])->canInvoicedEkspedisi($partnerId, $listdoc)->get();
         return view('purchase.invoice_lines.create')->with('datas', $btbValidated);
     }
 

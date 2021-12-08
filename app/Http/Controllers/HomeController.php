@@ -54,11 +54,12 @@ class HomeController extends Controller
 
         // $productPrice = new ProductPriceRepository(app());
         // $productPrice = new ProductPrice();
-        $tes = \App\Models\Purchase\BtbValidate::selectRaw('co_reference, sum(qty) - sum(qty_reject) as qty')->whereInvoiced(0)
-                        ->disableModelCaching()
-                        ->groupBy('co_reference')
-                        ->get();
+        // $tes = \App\Models\Purchase\BtbValidate::selectRaw('co_reference, sum(qty) - sum(qty_reject) as qty')->whereInvoiced(0)
+        //                 ->disableModelCaching()
+        //                 ->groupBy('co_reference')
+        //                 ->get();
         // ->pluck('co_reference','co_reference');
+        $tes = \App\Models\Purchase\Invoice::with(['btb','invoiceLines'])->find(6)->toArray();
         dd($tes);
 
         

@@ -2,9 +2,10 @@
 
 namespace InfyOm\Generator\Generators\Scaffold;
 
+use Illuminate\Support\Str;
+use InfyOm\Generator\Utils\FileUtil;
 use InfyOm\Generator\Common\CommandData;
 use InfyOm\Generator\Generators\BaseGenerator;
-use InfyOm\Generator\Utils\FileUtil;
 
 class ControllerGenerator extends BaseGenerator
 {
@@ -188,9 +189,9 @@ class ControllerGenerator extends BaseGenerator
                 
                 if (!empty($relationShipText)) {                                        
                     $fieldsArr[] = $field;                                        
-                    $instanceModelName = \Str::camel($modelName);
-                    $relations['REPOSITORY_REFERENCE_OPTION_ITEM'][] = 'use $NAMESPACE_REPOSITORY$\\'.\Str::singular($modelName).'Repository;';
-                    $relations['REPOSITORY_OPTION_ITEM_INSTANCE'][] = '$'.$instanceModelName.' = new '.\Str::singular($modelName).'Repository(app());';
+                    $instanceModelName = Str::camel($modelName);
+                    $relations['REPOSITORY_REFERENCE_OPTION_ITEM'][] = 'use $NAMESPACE_REPOSITORY$\\'.Str::singular($modelName).'Repository;';
+                    $relations['REPOSITORY_OPTION_ITEM_INSTANCE'][] = '$'.$instanceModelName.' = new '.Str::singular($modelName).'Repository(app());';
                     $relations['LIST_OPTION_ITEM_INSTANCE'][] = '\''.$instanceModelName.'Items\' => [\'\' => __(\'crud.option.'.$instanceModelName.'_placeholder\')] + $'.$instanceModelName.'->pluck()';
                 }
             }

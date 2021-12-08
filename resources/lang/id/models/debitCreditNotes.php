@@ -14,5 +14,6 @@ return array (
     'reference' => 'Reference',
     'invoice_id' => 'Invoice Id',
     'description' => 'Description',
+    'amount' => 'Jumlah'
   ),
 );
