@@ -147,6 +147,13 @@ class DebitCreditNote extends Model
 
     public function getAmountAttribute($value)
     {
-        return localNumberFormat($value);
+        $pengali = 'CN' == $this->attributes['type'] ? 1 : -1;
+        return localNumberFormat($pengali * $value);
+    }
+
+    public function getRawAmountAttribute($value)
+    {
+        $pengali = 'CN' == $this->attributes['type'] ? 1 : -1;
+        return $pengali * $this->attributes['amount'];
     }
 }

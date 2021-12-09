@@ -56,13 +56,16 @@ class PaymentRepository extends BaseRepository
         $model = $this->model->newInstance($input);
         $paymentLine = $input['invoice_id'];
         $model->number = $model->getNextNumber();
-        $model->type = $model->defaultType();
+        $model->type = 'in';
         $model->state = Payment::READY_PAY;        
-        //$model->amount_total = $input['amount'] - $model->getRawOriginal('amount_discount');
+        $model->reference = $model->external_reference;
+        $model->amount_total = $input['amount'] - $model->getRawOriginal('amount_discount');
         $model->save();
+        $model->invoiceUsers()->create([
+            'state' => $model->getRawOriginal('state')
+        ]);        
         
-        
-        //$model->btb()->update(['invoiced' => 1]);
+        $model->btb()->update(['invoiced' => 1]);
         return $model;
     }
 }

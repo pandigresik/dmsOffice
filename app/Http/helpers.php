@@ -35,6 +35,22 @@ if (!function_exists('localNumberFormat')) {
     }
 }
 
+if (!function_exists('localNumberAccountingFormat')) {
+    function localNumberAccountingFormat($value, $digitDecimal = null)
+    {
+        if (null === $digitDecimal) {
+            $digitDecimal = config('local.digit_decimal');
+        }
+        
+        if($value < 0){            
+            $result = '( '.number_format($value * -1, $digitDecimal, config('local.decimal_separator'), config('local.thousand_separator')).' )';
+        }else{
+            $result = number_format($value, $digitDecimal, config('local.decimal_separator'), config('local.thousand_separator'));
+        }
+        return $result ;
+    }
+}
+
 // ['width:9000','height:7000'] to ['width' => 9000,'height' => 7000]
 if (!function_exists('convertStringArray')) {
     function convertStringArray($values, $separator = ':')

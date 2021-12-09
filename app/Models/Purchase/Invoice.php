@@ -86,6 +86,7 @@ class Invoice extends Model
     const SUBMIT = 'submit';
     const VALIDATE = 'validate';
     const APPROVE = 'approve';
+    const READY_PAY = 'ready_pay';
     const PAY = 'pay';
 
     public $table = 'invoice';
@@ -162,6 +163,14 @@ class Invoice extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function debitCreditNote()
+    {
+        return $this->hasMany(\App\Models\Finance\DebitCreditNote::class, 'invoice_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function btb()
     {
         return $this->hasManyThrough(\App\Models\Purchase\BtbValidate::class, \App\Models\Purchase\InvoiceLine::class, 'invoice_id','doc_id','id', 'doc_id');
@@ -176,6 +185,7 @@ class Invoice extends Model
     {
         return $this->hasOne(DmsApSupplier::class, 'szId', 'partner_id');
     }
+    
 
     public function getNextNumber()
     {

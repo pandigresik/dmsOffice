@@ -7,6 +7,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Finance\CreatePaymentRequest;
 use App\Http\Requests\Finance\UpdatePaymentRequest;
 use App\Repositories\Finance\PaymentRepository;
+use App\Repositories\Purchase\InvoiceRepository;
 use Flash;
 use Response;
 
@@ -14,7 +15,8 @@ class PaymentController extends AppBaseController
 {
     /** @var PaymentRepository */
     protected $repository;
-
+    protected $baseViewPath = 'finance.payments';
+    protected $baseRoute = 'finance.payments';
     public function __construct()
     {
         $this->repository = PaymentRepository::class;
@@ -27,7 +29,7 @@ class PaymentController extends AppBaseController
      */
     public function index(PaymentDataTable $paymentDataTable)
     {
-        return $paymentDataTable->render('finance.payments.index');
+        return $paymentDataTable->render($this->baseViewPath.'.index', $this->getOptionItems());
     }
 
     /**
@@ -37,7 +39,13 @@ class PaymentController extends AppBaseController
      */
     public function create()
     {
-        return view('finance.payments.create')->with($this->getOptionItems());
+        $validatedInvoice = [];
+        $invoice = new InvoiceRepository(app());
+        $readyPayment = $invoice->readyPayment();
+        if($readyPayment){
+            $validatedInvoice = $readyPayment->groupBy('partner_id');
+        }
+        return view($this->baseViewPath.'.create')->with('invoices', $validatedInvoice)->with($this->getOptionItems());;
     }
 
     /**
@@ -53,7 +61,7 @@ class PaymentController extends AppBaseController
 
         Flash::success(__('messages.saved', ['model' => __('models/payments.singular')]));
 
-        return redirect(route('finance.payments.index'));
+        return redirect(route($this->baseRoute.'.index'));
     }
 
     /**
@@ -70,10 +78,10 @@ class PaymentController extends AppBaseController
         if (empty($payment)) {
             Flash::error(__('models/payments.singular').' '.__('messages.not_found'));
 
-            return redirect(route('finance.payments.index'));
+            return redirect(route($this->baseRoute.'.index'));
         }
 
-        return view('finance.payments.show')->with('payment', $payment);
+        return view($this->baseViewPath.'.show')->with('payment', $payment);
     }
 
     /**
@@ -90,10 +98,10 @@ class PaymentController extends AppBaseController
         if (empty($payment)) {
             Flash::error(__('messages.not_found', ['model' => __('models/payments.singular')]));
 
-            return redirect(route('finance.payments.index'));
+            return redirect(route($this->baseRoute.'.index'));
         }
 
-        return view('finance.payments.edit')->with('payment', $payment)->with($this->getOptionItems());
+        return view($this->baseViewPath.'.edit')->with('payment', $payment)->with($this->getOptionItems());
     }
 
     /**
@@ -110,14 +118,14 @@ class PaymentController extends AppBaseController
         if (empty($payment)) {
             Flash::error(__('messages.not_found', ['model' => __('models/payments.singular')]));
 
-            return redirect(route('finance.payments.index'));
+            return redirect(route($this->baseRoute.'.index'));
         }
 
         $payment = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/payments.singular')]));
 
-        return redirect(route('finance.payments.index'));
+        return redirect(route($this->baseRoute.'.index'));
     }
 
     /**
@@ -134,14 +142,14 @@ class PaymentController extends AppBaseController
         if (empty($payment)) {
             Flash::error(__('messages.not_found', ['model' => __('models/payments.singular')]));
 
-            return redirect(route('finance.payments.index'));
+            return redirect(route($this->baseRoute.'.index'));
         }
 
         $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/payments.singular')]));
 
-        return redirect(route('finance.payments.index'));
+        return redirect(route($this->baseRoute.'.index'));
     }
 
     /**
@@ -154,6 +162,8 @@ class PaymentController extends AppBaseController
     private function getOptionItems()
     {
         return [
+            'baseRoute' => $this->baseRoute,
+            'baseViewPath' => $this->baseViewPath,
         ];
     }
 }

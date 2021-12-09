@@ -129,5 +129,9 @@ class InvoiceRepository extends BaseRepository
     public function billValidate(){
         return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount_total) amount')->validate()->first();
     }
+
+    public function readyPayment(){
+        return $this->model->disableModelCaching()->with(['invoiceLines','partner', 'debitCreditNote'])->validate()->get();
+    }
     
 }

@@ -66,11 +66,11 @@ class Payment extends Model
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    const READY_PAY = 'ready_pay';
+    const PAY = 'pay';
+    const TYPE = 'OUT';
 
     protected $dates = ['deleted_at'];
-
-    public $connection = "mysql_sejati";
 
     public $fillable = [
         'number',
@@ -104,13 +104,13 @@ class Payment extends Model
      * @var array
      */
     public static $rules = [
-        'number' => 'required|string|max:30',
-        'type' => 'required|string',
-        'reference' => 'required|string|max:255',
-        'state' => 'required|string|max:10',
-        'estimate_date' => 'required',
-        'pay_date' => 'required',
-        'amount' => 'required|numeric'
+        // 'number' => 'required|string|max:30',
+        // 'type' => 'required|string',
+        // 'reference' => 'required|string|max:255',
+        // 'state' => 'required|string|max:10',
+        // 'estimate_date' => 'required',
+        // 'pay_date' => 'required',
+        'amount' => 'required|numeric|min:1'
     ];
 
     /**
@@ -119,5 +119,40 @@ class Payment extends Model
     public function paymentLines()
     {
         return $this->hasMany(\App\Models\Finance\PaymentLine::class, 'payment_id');
+    }
+
+    /**
+    * $type = IN or OUT
+     */
+    public function getNextNumber()
+    {
+        $pattern = 'PAY/'.self::TYPE.'/'.date('Ym').'/';
+        $columnReference = 'number';
+        $sequenceLength = 5;
+        $nextId = $this->where($columnReference, 'like', $pattern.'%')->max($columnReference);
+        $nextId = !$nextId ? 1 : intval(substr($nextId, strlen($nextId) - $sequenceLength)) + 1;
+        $newId = [$pattern, str_pad($nextId, $sequenceLength, '0', STR_PAD_LEFT)];
+
+        return implode('', $newId);
+    }
+
+    public function getEstimateDateAttribute($value)
+    {
+        return localFormatDate($value);
+    }
+
+    public function getPayDateAttribute($value)
+    {
+        return localFormatDate($value);
+    }
+
+    public function getAmountAttribute($value)
+    {
+        return localNumberFormat($value);
+    }
+
+    public function defaultType(){
+
+        return self::TYPE;
     }
 }

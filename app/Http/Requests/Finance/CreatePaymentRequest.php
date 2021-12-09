@@ -40,6 +40,7 @@ class CreatePaymentRequest extends FormRequest
     */
     public function all($keys = null){
         $keys = (new Payment)->fillable;
+        $keys = array_merge(['invoice_id'], $keys);
         return parent::all($keys);
     }
 }

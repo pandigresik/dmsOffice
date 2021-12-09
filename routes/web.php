@@ -119,7 +119,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'finance'], function () {
         Route::resource('debitCreditNotes', App\Http\Controllers\Finance\DebitCreditNoteController::class, ['as' => 'finance']);
-        Route::resource('payments', App\Http\Controllers\Finance\PaymentController::class, ['as' => 'finance']);
+        Route::resource('paymentOuts', App\Http\Controllers\Finance\PaymentOutController::class, ['as' => 'finance']);
+        Route::resource('paymentIns', App\Http\Controllers\Finance\PaymentInController::class, ['as' => 'finance']);
         Route::resource('paymentLines', App\Http\Controllers\Finance\PaymentLineController::class, ['as' => 'finance']);
     });
 

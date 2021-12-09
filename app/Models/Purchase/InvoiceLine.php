@@ -128,4 +128,19 @@ class InvoiceLine extends Model
     {
         return $this->hasOne(BtbValidate::class, 'doc_id', 'doc_id');
     }
+
+    public function getQtyAttribute($value)
+    {
+        return localNumberFormat($value, 0);
+    }
+
+    public function getPriceAttribute($value)
+    {
+        return localNumberFormat($value, 2);
+    }
+
+    public function getAmountTotalAttribute($value)
+    {
+        return localNumberFormat($this->attributes['price'] * $this->attributes['qty'], 2);
+    }
 }

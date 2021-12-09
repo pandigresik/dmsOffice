@@ -70,8 +70,6 @@ class PaymentLine extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $connection = "mysql_sejati";
-
     public $fillable = [
         'payment_id',
         'invoice_id',
@@ -124,5 +122,25 @@ class PaymentLine extends Model
     public function payment()
     {
         return $this->belongsTo(\App\Models\Finance\Payment::class, 'payment_id');
+    }
+
+    public function getAmountAttribute($value)
+    {
+        return localNumberFormat($value);
+    }
+
+    public function getAmountCnAttribute($value)
+    {
+        return localNumberFormat($value);
+    }
+
+    public function getAmountDnAttribute($value)
+    {
+        return localNumberFormat($value);
+    }
+
+    public function getAmountTotalAttribute($value)
+    {
+        return localNumberFormat($value);
     }
 }
