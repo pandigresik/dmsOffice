@@ -9,7 +9,7 @@ use App\Models\Finance\Payment;
 
 class UpdatePaymentRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = ['type', 'estimate_date']; 
 
     /**
      * Determine if the user is authorized to make this request.

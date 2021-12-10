@@ -159,7 +159,7 @@ class PaymentController extends AppBaseController
      *
      * @return Response
      */
-    private function getOptionItems()
+    protected function getOptionItems()
     {
         return [
             'baseRoute' => $this->baseRoute,

@@ -16,11 +16,11 @@ class CreatePayment extends Migration
         Schema::create('payment', function (Blueprint $table) {
             $table->id();
             $table->string('number', 30);
-            $table->enum('type', ['in', 'out']);
-            $table->string('reference')->description('external document');
+            $table->enum('type', ['IN', 'OUT']);
+            $table->string('reference')->nullable()->description('external document');
             $table->string('state', 10)->default('submit');
             $table->date('estimate_date');
-            $table->date('pay_date');
+            $table->date('pay_date')->nullable();
             $table->unsignedDecimal('amount', 15, 2);            
             $table->blameable();
             $table->timestamps();

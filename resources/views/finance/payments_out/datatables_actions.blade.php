@@ -1,10 +1,10 @@
-{!! Form::open(['route' => ['finance.payments.destroy', $id], 'method' => 'delete']) !!}
-<div class='btn-group'>
-    <a href="{{ route($baseRoute.'.show', $id) }}" class='btn btn-ghost-success'>
-       <i class="fa fa-eye"></i>
-    </a>
-    <a href="{{ route($baseRoute.'.edit', $id) }}" class='btn btn-ghost-info'>
-       <i class="fa fa-edit"></i>
+@php
+    $baseRoute = 'finance.paymentOuts';
+@endphp
+{!! Form::open(['route' => [$baseRoute.'.destroy', $id], 'method' => 'delete']) !!}
+<div class='btn-group'>    
+    <a href="{{ route($baseRoute.'.edit', $id) }}" title="Bayar" class='btn btn-ghost-info'>
+       <i class="fa fa-money"></i>
     </a>
     {!! Form::button('<i class="fa fa-trash"></i>', [
         'type' => 'submit',

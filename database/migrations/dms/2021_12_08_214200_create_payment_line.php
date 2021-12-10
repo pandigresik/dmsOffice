@@ -18,8 +18,7 @@ class CreatePaymentLine extends Migration
             $table->unsignedBigInteger('payment_id');
             $table->unsignedBigInteger('invoice_id');
             $table->unsignedDecimal('amount', 15, 2);
-            $table->decimal('amount_cn', 15, 2)->default(0);
-            $table->decimal('amount_dn', 15, 2)->default(0);
+            $table->decimal('amount_cn_dn', 15, 2)->default(0);            
             $table->unsignedDecimal('amount_total', 15, 2);
             $table->blameable();
             $table->timestamps();

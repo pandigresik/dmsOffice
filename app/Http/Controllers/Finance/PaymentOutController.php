@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Finance;
 
+use App\DataTables\Finance\PaymentDataTable;
+use App\DataTables\Finance\PaymentOutDataTable;
 use App\Repositories\Finance\PaymentOutRepository;
 
 class PaymentOutController extends PaymentController
@@ -15,4 +17,16 @@ class PaymentOutController extends PaymentController
     {
         $this->repository = PaymentOutRepository::class;
     }
+
+        /**
+     * Display a listing of the Payment.
+     *
+     * @return Response
+     */
+    public function index(PaymentDataTable $paymentDataTable)
+    {
+        $paymentDataTable = new PaymentOutDataTable(app());
+        return $paymentDataTable->render($this->baseViewPath.'.index', $this->getOptionItems());
+    }
+    
 }

@@ -59,7 +59,7 @@ class HomeController extends Controller
         //                 ->groupBy('co_reference')
         //                 ->get();
         // ->pluck('co_reference','co_reference');
-        $tes = \App\Models\Purchase\Invoice::with(['btb','invoiceLines'])->find(6)->toArray();
+        $tes = \App\Models\Finance\Payment::with(['invoices','paymentLines'])->disableModelCaching()->get()->toArray();
         dd($tes);
 
         

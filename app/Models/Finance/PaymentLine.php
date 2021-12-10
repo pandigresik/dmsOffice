@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * @SWG\Definition(
  *      definition="PaymentLine",
- *      required={"payment_id", "invoice_id", "amount", "amount_cn", "amount_dn", "amount_total"},
+ *      required={"payment_id", "invoice_id", "amount", "amount_cn_dn", "amount_dn", "amount_total"},
  *      @SWG\Property(
  *          property="id",
  *          description="id",
@@ -74,7 +74,7 @@ class PaymentLine extends Model
         'payment_id',
         'invoice_id',
         'amount',
-        'amount_cn',
+        'amount_cn_dn',
         'amount_dn',
         'amount_total'
     ];
@@ -89,8 +89,7 @@ class PaymentLine extends Model
         'payment_id' => 'integer',
         'invoice_id' => 'integer',
         'amount' => 'decimal:2',
-        'amount_cn' => 'decimal:2',
-        'amount_dn' => 'decimal:2',
+        'amount_cn_dn' => 'decimal:2',        
         'amount_total' => 'decimal:2'
     ];
 
@@ -103,8 +102,7 @@ class PaymentLine extends Model
         'payment_id' => 'required',
         'invoice_id' => 'required',
         'amount' => 'required|numeric',
-        'amount_cn' => 'required|numeric',
-        'amount_dn' => 'required|numeric',
+        'amount_cn_dn' => 'required|numeric',        
         'amount_total' => 'required|numeric'
     ];
 
@@ -113,7 +111,7 @@ class PaymentLine extends Model
      **/
     public function invoice()
     {
-        return $this->belongsTo(\App\Models\Finance\Invoice::class, 'invoice_id');
+        return $this->belongsTo(\App\Models\Purchase\Invoice::class, 'invoice_id');
     }
 
     /**

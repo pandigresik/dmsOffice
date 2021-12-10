@@ -79,7 +79,7 @@ class Payment extends Model
         'state',
         'estimate_date',
         'pay_date',
-        'amount'
+        'amount'        
     ];
 
     /**
@@ -112,6 +112,16 @@ class Payment extends Model
         // 'pay_date' => 'required',
         'amount' => 'required|numeric|min:1'
     ];
+    
+    public function scopeReadyToPay($query)
+    {
+        return $query->whereState(self::READY_PAY);
+    }
+
+    public function scopePay($query)
+    {
+        return $query->whereState(self::PAY);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -119,6 +129,14 @@ class Payment extends Model
     public function paymentLines()
     {
         return $this->hasMany(\App\Models\Finance\PaymentLine::class, 'payment_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invoices()
+    {
+        return $this->hasManyThrough(\App\Models\Purchase\Invoice::class, \App\Models\Finance\PaymentLine::class, 'payment_id', 'id', 'id', 'invoice_id');
     }
 
     /**

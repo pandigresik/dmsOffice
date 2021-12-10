@@ -43,14 +43,16 @@
                 @php
                 $totalCreditDebitNote = 0;
                 $totalCreditDebitNote = $item->debitCreditNote->sum(function($debit){
-                return $debit->rawAmount;
+                    return $debit->rawAmount;
                 });
                 $total = $item->getRawOriginal('amount_total') + $totalCreditDebitNote;
+                $item->amount_cn_dn = $totalCreditDebitNote;
+                $item->syncOriginal();
                 @endphp
                 <tr>
                     <td rowspan="2">
                         <label class="form-check-label">
-                            <input type="checkbox" name="invoice_id[]" onchange="updateTotalPayment(this)" value="{{ $item->id }}">
+                            <input type="checkbox" name="invoice_id[]" onchange="updateTotalPayment(this)" value="{{ json_encode($item->getRawOriginal()) }}">
                         </label>
                     </td>
                     <td>{{ $item->partner->szName }}</td>
