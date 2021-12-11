@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Purchase;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Purchase\Invoice;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateInvoiceRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateInvoiceRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'invoice-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,11 +35,12 @@ class CreateInvoiceRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new Invoice)->fillable;
-        $keys = array_merge(['invoice_line'], $keys);
-        
+     */
+    public function all($keys = null)
+    {
+        $keys = (new Invoice())->fillable;
+        $keys = array_merge(['invoice_line','ekspedisi_id'], $keys);
+
         return parent::all($keys);
     }
 }

@@ -34,13 +34,14 @@ class ProductCategoriesProductController extends AppBaseController
     public function index(Request $request)
     {
         $products = [];
-        if($request->get('product_categories_id')){
+        if ($request->get('product_categories_id')) {
             $products = $this->getRepositoryObj()->with(['product'])->all(['product_categories_id' => $request->get('product_categories_id')])->map(function ($q) {
                 $q->product['stateForm'] = 'update';
+
                 return $q->product;
             });
         }
-        
+
         $buttonView = view('inventory.product_categories.partials.product_button', ['json' => [], 'url' => route('inventory.productCategoriesProducts.create')])->render();
 
         return view('inventory.product_categories_products.index')->with(['products' => $products, 'buttonView' => $buttonView]);
@@ -187,8 +188,8 @@ class ProductCategoriesProductController extends AppBaseController
             'productItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()
                 ->disableModelCaching()
                 ->whereNotIn('iInternalId', function ($q) {
-                $q->select(['product_id'])->from('product_categories_product');
-            })->get()->pluck('full_identity', 'iInternalId')->toArray(),
+                    $q->select(['product_id'])->from('product_categories_product');
+                })->get()->pluck('full_identity', 'iInternalId')->toArray(),
         ];
     }
 }

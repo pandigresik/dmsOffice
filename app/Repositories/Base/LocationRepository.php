@@ -6,11 +6,10 @@ use App\Models\Base\Location;
 use App\Repositories\BaseRepository;
 
 /**
- * Class LocationRepository
- * @package App\Repositories\Base
+ * Class LocationRepository.
+ *
  * @version November 13, 2021, 8:13 pm WIB
-*/
-
+ */
 class LocationRepository extends BaseRepository
 {
     /**
@@ -20,11 +19,11 @@ class LocationRepository extends BaseRepository
         'name',
         'district',
         'city',
-        'type'
+        'type',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -34,8 +33,8 @@ class LocationRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Location::class;

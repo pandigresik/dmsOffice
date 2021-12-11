@@ -2,10 +2,10 @@
 
 namespace App\Repositories\Purchase;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Models\Purchase\BtbValidate;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class BtbValidateRepository.
@@ -65,20 +65,20 @@ class BtbValidateRepository extends BaseRepository
         try {
             $btb = $input['btb'] ?? [];
             $model = null;
-            if (!empty($btb)) {                
-                $groupingBtb = collect($btb)->mapToGroups(function($item){
+            if (!empty($btb)) {
+                $groupingBtb = collect($btb)->mapToGroups(function ($item) {
                     $arr = json_decode($item, 1);
 
                     return [$arr['jenis'] => $arr['no_btb']];
                 });
-                
-                foreach ($groupingBtb as $key => $vc) {                    
+
+                foreach ($groupingBtb as $key => $vc) {
                     switch ($key) {
-                        case 'BTB Supplier':                        
+                        case 'BTB Supplier':
                             $model = $this->model->insertBtbSupplier($vc);
 
                             break;
-                        case 'BTB Distribusi':                            
+                        case 'BTB Distribusi':
                             $model = $this->model->insertBtbDistribusi($vc);
 
                             break;
@@ -89,6 +89,7 @@ class BtbValidateRepository extends BaseRepository
             DB::commit();
             // flush cache karena menggunakan from query untuk eksekusi statement insert into
             $this->model->flushCache();
+
             return $model;
         } catch (\Exception $e) {
             DB::rollBack();

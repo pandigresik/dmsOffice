@@ -6,8 +6,8 @@ use App\DataTables\Purchase\InvoiceDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateInvoiceRequest;
 use App\Http\Requests\Purchase\UpdateInvoiceRequest;
-use App\Models\Purchase\BtbValidate;
 use App\Repositories\Base\DmsApSupplierRepository;
+use App\Repositories\Inventory\DmsInvCarrierRepository;
 use App\Repositories\Purchase\InvoiceRepository;
 use Flash;
 use Response;
@@ -39,7 +39,13 @@ class InvoiceController extends AppBaseController
      */
     public function create()
     {
-        return view('purchase.invoices.create')->with($this->getOptionItems());
+        $optionItems = $this->getOptionItems();
+        $dataTabs = [
+            'supplier' => ['text' => 'Supplier', 'json' => [], 'url' => '', 'defaultContent' => view('purchase.invoices.supplier_create')->with($optionItems), 'class' => 'active'],
+            'ekspedisi' => ['text' => 'Ekspedisi', 'json' => [], 'url' => '', 'defaultContent' => view('purchase.invoices.ekspedisi_create')->with($optionItems), 'class' => ''],
+        ];
+
+        return view('purchase.invoices.create')->with('dataTabs', $dataTabs);
     }
 
     /**
@@ -49,7 +55,7 @@ class InvoiceController extends AppBaseController
      */
     public function store(CreateInvoiceRequest $request)
     {
-        $input = $request->all();
+        $input = $request->all();        
 
         $invoice = $this->getRepositoryObj()->create($input);
 
@@ -88,7 +94,7 @@ class InvoiceController extends AppBaseController
     public function edit($id)
     {
         $invoice = $this->getRepositoryObj()->find($id);
-        
+
         if (empty($invoice)) {
             Flash::error(__('messages.not_found', ['model' => __('models/invoices.singular')]));
 
@@ -156,9 +162,11 @@ class InvoiceController extends AppBaseController
     protected function getOptionItems()
     {
         $supplier = new DmsApSupplierRepository(app());
+        $ekspedisi = new DmsInvCarrierRepository(app());
 
         return [
-            'partnerItem' => ['' => __('crud.option.supplier_placeholder')] + $supplier->all()->pluck('szName','szId')->toArray(),            
+            'partnerItem' => ['' => __('crud.option.supplier_placeholder')] + $supplier->all()->pluck('szName', 'szId')->toArray(),
+            'ekspedisiItem' => ['' => __('crud.option.ekspedisi_placeholder')] + $ekspedisi->all()->pluck('szName', 'szId')->toArray(),
         ];
     }
 }

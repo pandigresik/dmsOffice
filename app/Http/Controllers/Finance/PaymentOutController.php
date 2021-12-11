@@ -18,7 +18,7 @@ class PaymentOutController extends PaymentController
         $this->repository = PaymentOutRepository::class;
     }
 
-        /**
+    /**
      * Display a listing of the Payment.
      *
      * @return Response
@@ -26,7 +26,7 @@ class PaymentOutController extends PaymentController
     public function index(PaymentDataTable $paymentDataTable)
     {
         $paymentDataTable = new PaymentOutDataTable(app());
+
         return $paymentDataTable->render($this->baseViewPath.'.index', $this->getOptionItems());
     }
-    
 }

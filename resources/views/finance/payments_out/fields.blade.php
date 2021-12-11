@@ -55,7 +55,7 @@
                             <input type="checkbox" name="invoice_id[]" onchange="updateTotalPayment(this)" value="{{ json_encode($item->getRawOriginal()) }}">
                         </label>
                     </td>
-                    <td>{{ $item->partner->szName }}</td>
+                    <td>{{ $item->partner->szName ?? $item->ekspedisi->szName  }}</td>
                     <td>{{ $item->number }}</td>
                     <td>{{ $item->amount_total }}</td>
                     <td>{{ localNumberAccountingFormat($totalCreditDebitNote) }}</td>

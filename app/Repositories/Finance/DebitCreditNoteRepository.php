@@ -6,11 +6,10 @@ use App\Models\Finance\DebitCreditNote;
 use App\Repositories\BaseRepository;
 
 /**
- * Class DebitCreditNoteRepository
- * @package App\Repositories\Finance
+ * Class DebitCreditNoteRepository.
+ *
  * @version December 6, 2021, 9:29 pm WIB
-*/
-
+ */
 class DebitCreditNoteRepository extends BaseRepository
 {
     /**
@@ -24,11 +23,11 @@ class DebitCreditNoteRepository extends BaseRepository
         'issue_date',
         'reference',
         'invoice_id',
-        'description'
+        'description',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -38,8 +37,8 @@ class DebitCreditNoteRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return DebitCreditNote::class;
@@ -54,9 +53,9 @@ class DebitCreditNoteRepository extends BaseRepository
      */
     public function create($input)
     {
-        $model = $this->model->newInstance($input);        
-        $model->number = $model->getNextNumber($input['type']);        
-        $model->save();        
+        $model = $this->model->newInstance($input);
+        $model->number = $model->getNextNumber($input['type']);
+        $model->save();
 
         return $model;
     }

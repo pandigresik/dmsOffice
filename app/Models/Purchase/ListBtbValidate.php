@@ -10,7 +10,7 @@ class ListBtbValidate extends Model
     public $isCachable = false;
 
     public function getFullIdentityAttribute($value)
-    {        
+    {
         return implode(' | ', ['BTB::'.$this->no_btb, 'CO::'.$this->co_reference, 'Product::'.$this->product_name]);
     }
 }

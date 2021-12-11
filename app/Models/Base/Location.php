@@ -3,8 +3,8 @@
 namespace App\Models\Base;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -44,20 +44,31 @@ class Location extends Model
 
     use HasFactory;
 
-    public $table = 'location';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];    
+    public $table = 'location';
 
     public $fillable = [
         'name',
         'district',
         'city',
-        'type'
+        'type',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'name' => 'required|string|max:80',
+        'district' => 'required|string|max:50',
+        'city' => 'required|string|max:50',
+        'type' => 'required|string',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -69,23 +80,11 @@ class Location extends Model
         'name' => 'string',
         'district' => 'string',
         'city' => 'string',
-        'type' => 'string'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'name' => 'required|string|max:80',
-        'district' => 'required|string|max:50',
-        'city' => 'required|string|max:50',
-        'type' => 'required|string'
+        'type' => 'string',
     ];
 
     public function getFullIdentityAttribute($value)
     {
         return $this->attributes['name'].' , '.$this->attributes['district'].' '.$this->attributes['city'];
-    }    
+    }
 }

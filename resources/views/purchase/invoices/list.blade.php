@@ -20,9 +20,9 @@
                 <td>{{ $data->doc_id }}</td>
                 <td>{{ $data->product_name }}</td>
                 <td>{{ $data->uom_id }}</td>
-                <td class="text-right">{{ localNumberFormat($data->qty,0) }}</td>
-                <td class="text-right">{{ localNumberFormat($data->price,0) }}</td>                                          
-                <td class="text-right">{{ localNumberFormat($data->qty * $data->price,0) }}</td>                                          
+                <td class="text-right">{{ $data->qty }}</td>
+                <td class="text-right">{{ $data->price }}</td>                                          
+                <td class="text-right">{{ $data->amount_total }}</td>                                          
             </tr>
             @empty
             <tr>

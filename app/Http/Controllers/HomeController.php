@@ -41,11 +41,11 @@ class HomeController extends Controller
         return view('home')->with(['widgets' => $widgets]);
     }
 
-    public function tes(){
-        
+    public function tes()
+    {
         // $product = DmsInvProduct::where('iInternalId',6)->with(['productCategories'])->get();
         // //dd($product->toArray());
-        // dd( [            
+        // dd( [
         //     'productItem' => $productRepo->allQuery()->disableModelCaching()->with(['dmsInvProduct' => function($q){
         //         $q->whereHas('productCategoriesProduct')->with(['productCategories']);
         //         //$q->with(['productCategories']);
@@ -59,9 +59,7 @@ class HomeController extends Controller
         //                 ->groupBy('co_reference')
         //                 ->get();
         // ->pluck('co_reference','co_reference');
-        $tes = \App\Models\Finance\Payment::with(['invoices','paymentLines'])->disableModelCaching()->get()->toArray();
+        $tes = \App\Models\Finance\Payment::with(['invoices', 'paymentLines'])->disableModelCaching()->get()->toArray();
         dd($tes);
-
-        
     }
 }

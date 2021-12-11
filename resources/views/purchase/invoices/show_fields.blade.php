@@ -10,7 +10,7 @@
 <div class="form-group row">
     {!! Form::label('partner_id', __('models/invoices.fields.partner_id').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        <p>{{ $invoice->partner->szName }}</p>
+        <p>{{ $invoice->partner->szName ?? $invoice->ekspedisi->szName }}</p>
     </div>
 </div>
 

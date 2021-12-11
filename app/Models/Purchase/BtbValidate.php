@@ -2,11 +2,11 @@
 
 namespace App\Models\Purchase;
 
-use Illuminate\Support\Facades\DB;
 use App\Models\BaseEntity as Model;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @SWG\Definition(
@@ -69,13 +69,10 @@ class BtbValidate extends Model
 
     use HasFactory;
 
-    public $table = 'btb_validate';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];    
+    public $table = 'btb_validate';
 
     public $fillable = [
         'doc_id',
@@ -85,12 +82,23 @@ class BtbValidate extends Model
         'product_name',
         'uom_id',
         'ref_doc',
-        'qty',        
+        'qty',
         'btb_date',
         'invoiced',
         'invoiced_expedition',
-        'price'        
+        'price',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'btb' => 'required|array',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -103,17 +111,8 @@ class BtbValidate extends Model
         'product_id' => 'string',
         'uom_id' => 'string',
         'ref_doc' => 'string',
-        'qty' => 'integer',        
-        'invoiced' => 'boolean'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'btb' => 'required|array',        
+        'qty' => 'integer',
+        'invoiced' => 'boolean',
     ];
 
     public function getQtyAttribute($value)
@@ -129,47 +128,130 @@ class BtbValidate extends Model
     public function getQtyRejectAttribute($value)
     {
         return localNumberFormat($value, 0);
-    }    
+    }
 
     public function getBtbDateAttribute($value)
     {
-
         return localFormatDate($value);
     }
-    
-    public function mustValidate($startDate, $endDate){
+
+    public function mustValidate($startDate, $endDate)
+    {
         $sql = implode(' union all ', [
             $this->btbSupplierSql($startDate, $endDate),
             $this->btbDistribusiSql($startDate, $endDate),
         ]);
+
         return $this->fromQuery($sql);
     }
 
-    public function scopeCanInvoiced($query){
-
+    public function scopeCanInvoiced($query)
+    {
         return $query->whereInvoiced(0);
     }
 
-    public function scopeCanInvoicedExpedition($query){
-
+    public function scopeCanInvoicedExpedition($query)
+    {
         return $query->whereInvoicedExpedition(0);
     }
 
-    public function scopeCanInvoicedSupplier($query, $supplierId, $listDoc = []){
-        if(empty($listDoc)){
+    public function scopeCanInvoicedSupplier($query, $supplierId, $listDoc = [])
+    {
+        if (empty($listDoc)) {
             return $query->canInvoiced()->wherePartnerId($supplierId);
         }
-        return $query->canInvoiced()->wherePartnerId($supplierId)->whereNotIn('doc_id',$listDoc);
+
+        return $query->canInvoiced()->wherePartnerId($supplierId)->whereNotIn('doc_id', $listDoc);
     }
 
-    public function scopeCanInvoicedEkspedisi($query, $supplierId, $listDoc = []){
-        if(empty($listDoc)){
-            return $query->canInvoicedExpedition()->wherePartnerId($supplierId);
+    public function scopeCanInvoicedEkspedisi($query, $supplierId, $listDoc = [])
+    {
+        if (empty($listDoc)) {
+            return $query->canInvoicedExpedition()->whereDmsInvCarrierId($supplierId);
         }
-        return $query->canInvoicedExpedition()->wherePartnerId($supplierId)->whereNotIn('doc_id',$listDoc);
+
+        return $query->canInvoicedExpedition()->whereDmsInvCarrierId($supplierId)->whereNotIn('doc_id', $listDoc);
     }
 
-    private function btbSupplierSql($startDate, $endDate){
+    public function insertBtbSupplier($btbs)
+    {
+        $userId = Auth::id();
+        $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');
+        $btbStr = implode("','", $btbs->flatten()->all());
+        $sql = <<<SQL
+        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price )
+        select
+            'BTB Supplier' as jenis,
+            dsd.szDocId AS no_btb,
+            dsd.dtmCreated as tgl_btb,
+            dsdi.iId as reference_id,
+            -- dsd.szRefDocId AS sj_pabrik,
+            dsd.szRef1 AS co_reference,            
+            dsdi.szProductId,
+            divi.szName,
+            dsdi.szUomId, 
+            dsd.szRef2 AS sj_ekspedisi,
+            dsdi.decQty,
+            dsd.szCarrierId,
+            dsd.szWarehouseId,
+            dsd.szVehicle2 as nopol,
+            {$userId} as created_by ,
+            '{$now}' as created_at,
+            dsd.szSupplierId,
+            coalesce(pp.price, 0) as price
+            
+        from
+            dms_inv_docstockinsupplier dsd
+        join dms_inv_docstockinsupplieritem dsdi on dsdi.szDocId = dsd.szDocId
+        join dms_inv_product divi on divi.szId = dsdi.szProductId
+        left join product_price pp on pp.dms_inv_product_id = divi.iInternalId
+        where dsd.szDocStatus = 'Applied' and dsd.szDocId in ('{$btbStr}') 
+        SQL;
+        // DB::statement($sql);
+        $this->fromQuery($sql);
+    }
+
+    public function insertBtbDistribusi($btbs)
+    {
+        $userId = Auth::id();
+        $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');
+        $btbStr = implode("','", $btbs->flatten()->all());
+        $sql = <<<SQL
+        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price )
+        select
+            'BTB Distribusi' as jenis,
+            dsd.szDocId AS no_btb,
+            dsd.dtmCreated as tgl_btb,
+            dsdi.iId as reference_id,
+            -- dsd.szBkbReferensi AS sj_pabrik,
+            dsd.szDoReferensi AS co_reference,
+            dsdi.szProductId,
+            divi.szName,
+            dsdi.szUomId, 
+            '-' AS sj_ekspedisi,
+            dsdi.decQty,
+            'Internal',
+            dsd.szWarehouseId,
+            eks.szPoliceNo as nopol,
+            {$userId} as created_by ,
+            '{$now}' as created_at,
+            'Internal' as partner_id,
+            coalesce(pp.price, 0) as price
+            
+        from
+            dms_inv_docstockindistribution dsd
+        join dms_inv_docstockindistributionitem dsdi on dsdi.szDocId = dsd.szDocId
+        join dms_inv_product divi on divi.szId = dsdi.szProductId
+        join dms_inv_vehicle eks on eks.szId  = dsd.szVehicleId
+        left join product_price pp on pp.dms_inv_product_id = divi.iInternalId
+        where dsd.szDocStatus = 'Applied' and dsd.szDocId in ('{$btbStr}') 
+        SQL;
+        //DB::statement($sql);
+        $this->fromQuery($sql);
+    }
+
+    private function btbSupplierSql($startDate, $endDate)
+    {
         return <<<SQL
         select
             'BTB Supplier' as jenis,
@@ -191,11 +273,12 @@ class BtbValidate extends Model
         join dms_inv_carrier eks on eks.szId  = dsd.szCarrierId 
         left join btb_validate bv on bv.doc_id = dsd.szDocId and bv.deleted_at is null 
         where dsd.szDocStatus = 'Applied' and bv.reference_id is null 
-        and dsd.dtmCreated between '${startDate}' and '${endDate}'
+        and dsd.dtmCreated between '{$startDate}' and '{$endDate}'
         SQL;
     }
 
-    private function btbDistribusiSql($startDate, $endDate){
+    private function btbDistribusiSql($startDate, $endDate)
+    {
         return <<<SQL
         select
             'BTB Distribusi' as jenis,
@@ -217,82 +300,7 @@ class BtbValidate extends Model
         join dms_inv_vehicle eks on eks.szId  = dsd.szVehicleId 
         left join btb_validate bv on bv.doc_id = dsd.szDocId and bv.deleted_at is null
         where dsd.szDocStatus = 'Applied' and bv.reference_id is null        
-        and dsd.dtmCreated between '${startDate}' and '${endDate}'
+        and dsd.dtmCreated between '{$startDate}' and '{$endDate}'
         SQL;
-    }
-
-    public function insertBtbSupplier($btbs){
-        $userId = Auth::id();
-        $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');        
-        $btbStr = implode("','", $btbs->flatten()->all());
-        $sql = <<<SQL
-        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price )
-        select
-            'BTB Supplier' as jenis,
-            dsd.szDocId AS no_btb,
-            dsd.dtmCreated as tgl_btb,
-            dsdi.iId as reference_id,
-            -- dsd.szRefDocId AS sj_pabrik,
-            dsd.szRef1 AS co_reference,            
-            dsdi.szProductId,
-            divi.szName,
-            dsdi.szUomId, 
-            dsd.szRef2 AS sj_ekspedisi,
-            dsdi.decQty,
-            dsd.szCarrierId,
-            dsd.szWarehouseId,
-            dsd.szVehicle2 as nopol,
-            ${userId} as created_by ,
-            '${now}' as created_at,
-            dsd.szSupplierId,
-            coalesce(pp.price, 0) as price
-            
-        from
-            dms_inv_docstockinsupplier dsd
-        join dms_inv_docstockinsupplieritem dsdi on dsdi.szDocId = dsd.szDocId
-        join dms_inv_product divi on divi.szId = dsdi.szProductId
-        left join product_price pp on pp.dms_inv_product_id = divi.iInternalId
-        where dsd.szDocStatus = 'Applied' and dsd.szDocId in ('${btbStr}') 
-        SQL;
-        // DB::statement($sql);
-        $this->fromQuery($sql);
-}
-
-    public function insertBtbDistribusi($btbs){
-        $userId = Auth::id();
-        $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');
-        $btbStr = implode("','", $btbs->flatten()->all());
-        $sql = <<<SQL
-        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price )
-        select
-            'BTB Distribusi' as jenis,
-            dsd.szDocId AS no_btb,
-            dsd.dtmCreated as tgl_btb,
-            dsdi.iId as reference_id,
-            -- dsd.szBkbReferensi AS sj_pabrik,
-            dsd.szDoReferensi AS co_reference,
-            dsdi.szProductId,
-            divi.szName,
-            dsdi.szUomId, 
-            '-' AS sj_ekspedisi,
-            dsdi.decQty,
-            'Internal',
-            dsd.szWarehouseId,
-            eks.szPoliceNo as nopol,
-            ${userId} as created_by ,
-            '${now}' as created_at,
-            'Internal' as partner_id,
-            coalesce(pp.price, 0) as price
-            
-        from
-            dms_inv_docstockindistribution dsd
-        join dms_inv_docstockindistributionitem dsdi on dsdi.szDocId = dsd.szDocId
-        join dms_inv_product divi on divi.szId = dsdi.szProductId
-        join dms_inv_vehicle eks on eks.szId  = dsd.szVehicleId
-        left join product_price pp on pp.dms_inv_product_id = divi.iInternalId
-        where dsd.szDocStatus = 'Applied' and dsd.szDocId in ('${btbStr}') 
-        SQL;
-        //DB::statement($sql);
-        $this->fromQuery($sql);
     }
 }

@@ -3,20 +3,20 @@
 namespace App\DataTables\Purchase;
 
 use App\Models\Purchase\Invoice;
-use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Services\DataTable;
 
 class InvoiceDataTable extends DataTable
 {
     protected $withUpdate = false;
     /**
-    * example mapping filter column to search by keyword, default use %keyword%
-    */
+     * example mapping filter column to search by keyword, default use %keyword%.
+     */
     private $columnFilterOperator = [
-        'partner.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class,        
+        'partner.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
     ];
-    
+
     private $mapColumnSearch = [
         //'partner.name' => 'partner_id',
     ];
@@ -24,7 +24,8 @@ class InvoiceDataTable extends DataTable
     /**
      * Build DataTable class.
      *
-     * @param mixed $query Results from query() method.
+     * @param mixed $query results from query() method
+     *
      * @return \Yajra\DataTables\DataTableAbstract
      */
     public function dataTable($query)
@@ -33,12 +34,15 @@ class InvoiceDataTable extends DataTable
         if (!empty($this->columnFilterOperator)) {
             foreach ($this->columnFilterOperator as $column => $operator) {
                 $columnSearch = $this->mapColumnSearch[$column] ?? $column;
-                $dataTable->filterColumn($column, new $operator($columnSearch));                
+                $dataTable->filterColumn($column, new $operator($columnSearch));
             }
         }
-        if($this->withUpdate){
+        if ($this->withUpdate) {
             $dataTable->addColumn('action', 'purchase.invoices.datatables_actions');
         }
+        $dataTable->editColumn('partner.szName', function($q){
+            return !empty($q->partner->szName) ? $q->partner->szName : $q->ekspedisi->szName;            
+        });
         return $dataTable; //->addColumn('action', 'purchase.invoices.datatables_actions');
     }
 
@@ -46,11 +50,16 @@ class InvoiceDataTable extends DataTable
      * Get query source of dataTable.
      *
      * @param \App\Models\Invoice $model
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(Invoice $model)
     {
-        return $model->with(['partner'])->newQuery();
+        return $model->with(['partner' => function($q){
+            return $q->select(['szId', 'szName']);
+        },'ekspedisi' => function($q){
+            return $q->select(['szId', 'szName']);
+        }])->newQuery();
     }
 
     /**
@@ -61,57 +70,59 @@ class InvoiceDataTable extends DataTable
     public function html()
     {
         $buttons = [
-                    [
-                       'extend' => 'create',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-                    ],
-                    [
-                       'extend' => 'export',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
-                    ],
-                    // [
-                    //    'extend' => 'import',
-                    //    'className' => 'btn btn-default btn-sm no-corner',
-                    //    'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-                    // ],
-                    // [
-                    //    'extend' => 'print',
-                    //    'className' => 'btn btn-default btn-sm no-corner',
-                    //    'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
-                    // ],
-                    [
-                       'extend' => 'reset',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-undo"></i> ' .__('auth.app.reset').''
-                    ],
-                    [
-                       'extend' => 'reload',
-                       'className' => 'btn btn-default btn-sm no-corner',
-                       'text' => '<i class="fa fa-refresh"></i> ' .__('auth.app.reload').''
-                    ],
-                ];
-                
+            [
+                'extend' => 'create',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-plus"></i> '.__('auth.app.create').'',
+            ],
+            [
+                'extend' => 'export',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
+            ],
+            // [
+            //    'extend' => 'import',
+            //    'className' => 'btn btn-default btn-sm no-corner',
+            //    'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
+            // ],
+            // [
+            //    'extend' => 'print',
+            //    'className' => 'btn btn-default btn-sm no-corner',
+            //    'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
+            // ],
+            [
+                'extend' => 'reset',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-undo"></i> '.__('auth.app.reset').'',
+            ],
+            [
+                'extend' => 'reload',
+                'className' => 'btn btn-default btn-sm no-corner',
+                'text' => '<i class="fa fa-refresh"></i> '.__('auth.app.reload').'',
+            ],
+        ];
+
         $builder = $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->initComplete('function( settings, json ){ $(this).find(\'[data-toggle=tooltip]\').tooltip()}')
             ->parameters([
-                'dom'       => 'Brtip',
+                'dom' => 'Brtip',
                 'stateSave' => true,
-                'order'     => [[0, 'desc']],
-                'buttons'   => $buttons,
-                 'language' => [
-                   'url' => url('vendor/datatables/i18n/en-gb.json'),
-                 ],
-                 'responsive' => true,
-                 'fixedHeader' => true,
-                 'orderCellsTop' => true     
-            ]);
-        if($this->withUpdate){
+                'order' => [[0, 'desc']],
+                'buttons' => $buttons,
+                'language' => [
+                    'url' => url('vendor/datatables/i18n/en-gb.json'),
+                ],
+                'responsive' => true,
+                'fixedHeader' => true,
+                'orderCellsTop' => true,
+            ])
+        ;
+        if ($this->withUpdate) {
             $builder->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')]);
         }
+
         return $builder;
     }
 
@@ -132,7 +143,7 @@ class InvoiceDataTable extends DataTable
             'state' => new Column(['title' => __('models/invoices.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text']),
             'date_invoice' => new Column(['title' => __('models/invoices.fields.date_invoice'), 'data' => 'date_invoice', 'searchable' => true, 'elmsearch' => 'text']),
             'date_due' => new Column(['title' => __('models/invoices.fields.date_due'), 'data' => 'date_due', 'searchable' => true, 'elmsearch' => 'text']),
-            'partner_id' => new Column(['title' => __('models/invoices.fields.partner_id'), 'data' => 'partner.szName','defaultContent' => '', 'searchable' => true, 'elmsearch' => 'text'])
+            'partner_id' => new Column(['title' => __('models/invoices.fields.partner_id'), 'data' => 'partner.szName', 'defaultContent' => '', 'searchable' => true, 'elmsearch' => 'text']),
         ];
     }
 
@@ -143,6 +154,6 @@ class InvoiceDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'invoices_datatable_' . time();
+        return 'invoices_datatable_'.time();
     }
 }

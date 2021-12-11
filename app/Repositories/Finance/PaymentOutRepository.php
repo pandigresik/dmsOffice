@@ -17,5 +17,5 @@ class PaymentOutRepository extends PaymentRepository
     public function model()
     {
         return PaymentOut::class;
-    }    
+    }
 }

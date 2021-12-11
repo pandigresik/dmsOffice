@@ -17,6 +17,7 @@ class PaymentController extends AppBaseController
     protected $repository;
     protected $baseViewPath = 'finance.payments';
     protected $baseRoute = 'finance.payments';
+
     public function __construct()
     {
         $this->repository = PaymentRepository::class;
@@ -42,10 +43,11 @@ class PaymentController extends AppBaseController
         $validatedInvoice = [];
         $invoice = new InvoiceRepository(app());
         $readyPayment = $invoice->readyPayment();
-        if($readyPayment){
+        if ($readyPayment) {
             $validatedInvoice = $readyPayment->groupBy('partner_id');
         }
-        return view($this->baseViewPath.'.create')->with('invoices', $validatedInvoice)->with($this->getOptionItems());;
+
+        return view($this->baseViewPath.'.create')->with('invoices', $validatedInvoice)->with($this->getOptionItems());
     }
 
     /**

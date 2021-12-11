@@ -3,21 +3,18 @@
 namespace App\Http\Controllers\Purchase;
 
 use App\DataTables\Purchase\InvoiceLineDataTable;
-use App\Http\Requests\Purchase;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateInvoiceLineRequest;
 use App\Http\Requests\Purchase\UpdateInvoiceLineRequest;
-use App\Repositories\Purchase\InvoiceLineRepository;
-
-use Flash;
-use App\Http\Controllers\AppBaseController;
 use App\Models\Purchase\BtbValidate;
-use App\Repositories\Purchase\BtbValidateRepository;
+use App\Repositories\Purchase\InvoiceLineRepository;
+use Flash;
 use Illuminate\Http\Request;
 use Response;
 
 class InvoiceLineController extends AppBaseController
 {
-    /** @var  InvoiceLineRepository */
+    /** @var InvoiceLineRepository */
     protected $repository;
 
     public function __construct()
@@ -28,7 +25,6 @@ class InvoiceLineController extends AppBaseController
     /**
      * Display a listing of the InvoiceLine.
      *
-     * @param InvoiceLineDataTable $invoiceLineDataTable
      * @return Response
      */
     public function index(InvoiceLineDataTable $invoiceLineDataTable)
@@ -37,26 +33,25 @@ class InvoiceLineController extends AppBaseController
     }
 
     /**
-     * Show list btb validate to be invoiced
+     * Show list btb validate to be invoiced.
      *
      * @return Response
      */
     public function create(Request $request)
     {
-        $invoiceId = $request->get('invoice_id');
+        // $invoiceId = $request->get('invoice_id');
         $type = $request->get('type');
         $partnerId = $request->get('partner_id');
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
         $listdoc = $request->get('listdoc') ?? [];
-        $btbValidated = $type == 'supplier' ? BtbValidate::whereBetween('btb_date',[$startDate, $endDate])->canInvoicedSupplier($partnerId, $listdoc)->disableModelCaching()->get() : BtbValidate::whereBetween('btb_date',[$startDate, $endDate])->canInvoicedEkspedisi($partnerId, $listdoc)->get();
-        return view('purchase.invoice_lines.create')->with('datas', $btbValidated);
+        $btbValidated = 'supplier' == $type ? BtbValidate::whereBetween('btb_date', [$startDate, $endDate])->canInvoicedSupplier($partnerId, $listdoc)->disableModelCaching()->get() : BtbValidate::whereBetween('btb_date', [$startDate, $endDate])->canInvoicedEkspedisi($partnerId, $listdoc)->get();
+
+        return view('purchase.invoice_lines.create')->with(['datas' => $btbValidated, 'type' => $type]);
     }
 
     /**
      * Store a newly created InvoiceLine in storage.
-     *
-     * @param CreateInvoiceLineRequest $request
      *
      * @return Response
      */
@@ -74,7 +69,7 @@ class InvoiceLineController extends AppBaseController
     /**
      * Display the specified InvoiceLine.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -94,7 +89,7 @@ class InvoiceLineController extends AppBaseController
     /**
      * Show the form for editing the specified InvoiceLine.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -114,8 +109,7 @@ class InvoiceLineController extends AppBaseController
     /**
      * Update the specified InvoiceLine in storage.
      *
-     * @param  int              $id
-     * @param UpdateInvoiceLineRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -139,7 +133,7 @@ class InvoiceLineController extends AppBaseController
     /**
      * Remove the specified InvoiceLine from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -161,16 +155,15 @@ class InvoiceLineController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model InvoiceLine from storage.         
+     * Provide options item based on relationship model InvoiceLine from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

@@ -8,7 +8,7 @@
     </ul>
     <div class='tab-content'>
         @foreach ($data as $key => $item)
-            <div class='tab-pane' id='{{ $key }}' role='tabpanel'>{!! $item['defaultContent'] ?? '' !!}</div>
+            <div class='tab-pane {{ $item['class'] }}' id='{{ $key }}' role='tabpanel'>{!! $item['defaultContent'] ?? '' !!}</div>
         @endforeach        
     </div>
 </div>

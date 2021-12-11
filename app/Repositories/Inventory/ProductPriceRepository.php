@@ -42,7 +42,7 @@ class ProductPriceRepository extends BaseRepository
     public function create($input)
     {
         /** transaction menjadikan cache tidak berjalan dengan baik */
-        //$this->model->getConnection()->transaction(function() use ($input){        
+        //$this->model->getConnection()->transaction(function() use ($input){
         $model = $this->model->firstOrCreate(['dms_inv_product_id' => $input['dms_inv_product_id']]);
         $model->fill($input);
         $model->save();

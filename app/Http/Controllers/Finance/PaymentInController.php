@@ -3,11 +3,7 @@
 namespace App\Http\Controllers\Finance;
 
 use App\DataTables\Finance\PaymentDataTable;
-use App\Http\Requests\Finance\CreatePaymentRequest;
-use App\Http\Requests\Finance\UpdatePaymentRequest;
 use App\Repositories\Finance\PaymentInRepository;
-use App\Repositories\Purchase\InvoiceRepository;
-use Flash;
 use Response;
 
 class PaymentInController extends PaymentController
@@ -16,6 +12,7 @@ class PaymentInController extends PaymentController
     protected $repository;
     protected $baseViewPath = 'finance.payments_in';
     protected $baseRoute = 'finance.paymentIns';
+
     public function __construct()
     {
         $this->repository = PaymentInRepository::class;
@@ -29,5 +26,5 @@ class PaymentInController extends PaymentController
     public function index(PaymentDataTable $paymentDataTable)
     {
         return $paymentDataTable->render('finance.payments.index');
-    }    
+    }
 }

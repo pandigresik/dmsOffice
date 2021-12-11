@@ -6,11 +6,10 @@ use App\Models\Finance\Payment;
 use App\Repositories\BaseRepository;
 
 /**
- * Class PaymentRepository
- * @package App\Repositories\Finance
+ * Class PaymentRepository.
+ *
  * @version December 8, 2021, 9:49 pm WIB
-*/
-
+ */
 class PaymentRepository extends BaseRepository
 {
     /**
@@ -23,11 +22,11 @@ class PaymentRepository extends BaseRepository
         'state',
         'estimate_date',
         'pay_date',
-        'amount'
+        'amount',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -37,8 +36,8 @@ class PaymentRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Payment::class;
@@ -57,15 +56,16 @@ class PaymentRepository extends BaseRepository
         $paymentLine = $input['invoice_id'];
         $model->number = $model->getNextNumber();
         $model->type = 'in';
-        $model->state = Payment::READY_PAY;        
+        $model->state = Payment::READY_PAY;
         $model->reference = $model->external_reference;
         $model->amount_total = $input['amount'] - $model->getRawOriginal('amount_discount');
         $model->save();
         $model->invoiceUsers()->create([
-            'state' => $model->getRawOriginal('state')
-        ]);        
-        
+            'state' => $model->getRawOriginal('state'),
+        ]);
+
         $model->btb()->update(['invoiced' => 1]);
+
         return $model;
     }
 }

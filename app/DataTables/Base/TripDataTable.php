@@ -146,8 +146,8 @@ class TripDataTable extends DataTable
     {
         $locationItems = new LocationRepository(app());
         $productCategoriesItems = new ProductCategoriesRepository(app());
-        $dropDownOrigin = array_merge([['value' => '', 'text' => __('crud.option.location_placeholder')]], convertArrayPairValue($locationItems->allQuery(['type' => 'origin'])->get()->pluck('full_identity','id')));
-        $dropDownDestination = array_merge([['value' => '', 'text' => __('crud.option.location_placeholder')]], convertArrayPairValue($locationItems->allQuery(['type' => 'destination'])->get()->pluck('full_identity','id')));
+        $dropDownOrigin = array_merge([['value' => '', 'text' => __('crud.option.location_placeholder')]], convertArrayPairValue($locationItems->allQuery(['type' => 'origin'])->get()->pluck('full_identity', 'id')));
+        $dropDownDestination = array_merge([['value' => '', 'text' => __('crud.option.location_placeholder')]], convertArrayPairValue($locationItems->allQuery(['type' => 'destination'])->get()->pluck('full_identity', 'id')));
         $dropDownProductCategories = array_merge([['value' => '', 'text' => __('crud.option.product_categories_placeholder')]], convertArrayPairValue($productCategoriesItems->pluck()));
 
         return [

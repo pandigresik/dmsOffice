@@ -70,7 +70,6 @@ class DmsApSupplier extends Model
     const UPDATED_BY = null;
 
     public $table = 'dms_ap_supplier';
-    protected $showColumnOption = 'szName';
     public $primaryKey = 'iInternalId';
     public $fillable = [
         'iId',
@@ -98,6 +97,7 @@ class DmsApSupplier extends Model
         // 'dtmCreated' => 'required',
         // 'dtmLastUpdated' => 'required',
     ];
+    protected $showColumnOption = 'szName';
 
     protected $dates = ['deleted_at'];
 

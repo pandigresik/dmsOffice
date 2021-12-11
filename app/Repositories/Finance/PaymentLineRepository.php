@@ -6,11 +6,10 @@ use App\Models\Finance\PaymentLine;
 use App\Repositories\BaseRepository;
 
 /**
- * Class PaymentLineRepository
- * @package App\Repositories\Finance
+ * Class PaymentLineRepository.
+ *
  * @version December 8, 2021, 9:49 pm WIB
-*/
-
+ */
 class PaymentLineRepository extends BaseRepository
 {
     /**
@@ -22,11 +21,11 @@ class PaymentLineRepository extends BaseRepository
         'amount',
         'amount_cn',
         'amount_dn',
-        'amount_total'
+        'amount_total',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -36,8 +35,8 @@ class PaymentLineRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return PaymentLine::class;

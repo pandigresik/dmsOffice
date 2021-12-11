@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Base;
 
-use Flash;
-use Response;
-use App\Http\Requests\Base;
-use App\Repositories\Base\CityRepository;
 use App\DataTables\Base\LocationDataTable;
-
 use App\Http\Controllers\AppBaseController;
-use App\Repositories\Base\LocationRepository;
 use App\Http\Requests\Base\CreateLocationRequest;
 use App\Http\Requests\Base\UpdateLocationRequest;
+use App\Repositories\Base\CityRepository;
+use App\Repositories\Base\LocationRepository;
+use Flash;
+use Response;
 
 class LocationController extends AppBaseController
 {
-    /** @var  LocationRepository */
+    /** @var LocationRepository */
     protected $repository;
 
     public function __construct()
@@ -26,7 +24,6 @@ class LocationController extends AppBaseController
     /**
      * Display a listing of the Location.
      *
-     * @param LocationDataTable $locationDataTable
      * @return Response
      */
     public function index(LocationDataTable $locationDataTable)
@@ -47,8 +44,6 @@ class LocationController extends AppBaseController
     /**
      * Store a newly created Location in storage.
      *
-     * @param CreateLocationRequest $request
-     *
      * @return Response
      */
     public function store(CreateLocationRequest $request)
@@ -65,7 +60,7 @@ class LocationController extends AppBaseController
     /**
      * Display the specified Location.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -85,7 +80,7 @@ class LocationController extends AppBaseController
     /**
      * Show the form for editing the specified Location.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -105,8 +100,7 @@ class LocationController extends AppBaseController
     /**
      * Update the specified Location in storage.
      *
-     * @param  int              $id
-     * @param UpdateLocationRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -130,7 +124,7 @@ class LocationController extends AppBaseController
     /**
      * Remove the specified Location from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -152,24 +146,25 @@ class LocationController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Location from storage.         
+     * Provide options item based on relationship model Location from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-                
+    private function getOptionItems()
+    {
         $city = new CityRepository(app());
         $typeItems = [
             '' => __('crud.option.location_type_placeholder'),
             'origin' => 'origin',
             'destination' => 'destination',
-            'common' => 'common'
+            'common' => 'common',
         ];
+
         return [
             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck([], null, null, 'name', 'name'),
-            'typeItems' => $typeItems
+            'typeItems' => $typeItems,
         ];
     }
 }

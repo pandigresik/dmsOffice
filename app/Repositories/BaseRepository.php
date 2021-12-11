@@ -178,7 +178,7 @@ abstract class BaseRepository
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
      */
     public function update($input, $id)
-    {        
+    {
         $query = $this->model->newQuery();
 
         $model = $query->findOrFail($id);

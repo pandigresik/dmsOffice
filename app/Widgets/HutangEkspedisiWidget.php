@@ -24,9 +24,10 @@ class HutangEkspedisiWidget extends AbstractWidget
             ['text' => '2 Bill to validate', 'amount' => Money::IDR(5000000, true), 'url' => ''],
             ['text' => '6 Bill to pay', 'amount' => Money::IDR(75000000, true), 'url' => ''],
         ];
+
         return view('widgets.hutang_ekspedisi_widget', [
             'config' => $this->config,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Models\Finance;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -66,15 +66,13 @@ class DebitCreditNote extends Model
 
     use HasFactory;
 
-    public $table = 'debit_credit_note';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const PARTNER_TYPE = ['supplier' => 'supplier', 'ekspedisi' => 'ekspedisi', 'customer' => 'customer', 'other' => 'lainnya'];
 
-    protected $dates = ['deleted_at'];    
+    public $table = 'debit_credit_note';
 
-    public $fillable = [        
+    public $fillable = [
         'type',
         'partner_type',
         'partner_id',
@@ -82,8 +80,25 @@ class DebitCreditNote extends Model
         'amount',
         'reference',
         'invoice_id',
-        'description'
+        'description',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'type' => 'required|string',
+        'partner_type' => 'required|string',
+        'partner_id' => 'required|string|max:30',
+        'issue_date' => 'required',
+        'reference' => 'nullable|string|max:30',
+        'invoice_id' => 'required',
+        'description' => 'nullable|string',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -99,34 +114,21 @@ class DebitCreditNote extends Model
         'issue_date' => 'date',
         'reference' => 'string',
         'invoice_id' => 'integer',
-        'description' => 'string'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [        
-        'type' => 'required|string',
-        'partner_type' => 'required|string',
-        'partner_id' => 'required|string|max:30',
-        'issue_date' => 'required',
-        'reference' => 'nullable|string|max:30',
-        'invoice_id' => 'required',
-        'description' => 'nullable|string'
+        'description' => 'string',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function invoice()
     {
         return $this->belongsTo(\App\Models\Purchase\Invoice::class, 'invoice_id');
-    }    
+    }
 
     /**
-    * $type = CN or DN
+     * $type = CN or DN.
+     *
+     * @param mixed $type
      */
     public function getNextNumber($type)
     {
@@ -148,12 +150,14 @@ class DebitCreditNote extends Model
     public function getAmountAttribute($value)
     {
         $pengali = 'CN' == $this->attributes['type'] ? 1 : -1;
+
         return localNumberFormat($pengali * $value);
     }
 
     public function getRawAmountAttribute($value)
     {
         $pengali = 'CN' == $this->attributes['type'] ? 1 : -1;
+
         return $pengali * $this->attributes['amount'];
     }
 }

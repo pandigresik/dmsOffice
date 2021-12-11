@@ -155,11 +155,13 @@ class DatabaseSynchronizer
         $statement = $prepare['statement'];
         $amount = $prepare['amount'];
         $counter = 0;
-        if (!empty($amount)) {            
+        if (!empty($amount)) {
             while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
                 $exists = $this->getToDb()->table($tableName)->where($queryColumn, $row->{$queryColumn})->first();
-                /** remove iiInternalId because auto increment column */
-                if(isset($row->iInternalId)) unset($row->iInternalId);
+                // remove iiInternalId because auto increment column
+                if (isset($row->iInternalId)) {
+                    unset($row->iInternalId);
+                }
 
                 if (!$exists) {
                     $this->getToDb()->table($tableName)->insert((array) $row);

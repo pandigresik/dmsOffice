@@ -2,14 +2,12 @@
 
 namespace App\Http\Requests\Finance;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Finance\DebitCreditNote;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateDebitCreditNoteRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = [];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -19,6 +17,7 @@ class UpdateDebitCreditNoteRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'debit_credit_note-update';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -30,9 +29,8 @@ class UpdateDebitCreditNoteRequest extends FormRequest
     public function rules()
     {
         $rules = DebitCreditNote::$rules;
-        
-        $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
-        return $rules;
+
+        return $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
     }
 
     /**
@@ -41,10 +39,12 @@ class UpdateDebitCreditNoteRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new DebitCreditNote)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new DebitCreditNote())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+
         return parent::all($keys);
     }
 }

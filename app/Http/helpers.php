@@ -31,6 +31,7 @@ if (!function_exists('localNumberFormat')) {
         if (null === $digitDecimal) {
             $digitDecimal = config('local.digit_decimal');
         }
+
         return number_format($value, $digitDecimal, config('local.decimal_separator'), config('local.thousand_separator'));
     }
 }
@@ -41,13 +42,14 @@ if (!function_exists('localNumberAccountingFormat')) {
         if (null === $digitDecimal) {
             $digitDecimal = config('local.digit_decimal');
         }
-        
-        if($value < 0){            
+
+        if ($value < 0) {
             $result = '( '.number_format($value * -1, $digitDecimal, config('local.decimal_separator'), config('local.thousand_separator')).' )';
-        }else{
+        } else {
             $result = number_format($value, $digitDecimal, config('local.decimal_separator'), config('local.thousand_separator'));
         }
-        return $result ;
+
+        return $result;
     }
 }
 

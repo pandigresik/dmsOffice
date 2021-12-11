@@ -30,7 +30,7 @@ class BtbValidateController extends AppBaseController
      */
     public function index(BtbValidateDataTable $btbValidateDataTable)
     {
-        return $btbValidateDataTable->render('purchase.btb_validates.index');   
+        return $btbValidateDataTable->render('purchase.btb_validates.index');
     }
 
     /**
@@ -40,13 +40,15 @@ class BtbValidateController extends AppBaseController
      */
     public function create(Request $request)
     {
-        if($request->ajax()){
-            $period = explode(' - ',$request->get('ref'));
+        if ($request->ajax()) {
+            $period = explode(' - ', $request->get('ref'));
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-            $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate);        
-            return view('purchase.btb_validates.list')->with('datas',$datas);
+            $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate);
+
+            return view('purchase.btb_validates.list')->with('datas', $datas);
         }
+
         return view('purchase.btb_validates.create')->with($this->getOptionItems());
     }
 
@@ -62,7 +64,7 @@ class BtbValidateController extends AppBaseController
         $btbValidate = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/btbValidates.singular')]));
-        
+
         return redirect(route('purchase.btbValidates.index'));
     }
 

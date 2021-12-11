@@ -3,8 +3,8 @@
 namespace App\Models\Finance;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -62,13 +62,10 @@ class PaymentLine extends Model
 
     use HasFactory;
 
-    public $table = 'payment_line';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
+    public $table = 'payment_line';
 
     public $fillable = [
         'payment_id',
@@ -76,8 +73,23 @@ class PaymentLine extends Model
         'amount',
         'amount_cn_dn',
         'amount_dn',
-        'amount_total'
+        'amount_total',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'payment_id' => 'required',
+        'invoice_id' => 'required',
+        'amount' => 'required|numeric',
+        'amount_cn_dn' => 'required|numeric',
+        'amount_total' => 'required|numeric',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -89,26 +101,13 @@ class PaymentLine extends Model
         'payment_id' => 'integer',
         'invoice_id' => 'integer',
         'amount' => 'decimal:2',
-        'amount_cn_dn' => 'decimal:2',        
-        'amount_total' => 'decimal:2'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'payment_id' => 'required',
-        'invoice_id' => 'required',
-        'amount' => 'required|numeric',
-        'amount_cn_dn' => 'required|numeric',        
-        'amount_total' => 'required|numeric'
+        'amount_cn_dn' => 'decimal:2',
+        'amount_total' => 'decimal:2',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function invoice()
     {
         return $this->belongsTo(\App\Models\Purchase\Invoice::class, 'invoice_id');
@@ -116,7 +115,7 @@ class PaymentLine extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function payment()
     {
         return $this->belongsTo(\App\Models\Finance\Payment::class, 'payment_id');

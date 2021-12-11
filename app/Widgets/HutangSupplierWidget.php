@@ -3,9 +3,9 @@
 namespace App\Widgets;
 
 use Akaunting\Money\Money;
-use Arrilot\Widgets\AbstractWidget;
-use App\Repositories\Purchase\InvoiceRepository;
 use App\Repositories\Finance\PaymentOutRepository;
+use App\Repositories\Purchase\InvoiceRepository;
+use Arrilot\Widgets\AbstractWidget;
 
 class HutangSupplierWidget extends AbstractWidget
 {
@@ -27,12 +27,13 @@ class HutangSupplierWidget extends AbstractWidget
         $billToValidate = $bill->billValidate();
         $billToPay = $payment->paymentToPay();
         $data = [
-            ['text' => ( $billToValidate->qty ?? 0 ).' Bill to validate', 'amount' => Money::IDR($billToValidate->amount ?? 0 , true), 'url' => route('finance.paymentOuts.create')],
-            ['text' => ( $billToPay->qty ?? 0 ).' Bill to pay', 'amount' => Money::IDR($billToPay->amount ?? 0 , true), 'url' => route('finance.paymentOuts.index')],
+            ['text' => ($billToValidate->qty ?? 0).' Bill to validate', 'amount' => Money::IDR($billToValidate->amount ?? 0, true), 'url' => route('finance.paymentOuts.create')],
+            ['text' => ($billToPay->qty ?? 0).' Bill to pay', 'amount' => Money::IDR($billToPay->amount ?? 0, true), 'url' => route('finance.paymentOuts.index')],
         ];
+
         return view('widgets.hutang_supplier_widget', [
             'config' => $this->config,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

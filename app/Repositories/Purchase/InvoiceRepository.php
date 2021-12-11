@@ -6,11 +6,10 @@ use App\Models\Purchase\Invoice;
 use App\Repositories\BaseRepository;
 
 /**
- * Class InvoiceRepository
- * @package App\Repositories\Purchase
+ * Class InvoiceRepository.
+ *
  * @version November 26, 2021, 9:05 pm WIB
-*/
-
+ */
 class InvoiceRepository extends BaseRepository
 {
     /**
@@ -26,11 +25,11 @@ class InvoiceRepository extends BaseRepository
         'state',
         'date_invoice',
         'date_due',
-        'partner_id'
+        'partner_id',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -40,8 +39,8 @@ class InvoiceRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Invoice::class;
@@ -56,8 +55,13 @@ class InvoiceRepository extends BaseRepository
      */
     public function create($input)
     {
+        if(isset($input['ekspedisi_id'])){
+            $input['partner_type'] = 'ekspedisi';
+            $input['partner_id'] = $input['ekspedisi_id'];
+            unset($input['ekspedisi_id']);
+        }
         $model = $this->model->newInstance($input);
-        $invoiceLine = $input['invoice_line'];
+        $invoiceLine = $input['invoice_line'];        
         $model->number = $model->getNextNumber();
         $model->type = 'in';
         $model->state = Invoice::DEFAULT_STATE;
@@ -67,40 +71,34 @@ class InvoiceRepository extends BaseRepository
         $model->amount_total = $input['amount'] - $model->getRawOriginal('amount_discount');
         $model->save();
         $model->invoiceUsers()->create([
-            'state' => $model->getRawOriginal('state')
+            'state' => $model->getRawOriginal('state'),
         ]);
         $this->setInvoiceLines($invoiceLine, $model);
-        
-        $model->btb()->update(['invoiced' => 1]);
-        return $model;
-    }
 
-    private function setInvoiceLines($invoiceLine, $model){
-        if(!empty($invoiceLine)){
-            $model->invoiceLines()->forceDelete();
-            foreach($invoiceLine as $line){
-                $model->invoiceLines()->create(json_decode($line, 1));
-            }
-        }
+        $model->btb()->update(['invoiced' => 1]);
+
+        return $model;
     }
 
     public function update($input, $id)
     {
         $invoiceLine = $input['invoice_line'];
-        $model = parent::update($input, $id);        
+        $model = parent::update($input, $id);
         $this->setInvoiceLines($invoiceLine, $model);
         $model->invoiceUsers()->create([
-            'state' => $model->getRawOriginal('state')
+            'state' => $model->getRawOriginal('state'),
         ]);
+
         return $model;
     }
 
     public function validate($id)
-    {           
-        $model = parent::update(['state' => 'validate'], $id);        
+    {
+        $model = parent::update(['state' => 'validate'], $id);
         $model->invoiceUsers()->create([
-            'state' => $model->getRawOriginal('state')
+            'state' => $model->getRawOriginal('state'),
         ]);
+
         return $model;
     }
 
@@ -119,19 +117,32 @@ class InvoiceRepository extends BaseRepository
         $model->btb()->update(['invoiced' => 0]);
         $model->invoiceLines()->forceDelete();
         $model->invoiceUsers()->forceDelete();
+
         return $model->forceDelete();
     }
 
-    public function billSubmit(){
+    public function billSubmit()
+    {
         return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount_total) amount')->submit()->first();
     }
 
-    public function billValidate(){
+    public function billValidate()
+    {
         return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount_total) amount')->validate()->first();
     }
 
-    public function readyPayment(){
-        return $this->model->disableModelCaching()->with(['invoiceLines','partner', 'debitCreditNote'])->validate()->get();
+    public function readyPayment()
+    {
+        return $this->model->disableModelCaching()->with(['invoiceLines', 'partner', 'debitCreditNote'])->validate()->get();
     }
-    
+
+    private function setInvoiceLines($invoiceLine, $model)
+    {
+        if (!empty($invoiceLine)) {
+            $model->invoiceLines()->forceDelete();
+            foreach ($invoiceLine as $line) {
+                $model->invoiceLines()->create(json_decode($line, 1));
+            }
+        }
+    }
 }

@@ -7,11 +7,10 @@ use App\Models\Purchase\Invoice;
 use App\Repositories\BaseRepository;
 
 /**
- * Class PaymentRepository
- * @package App\Repositories\Finance
+ * Class PaymentRepository.
+ *
  * @version December 8, 2021, 9:49 pm WIB
-*/
-
+ */
 class PaymentRepository extends BaseRepository
 {
     /**
@@ -24,11 +23,11 @@ class PaymentRepository extends BaseRepository
         'state',
         'estimate_date',
         'pay_date',
-        'amount'
+        'amount',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -38,8 +37,8 @@ class PaymentRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Payment::class;
@@ -58,19 +57,21 @@ class PaymentRepository extends BaseRepository
         $paymentLine = $input['invoice_id'];
         $model->type = $model->defaultType();
         $model->number = $model->getNextNumber();
-        $model->state = Payment::READY_PAY;                
+        $model->state = Payment::READY_PAY;
         $model->save();
-        
+
         $this->setPaymentLines($paymentLine, $model);
-        
+
         $model->invoices()->update(['state' => Payment::READY_PAY]);
+
         return $model;
     }
 
     public function update($input, $id)
-    {        
-        $model = parent::update($input, $id);        
+    {
+        $model = parent::update($input, $id);
         $model->invoices()->update(['state' => Payment::PAY]);
+
         return $model;
     }
 
@@ -87,14 +88,21 @@ class PaymentRepository extends BaseRepository
 
         $model = $query->findOrFail($id);
         $model->invoices()->update(['state' => Invoice::VALIDATE]);
-        $model->paymentLines()->forceDelete();        
+        $model->paymentLines()->forceDelete();
+
         return $model->forceDelete();
     }
 
-    private function setPaymentLines($paymentLine, $model){
-        if(!empty($paymentLine)){
+    public function paymentToPay()
+    {
+        return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount) amount')->readyToPay()->first();
+    }
+
+    private function setPaymentLines($paymentLine, $model)
+    {
+        if (!empty($paymentLine)) {
             $model->paymentLines()->forceDelete();
-            foreach($paymentLine as $line){
+            foreach ($paymentLine as $line) {
                 $lineArr = json_decode($line, 1);
                 $lineArr['invoice_id'] = $lineArr['id'];
                 $lineArr['amount_total'] = $lineArr['amount'] + $lineArr['amount_cn_dn'];
@@ -103,8 +111,4 @@ class PaymentRepository extends BaseRepository
             }
         }
     }
-
-    public function paymentToPay(){
-        return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount) amount')->readyToPay()->first();
-    }    
 }

@@ -3,8 +3,8 @@
 namespace App\Models\Purchase;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -30,18 +30,26 @@ class InvoiceUser extends Model
 
     use HasFactory;
 
-    public $table = 'invoice_user';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];    
+    public $table = 'invoice_user';
 
     public $fillable = [
         'invoice_id',
-        'state'
+        'state',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'invoice_id' => 'required',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -50,21 +58,12 @@ class InvoiceUser extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'invoice_id' => 'integer'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'invoice_id' => 'required'
+        'invoice_id' => 'integer',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function invoice()
     {
         return $this->belongsTo(\App\Models\Purchase\Invoice::class, 'invoice_id');

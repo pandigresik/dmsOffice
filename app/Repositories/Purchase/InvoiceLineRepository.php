@@ -6,11 +6,10 @@ use App\Models\Purchase\InvoiceLine;
 use App\Repositories\BaseRepository;
 
 /**
- * Class InvoiceLineRepository
- * @package App\Repositories\Purchase
+ * Class InvoiceLineRepository.
+ *
  * @version December 4, 2021, 8:42 pm WIB
-*/
-
+ */
 class InvoiceLineRepository extends BaseRepository
 {
     /**
@@ -24,11 +23,11 @@ class InvoiceLineRepository extends BaseRepository
         'product_name',
         'uom_id',
         'qty',
-        'price'
+        'price',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -38,8 +37,8 @@ class InvoiceLineRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return InvoiceLine::class;

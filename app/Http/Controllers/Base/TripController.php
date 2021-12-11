@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Base;
 
-use Flash;
-use Response;
 use App\DataTables\Base\TripDataTable;
-use App\Repositories\Base\CityRepository;
-use App\Repositories\Base\TripRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateTripRequest;
 use App\Http\Requests\Base\UpdateTripRequest;
 use App\Repositories\Base\LocationRepository;
+use App\Repositories\Base\TripRepository;
 use App\Repositories\Inventory\ProductCategoriesRepository;
+use Flash;
+use Response;
 
 class TripController extends AppBaseController
 {

@@ -2,10 +2,6 @@
 
 namespace App\Models\Finance;
 
-use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 /**
  * @SWG\Definition(
  *      definition="Payment",

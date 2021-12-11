@@ -39,11 +39,11 @@ class DmsInvVehicletypeDataTable extends DataTable
 
         return $dataTable
             ->editColumn('decVolume', function ($q) {
-                        return '<div class="text-right">'.$q->decVolume.'</div>';
-                    })
+                return '<div class="text-right">'.$q->decVolume.'</div>';
+            })
             ->editColumn('decWeight', function ($q) {
-                        return '<div class="text-right">'.$q->decWeight.'</div>';
-                    })
+                return '<div class="text-right">'.$q->decWeight.'</div>';
+            })
             ->addColumn('action', 'inventory.dms_inv_vehicletypes.datatables_actions')
             ->escapeColumns([])
         ;

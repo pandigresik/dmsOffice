@@ -10,10 +10,13 @@
                                 <i class="fa fa-plus-square-o fa-lg"></i>
                                 <strong>Create @lang('models/invoiceLines.singular')</strong>
                             </div>
-                            <div class="card-body">                                
-
-                                   @include('purchase.invoice_lines.list')
-                                
+                            <div class="card-body">
+                                @if ($type == 'supplier')
+                                   @include('purchase.invoice_lines.list_supplier') 
+                                @else
+                                   @include('purchase.invoice_lines.list_ekspedisi') 
+                                @endif                                
+                                   
                             </div>
                             <div class="card-footer">
                                 <!-- Submit Field -->
@@ -34,7 +37,7 @@
             const _btb = _form.find('input[name^=btb]:checked')                                               
             const _divWrapper = $('.button-caller').closest('div')
             const _formCaller = _divWrapper.closest('form')
-            const _invoiceLines = _formCaller.find('#invoice-lines')
+            const _invoiceLines = _formCaller.find('.invoice-lines')
             let _invoiceLinesTable = _invoiceLines.find('table')
             if(_btb.length){
                 if(!_invoiceLinesTable.length){

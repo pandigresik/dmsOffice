@@ -4,6 +4,7 @@ namespace App\Models\Purchase;
 
 use App\Models\Base\DmsApSupplier;
 use App\Models\BaseEntity as Model;
+use App\Models\Inventory\DmsInvCarrier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -103,6 +104,7 @@ class Invoice extends Model
         'date_invoice',
         'date_due',
         'partner_id',
+        'partner_type'        
     ];
 
     /**
@@ -110,17 +112,12 @@ class Invoice extends Model
      *
      * @var array
      */
-    public static $rules = [
-        // 'number' => 'required|string|max:30',
-        // 'type' => 'required|string',
-        'external_reference' => 'required|string|max:255',
-        //'qty' => 'required|integer',
-        'amount' => 'required|numeric',
-        //'amount_discount' => 'required|numeric',
-        // 'state' => 'required|string|max:10',
+    public static $rules = [        
+        'external_reference' => 'required|string|max:255',        
+        'amount' => 'required|numeric',        
         'date_invoice' => 'required',
         'date_due' => 'required',
-        'partner_id' => 'required|string|max:20',
+        // 'partner_id' => 'required|string|max:20',
     ];
 
     protected $dates = ['deleted_at'];
@@ -173,7 +170,7 @@ class Invoice extends Model
      */
     public function btb()
     {
-        return $this->hasManyThrough(\App\Models\Purchase\BtbValidate::class, \App\Models\Purchase\InvoiceLine::class, 'invoice_id','doc_id','id', 'doc_id');
+        return $this->hasManyThrough(\App\Models\Purchase\BtbValidate::class, \App\Models\Purchase\InvoiceLine::class, 'invoice_id', 'doc_id', 'id', 'doc_id');
     }
 
     /**
@@ -185,7 +182,11 @@ class Invoice extends Model
     {
         return $this->hasOne(DmsApSupplier::class, 'szId', 'partner_id');
     }
-    
+
+    public function ekspedisi()
+    {
+        return $this->hasOne(DmsInvCarrier::class, 'szId', 'partner_id');
+    }
 
     public function getNextNumber()
     {

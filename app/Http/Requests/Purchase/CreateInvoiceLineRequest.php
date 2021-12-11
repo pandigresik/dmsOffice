@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Purchase;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Purchase\InvoiceLine;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateInvoiceLineRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateInvoiceLineRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'invoice_line-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateInvoiceLineRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new InvoiceLine)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new InvoiceLine())->fillable;
+
         return parent::all($keys);
     }
 }

@@ -2,14 +2,12 @@
 
 namespace App\Http\Requests\Purchase;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Purchase\Invoice;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateInvoiceRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = [];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -19,6 +17,7 @@ class UpdateInvoiceRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'invoice-update';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -30,10 +29,12 @@ class UpdateInvoiceRequest extends FormRequest
     public function rules()
     {
         $rules = Invoice::$rules;
-        /** if request from  InvoiceValidateController set rules as [] */
-        if($this->route()->getController() instanceof \App\Http\Controllers\Purchase\InvoiceValidateController ) return [];
-        $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
-        return $rules;
+        // if request from  InvoiceValidateController set rules as []
+        if ($this->route()->getController() instanceof \App\Http\Controllers\Purchase\InvoiceValidateController) {
+            return [];
+        }
+
+        return $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
     }
 
     /**
@@ -42,11 +43,13 @@ class UpdateInvoiceRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new Invoice)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new Invoice())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         $keys = array_merge(['invoice_line'], $keys);
+
         return parent::all($keys);
     }
 }

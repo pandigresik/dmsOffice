@@ -50,6 +50,7 @@ class TripEkspedisiController extends AppBaseController
     {
         $idForm = \Carbon\Carbon::now()->timestamp;
         $this->setDefaultCarrier(request('dms_inv_carrier_id'));
+
         return view('inventory.trip_ekspedisis.create')->with($this->getOptionItems())
             ->with(['dataCard' => ['stateForm' => 'insert'], 'stateForm' => 'insert', 'idForm' => $idForm, 'prefixName' => 'tripEkspedisis['.$idForm.']'])
         ;
@@ -160,6 +161,28 @@ class TripEkspedisiController extends AppBaseController
     }
 
     /**
+     * Get the value of defaultCarrier.
+     */
+    public function getDefaultCarrier()
+    {
+        return $this->defaultCarrier;
+    }
+
+    /**
+     * Set the value of defaultCarrier.
+     *
+     * @param mixed $defaultCarrier
+     *
+     * @return self
+     */
+    public function setDefaultCarrier($defaultCarrier)
+    {
+        $this->defaultCarrier = $defaultCarrier;
+
+        return $this;
+    }
+
+    /**
      * Provide options item based on relationship model TripEkspedisi from storage.
      *
      * @throws \Exception
@@ -168,35 +191,16 @@ class TripEkspedisiController extends AppBaseController
      */
     private function getOptionItems()
     {
-        $trip = new TripRepository(app());        
+        $trip = new TripRepository(app());
         $carrierId = $this->getDefaultCarrier();
+
         return [
             'tripItems' => $trip->allQuery()
                 ->disableModelCaching()
-                ->whereDoesntHave('tripEkspedisis', function ($q)use($carrierId){
+                ->whereDoesntHave('tripEkspedisis', function ($q) use ($carrierId) {
                     $q->where(['dms_inv_carrier_id' => $carrierId]);
                 })
                 ->with(['productCategories'])->get()->pluck('full_identity', 'id')->toArray(),
         ];
-    }
-
-    /**
-     * Get the value of defaultCarrier
-     */ 
-    public function getDefaultCarrier()
-    {
-        return $this->defaultCarrier;
-    }
-
-    /**
-     * Set the value of defaultCarrier
-     *
-     * @return  self
-     */ 
-    public function setDefaultCarrier($defaultCarrier)
-    {
-        $this->defaultCarrier = $defaultCarrier;
-
-        return $this;
     }
 }

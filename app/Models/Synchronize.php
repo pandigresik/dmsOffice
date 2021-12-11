@@ -55,11 +55,11 @@ class Synchronize extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'table_name' => 'string'        
+        'table_name' => 'string',
     ];
 
-    public function getUpdatedAtAttribute($value){
-
+    public function getUpdatedAtAttribute($value)
+    {
         return localFormatDateTime($value);
     }
 }

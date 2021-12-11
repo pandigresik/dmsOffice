@@ -3,8 +3,8 @@
 namespace App\Models\Finance;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -62,15 +62,13 @@ class Payment extends Model
 
     use HasFactory;
 
-    public $table = 'payment';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const READY_PAY = 'ready_pay';
     const PAY = 'pay';
     const TYPE = 'OUT';
 
-    protected $dates = ['deleted_at'];
+    public $table = 'payment';
 
     public $fillable = [
         'number',
@@ -79,8 +77,25 @@ class Payment extends Model
         'state',
         'estimate_date',
         'pay_date',
-        'amount'        
+        'amount',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        // 'number' => 'required|string|max:30',
+        // 'type' => 'required|string',
+        // 'reference' => 'required|string|max:255',
+        // 'state' => 'required|string|max:10',
+        // 'estimate_date' => 'required',
+        // 'pay_date' => 'required',
+        'amount' => 'required|numeric|min:1',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -95,24 +110,9 @@ class Payment extends Model
         'state' => 'string',
         'estimate_date' => 'date',
         'pay_date' => 'date',
-        'amount' => 'decimal:2'
+        'amount' => 'decimal:2',
     ];
 
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        // 'number' => 'required|string|max:30',
-        // 'type' => 'required|string',
-        // 'reference' => 'required|string|max:255',
-        // 'state' => 'required|string|max:10',
-        // 'estimate_date' => 'required',
-        // 'pay_date' => 'required',
-        'amount' => 'required|numeric|min:1'
-    ];
-    
     public function scopeReadyToPay($query)
     {
         return $query->whereState(self::READY_PAY);
@@ -125,7 +125,7 @@ class Payment extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     **/
+     */
     public function paymentLines()
     {
         return $this->hasMany(\App\Models\Finance\PaymentLine::class, 'payment_id');
@@ -140,7 +140,7 @@ class Payment extends Model
     }
 
     /**
-    * $type = IN or OUT
+     * $type = IN or OUT.
      */
     public function getNextNumber()
     {
@@ -169,8 +169,8 @@ class Payment extends Model
         return localNumberFormat($value);
     }
 
-    public function defaultType(){
-
+    public function defaultType()
+    {
         return self::TYPE;
     }
 }
