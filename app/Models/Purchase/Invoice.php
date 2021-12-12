@@ -89,6 +89,8 @@ class Invoice extends Model
     const APPROVE = 'approve';
     const READY_PAY = 'ready_pay';
     const PAY = 'pay';
+    const SUPPLIER = 'supplier';
+    const EKSPEDISI = 'ekspedisi';
 
     public $table = 'invoice';
     public $isCachable = false;
@@ -210,6 +212,16 @@ class Invoice extends Model
         return $query->whereState(self::VALIDATE);
     }
 
+    public function scopeSupplierPartner($query)
+    {
+        return $query->wherePartnerType(self::SUPPLIER);
+    }
+
+    public function scopeEkspedisiPartner($query)
+    {
+        return $query->wherePartnerType(self::EKSPEDISI);
+    }
+
     public function getQtyAttribute($value)
     {
         return localNumberFormat($value, 0);
@@ -238,5 +250,12 @@ class Invoice extends Model
     public function getDateDueAttribute($value)
     {
         return localFormatDate($value);
+    }
+
+    public function getFullIdentityAttribute($value)
+    {
+        $partnerName = $this->attributes['partner_type'] == self::SUPPLIER ? $this->supplier->szName : $this->ekspedisi->szName;
+        
+        return $this->attributes['number'].'('.$partnerName.' - '.$this->attributes['reference'].')';
     }
 }

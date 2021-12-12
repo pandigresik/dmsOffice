@@ -10,5 +10,7 @@ return array (
     'district' => 'Kecamatan',
     'city' => 'Kota',
     'type' => 'Tipe',
+    'reference_id' => 'Referensi',
+    'reference_type' => 'Tipe Referensi'
   ),
 );

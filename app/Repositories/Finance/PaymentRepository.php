@@ -98,6 +98,16 @@ class PaymentRepository extends BaseRepository
         return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount) amount')->readyToPay()->first();
     }
 
+    public function supplierPaymentToPay()
+    {
+        return $this->model->disableModelCaching()->supplier()->selectRaw('count(*) as qty, sum(amount) amount')->readyToPay()->first();
+    }
+
+    public function ekspedisiPaymentToPay()
+    {
+        return $this->model->disableModelCaching()->ekspedisi()->selectRaw('count(*) as qty, sum(amount) amount')->readyToPay()->first();
+    }
+
     private function setPaymentLines($paymentLine, $model)
     {
         if (!empty($paymentLine)) {

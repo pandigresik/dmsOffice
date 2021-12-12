@@ -39,7 +39,7 @@ class CreateLocationRequest extends FormRequest
     public function all($keys = null)
     {
         $keys = (new Location())->fillable;
-
+        
         return parent::all($keys);
     }
 }

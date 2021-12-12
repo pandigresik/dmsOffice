@@ -4,6 +4,8 @@ namespace App\Widgets;
 
 use Akaunting\Money\Money;
 use Arrilot\Widgets\AbstractWidget;
+use App\Repositories\Purchase\InvoiceRepository;
+use App\Repositories\Finance\PaymentOutRepository;
 
 class HutangEkspedisiWidget extends AbstractWidget
 {
@@ -20,9 +22,13 @@ class HutangEkspedisiWidget extends AbstractWidget
      */
     public function run()
     {
+        $bill = new InvoiceRepository(app());
+        $payment = new PaymentOutRepository(app());
+        $billToValidate = $bill->billEkspedisiValidate();
+        $billToPay = $payment->ekspedisiPaymentToPay();
         $data = [
-            ['text' => '2 Bill to validate', 'amount' => Money::IDR(5000000, true), 'url' => ''],
-            ['text' => '6 Bill to pay', 'amount' => Money::IDR(75000000, true), 'url' => ''],
+            ['text' => ($billToValidate->qty ?? 0).' Bill to validate', 'amount' => Money::IDR($billToValidate->amount ?? 0, true), 'url' => route('finance.paymentOuts.create')],
+            ['text' => ($billToPay->qty ?? 0).' Bill to pay', 'amount' => Money::IDR($billToPay->amount ?? 0, true), 'url' => route('finance.paymentOuts.index')],
         ];
 
         return view('widgets.hutang_ekspedisi_widget', [

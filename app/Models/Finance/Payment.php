@@ -118,6 +118,22 @@ class Payment extends Model
         return $query->whereState(self::READY_PAY);
     }
 
+    public function scopeSupplier($query)
+    {
+        return $query->whereHas('invoices', function($q){
+
+            return $q->supplierPartner();
+        });
+    }
+
+    public function scopeEkspedisi($query)
+    {
+        return $query->whereHas('invoices', function($q){
+
+            return $q->ekspedisiPartner();
+        });
+    }
+
     public function scopePay($query)
     {
         return $query->whereState(self::PAY);

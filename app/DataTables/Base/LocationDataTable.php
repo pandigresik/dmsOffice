@@ -130,6 +130,8 @@ class LocationDataTable extends DataTable
             'district' => new Column(['title' => __('models/locations.fields.district'), 'data' => 'district', 'searchable' => true, 'elmsearch' => 'text']),
             'city' => new Column(['title' => __('models/locations.fields.city'), 'data' => 'city', 'searchable' => true, 'elmsearch' => 'text']),
             'type' => new Column(['title' => __('models/locations.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $typeItems]),
+            'reference_id' => new Column(['title' => __('models/locations.fields.reference_id'), 'data' => 'reference_id', 'searchable' => false]),
+            'reference_type' => new Column(['title' => __('models/locations.fields.reference_type'), 'data' => 'reference_type', 'searchable' => false]),
         ];
     }
 

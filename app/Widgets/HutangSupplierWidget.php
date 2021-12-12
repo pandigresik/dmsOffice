@@ -24,8 +24,8 @@ class HutangSupplierWidget extends AbstractWidget
     {
         $bill = new InvoiceRepository(app());
         $payment = new PaymentOutRepository(app());
-        $billToValidate = $bill->billValidate();
-        $billToPay = $payment->paymentToPay();
+        $billToValidate = $bill->billSupplierValidate();
+        $billToPay = $payment->supplierPaymentToPay();
         $data = [
             ['text' => ($billToValidate->qty ?? 0).' Bill to validate', 'amount' => Money::IDR($billToValidate->amount ?? 0, true), 'url' => route('finance.paymentOuts.create')],
             ['text' => ($billToPay->qty ?? 0).' Bill to pay', 'amount' => Money::IDR($billToPay->amount ?? 0, true), 'url' => route('finance.paymentOuts.index')],

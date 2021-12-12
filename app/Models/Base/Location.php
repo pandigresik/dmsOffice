@@ -46,7 +46,11 @@ class Location extends Model
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    const REFERENCE_TYPE = [
+        'origin' => 'supplier',
+        'destination' => 'warehouse',
+        'common' => ''
+    ];
     public $table = 'location';
 
     public $fillable = [
@@ -54,6 +58,8 @@ class Location extends Model
         'district',
         'city',
         'type',
+        'reference_id',
+        'reference_type'  
     ];
 
     /**
@@ -65,7 +71,7 @@ class Location extends Model
         'name' => 'required|string|max:80',
         'district' => 'required|string|max:50',
         'city' => 'required|string|max:50',
-        'type' => 'required|string',
+        'type' => 'required|string',        
     ];
 
     protected $dates = ['deleted_at'];

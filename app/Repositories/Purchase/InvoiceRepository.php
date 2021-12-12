@@ -59,6 +59,8 @@ class InvoiceRepository extends BaseRepository
             $input['partner_type'] = 'ekspedisi';
             $input['partner_id'] = $input['ekspedisi_id'];
             unset($input['ekspedisi_id']);
+        }else{
+            $input['partner_type'] = 'supplier';
         }
         $model = $this->model->newInstance($input);
         $invoiceLine = $input['invoice_line'];        
@@ -125,10 +127,20 @@ class InvoiceRepository extends BaseRepository
     {
         return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount_total) amount')->submit()->first();
     }
-
+    
     public function billValidate()
     {
         return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount_total) amount')->validate()->first();
+    }
+
+    public function billSupplierValidate()
+    {
+        return $this->model->disableModelCaching()->supplierPartner()->selectRaw('count(*) as qty, sum(amount_total) amount')->validate()->first();
+    }
+
+    public function billEkspedisiValidate()
+    {
+        return $this->model->disableModelCaching()->ekspedisiPartner()->selectRaw('count(*) as qty, sum(amount_total) amount')->validate()->first();
     }
 
     public function readyPayment()

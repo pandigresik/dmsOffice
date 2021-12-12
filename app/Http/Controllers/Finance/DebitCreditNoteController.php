@@ -157,10 +157,10 @@ class DebitCreditNoteController extends AppBaseController
     private function getOptionItems()
     {
         $invoice = new InvoiceRepository(app());
-        $invoiceData = $invoice->all(['state' => Invoice::VALIDATE], null, null, ['id', 'reference', 'partner_id']);
+        $invoiceData = $invoice->all(['state' => Invoice::VALIDATE], null, null, ['id','number', 'reference', 'partner_id']);
 
         return [
-            'invoiceItems' => ['' => __('crud.option.invoice_placeholder')] + $invoiceData->pluck('reference', 'id')->toArray(),
+            'invoiceItems' => ['' => __('crud.option.invoice_placeholder')] + $invoiceData->pluck('full_identity', 'id')->toArray(),
             'invoiceItemOptions' => $invoiceData->keyBy('id')->toArray(),
             'partnerTypeItems' => array_merge(['' => __('crud.option.invoice_placeholder')], DebitCreditNote::PARTNER_TYPE),
             'typeItems' => ['' => __('crud.option.invoice_placeholder'), 'CN' => 'CN', 'DN' => 'DN'],
