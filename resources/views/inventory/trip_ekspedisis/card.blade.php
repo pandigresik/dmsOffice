@@ -27,6 +27,7 @@
                 <div>Nama - {{ $dataCard['name'] ?? '{tripName}' }}</div>                
                 <div>Jarak - {{ $dataCard['distance'] ?? '{tripDistance}' }}</div>                
                 <div>Harga - {{ $dataCard['price'] ?? '{tripPrice}' }}</div>
+                <div>Biaya Tambahan - {{ $dataCard['destination_additional_price'] ?? '{tripAdditionalPrice}' }}</div>
                 <div>Jumlah - {{ $dataCard['quantity'] ?? '{tripQuantity}' }}</div>
                 <div>Jenis - {{ $dataCard['productCategories']['name'] ?? '{tripProductCategories}' }}</div>                
             </div>

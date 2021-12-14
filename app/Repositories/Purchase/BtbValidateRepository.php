@@ -63,7 +63,7 @@ class BtbValidateRepository extends BaseRepository
         DB::beginTransaction();
 
         try {
-            $btb = $input['btb'] ?? [];
+            $btb = $input['btb'] ?? [];            
             $model = null;
             if (!empty($btb)) {
                 $groupingBtb = collect($btb)->mapToGroups(function ($item) {

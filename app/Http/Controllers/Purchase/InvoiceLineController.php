@@ -7,6 +7,7 @@ use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateInvoiceLineRequest;
 use App\Http\Requests\Purchase\UpdateInvoiceLineRequest;
 use App\Models\Purchase\BtbValidate;
+use App\Models\Purchase\Invoice;
 use App\Repositories\Purchase\InvoiceLineRepository;
 use Flash;
 use Illuminate\Http\Request;
@@ -45,7 +46,8 @@ class InvoiceLineController extends AppBaseController
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
         $listdoc = $request->get('listdoc') ?? [];
-        $btbValidated = 'supplier' == $type ? BtbValidate::whereBetween('btb_date', [$startDate, $endDate])->canInvoicedSupplier($partnerId, $listdoc)->disableModelCaching()->get() : BtbValidate::whereBetween('btb_date', [$startDate, $endDate])->canInvoicedEkspedisi($partnerId, $listdoc)->get();
+        
+        $btbValidated = Invoice::SUPPLIER == $type ? BtbValidate::whereBetween('btb_date', [$startDate, $endDate])->canInvoicedSupplier($partnerId, $listdoc)->disableModelCaching()->get() : BtbValidate::whereBetween('btb_date', [$startDate, $endDate])->canInvoicedEkspedisi($partnerId, $listdoc)->get()->keyBy('doc_id');
 
         return view('purchase.invoice_lines.create')->with(['datas' => $btbValidated, 'type' => $type]);
     }

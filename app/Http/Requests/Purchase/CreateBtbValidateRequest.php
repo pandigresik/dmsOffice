@@ -39,7 +39,7 @@ class CreateBtbValidateRequest extends FormRequest
     public function all($keys = null)
     {
         $keys = (new BtbValidate())->fillable;
-
+        $keys = array_merge(['btb'], $keys);
         return parent::all($keys);
     }
 }

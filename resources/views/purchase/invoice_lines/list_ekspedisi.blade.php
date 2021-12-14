@@ -16,13 +16,15 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody>            
             @forelse($datas as $data)
             <!-- sementara di hardcode dulu -->
             @php
-                $data->price = 1900000;
+                $data->price = $data->getRawOriginal('shipping_cost');
                 $data->qty = 1;
-                $data->syncOriginal();
+                $data->product_name = '-';
+                $data->uom_id = '-';
+                $data->syncOriginal();                                
             @endphp
             <tr>                
                 <td>{{ localFormatDate($data->btb_date) }}</td>

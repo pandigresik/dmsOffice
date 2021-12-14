@@ -71,7 +71,10 @@ class BtbValidate extends Model
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    const INVOICE_TYPE_COLUMN = [
+        'supplier' => 'invoiced',
+        'ekspedisi' => 'invoiced_expedition'
+    ];
     public $table = 'btb_validate';
 
     public $fillable = [
@@ -179,7 +182,7 @@ class BtbValidate extends Model
         $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');
         $btbStr = implode("','", $btbs->flatten()->all());
         $sql = <<<SQL
-        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price )
+        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price, shipping_cost )
         select
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
@@ -198,8 +201,8 @@ class BtbValidate extends Model
             {$userId} as created_by ,
             '{$now}' as created_at,
             dsd.szSupplierId,
-            coalesce(pp.price, 0) as price
-            
+            coalesce(pp.price, 0) as price,            
+            coalesce((select cost from shippingCost where product_id = dsdi.szProductId and destination_id = dsd.szWarehouseId and origin_id = dsd.szSupplierId limit 1),0) as shipping_cost
         from
             dms_inv_docstockinsupplier dsd
         join dms_inv_docstockinsupplieritem dsdi on dsdi.szDocId = dsd.szDocId
@@ -217,7 +220,7 @@ class BtbValidate extends Model
         $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');
         $btbStr = implode("','", $btbs->flatten()->all());
         $sql = <<<SQL
-        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price )
+        insert into btb_validate (btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price, shipping_cost )
         select
             'BTB Distribusi' as jenis,
             dsd.szDocId AS no_btb,
@@ -236,7 +239,8 @@ class BtbValidate extends Model
             {$userId} as created_by ,
             '{$now}' as created_at,
             'Internal' as partner_id,
-            coalesce(pp.price, 0) as price
+            coalesce(pp.price, 0) as price,
+            0 as shipping_cost
             
         from
             dms_inv_docstockindistribution dsd

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Purchase;
 
+use App\Models\Purchase\BtbValidate;
 use App\Models\Purchase\Invoice;
 use App\Repositories\BaseRepository;
 
@@ -55,10 +56,12 @@ class InvoiceRepository extends BaseRepository
      */
     public function create($input)
     {
+        $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN['supplier'];
         if(isset($input['ekspedisi_id'])){
             $input['partner_type'] = 'ekspedisi';
             $input['partner_id'] = $input['ekspedisi_id'];
             unset($input['ekspedisi_id']);
+            $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN['ekspedisi'];
         }else{
             $input['partner_type'] = 'supplier';
         }
@@ -77,7 +80,7 @@ class InvoiceRepository extends BaseRepository
         ]);
         $this->setInvoiceLines($invoiceLine, $model);
 
-        $model->btb()->update(['invoiced' => 1]);
+        $model->btb()->update([$btbInvoicedColumn => 1]);
 
         return $model;
     }
@@ -112,11 +115,12 @@ class InvoiceRepository extends BaseRepository
      * @return null|bool|mixed
      */
     public function delete($id)
-    {
+    {        
         $query = $this->model->newQuery();
 
         $model = $query->findOrFail($id);
-        $model->btb()->update(['invoiced' => 0]);
+        $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN[$model->getRawOriginal('partner_type')];
+        $model->btb()->update([$btbInvoicedColumn => 0]);
         $model->invoiceLines()->forceDelete();
         $model->invoiceUsers()->forceDelete();
 

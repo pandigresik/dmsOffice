@@ -90,7 +90,7 @@ class Invoice extends Model
     const READY_PAY = 'ready_pay';
     const PAY = 'pay';
     const SUPPLIER = 'supplier';
-    const EKSPEDISI = 'ekspedisi';
+    const EKSPEDISI = 'ekspedisi';    
 
     public $table = 'invoice';
     public $isCachable = false;
