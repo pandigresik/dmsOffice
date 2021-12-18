@@ -54,10 +54,10 @@ class TripDataTable extends DataTable
                         return '<div class="text-right">'.$q->quantity.'</div>';
                     })
                     ->editColumn('origin.name', function ($q) {
-                        return $q->origin->fullIdentity;
+                        return $q->origin ? $q->origin->fullIdentity : '-';
                     })
                     ->editColumn('destination.name', function ($q) {
-                        return $q->destination->fullIdentity;
+                        return $q->destination ? $q->destination->fullIdentity : '-';
                     })
                     ->filterColumn($column, new $operator($columnSearch))
                     ->escapeColumns([])
