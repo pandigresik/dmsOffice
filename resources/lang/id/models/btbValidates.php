@@ -18,6 +18,7 @@ return array (
     'co_reference' => 'Nomer CO',
     'product_name' => 'Nama Barang',
     'period_range' => 'Periode',
-    'price' => 'Harga'
+    'price' => 'Harga',
+    'shipping_cost' => 'Ongkos Angkut'
   ),
 );

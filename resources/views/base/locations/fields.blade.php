@@ -51,7 +51,9 @@
             $('select[name=reference_id]').trigger('change')
         });
 
-        $('select[name=type]').trigger('change');
+        if(_.isEmpty($('select[name=type]').val())){
+            $('select[name=type]').trigger('change');
+        }        
     })
 </script>
 @endpush

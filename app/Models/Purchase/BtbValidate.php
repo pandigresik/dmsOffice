@@ -73,7 +73,7 @@ class BtbValidate extends Model
     const UPDATED_AT = 'updated_at';
     const INVOICE_TYPE_COLUMN = [
         'supplier' => 'invoiced',
-        'ekspedisi' => 'invoiced_expedition'
+        'ekspedisi' => 'invoiced_expedition',
     ];
     public $table = 'btb_validate';
 
@@ -128,6 +128,11 @@ class BtbValidate extends Model
         return localNumberFormat($value, 0);
     }
 
+    public function getShippingCostAttribute($value)
+    {
+        return localNumberFormat($value, 0);
+    }
+
     public function getQtyRejectAttribute($value)
     {
         return localNumberFormat($value, 0);
@@ -158,13 +163,22 @@ class BtbValidate extends Model
         return $query->whereInvoicedExpedition(0);
     }
 
-    public function scopeCanInvoicedSupplier($query, $supplierId, $listDoc = [])
+    // public function scopeCanInvoicedSupplier($query, $supplierId, $listDoc = [])
+    // {
+    //     if (empty($listDoc)) {
+    //         return $query->canInvoiced()->wherePartnerId($supplierId);
+    //     }
+
+    //     return $query->canInvoiced()->wherePartnerId($supplierId)->whereNotIn('doc_id', $listDoc);
+    // }
+
+    public function scopeCanInvoicedSupplier($query, $listDoc = [])
     {
         if (empty($listDoc)) {
-            return $query->canInvoiced()->wherePartnerId($supplierId);
+            return $query->canInvoiced();
         }
 
-        return $query->canInvoiced()->wherePartnerId($supplierId)->whereNotIn('doc_id', $listDoc);
+        return $query->canInvoiced()->whereNotIn('doc_id', $listDoc);
     }
 
     public function scopeCanInvoicedEkspedisi($query, $supplierId, $listDoc = [])

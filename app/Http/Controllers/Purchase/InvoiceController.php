@@ -163,9 +163,9 @@ class InvoiceController extends AppBaseController
     {
         $supplier = new DmsApSupplierRepository(app());
         $ekspedisi = new DmsInvCarrierRepository(app());
-
+        // untuk supplier hanya menampilkan TIV saja
         return [
-            'partnerItem' => ['' => __('crud.option.supplier_placeholder')] + $supplier->all()->pluck('szName', 'szId')->toArray(),
+            'partnerItem' => ['' => __('crud.option.supplier_placeholder')] + $supplier->all(['szId' => 'TIV'])->pluck('szName', 'szId')->toArray(),
             'ekspedisiItem' => ['' => __('crud.option.ekspedisi_placeholder')] + $ekspedisi->all()->pluck('szName', 'szId')->toArray(),
         ];
     }

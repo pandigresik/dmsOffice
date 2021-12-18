@@ -128,6 +128,7 @@ class BtbValidateDataTable extends DataTable
             'btb_date' => new Column(['title' => __('models/btbValidates.fields.btb_date'), 'data' => 'btb_date', 'searchable' => true, 'elmsearch' => 'text']),
             'qty' => new Column(['title' => __('models/btbValidates.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
             'price' => new Column(['title' => __('models/btbValidates.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text']),
+            'shipping_cost' => new Column(['title' => __('models/btbValidates.fields.shipping_cost'), 'data' => 'shipping_cost', 'searchable' => false, 'elmsearch' => 'text']),
         ];
     }
 
