@@ -108,7 +108,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'sales'], function () {
         Route::resource('dmsSdPricecatalogs', App\Http\Controllers\Sales\DmsSdPricecatalogController::class, ['as' => 'sales']);
         Route::resource('dmsSdRoutes', App\Http\Controllers\Sales\DmsSdRouteController::class, ['as' => 'sales']);
-        Route::resource('dmsSdRouteitems', App\Http\Controllers\Sales\DmsSdRouteitemController::class, ['as' => 'sales']);
+        Route::resource('dmsSdRouteitems', App\Http\Controllers\Sales\DmsSdRouteitemController::class, ['as' => 'sales']);        
+        Route::resource('discounts', App\Http\Controllers\Sales\DiscountsController::class, ["as" => 'sales']);
     });
 
     Route::group(['prefix' => 'purchase'], function () {
@@ -149,3 +150,6 @@ Route::group(['prefix' => 'artisan'], function () {
         Artisan::call('cache:clear');
     });
 });
+
+
+

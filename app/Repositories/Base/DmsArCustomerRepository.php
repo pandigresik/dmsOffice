@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
  */
 class DmsArCustomerRepository extends BaseRepository
 {
+    protected $lookupColumnSelect = ['id' => 'szId', 'text' => 'szName'];
+    
     /**
      * @var array
      */

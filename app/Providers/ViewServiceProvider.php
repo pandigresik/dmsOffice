@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Providers;
+use App\Models\Sales\BundlingDmsInvProduct;
+use App\Models\Sales\MainDmsInvProduct;
 
 use App\Models\Finance\Partner;
 use Illuminate\Support\ServiceProvider;
@@ -18,7 +20,7 @@ class ViewServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot()
-    {
+    {        
         // View::composer(['finance.debit_credit_note.fields'], function ($view) {
         //     $partnerItems = Partner::pluck('id')->toArray();
         //     $view->with('partnerItems', $partnerItems);

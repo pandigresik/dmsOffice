@@ -12,6 +12,7 @@ use App\Repositories\BaseRepository;
  */
 class DmsInvProductRepository extends BaseRepository
 {
+    protected $lookupColumnSelect = ['id' => 'szId', 'text' => 'szName'];
     /**
      * @var array
      */

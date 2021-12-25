@@ -8,7 +8,7 @@
 <!-- Customer Id Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('customer_id', __('models/bookableBookings.fields.customer_id').':') !!}
-    {!! Form::select('customer_id', [], null, array_merge(['class' => 'form-control select2', 'data-url' => route('selectAjax'), 'data-repository' => 'CustomersRepository' ], config('local.select2.ajax')) ) !!}
+    {!! Form::select('customer_id', [], null, array_merge(['class' => 'form-control select2', 'data-url' => route('selectAjax'), 'data-ajax' => 1, 'data-repository' => 'CustomersRepository' ], config('local.select2.ajax')) ) !!}
 </div>
 
 <!-- example select2, using tag !-->
