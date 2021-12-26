@@ -4,6 +4,7 @@ namespace App\Models\Sales;
 
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -40,21 +41,29 @@ class DiscountMember extends Model
 
     use HasFactory;
 
-    public $table = 'discount_members';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-    
+    public $table = 'discount_members';
 
     public $fillable = [
         'discounts_id',
         'member_id',
-        'tipe'
+        'tipe',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'discounts_id' => 'required',
+        'member_id' => 'required|string|max:10',
+        'tipe' => 'required|string',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -65,19 +74,16 @@ class DiscountMember extends Model
         'id' => 'integer',
         'discounts_id' => 'integer',
         'member_id' => 'string',
-        'tipe' => 'string'
+        'tipe' => 'string',
     ];
 
     /**
-     * Validation rules
+     * Get the Discount that owns the DiscountMember.
      *
-     * @var array
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public static $rules = [
-        'discounts_id' => 'required',
-        'member_id' => 'required|string|max:10',
-        'tipe' => 'required|string'
-    ];
-
-    
+    public function Discount(): BelongsTo
+    {
+        return $this->belongsTo(Discount::class);
+    }
 }

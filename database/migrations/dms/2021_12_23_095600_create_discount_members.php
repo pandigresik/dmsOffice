@@ -16,7 +16,7 @@ class CreateDiscountMembers extends Migration
         Schema::create('discount_members', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('discounts_id');
-            $table->string('member_id',10);
+            $table->string('member_id',20);
             $table->enum('tipe', ['customer', 'customer_segment'])->default('customer_segment');
             $table->blameable();
             $table->timestamps();

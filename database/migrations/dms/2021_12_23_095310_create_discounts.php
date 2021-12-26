@@ -20,11 +20,11 @@ class CreateDiscounts extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->unsignedTinyInteger('split')->default(0);
-            $table->string('main_dms_inv_product_id', 10);
-            $table->unsignedInteger('main_quota');
-            $table->string('bundling_dms_inv_product_id', 10)->nullable();
+            $table->string('main_dms_inv_product_id', 15)->nullable();
+            $table->unsignedInteger('main_quota')->nullable();
+            $table->string('bundling_dms_inv_product_id', 15)->nullable();
             $table->unsignedInteger('bundling_quota')->nullable();
-            $table->unsignedInteger('max_quota');
+            $table->unsignedInteger('max_quota')->nullable();
             $table->string('state', 2)->default('A');
             $table->blameable();
             $table->timestamps();

@@ -10,8 +10,10 @@ use App\Repositories\Sales\DiscountsRepository;
 
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use App\Models\Base\DmsArCustomer;
 use App\Models\Sales\Discounts;
 use App\Repositories\Base\DmsArCustomerhierarchyRepository;
+use App\Repositories\Inventory\DmsInvProductRepository;
 use Response;
 
 class DiscountsController extends AppBaseController
@@ -91,16 +93,32 @@ class DiscountsController extends AppBaseController
      * @return Response
      */
     public function edit($id)
-    {
+    {                
         $discounts = $this->getRepositoryObj()->find($id);
-
+        $members = $discounts->members;
+        $details = $discounts->details;
+        $typeMember = $members->first()->tipe;
+        $listMember = $members->pluck('member_id')->toArray();
+        $discounts->discount_members = [
+            'tipe' => $typeMember,
+            'member_id' => $listMember
+            ];
         if (empty($discounts)) {
             Flash::error(__('messages.not_found', ['model' => __('models/discounts.singular')]));
 
             return redirect(route('sales.discounts.index'));
         }
-
-        return view('sales.discounts.edit')->with('discounts', $discounts)->with($this->getOptionItems());
+        $optionItems = $this->getOptionItems();
+        $product = new DmsInvProductRepository(app());
+        if($typeMember == 'customer'){
+            $customer = new DmsArCustomer();
+            $optionItems['customerItems'] = $customer->whereIn('szId',$listMember)->pluck('szName','szId');
+        }
+                
+        $optionItems['mainProductItems'] = $product->pluck(['szId' => $discounts->main_dms_inv_product_id], null, null, 'szId', 'szName');
+        $optionItems['bundlingProductItems'] = $discounts->bundling_dms_inv_product_id ? $product->pluck(['szId' => $discounts->bundling_dms_inv_product_id], null, null, 'szId', 'szName') : [];
+        $optionItems['detailItems'] = $details;        
+        return view('sales.discounts.edit')->with('discounts', $discounts)->with($optionItems);
     }
 
     /**
@@ -164,8 +182,10 @@ class DiscountsController extends AppBaseController
         return [
             'typeOptionItems' => array_combine(Discounts::OPTION_ITEM_JENIS,Discounts::OPTION_ITEM_JENIS),
             'segmentCustomerItems' => $segmentCustomer->pluck([], null, null, 'szId', 'szName'),
-            'tipeSegmentCustomerItems' => array_combine(Discounts::OPTION_ITEM_SEGMENT, ['Segment Pelanggan','Pelanggan'])
-
+            'tipeSegmentCustomerItems' => array_combine(Discounts::OPTION_ITEM_SEGMENT, ['Segment Pelanggan','Pelanggan']),
+            'mainProductItems' => [],
+            'bundlingProductItems' => [],
+            'customerItems' => [],
         ];
     }
 }

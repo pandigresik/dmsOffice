@@ -3,7 +3,10 @@
 namespace App\Models\Sales;
 
 use App\Models\BaseEntity as Model;
+use App\Models\Inventory\DmsInvProduct;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -133,5 +136,28 @@ class DiscountDetail extends Model
         'distributor_amount' => 'nullable|integer'
     ];
 
-    
+    /**
+     * Get the Discount that owns the DiscountMember.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function Discount(): BelongsTo
+    {
+        return $this->belongsTo(Discount::class);
+    }
+
+    /**
+     * Get the user associated with the DiscountDetail
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function mainProduct(): BelongsTo
+    {
+        return $this->belongsTo(DmsInvProduct::class, 'main_dms_inv_product_id', 'szId');
+    }
+
+    public function bundlingProduct(): BelongsTo
+    {
+        return $this->belongsTo(DmsInvProduct::class, 'bundling_dms_inv_product_id', 'szId');
+    }
 }

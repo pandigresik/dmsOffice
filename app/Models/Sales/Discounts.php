@@ -3,7 +3,10 @@
 namespace App\Models\Sales;
 
 use App\Models\BaseEntity as Model;
+use App\Models\Inventory\DmsInvProduct;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -136,16 +139,74 @@ class Discounts extends Model
     public static $rules = [
         'jenis' => 'required|string',
         'name' => 'required|string|max:100',
-        'start_date' => 'required',
-        'end_date' => 'required',
-        'split' => 'required|boolean',
+        'period' => 'required',                
+        'main_dms_inv_product_id' => 'required|string|max:10',
+        'main_quota' => 'required|integer',
+        'bundling_dms_inv_product_id' => 'nullable|string|max:10',
+        'bundling_quota' => 'nullable|integer',
+        'max_quota' => 'required|integer',        
+    ];
+
+    public static $rulesCombine = [
+        'jenis' => 'required|string',
+        'name' => 'required|string|max:100',
+        'period' => 'required',
+        'split' => 'required|integer',     
         'main_dms_inv_product_id' => 'required|string|max:10',
         'main_quota' => 'required|integer',
         'bundling_dms_inv_product_id' => 'nullable|string|max:10',
         'bundling_quota' => 'nullable|integer',
         'max_quota' => 'required|integer',
-        'state' => 'required|string|max:2'
     ];
 
+    public static $rulesKontrak = [
+        'jenis' => 'required|string',
+        'name' => 'required|string|max:100',
+        'period' => 'required',        
+    ];
+
+    /**
+     * Get all of the details for the Discounts
+     *
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function details(): HasMany
+    {
+        return $this->hasMany(DiscountDetail::class);
+    }
     
+    public function members(): HasMany
+    {
+        return $this->hasMany(DiscountMember::class);
+    }    
+
+    /**
+     * Get the mainProduct that owns the Discounts
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function mainProduct(): BelongsTo
+    {
+        return $this->belongsTo(DmsInvProduct::class, 'main_dms_inv_product_id', 'szId');
+    }
+
+    public function bundlingProduct(): BelongsTo
+    {
+        return $this->belongsTo(DmsInvProduct::class, 'bundling_dms_inv_product_id', 'szId');
+    }
+
+    public function getStartDateAttribute($value)
+    {
+        return localFormatDate($value);
+    }
+
+    public function getEndDateAttribute($value)
+    {
+        return localFormatDate($value);
+    }
+
+    public function getPeriodAttribute($value)
+    {
+        return localFormatDate($this->attributes['start_date']).' - '.localFormatDate($this->attributes['end_date']);
+    }
 }

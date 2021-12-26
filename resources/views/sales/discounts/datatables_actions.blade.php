@@ -1,8 +1,5 @@
 {!! Form::open(['route' => ['sales.discounts.destroy', $id], 'method' => 'delete']) !!}
-<div class='btn-group'>
-    <a href="{{ route('sales.discounts.show', $id) }}" class='btn btn-ghost-success'>
-       <i class="fa fa-eye"></i>
-    </a>
+<div class='btn-group'>    
     <a href="{{ route('sales.discounts.edit', $id) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>

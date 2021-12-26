@@ -45,6 +45,7 @@ class UpdateDiscountsRequest extends FormRequest
     public function all($keys = null){
         $keys = (new Discounts)->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+        $keys = array_merge(['period','discount_members', 'discount_details'], $keys);
         return parent::all($keys);
     }
 }

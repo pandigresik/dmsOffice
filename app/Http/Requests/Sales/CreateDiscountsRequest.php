@@ -28,7 +28,19 @@ class CreateDiscountsRequest extends FormRequest
      */
     public function rules()
     {
-        return Discounts::$rules;
+        $jenis = $this->get('jenis');
+        
+        switch($jenis){
+            case 'kontrak':
+                $rules = Discounts::$rulesKontrak;
+                break;
+            case 'combine':
+                $rules = Discounts::$rulesCombine;
+                break;
+            default:
+                $rules = Discounts::$rules;
+        }
+        return $rules;
     }
 
     /**
@@ -40,6 +52,7 @@ class CreateDiscountsRequest extends FormRequest
     */
     public function all($keys = null){
         $keys = (new Discounts)->fillable;
+        $keys = array_merge(['period','discount_members', 'discount_details'], $keys);
         return parent::all($keys);
     }
 }
