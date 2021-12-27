@@ -14,5 +14,6 @@ return array (
     'disc_principle_dms' => 'Disc Principle Dms',
     'disc_distributor_dms' => 'Disc Distributor Dms',
     'invoiced' => 'Invoiced',
+    'period_range' => 'Periode Penjualan'
   ),
 );

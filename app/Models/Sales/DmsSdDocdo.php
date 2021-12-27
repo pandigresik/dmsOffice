@@ -2,8 +2,13 @@
 
 namespace App\Models\Sales;
 
+use App\Models\Base\DmsArCustomer;
+use App\Models\Base\DmsPiEmployee;
+use App\Models\Base\DmsSmBranch;
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -220,9 +225,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class DmsSdDocdo extends Model
-{
-    use SoftDeletes;
-
+{    
     use HasFactory;
 
     public $table = 'dms_sd_docdo';
@@ -233,7 +236,7 @@ class DmsSdDocdo extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $connection = "mysql_sejati";
+    
 
     public $fillable = [
         'iId',
@@ -372,5 +375,43 @@ class DmsSdDocdo extends Model
         'szManualNo' => 'required|string|max:50'
     ];
 
+    /**
+     * Get all of the items for the DmsSdDocdo
+     *
+     * @return \Illuminate\Database\Relations\HasMany
+     */
+    public function items(): HasMany
+    {
+        return $this->hasMany(DmsSdDocdoItem::class, 'szDocId', 'szDocId');
+    }
+
+    /**
+     * Get the customer that owns the DmsSdDocdo
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(DmsArCustomer::class, 'szCustomerId', 'szId');
+    }
     
+    /**
+     * Get the sales that owns the DmsSdDocdo
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function sales(): BelongsTo
+    {
+        return $this->belongsTo(DmsPiEmployee::class, 'szSalesId', 'szId');
+    }
+
+    /**
+     * Get the depo that owns the DmsSdDocdo
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function depo(): BelongsTo
+    {
+        return $this->belongsTo(DmsSmBranch::class, 'szBranchId', 'szId');
+    }
 }

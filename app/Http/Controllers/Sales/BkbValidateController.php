@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Sales;
 
-use App\DataTables\Sales\BkbValidateDataTable;
+use Flash;
+use Response;
 use App\Http\Requests\Sales;
+use Illuminate\Http\Request;
+use App\Http\Controllers\AppBaseController;
+
+use App\DataTables\Sales\BkbValidateDataTable;
+use App\Repositories\Sales\BkbValidateRepository;
 use App\Http\Requests\Sales\CreateBkbValidateRequest;
 use App\Http\Requests\Sales\UpdateBkbValidateRequest;
-use App\Repositories\Sales\BkbValidateRepository;
-
-use Flash;
-use App\Http\Controllers\AppBaseController;
-use Response;
 
 class BkbValidateController extends AppBaseController
 {
@@ -38,8 +39,16 @@ class BkbValidateController extends AppBaseController
      *
      * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        if ($request->ajax()) {
+            $period = explode(' - ', $request->get('ref'));
+            $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
+            $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
+            $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate);
+
+            return view('sales.bkb_validates.list')->with('datas', $datas);
+        }
         return view('sales.bkb_validates.create')->with($this->getOptionItems());
     }
 

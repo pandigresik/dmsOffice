@@ -110,9 +110,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class DmsSdDocdoItemPrice extends Model
-{
-    use SoftDeletes;
-
+{   
     use HasFactory;
 
     public $table = 'dms_sd_docdoitemprice';
@@ -123,7 +121,7 @@ class DmsSdDocdoItemPrice extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $connection = "mysql_sejati";
+    
 
     public $fillable = [
         'iId',
@@ -193,5 +191,12 @@ class DmsSdDocdoItemPrice extends Model
         'decDiscInternal' => 'required|numeric'
     ];
 
+    public function getDecDiscPrincipleAttribute($value){
+        return localNumberFormat($value, 0);
+    }
+
+    public function getDecDiscDistributorAttribute($value){
+        return localNumberFormat($value, 0);
+    }
     
 }

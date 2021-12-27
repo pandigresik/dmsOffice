@@ -3,6 +3,7 @@
 namespace App\Repositories\Sales;
 
 use App\Models\Sales\BkbValidate;
+use App\Models\Sales\DmsSdDocdo;
 use App\Repositories\BaseRepository;
 
 /**
@@ -43,5 +44,13 @@ class BkbValidateRepository extends BaseRepository
     public function model()
     {
         return BkbValidate::class;
+    }
+
+    public function mustValidate($startDate, $endDate)
+    {
+        return DmsSdDocdo::with(['items' => function($q){
+                    $q->with(['product', 'itemPrice']);
+                },'customer','sales', 'depo'])->whereBetween('dtmDoc',[$startDate, $endDate])->where('szDocStatus','Applied')
+                ->get();
     }
 }

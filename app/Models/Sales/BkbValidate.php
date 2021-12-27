@@ -76,7 +76,7 @@ class BkbValidate extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $connection = "mysql_sejati";
+    
 
     public $fillable = [
         'doc_id',

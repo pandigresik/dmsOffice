@@ -3,7 +3,10 @@
 namespace App\Models\Sales;
 
 use App\Models\BaseEntity as Model;
+use App\Models\Inventory\DmsInvProduct;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -66,8 +69,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class DmsSdDocdoItem extends Model
-{
-    use SoftDeletes;
+{    
 
     use HasFactory;
 
@@ -79,7 +81,7 @@ class DmsSdDocdoItem extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $connection = "mysql_sejati";
+    
 
     public $fillable = [
         'iId',
@@ -128,5 +130,27 @@ class DmsSdDocdoItem extends Model
         'bIgnoreStockLotSn' => 'required|boolean'
     ];
 
-    
+    /**
+     * Get the product that owns the DmsSdDocdoItem
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(DmsInvProduct::class, 'szProductId', 'szId');
+    }
+
+    /**
+     * Get the itemPrice associated with the DmsSdDocdoItem
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function itemPrice(): HasOne
+    {
+        return $this->hasOne(DmsSdDocdoItemPrice::class, 'szDocId', 'szDocId')->where('intItemNumber',$this->attributes['intItemNumber']);
+    }
+
+    public function getDecQtyAttribute($value){
+        return localNumberFormat($value, 0);
+    }
 }
