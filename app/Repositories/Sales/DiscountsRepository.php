@@ -143,7 +143,8 @@ class DiscountsRepository extends BaseRepository
                 'min_bundling_qty'=> $discountDetails['min_bundling_qty'][$k] ?? $defaultValue['min_bundling_qty'],
                 'max_bundling_qty'=> $discountDetails['max_bundling_qty'][$k] ?? $defaultValue['max_bundling_qty'],
                 'principle_amount'=> $discountDetails['principle_amount'][$k] ?? $defaultValue['principle_amount'],
-                'distributor_amount'=> $discountDetails['distributor_amount'][$k] ?? $defaultValue['distributor_amount'],                
+                'distributor_amount'=> $discountDetails['distributor_amount'][$k] ?? $defaultValue['distributor_amount'],
+                'package'=> $discountDetails['package'][$k] ?? $defaultValue['package'],
             ];
             $model->details()->create($insertData);
         }
@@ -156,7 +157,8 @@ class DiscountsRepository extends BaseRepository
             'bundling_dms_inv_product_id' => NULL,
             'min_bundling_qty' => NULL,
             'max_bundling_qty' => NULL,        
-            'distributor_amount' => 0
+            'distributor_amount' => 0,
+            'package' => NULL
         ];        
 
         return $tmp;

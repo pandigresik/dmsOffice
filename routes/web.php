@@ -110,6 +110,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('dmsSdRoutes', App\Http\Controllers\Sales\DmsSdRouteController::class, ['as' => 'sales']);
         Route::resource('dmsSdRouteitems', App\Http\Controllers\Sales\DmsSdRouteitemController::class, ['as' => 'sales']);        
         Route::resource('discounts', App\Http\Controllers\Sales\DiscountsController::class, ["as" => 'sales']);
+        Route::resource('bkbValidates', App\Http\Controllers\Sales\BkbValidateController::class, ["as" => 'sales']);
     });
 
     Route::group(['prefix' => 'purchase'], function () {
@@ -150,6 +151,4 @@ Route::group(['prefix' => 'artisan'], function () {
         Artisan::call('cache:clear');
     });
 });
-
-
 

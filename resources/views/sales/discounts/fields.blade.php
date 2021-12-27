@@ -221,7 +221,7 @@
                     <tr>
                         <th colspan=3>Produk Utama</th>
                         <th colspan=3>Produk Bundling</th>
-                        <th colspan=2>Potongan</th>
+                        <th colspan=3>Potongan</th>
                     </tr>
                     <tr>
                         <th>Nama</th>
@@ -232,6 +232,7 @@
                         <th>Qty Maks</th>
                         <th>TIV</th>
                         <th>Distributor</th>
+                        <th>Paket</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -260,6 +261,15 @@
                         <td><input type="text" class="form-control inputmask" data-unmask=1
                                 data-optionmask='{{ json_encode(config('local.number.integer')) }}'
                                 value="{{ $item->distributor_amount }}" name="discount_details[distributor_amount][]">
+                        </td>
+                        <td>
+                            @if (!empty($item->package))
+                                <input type="text" class="form-control inputmask" data-unmask=1
+                                data-optionmask='{{ json_encode(config('local.number.integer')) }}'
+                                value="{{ $item->package }}" name="discount_details[package][]">
+                            @else
+                                -
+                            @endif
                         </td>
                     </tr>
                     @endforeach
@@ -351,6 +361,8 @@
 
     function addItemList(elm) {
         const _form = $(elm).closest('form')
+        const _jenis = _form.find('select[name=jenis]').val()
+        const _hasPackage = _jenis == 'bundling' ? 1 : 0
         const _detailDiscount = _form.find('#detail_discount')
         let _table = _detailDiscount.find('table')
         const _mainProductElm = _form.find('select[name=main_dms_inv_product_id]')
@@ -367,7 +379,8 @@
         let _adaProductBundling = 0,
             _mainProductName = '',
             _bundlingProductName = '',
-            _bundlingItemRow = ''
+            _bundlingItemRow = '',
+            _packageItemRow = ''
         if (_.isEmpty(_mainProduct)) {
             main.alertDialog('Warning', 'Produk utama belum dipilih')
             return
@@ -379,6 +392,8 @@
         if (!_table.length) {
             let _additionalHeader = ''
             let _additionalHeaderItem = ''
+            let _packageHeader = _hasPackage ? '<th>Paket</th>' : ''
+            let _colspanPotongan = _hasPackage ? 2 : 3
             if (_adaProductBundling) {
                 _additionalHeader = '<th colspan=3>Produk Pelengkap</th>'
                 _additionalHeaderItem = `<th>Nama</th>
@@ -390,7 +405,7 @@
                     <tr>
                         <th colspan=3>Produk Utama</th>
                         ${_additionalHeader}
-                        <th colspan=2>Potongan</th>
+                        <th colspan='${_colspanPotongan}'>Potongan</th>
                     </tr>
                     <tr>
                         <th>Nama</th>
@@ -399,6 +414,7 @@
                         ${_additionalHeaderItem}
                         <th>TIV</th>
                         <th>Distributor</th>
+                        ${_packageHeader}
                     </tr>
                 </thead>
                 <tbody>
@@ -415,6 +431,9 @@
                 `<td><input type="hidden" name="discount_details[bundling_dms_inv_product_id][]" value="${_bundlingProduct}">${_bundlingProductName}</td>
                                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}' name="discount_details[min_bundling_qty][]"></td>
                                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}'  name="discount_details[max_bundling_qty][]"></td>`
+            if(_hasPackage){
+                _packageItemRow = `<td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}' name="discount_details[package][]"></td>`
+            }
         }
         const _item = `
             <tr>
@@ -424,6 +443,7 @@
                 ${_bundlingItemRow}
                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}'  name="discount_details[principle_amount][]"></td>
                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}'  name="discount_details[distributor_amount][]"></td>
+                ${_packageItemRow}
             </tr>
         `
         $(_item).appendTo(_detailDiscount.find('tbody'))

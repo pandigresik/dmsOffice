@@ -98,7 +98,8 @@ class DiscountDetail extends Model
         'min_bundling_qty',
         'max_bundling_qty',
         'principle_amount',
-        'distributor_amount'
+        'distributor_amount',
+        'package'
     ];
 
     /**

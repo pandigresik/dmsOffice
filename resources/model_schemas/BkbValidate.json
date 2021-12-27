@@ -1,0 +1,110 @@
+[
+    {
+        "name": "id",
+        "dbType": "bigInteger,true,true",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "doc_id",
+        "dbType": "string,50",
+        "htmlType": "text",
+        "validations": "required|string|max:50|string|max:50",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "dms_ar_customer_id",
+        "dbType": "string,50",
+        "htmlType": "text",
+        "validations": "required|string|max:50|string|max:50",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "dms_pi_employee_id",
+        "dbType": "string,50",
+        "htmlType": "text",
+        "validations": "required|string|max:50|string|max:50",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "disc_principle_sales",
+        "dbType": "decimal,15,2",
+        "htmlType": null,
+        "validations": "required|numeric|numeric",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "disc_distributor_sales",
+        "dbType": "decimal,15,2",
+        "htmlType": null,
+        "validations": "required|numeric|numeric",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "disc_principle_dms",
+        "dbType": "decimal,15,2",
+        "htmlType": null,
+        "validations": "required|numeric|numeric",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "disc_distributor_dms",
+        "dbType": "decimal,15,2",
+        "htmlType": null,
+        "validations": "required|numeric|numeric",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "invoiced",
+        "dbType": "boolean",
+        "htmlType": "checkbox,1",
+        "validations": "required|boolean|boolean",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    }
+]
