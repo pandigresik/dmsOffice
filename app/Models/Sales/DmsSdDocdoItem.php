@@ -153,4 +153,12 @@ class DmsSdDocdoItem extends Model
     public function getDecQtyAttribute($value){
         return localNumberFormat($value, 0);
     }
+
+    public function getDecDiscPrincipleAttribute($value){
+        return localNumberFormat($value, 0);
+    }
+
+    public function getDecDiscDistributorAttribute($value){
+        return localNumberFormat($value, 0);
+    }
 }

@@ -29,9 +29,10 @@
             </tr>
         </thead>
         <tbody>
+            
             @forelse($datas as $number => $data)
-            @php
-                $rowspan = $data->items->count()   
+            @php                
+                $rowspan = $data->items->count()  
             @endphp
             <tr>
                 <td rowspan="{{ $rowspan }}">{{ $number + 1 }}</td>
@@ -48,10 +49,11 @@
                     @endif                
                     <td>{{ $item->product->szName}}</td>
                     <td class="text-right">{{ $item->decQty }}</td>
-                    <td class="text-right">{{ $item->itemPrice->decDiscPrinciple }}</td>
-                    <td class="text-right">{{ $item->itemPrice->decDiscDistributor }}</td>
+                    <td class="text-right">{{ $item->decDiscPrinciple }}</td>
+                    <td class="text-right">{{ $item->decDiscDistributor }}</td>
                     <td>not yet</td>
                     <td>not yet</td>
+                    <td></td>
                     <td>
                         <label class="form-check-label">
                             <input type="checkbox" name="btb[]"

@@ -49,7 +49,13 @@ class BkbValidateRepository extends BaseRepository
     public function mustValidate($startDate, $endDate)
     {
         return DmsSdDocdo::with(['items' => function($q){
-                    $q->with(['product', 'itemPrice']);
+                    // $q->with(['product', 'itemPrice']);
+                    $q->select(['dms_sd_docdoitem.szDocId','dms_sd_docdoitem.szProductId','dms_sd_docdoitem.intItemNumber','dms_sd_docdoitem.decQty','dms_sd_docdoitemprice.decDiscPrinciple','dms_sd_docdoitemprice.decDiscDistributor'])
+                        ->with(['product'])
+                        ->join('dms_sd_docdoitemprice',function($join){
+                            $join->on('dms_sd_docdoitemprice.szDocId','=','dms_sd_docdoitem.szDocId')
+                                ->on('dms_sd_docdoitemprice.intItemNumber','=','dms_sd_docdoitem.intItemNumber');
+                        });
                 },'customer','sales', 'depo'])->whereBetween('dtmDoc',[$startDate, $endDate])->where('szDocStatus','Applied')
                 ->get();
     }
