@@ -50,6 +50,7 @@ return [
         ['name' => 'dms_sd_docdoitem', 'filter' => 'dtmLastUpdated', 'key' => 'iId', 'references' => ['table' => 'dms_sd_docdo', 'column' => 'szDocId']],
         ['name' => 'dms_sd_docdoitemprice', 'filter' => 'dtmLastUpdated', 'key' => 'iId', 'references' => ['table' => 'dms_sd_docdo', 'column' => 'szDocId']],
         ['name' => 'dms_sd_docdoitempromo', 'filter' => 'dtmLastUpdated', 'key' => 'iId', 'references' => ['table' => 'dms_sd_docdo', 'column' => 'szDocId']],
+        ['name' => 'dms_pi_employee', 'filter' => 'dtmLastUpdated', 'key' => 'iId', 'references' => []],
         // // ['name' => 'dms_sd_docdoitemreason', 'filter' => 'dtmLastUpdated', 'key' => 'iId', 'references' => ['table' => 'dms_sd_docdo', 'column' => 'szDocId']],
     ],
 

@@ -14,7 +14,7 @@ class CreateDmsPiEmployeeTable extends Migration
     public function up()
     {
         Schema::create('dms_pi_employee', function (Blueprint $table) {
-            $table->unsignedInteger('iInternalId');
+            $table->unsignedInteger('iInternalId')->autoIncrement();
             $table->char('iId', 50)->default('ewid(');
             $table->string('szId', 50)->index()->unique();
             $table->string('szName', 50);
@@ -32,8 +32,7 @@ class CreateDmsPiEmployeeTable extends Migration
             $table->dateTime('dtmStop')->default('2000-01-01 00:00:00');
             $table->string('szIdCard', 50)->default('');
             $table->string('szSupervisorId', 50)->default('')->index('IX_dms_pi_employee_83E44C3F_96DD_4207_8E19_4031992A88D8');
-            $table->string('szPassword', 50)->default('');
-            $table->primary(['iInternalId', 'iId']);
+            $table->string('szPassword', 50)->default('');            
         });
     }
 
