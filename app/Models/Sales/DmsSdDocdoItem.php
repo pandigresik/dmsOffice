@@ -243,15 +243,18 @@ class DmsSdDocdoItem extends Model
         }
     }
 
-    private function discountKontrak($discount){
+    private function customerHasDiscount($discount){
         $member = $discount->members->first();
         $tipe = $member->tipe;
-        $listMembers = $discount->members->keyBy('member_id');
-        $listProduct = $discount->details->keyBy('main_dms_inv_product_id');        
+        $listMembers = $discount->members->keyBy('member_id');        
         $indexMember = 'customer' == $tipe ? $this->getCustomer()->szId : $this->getCustomer()->szHierarchyId;
-        $customerHasDiscount = isset($listMembers[$indexMember]) ? true : false;
+        return isset($listMembers[$indexMember]) ? true : false;
+    }
+    private function discountKontrak($discount){        
+        $customerHasDiscount = $this->customerHasDiscount($discount);
         
         if($customerHasDiscount){
+            $listProduct = $discount->details->keyBy('main_dms_inv_product_id');
             $productDiscount = $listProduct[$this->szProductId] ?? null;
             
             if($productDiscount){
@@ -260,21 +263,15 @@ class DmsSdDocdoItem extends Model
             }
         }
     }
-
+    
     private function discountPromo($discount){
-        $member = $discount->members->first();
-        $tipe = $member->tipe;
-        $listMembers = $discount->members->keyBy('member_id');        
-        $indexMember = 'customer' == $tipe ? $this->getCustomer()->szId : $this->getCustomer()->szHierarchyId;
-        $customerHasDiscount = isset($listMembers[$indexMember]) ? true : false;
+        $customerHasDiscount = $this->customerHasDiscount($discount);
         
         if($customerHasDiscount){
             $productDiscount = $this->szProductId == $discount->main_dms_inv_product_id ? true : false;
             
-            if($productDiscount){
-                $listProduct = $discount->details->keyBy('main_dms_inv_product_id');
-                $qtyQuotaNota = $this->attributes['decQty'] > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $this->attributes['decQty'];
-                //$qtyQuotaNota = $this->attributes['decQty'] ;
+            if($productDiscount){                
+                $qtyQuotaNota = $this->attributes['decQty'] > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $this->attributes['decQty'];                
                 foreach($discount->details as $d){
                     if($qtyQuotaNota >= $d->getRawOriginal('min_main_qty') && $qtyQuotaNota <= $d->getRawOriginal('max_main_qty')){
                         $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $d->principle_amount * $qtyQuotaNota];
@@ -288,11 +285,65 @@ class DmsSdDocdoItem extends Model
     }
 
     private function discountBundling($discount){
-    
+        $customerHasDiscount = $this->customerHasDiscount($discount);
+        
+        if($customerHasDiscount){
+            $productDiscount = $this->szProductId == $discount->main_dms_inv_product_id ? true : false;
+            
+            if($productDiscount){
+                /** get other product in this nota */
+                $bundlingProduct = DmsSdDocdoItem::where(['szProductId' => $discount->bundling_dms_inv_product_id, 'szDocId' => $this->szDocId])->first();
+                if($bundlingProduct){
+                    $qtyQuotaNota = $this->attributes['decQty'] > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $this->attributes['decQty'];
+                    $qtyQuotaNotaBundling = $bundlingProduct->getRawOriginal('decQty');
+                    $selectedPackage = [];
+                    foreach($discount->details as $d){
+                        if($qtyQuotaNota >= $d->getRawOriginal('min_main_qty') && $qtyQuotaNotaBundling >= $d->getRawOriginal('min_bundling_qty')){
+                            $selectedPackage = $d;
+                        }
+                    }
+                    if(!empty($selectedPackage)){
+                        $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
+                        $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $selectedPackage->getRawOriginal('package')];
+                    }
+                    
+                }                                
+            }
+        }
     }
 
     private function discountCombine($discount){
-    
+        $customerHasDiscount = $this->customerHasDiscount($discount);
+        
+        if($customerHasDiscount){
+            $productDiscount = $this->szProductId == $discount->main_dms_inv_product_id ? true : false;
+            
+            if($productDiscount){
+                $qtyQuotaNotaBundling = 0;
+                /** get other product in this nota */
+                $bundlingProduct = DmsSdDocdoItem::where(['szProductId' => $discount->bundling_dms_inv_product_id, 'szDocId' => $this->szDocId])->first();
+                if($bundlingProduct){
+                    $qtyQuotaNotaBundling = $bundlingProduct->getRawOriginal('decQty');
+                }
+                    $qtyQuotaNota = $this->attributes['decQty'];
+                    $selectedPackage = [];
+                    foreach($discount->details as $d){
+                        if($qtyQuotaNota >= $d->getRawOriginal('min_main_qty') && $qtyQuotaNotaBundling >= $d->getRawOriginal('min_bundling_qty')){
+                            $selectedPackage = $d;
+                        }
+                    }
+                    $totalNota = $qtyQuotaNota + $qtyQuotaNotaBundling;
+                    if($totalNota > $discount->getRawOriginal('max_quota') ){
+                        $totalNota = $discount->getRawOriginal('max_quota');
+                    }
+                    if(!empty($selectedPackage)){
+                        $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
+                        $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $totalNota];
+                    }
+                    
+                //}                                
+            }
+        }
     }
 
     /**

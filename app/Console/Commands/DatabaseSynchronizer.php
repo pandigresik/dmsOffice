@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use App\Models\LogSynchronize;
+use App\Models\Synchronize;
 use PDOException;
 
 class DatabaseSynchronizer
@@ -55,6 +57,11 @@ class DatabaseSynchronizer
         Cache::tags(self::CACHE_NAME.$this->cacheIdentity)->put('state', 'progress');
         foreach ($this->getTables() as $table) {
             $tableName = $table['name'];
+            $this->updateProgress($tableName, 100, 0);
+        }
+        
+        foreach ($this->getTables() as $table) {
+            $tableName = $table['name'];
             $this->feedback(PHP_EOL.PHP_EOL."Table: {$tableName}", 'line');
             \Log::error('prepare sinkronisasi table '.$tableName);
             if (!Schema::connection($this->from)->hasTable($tableName)) {
@@ -66,6 +73,8 @@ class DatabaseSynchronizer
             //$this->syncTable($table);
             \Log::error('sinkronisasi table '.$tableName);
             $this->syncRows($table, $this->getFilterTable($tableName));
+            LogSynchronize::create(['table_name' => $tableName]);
+            Synchronize::updateOrCreate(['table_name' => $tableName]);
         }
         Cache::tags(self::CACHE_NAME.$this->cacheIdentity)->put('state', 'done');
         $this->feedback('Synchronization done!', 'info');
@@ -157,7 +166,15 @@ class DatabaseSynchronizer
         $counter = 0;
         if (!empty($amount)) {
             while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
-                $exists = $this->getToDb()->table($tableName)->where($queryColumn, $row->{$queryColumn})->first();
+                $tmp = $this->getToDb()->table($tableName);
+                if(is_array($queryColumn)){
+                    foreach($queryColumn as $qc){
+                        $tmp->where($qc, $row->{$qc});
+                    }
+                }else{
+                    $tmp->where($queryColumn, $row->{$queryColumn});
+                }             
+                $exists = $tmp->first();
                 // remove iiInternalId because auto increment column
                 if (isset($row->iInternalId)) {
                     unset($row->iInternalId);
@@ -166,7 +183,15 @@ class DatabaseSynchronizer
                 if (!$exists) {
                     $this->getToDb()->table($tableName)->insert((array) $row);
                 } else {
-                    $this->getToDb()->table($tableName)->where($queryColumn, $row->{$queryColumn})->update((array) $row);
+                    $tmpUpdate = $this->getToDb()->table($tableName);
+                    if(is_array($queryColumn)){
+                        foreach($queryColumn as $qc){
+                            $tmpUpdate->where($qc, $row->{$qc});
+                        }
+                    }else{
+                        $tmpUpdate->where($queryColumn, $row->{$queryColumn});
+                    }
+                    $tmpUpdate->update((array) $row);
                 }
                 ++$counter;
 

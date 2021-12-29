@@ -68,9 +68,7 @@ class SynchronizeController extends AppBaseController
         $to = $connectionStr;
         // $to = $connectionStr.'_origin';
         // $from = $connectionStr;
-        $cacheIdentity = $this->getCacheIdentity($connectionStr);
-        $synchronize = Synchronize::max('updated_at') ?? '2021-03-01 01:01:01';
-        $lastSinkron = (\Carbon\Carbon::parse($synchronize))->subHour(1);
+        $cacheIdentity = $this->getCacheIdentity($connectionStr);        
 
         try {
             (new DatabaseSynchronizer(
@@ -81,15 +79,14 @@ class SynchronizeController extends AppBaseController
                 ->setTables($this->getTables())
                 ->setSkipTables($this->getSkipTables())
                 //->setLimit((int) $this->getLimit())
-                ->setFilter($this->getTableConditions($lastSinkron))
+                ->setFilter($this->getTableConditions())
                 ->run()
             ;
-            foreach ($this->getTables() as $table) {
-                $tableName = $table['name'];
-                \Log::error($tableName);
-                LogSynchronize::create(['table_name' => $tableName]);
-                Synchronize::updateOrCreate(['table_name' => $tableName]);
-            }
+            // foreach ($this->getTables() as $table) {
+            //     $tableName = $table['name'];
+            //     \Log::error($tableName);
+                
+            // }
         } catch (Exception $e) {
             \Log::error($e->getMessage());
 
@@ -147,19 +144,30 @@ class SynchronizeController extends AppBaseController
         return config('database-synchronizer.limit', DatabaseSynchronizer::DEFAULT_LIMIT);
     }
 
-    private function getTableConditions(string $lastSinkron): array
+    private function getTableConditions(): array
     {
-        $resultCondition = [];
+        $user = Auth::user();
+        $connectionStr = config('entity.entityConnection')[$user->entity_id];
+        $resultCondition = [];        
         $columnCondition = config('database-synchronizer.tables', []);
         $tables = $this->getTables();
         $tableReferences = [];
-        foreach ($tables as $table) {
+        $cutOff = '2021-11-01';
+        foreach ($tables as $table) {            
+            //$synchronize = Synchronize::whereTableName($table)->max('updated_at') ?? '2021-10-01 01:01:01';            
             $tableName = $table['name'];
             $tableReferences[$tableName] = $table;
             $references = $table['references'];
-            if (empty($references)) {
+            if (empty($references)) {                
+                $synchronize = \DB::connection($connectionStr)->table($tableName)->max($table['filter']);
+                $lastSinkron = (\Carbon\Carbon::parse($synchronize))->subHour(1);                
+                $lastSinkron = $lastSinkron < $cutOff ? $cutOff : $lastSinkron;
                 $resultCondition[$tableName] = $table['filter'].' >= \''.$lastSinkron.'\'';
-            } else {
+            } else {                
+                \Log::error($tableReferences[$references['table']]['filter']);
+                $synchronize = \DB::connection($connectionStr)->table($references['table'])->max($tableReferences[$references['table']]['filter']);
+                $lastSinkron = (\Carbon\Carbon::parse($synchronize))->subHour(1);
+                $lastSinkron = $lastSinkron < $cutOff ? $cutOff : $lastSinkron;
                 $resultCondition[$tableName] = $references['column'].' in (select '.$references['column'].' from '.$references['table'].' where '.$tableReferences[$references['table']]['filter'].' >= \''.$lastSinkron.'\')';
             }
         }
