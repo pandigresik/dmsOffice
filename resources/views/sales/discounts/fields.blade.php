@@ -167,7 +167,7 @@
                 <tbody>
                     @foreach ($detailItems as $item)
                     <tr>
-                        <td><input type="hidden" name="discount_details[bundling_dms_inv_product_id][]"
+                        <td><input type="hidden" name="discount_details[main_dms_inv_product_id][]"
                                 value="{{ $item->main_dms_inv_product_id }}">{{ $item->mainProduct->szName }}
                         </td>
                         <td><input type="text" class="form-control inputmask" data-unmask=1

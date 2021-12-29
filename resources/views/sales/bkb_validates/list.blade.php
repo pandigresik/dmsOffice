@@ -14,18 +14,15 @@
                 <th rowspan="2">Qty</th>                
                 <th colspan="2">Diskon Sales</th>
                 <th colspan="2">Diskon Sistem</th>
-                <th rowspan="2">Selisih</th>
-                <th rowspan="2">
-                    <label class="form-check-label">
-                        <input type="checkbox" onclick="main.checkAll(this,'table')">
-                    </label>
-                </th>
+                <th colspan="2">Selisih</th>                
             </tr>
             <tr>
                 <th>TIV</th>
                 <th>Distributor</th>
                 <th>TIV</th>
-                <th>Distributor</th>                
+                <th>Distributor</th>
+                <th>TIV</th>
+                <th>Distributor</th>
             </tr>
         </thead>
         <tbody>
@@ -46,20 +43,41 @@
                 @foreach ($data->items as $index => $item)
                     @if($index)
                         <tr>
-                    @endif                
+                    @endif
+                    @php
+                        $item->setCustomer($data->szCustomerId);
+                        $item->setBkbDate($data->getRawOriginal('dtmDoc'));
+                        $totalDiscountPrinciple = 0;
+                        $totalDiscountDistributor = 0;
+                    @endphp
+
                     <td>{{ $item->product->szName}}</td>
                     <td class="text-right">{{ $item->decQty }}</td>
                     <td class="text-right">{{ $item->decDiscPrinciple }}</td>
                     <td class="text-right">{{ $item->decDiscDistributor }}</td>
-                    <td>not yet</td>
-                    <td>not yet</td>
-                    <td></td>
-                    <td>
-                        <label class="form-check-label">
-                            <input type="checkbox" name="btb[]"
-                                value="{{ json_encode(['jenis' => $data->jenis,'no_btb' => $data->no_btb]) }}">
-                        </label>
-                    </td> 
+                    <td> 
+                        @forelse ($item->getDiscountPrinciple() as $itemDiscount)
+                            {{ $itemDiscount['name'] }} - {{ $itemDiscount['amount'] }}
+                            @php
+                                $totalDiscountPrinciple += $itemDiscount['amount'];    
+                            @endphp
+                            
+                        @empty
+                            -
+                        @endforelse                    
+                    </td>
+                    <td> 
+                        @forelse ($item->getDiscountDistributor() as $itemDiscount)
+                            {{ $itemDiscount['name'] }} - {{ $itemDiscount['amount'] }}
+                            @php
+                                $totalDiscountDistributor += $itemDiscount['amount'];    
+                            @endphp
+                        @empty
+                            -
+                        @endforelse            
+                    </td>
+                    <td class="text-right">{{ localNumberAccountingFormat($item->getRawOriginal('decDiscPrinciple') - $totalDiscountPrinciple, 0) }}</td>
+                    <td class="text-right">{{ localNumberAccountingFormat($item->getRawOriginal('decDiscDistributor') - $totalDiscountDistributor, 0) }}</td>
                     @if($index)
                         </tr>
                     @endif   

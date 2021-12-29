@@ -29,9 +29,18 @@ class UpdateDiscountsRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = Discounts::$rules;
+        $jenis = $this->get('jenis');
         
-        $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
+        switch($jenis){
+            case 'kontrak':
+                $rules = Discounts::$rulesKontrak;
+                break;
+            case 'combine':
+                $rules = Discounts::$rulesCombine;
+                break;
+            default:
+                $rules = Discounts::$rules;
+        }
         return $rules;
     }
 
