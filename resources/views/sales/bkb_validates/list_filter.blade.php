@@ -1,4 +1,7 @@
 <div class="table-responsive">
+    <input type="hidden" name="start_date" value="{{ $startDate }}">
+    <input type="hidden" name="end_date" value="{{ $endDate }}">
+    <input type="hidden" name="branch_id" value="{{ $branchId }}">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -43,7 +46,7 @@
                         $item->setBkbDate($data->getRawOriginal('dtmDoc'));
                         $totalDiscountPrinciple = 0;
                         $totalDiscountDistributor = 0;
-                        $discounts = $item->getDiscounts();                        
+                        $discounts = $item->getDiscounts();                                                
                     @endphp
                     {{-- @if(empty($discounts['distributor']) && empty($discounts['principle']) && empty($item->decDiscPrinciple) && empty($item->decDiscDistributor))
                         @continue;
@@ -80,15 +83,34 @@
                         @empty
                             -
                         @endforelse            
-                    </td>
-                    <td class="text-right">{{ localNumberAccountingFormat($item->getRawOriginal('decDiscPrinciple') - $totalDiscountPrinciple, 0) }}</td>
-                    <td class="text-right">{{ localNumberAccountingFormat($item->getRawOriginal('decDiscDistributor') - $totalDiscountDistributor, 0) }}</td>
+                    </td>                    
                     @php
                         $totalDiskonTivSales += $item->getRawOriginal('decDiscPrinciple');
                         $totalDiskonDistributorSales += $item->getRawOriginal('decDiscDistributor');
                         $totalDiskonTivSistem += $totalDiscountPrinciple;
-                        $totalDiskonDistributorSistem += $totalDiscountDistributor;                        
-                    @endphp                        
+                        $totalDiskonDistributorSistem += $totalDiscountDistributor;
+                        $selisihPrinciple = $item->getRawOriginal('decDiscPrinciple') - $totalDiscountPrinciple;
+                        $selisihDistributor = $item->getRawOriginal('decDiscDistributor') - $totalDiscountDistributor;                        
+                        $saveData = [
+                            'szDocId' => $data->szDocId,
+                            'szProductId' => $item->szProductId,
+                            'szSalesId' => $data->szSalesId,
+                            'szBranchId' => $data->szBranchId,
+                            'bkbDate' => $data->getRawOriginal('dtmDoc'),
+                            'decQty' => $item->decQty,
+                            'discPrinciple' => $item->getRawOriginal('decDiscPrinciple'),
+                            'discDistributor' => $item->getRawOriginal('decDiscDistributor'),
+                            'sistemPrinciple' => $totalDiscountPrinciple,
+                            'sistemDistributor' => $totalDiscountDistributor,
+                            'detailProgram' => $discounts,
+                            'selisihPrinciple' => $selisihPrinciple,
+                            'selisihDistributor' => $selisihDistributor
+                        ];
+                        
+                    @endphp
+                    <td class="text-right">{{ localNumberAccountingFormat($selisihPrinciple, 0) }}</td>
+                    <td class="text-right">{{ localNumberAccountingFormat($selisihDistributor, 0) }}</td>
+                    <input type="hidden" name="szDocId[]" value="{{ json_encode($saveData) }}"  >                        
                 </tr>
                 @endforeach
             @empty

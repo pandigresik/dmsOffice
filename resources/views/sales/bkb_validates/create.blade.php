@@ -14,7 +14,7 @@
                 @include('coreui-templates::common.errors')
                 <div class="row">
                     <div class="col-lg-12">
-                        {!! Form::open(['route' => 'sales.bkbValidates.store']) !!}
+                        {!! Form::open(['route' => 'sales.bkbDiscounts.store']) !!}
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
