@@ -38,6 +38,7 @@
             @forelse($datas as $data)          
                 @foreach ($data->items as $index => $item)  
                     @php
+                        $item->setOtherItem($data->items);
                         $item->setCustomer($data->customer);
                         $item->setBkbDate($data->getRawOriginal('dtmDoc'));
                         $totalDiscountPrinciple = 0;

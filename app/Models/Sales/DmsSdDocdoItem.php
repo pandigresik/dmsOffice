@@ -127,6 +127,7 @@ class DmsSdDocdoItem extends Model
     private $discounts = [];
     private $customer = NULL;
     private $bkbDate;
+    private $otherItem;
 
     /**
      * Get the product that owns the DmsSdDocdoItem.
@@ -303,7 +304,8 @@ class DmsSdDocdoItem extends Model
             
             if($productDiscount){
                 /** get other product in this nota */
-                $bundlingProduct = DmsSdDocdoItem::where(['szProductId' => $discount->bundling_dms_inv_product_id, 'szDocId' => $this->szDocId])->first();
+                //$bundlingProduct = DmsSdDocdoItem::where(['szProductId' => $discount->bundling_dms_inv_product_id, 'szDocId' => $this->szDocId])->first();
+                $bundlingProduct = $this->getOtherItem()->where('szProductId',$discount->bundling_dms_inv_product_id)->first();
                 if($bundlingProduct){
                     $qtyQuotaNota = $this->attributes['decQty'] > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $this->attributes['decQty'];
                     $qtyQuotaNotaBundling = $bundlingProduct->getRawOriginal('decQty');
@@ -332,7 +334,8 @@ class DmsSdDocdoItem extends Model
             if($productDiscount){
                 $qtyQuotaNotaBundling = 0;
                 /** get other product in this nota */
-                $bundlingProduct = DmsSdDocdoItem::where(['szProductId' => $discount->bundling_dms_inv_product_id, 'szDocId' => $this->szDocId])->first();
+                //$bundlingProduct = DmsSdDocdoItem::where(['szProductId' => $discount->bundling_dms_inv_product_id, 'szDocId' => $this->szDocId])->first();
+                $bundlingProduct = $this->getOtherItem()->where('szProductId',$discount->bundling_dms_inv_product_id)->first();
                 if($bundlingProduct){
                     $qtyQuotaNotaBundling = $bundlingProduct->getRawOriginal('decQty');
                 }
@@ -373,6 +376,26 @@ class DmsSdDocdoItem extends Model
     public function setBkbDate($bkbDate)
     {
         $this->bkbDate = $bkbDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of otherItem
+     */ 
+    public function getOtherItem()
+    {
+        return $this->otherItem;
+    }
+
+    /**
+     * Set the value of otherItem
+     *
+     * @return  self
+     */ 
+    public function setOtherItem($otherItem)
+    {
+        $this->otherItem = $otherItem;
 
         return $this;
     }
