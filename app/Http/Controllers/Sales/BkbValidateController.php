@@ -12,6 +12,7 @@ use App\DataTables\Sales\BkbValidateDataTable;
 use App\Repositories\Sales\BkbValidateRepository;
 use App\Http\Requests\Sales\CreateBkbValidateRequest;
 use App\Http\Requests\Sales\UpdateBkbValidateRequest;
+use App\Repositories\Base\DmsSmBranchRepository;
 
 class BkbValidateController extends AppBaseController
 {
@@ -42,12 +43,13 @@ class BkbValidateController extends AppBaseController
     public function create(Request $request)
     {
         if ($request->ajax()) {
-            $period = explode(' - ', $request->get('ref'));
+            $period = explode(' - ', $request->get('period_range'));
+            $branchId = $request->get('branch_id');
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-            $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate);
+            $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate, $branchId);
 
-            return view('sales.bkb_validates.list')->with('datas', $datas);
+            return view('sales.bkb_validates.list_filter')->with('datas', $datas);
         }
         return view('sales.bkb_validates.create')->with($this->getOptionItems());
     }
@@ -167,9 +169,9 @@ class BkbValidateController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        
+        $branch = new DmsSmBranchRepository(app());
         return [
-                        
+            'branchItems' => $branch->pluck([],null,null,'szId','szName')
         ];
     }
 }

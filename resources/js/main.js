@@ -513,7 +513,14 @@ class Main {
       }
     }
     if (_refElm.length) {
-      _data.ref = _refElm.val()
+      if(_refElm.length > 1){
+        _refElm.each(function(){
+          _data[$(this).attr('name')] = $(this).val()
+        });
+      }else{
+        _data.ref = _refElm.val()
+      }
+      
     }
     this.getHtmlData(_url, _type, _data, function(data) {
       $(_target).html(data)
