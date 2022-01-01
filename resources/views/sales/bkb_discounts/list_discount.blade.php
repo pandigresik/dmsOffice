@@ -8,5 +8,5 @@
         </div>
     </div>
 @empty
-    
+    Data tidak ditemukan
 @endforelse

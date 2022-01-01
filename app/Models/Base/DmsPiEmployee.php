@@ -114,8 +114,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class DmsPiEmployee extends Model
-{
-    
+{    
 
     use HasFactory;
 
@@ -124,11 +123,9 @@ class DmsPiEmployee extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
+    public $primaryKey = 'iInternalId';
     protected $dates = ['deleted_at'];
-
     
-
     public $fillable = [
         'iId',
         'szId',

@@ -11,29 +11,32 @@
              @include('flash::message')
              <div class="row">
                     <div class="col-lg-12">
-                        {!! Form::open(['route' => 'sales.bkbDiscounts.store']) !!}
+                        {!! Form::open(['onsubmit' => 'return false']) !!}
                         <div class="card">
                             <div class="card-header">                                
-                                <strong>Rekap @lang('models/bkbDiscounts.singular')</strong>
+                                <strong>Sales Discount Reject</strong>
                             </div>
                             <div class="card-body">                   
                                 <!-- Range Period Field -->
                                 <div class="form-group row">
                                     {!! Form::label('period_range', __('models/bkbDiscounts.fields.period_range').':', ['class' => 'col-md-3 col-form-label']) !!}
-                                    <div class="col-md-3"> 
+                                    <div class="col-md-9"> 
                                         {!! Form::text('period_range', null, ['class' => 'form-control datetime', 'data-optiondate' => json_encode( ['singleDatePicker' => false, 'locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'period_range']) !!}
-                                    </div>
-                                    <div class="clo-md-3 mr-2">
-                                        {!! Form::select('branch_id', $branchItems, null, ['class' => 'form-control', 'required' => 'required']) !!}
-                                    </div>
-                                    <div class="clo-md-2 mr-2">
-                                        {!! Form::select('type', $typeItems, null, ['class' => 'form-control', 'required' => 'required']) !!}
-                                    </div>
-                                    <div class="clo-md-2">
-                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listbkb', 'data-url' => route('sales.bkbDiscounts.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id],select[name=type]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
+                                    </div>                                                                        
+                                </div>                                
+                                <div class="form-group row">
+                                    {!! Form::label('sales', 'Sales :',['class' => 'col-md-3 col-form-label']) !!}
+                                    <div class="col-md-9">
+                                        {!! Form::select('sales[]', [], null, array_merge(['class' => 'form-control
+                                        select2','multiple' => 'multiple', 'required' => 'required', 'data-url' => route('selectAjax'), 'data-ajax'
+                                        => 1, 'data-repository' => 'Base\\DmsPiSalesRepository'], config('local.select2.ajax')) ) !!}
                                     </div>
                                 </div>
-
+                                <div class="form-group row">
+                                    <div class="col-md-9 offset-3">
+                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listbkb', 'data-url' => route('sales.discountReject.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name="sales[]"]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
+                                    </div>
+                                </div>
                                 <div class="">
                                     <div id="listbkb"></div>
                                 </div>

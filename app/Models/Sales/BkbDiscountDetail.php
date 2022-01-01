@@ -2,6 +2,7 @@
 
 namespace App\Models\Sales;
 
+use App\Models\Base\DmsSmBranch;
 use App\Models\Sales\DmsSdDocdo;
 use App\Models\BaseEntity as Model;
 use App\Models\Inventory\DmsInvProduct;
@@ -133,5 +134,15 @@ class BkbDiscountDetail extends Model
     public function promo(): BelongsTo
     {
         return $this->belongsTo(Discounts::class, 'discount_id', 'id');
+    }
+
+    /**
+     * Get the depo that owns the DmsSdDocdo
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function depo(): BelongsTo
+    {
+        return $this->belongsTo(DmsSmBranch::class, 'szBranchId', 'szId');
     }    
 }

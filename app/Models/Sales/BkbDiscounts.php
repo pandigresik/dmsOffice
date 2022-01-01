@@ -88,15 +88,10 @@ class BkbDiscounts extends Model
 
     use HasFactory;
 
-    public $table = 'bkb_discounts';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-    
+    public $table = 'bkb_discounts';
 
     public $fillable = [
         'szDocId',
@@ -110,8 +105,29 @@ class BkbDiscounts extends Model
         'sistemPrinciple',
         'sistemDistributor',
         'selisihPrinciple',
-        'selisihDistributor'
+        'selisihDistributor',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'szDocId' => 'required|string|max:50',
+        'szProductId' => 'required|string|max:50',
+        'szSalesId' => 'required|string|max:50',
+        'szBranchId' => 'required|string|max:50',
+        'decQty' => 'required|numeric',
+        'discPrinciple' => 'required|numeric',
+        'discDistributor' => 'required|numeric',
+        'sistemPrinciple' => 'required|numeric',
+        'sistemDistributor' => 'required|numeric',
+        'selisihPrinciple' => 'required|numeric',
+        'selisihDistributor' => 'required|numeric',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -130,35 +146,30 @@ class BkbDiscounts extends Model
         'sistemPrinciple' => 'decimal:2',
         'sistemDistributor' => 'decimal:2',
         'selisihPrinciple' => 'decimal:2',
-        'selisihDistributor' => 'decimal:2'
+        'selisihDistributor' => 'decimal:2',
     ];
 
     /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'szDocId' => 'required|string|max:50',
-        'szProductId' => 'required|string|max:50',
-        'szSalesId' => 'required|string|max:50',
-        'szBranchId' => 'required|string|max:50',
-        'decQty' => 'required|numeric',
-        'discPrinciple' => 'required|numeric',
-        'discDistributor' => 'required|numeric',
-        'sistemPrinciple' => 'required|numeric',
-        'sistemDistributor' => 'required|numeric',
-        'selisihPrinciple' => 'required|numeric',
-        'selisihDistributor' => 'required|numeric'
-    ];
-
-    /**
-     * Get the bkb that owns the BkbDiscounts
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the bkb that owns the BkbDiscounts.
      */
     public function bkb(): BelongsTo
     {
         return $this->belongsTo(DmsSdDocdo::class, 'szDocId', 'szDocId');
-    }    
+    }
+
+    /**
+     * Get the sales that owns the DmsSdDocdo.
+     */
+    public function sales(): BelongsTo
+    {
+        return $this->belongsTo(DmsPiEmployee::class, 'szSalesId', 'szId');
+    }
+
+    /**
+     * Get the product that owns the DmsSdDocdoItem.
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(DmsInvProduct::class, 'szProductId', 'szId');
+    }
 }

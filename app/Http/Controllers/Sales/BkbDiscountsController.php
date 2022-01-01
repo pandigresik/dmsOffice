@@ -44,9 +44,20 @@ class BkbDiscountsController extends AppBaseController
             $branchId = $request->get('branch_id');
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-            $datas = $this->getRepositoryObj()->listDiscount($startDate, $endDate, $branchId);
-            $discountMaster = Discounts::whereIn('id', $datas->keys())->get()->keyBy('id');
-            return view('sales.bkb_discounts.list_discount')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'depo' => DmsSmBranch::where(['szId' => $branchId])->first(), 'discountMaster' => $discountMaster]);
+            $type = $request->get('type');
+            switch($type){
+                case 'detail':
+                    $datas = $this->getRepositoryObj()->listDiscount($startDate, $endDate, $branchId);                                        
+                    $discountMaster = Discounts::whereIn('id', $datas->keys())->get()->keyBy('id');
+                    return view('sales.bkb_discounts.list_discount')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'depo' => DmsSmBranch::where(['szId' => $branchId])->first(), 'discountMaster' => $discountMaster]);
+                break;
+                default:
+                    $datas = $this->getRepositoryObj()->listDiscountRekap($startDate, $endDate);
+                    $discountMaster = Discounts::whereIn('id', $datas->keys())->get()->keyBy('id');
+                    return view('sales.bkb_discounts.list_discount_rekap')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'discountMaster' => $discountMaster]);
+            }
+            
+            
         }
         return view('sales.bkb_discounts.index')->with($this->getOptionItems());
     }
@@ -186,7 +197,8 @@ class BkbDiscountsController extends AppBaseController
     private function getOptionItems(){        
         $branch = new DmsSmBranchRepository(app());
         return [
-            'branchItems' => $branch->pluck([],null,null,'szId','szName')
+            'branchItems' => $branch->pluck([],null,null,'szId','szName'),
+            'typeItems' => ['detail' => 'Detail', 'rekap' => 'Rekap']
         ];
     }
 }

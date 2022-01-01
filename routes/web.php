@@ -109,8 +109,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('dmsSdPricecatalogs', App\Http\Controllers\Sales\DmsSdPricecatalogController::class, ['as' => 'sales']);
         Route::resource('dmsSdRoutes', App\Http\Controllers\Sales\DmsSdRouteController::class, ['as' => 'sales']);
         Route::resource('dmsSdRouteitems', App\Http\Controllers\Sales\DmsSdRouteitemController::class, ['as' => 'sales']);        
-        Route::resource('discounts', App\Http\Controllers\Sales\DiscountsController::class, ["as" => 'sales']);        
-        Route::resource('bkbDiscounts', App\Http\Controllers\Sales\BkbDiscountsController::class, ["as" => 'sales']);
+        Route::resource('discounts', App\Http\Controllers\Sales\DiscountsController::class, ["as" => 'sales']);
+        Route::resource('bkbDiscounts', App\Http\Controllers\Sales\BkbDiscountsController::class, ["as" => 'sales'])->except(['destroy', 'update', 'edit', 'show']);
+        Route::get('discountReject', [App\Http\Controllers\Sales\DiscountRejectController::class, 'index'])->name('sales.discountReject.index');
     });
 
     Route::group(['prefix' => 'purchase'], function () {
@@ -140,8 +141,6 @@ Route::post(
     'generator_builder/generate-from-file',
     '\InfyOm\GeneratorBuilder\Controllers\GeneratorBuilderController@generateFromFile'
 )->name('io_generator_builder_generate_from_file');
-
-// Route::match(['get', 'post'],'/demo', [App\Http\Controllers\DemoAccountingController::class, 'index'])->name('demo');
 
 Route::resource('synchronizes', App\Http\Controllers\SynchronizeController::class)->except(['destroy', 'update', 'edit', 'show']);
 Route::get('synchronizes/progress', [App\Http\Controllers\SynchronizeController::class, 'progress'])->name('synchronizes.progress');

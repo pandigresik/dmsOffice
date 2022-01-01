@@ -160,4 +160,17 @@ class BkbDiscountsRepository extends BaseRepository
             $q->with(['customer', 'sales']);
         },'product'])->whereBetween('bkbDate', [$startDate, $endDate])->where(['szBranchId' => $branchId])->get()->groupBy('discount_id');
     }
+    
+    public function listDiscountRekap($startDate, $endDate){
+        return BkbDiscountDetail::select(['szBranchId','szProductId','discount_id'])->selectRaw('sum(principle_amount) as principle_amount, sum(distributor_amount) as distributor_amount')->with(['product'])->whereBetween('bkbDate', [$startDate, $endDate])
+                ->with(['depo'])
+                ->groupBy(['szBranchId','szProductId','discount_id'])
+                ->get()->groupBy('discount_id');
+    }
+
+    public function listSalesReject($startDate, $endDate, $sales){
+        return BkbDiscounts::with(['bkb' => function($q){
+            $q->with(['customer']);
+        },'product'])->whereBetween('bkbDate', [$startDate, $endDate])->whereIn('szSalesId', $sales)->get()->groupBy('szSalesId');
+    }
 }
