@@ -2,8 +2,11 @@
 
 namespace App\Models\Sales;
 
+use App\Models\Sales\DmsSdDocdo;
 use App\Models\BaseEntity as Model;
+use App\Models\Inventory\DmsInvProduct;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -63,9 +66,7 @@ class BkbDiscountDetail extends Model
     const UPDATED_AT = 'updated_at';
 
 
-    protected $dates = ['deleted_at'];
-
-    public $connection = "mysql_sejati";
+    protected $dates = ['deleted_at'];    
 
     public $fillable = [
         'szDocId',
@@ -106,5 +107,31 @@ class BkbDiscountDetail extends Model
         'distributor_amount' => 'required|numeric'
     ];
 
-    
+    /**
+     * Get the product that owns the DmsSdDocdoItem.
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(DmsInvProduct::class, 'szProductId', 'szId');
+    }
+
+    /**
+     * Get the bkb that owns the BkbDiscounts
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function bkb(): BelongsTo
+    {
+        return $this->belongsTo(DmsSdDocdo::class, 'szDocId', 'szDocId');
+    }
+
+    /**
+     * Get the promo that owns the BkbDiscountDetail
+     *
+     * @return \IlluminDiscountsDatabase\Ediscount_idatioidsTo
+     */
+    public function promo(): BelongsTo
+    {
+        return $this->belongsTo(Discounts::class, 'discount_id', 'id');
+    }    
 }

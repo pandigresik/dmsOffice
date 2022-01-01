@@ -3,7 +3,9 @@
 namespace App\Models\Sales;
 
 use App\Models\BaseEntity as Model;
+use App\Models\Inventory\DmsInvProduct;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -94,7 +96,7 @@ class BkbDiscounts extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $connection = "mysql_sejati";
+    
 
     public $fillable = [
         'szDocId',
@@ -150,5 +152,13 @@ class BkbDiscounts extends Model
         'selisihDistributor' => 'required|numeric'
     ];
 
-    
+    /**
+     * Get the bkb that owns the BkbDiscounts
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function bkb(): BelongsTo
+    {
+        return $this->belongsTo(DmsSdDocdo::class, 'szDocId', 'szDocId');
+    }    
 }

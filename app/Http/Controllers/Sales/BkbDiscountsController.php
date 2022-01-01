@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Sales;
 
-use App\DataTables\Sales\BkbDiscountsDataTable;
+use Flash;
+use Response;
 use App\Http\Requests\Sales;
+use Illuminate\Http\Request;
+use App\Http\Controllers\AppBaseController;
+
+use App\DataTables\Sales\BkbDiscountsDataTable;
+use App\Repositories\Base\DmsSmBranchRepository;
+use App\Repositories\Sales\BkbDiscountsRepository;
 use App\Http\Requests\Sales\CreateBkbDiscountsRequest;
 use App\Http\Requests\Sales\UpdateBkbDiscountsRequest;
-use App\Repositories\Sales\BkbDiscountsRepository;
-
-use Flash;
-use App\Http\Controllers\AppBaseController;
-use Response;
+use App\Models\Base\DmsSmBranch;
+use App\Models\Sales\Discounts;
 
 class BkbDiscountsController extends AppBaseController
 {
@@ -28,18 +32,40 @@ class BkbDiscountsController extends AppBaseController
      * @param BkbDiscountsDataTable $bkbDiscountsDataTable
      * @return Response
      */
-    public function index(BkbDiscountsDataTable $bkbDiscountsDataTable)
-    {
-        return $bkbDiscountsDataTable->render('sales.bkb_discounts.index');
-    }
+    // public function index(BkbDiscountsDataTable $bkbDiscountsDataTable)
+    // {
+    //     return $bkbDiscountsDataTable->render('sales.bkb_discounts.index');
+    // }
 
+    public function index(Request $request)
+    {
+        if ($request->ajax()) {
+            $period = explode(' - ', $request->get('period_range'));
+            $branchId = $request->get('branch_id');
+            $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
+            $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
+            $datas = $this->getRepositoryObj()->listDiscount($startDate, $endDate, $branchId);
+            $discountMaster = Discounts::whereIn('id', $datas->keys())->get()->keyBy('id');
+            return view('sales.bkb_discounts.list_discount')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'depo' => DmsSmBranch::where(['szId' => $branchId])->first(), 'discountMaster' => $discountMaster]);
+        }
+        return view('sales.bkb_discounts.index')->with($this->getOptionItems());
+    }
     /**
-     * Show the form for creating a new BkbDiscounts.
+     * Show the form for creating a new BkbValidate.
      *
      * @return Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        if ($request->ajax()) {
+            $period = explode(' - ', $request->get('period_range'));
+            $branchId = $request->get('branch_id');
+            $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
+            $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
+            $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate, $branchId);
+
+            return view('sales.bkb_discounts.list_filter')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'branchId' => $branchId]);
+        }
         return view('sales.bkb_discounts.create')->with($this->getOptionItems());
     }
 
@@ -58,7 +84,7 @@ class BkbDiscountsController extends AppBaseController
 
         Flash::success(__('messages.saved', ['model' => __('models/bkbDiscounts.singular')]));
 
-        return redirect(route('sales.bkbDiscounts.index'));
+        return redirect(route('sales.bkbDiscounts.create'));
     }
 
     /**
@@ -158,9 +184,9 @@ class BkbDiscountsController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        
+        $branch = new DmsSmBranchRepository(app());
         return [
-                        
+            'branchItems' => $branch->pluck([],null,null,'szId','szName')
         ];
     }
 }

@@ -17,5 +17,6 @@ return array (
     'sistemDistributor' => 'Sistemdistributor',
     'selisihPrinciple' => 'Selisihprinciple',
     'selisihDistributor' => 'Selisihdistributor',
+    'period_range' => 'Periode Penjualan'
   ),
 );
