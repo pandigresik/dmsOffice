@@ -68,6 +68,7 @@ class DiscountsRepository extends BaseRepository
             $input['end_date'] = $period[1];
             $input['split'] = $input['split'] ?? 0;
             $input['state'] = $input['state'] ?? 'A';
+            
             $model = $this->model->newInstance($input);
             $model->save();
 
@@ -97,7 +98,7 @@ class DiscountsRepository extends BaseRepository
             $input['start_date'] = $period[0];
             $input['end_date'] = $period[1];
             $input['split'] = $input['split'] ?? 0;
-            $input['state'] = $input['state'] ?? 'A';
+            $input['state'] = $input['state'] ?? 'A';            
             $model = parent::update($input, $id);            
             $this->removeMember($model);
             $this->createMember($discountMembers, $model);

@@ -2,7 +2,7 @@
     <input type="hidden" name="start_date" value="{{ $startDate }}">
     <input type="hidden" name="end_date" value="{{ $endDate }}">
     <input type="hidden" name="branch_id" value="{{ $branchId }}">
-    <table class="table table-bordered">
+    <table class="table table-bordered" style="font-size:80%">
         <thead>
             <tr>
                 <th rowspan="2">No</th>
@@ -48,9 +48,9 @@
                         $totalDiscountDistributor = 0;
                         $discounts = $item->getDiscounts();                                                
                     @endphp
-                    {{-- @if(empty($discounts['distributor']) && empty($discounts['principle']) && empty($item->decDiscPrinciple) && empty($item->decDiscDistributor))
+                    @if(empty($item->decDiscPrinciple) && empty($item->decDiscDistributor))
                         @continue;
-                    @endif --}}
+                    @endif
                 <tr>
                     <td>{{ ++$number }}</td>
                     <td>{{ $data->depo->szName }}</td>
@@ -108,8 +108,8 @@
                         ];
                         
                     @endphp
-                    <td class="text-right">{{ localNumberAccountingFormat($selisihPrinciple, 0) }}</td>
-                    <td class="text-right">{{ localNumberAccountingFormat($selisihDistributor, 0) }}</td>
+                    <td class="text-right {{ $selisihPrinciple != 0 ? 'text-danger' : ''}}">{{ localNumberAccountingFormat($selisihPrinciple, 0) }}</td>
+                    <td class="text-right {{ $selisihDistributor != 0 ? 'text-danger' : ''}}">{{ localNumberAccountingFormat($selisihDistributor, 0) }}</td>
                     <input type="hidden" name="szDocId[]" value="{{ json_encode($saveData) }}"  >                        
                 </tr>
                 @endforeach

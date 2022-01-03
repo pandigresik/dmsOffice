@@ -77,8 +77,7 @@
         {!! Form::label('main_dms_inv_product_id', __('models/discounts.fields.main_dms_inv_product_id').':', ['class'
         => 'col-md-3 col-form-label']) !!}
         <div class="col-md-9">
-            {!! Form::select('main_dms_inv_product_id', $mainProductItems, null, array_merge(['class' => 'form-control
-            select2',
+            {!! Form::select('main_dms_inv_product_id', $mainProductItems, null, array_merge(['class' => 'form-control select2', 'multiple' => 'multiple',
             'required' => 'required', 'data-url' => route('selectAjax'), 'data-ajax' => 1, 'data-repository' =>
             'Inventory\\DmsInvProductRepository'], config('local.select2.ajax')) ) !!}
         </div>
@@ -100,7 +99,7 @@
         ['class' => 'col-md-3 col-form-label']) !!}
         <div class="col-md-9">
             {!! Form::select('bundling_dms_inv_product_id', $bundlingProductItems, null, array_merge(['class' =>
-            'form-control select2',
+            'form-control select2', 'multiple' => 'multiple',
             'data-url' => route('selectAjax'), 'data-ajax' => 1, 'data-repository' =>
             'Inventory\\DmsInvProductRepository'], config('local.select2.ajax')) ) !!}
         </div>
@@ -197,7 +196,7 @@
                     @foreach ($detailItems as $item)
                     <tr>
                         <td><input type="hidden" name="discount_details[main_dms_inv_product_id][]"
-                                value="{{ $item->main_dms_inv_product_id }}">{{ $item->mainProduct->szName }}</td>
+                                value="{{ $item->main_dms_inv_product_id }}">{!! '<span class="badge badge-primary">'.implode('</span><span class="badge badge-primary ml-2">',$mainProductItems->toArray()).'</span>' !!}</td>
                         <td><input type="text" class="form-control inputmask" data-unmask=1
                                 data-optionmask='{{ json_encode(config('local.number.integer')) }}'
                                 value="{{ $item->min_main_qty }}" name="discount_details[min_main_qty][]"></td>
@@ -239,7 +238,7 @@
                     @foreach ($detailItems as $item)
                     <tr>
                         <td><input type="hidden" name="discount_details[main_dms_inv_product_id][]"
-                                value="{{ $item->main_dms_inv_product_id }}">{{ $item->mainProduct->szName }}</td>
+                                value="{{ $item->main_dms_inv_product_id }}">{!! '<span class="badge badge-primary">'.implode('</span><span class="badge badge-primary ml-2">',$mainProductItems->toArray()).'</span>' !!}</td>
                         <td><input type="text" class="form-control inputmask" data-unmask=1
                                 data-optionmask='{{ json_encode(config('local.number.integer')) }}'
                                 value="{{ $item->min_main_qty }}" name="discount_details[min_main_qty][]"></td>
@@ -247,7 +246,7 @@
                                 data-optionmask='{{ json_encode(config('local.number.integer')) }}'
                                 value="{{ $item->max_main_qty }}" name="discount_details[max_main_qty][]"></td>
                         <td><input type="hidden" name="discount_details[bundling_dms_inv_product_id][]"
-                                value="{{ $item->bundling_dms_inv_product_id }}">{{ $item->bundlingProduct->szName }}
+                                value="{{ $item->bundling_dms_inv_product_id }}">{!! '<span class="badge badge-primary">'.implode('</span><span class="badge badge-primary ml-2">',$bundlingProductItems->toArray()).'</span>' !!}
                         </td>
                         <td><input type="text" class="form-control inputmask" data-unmask=1
                                 data-optionmask='{{ json_encode(config('local.number.integer')) }}'
@@ -287,6 +286,16 @@
     $(function () {
         $('select[name="discount_members[tipe]"]').trigger('change')
         $('select[name=jenis]').trigger('change')
+        let _defaultMainProduct = [], _defaultBundlingProduct = []
+        $('select[name=main_dms_inv_product_id]').find('option').each(function(){
+            _defaultMainProduct.push($(this).val())
+        })
+        $('select[name=main_dms_inv_product_id]').val(_defaultMainProduct).change()
+        
+        $('select[name=bundling_dms_inv_product_id]').find('option').each(function(){
+            _defaultBundlingProduct.push($(this).val())
+        })
+        $('select[name=bundling_dms_inv_product_id]').val(_defaultBundlingProduct).change()
     })
 
     function setOptionSegment(elm) {
@@ -365,9 +374,9 @@
         const _hasPackage = _jenis == 'bundling' ? 1 : 0
         const _detailDiscount = _form.find('#detail_discount')
         let _table = _detailDiscount.find('table')
-        const _mainProductElm = _form.find('select[name=main_dms_inv_product_id]')
+        const _mainProductElm = _form.find('select[name="main_dms_inv_product_id"]')
         const _mainProduct = _mainProductElm.val()
-        const _bundlingProductElm = _form.find('select[name=bundling_dms_inv_product_id]')
+        const _bundlingProductElm = _form.find('select[name="bundling_dms_inv_product_id"]')
         const _bundlingProduct = _bundlingProductElm.val()
         const _optionMaskInteger = JSON.stringify({
             "alias": "numeric",
@@ -377,15 +386,17 @@
             "autoGroup": true
         })
         let _adaProductBundling = 0,
-            _mainProductName = '',
-            _bundlingProductName = '',
+            _mainProductName = [],
+            _bundlingProductName = [],
             _bundlingItemRow = '',
             _packageItemRow = ''
         if (_.isEmpty(_mainProduct)) {
             main.alertDialog('Warning', 'Produk utama belum dipilih')
             return
         }
-        _mainProductName = _mainProductElm.find('option:selected').text()
+        _mainProductElm.find('option:selected').each(function(){
+            _mainProductName.push($(this).text())
+        })
         if (!_.isEmpty(_bundlingProduct)) {
             _adaProductBundling = 1
         }
@@ -426,9 +437,11 @@
         }
 
         if (_adaProductBundling) {
-            _bundlingProductName = _bundlingProductElm.find('option:selected').text()
+            _bundlingProductElm.find('option:selected').each(function(){
+                _bundlingProductName.push($(this).text())
+            })
             _bundlingItemRow =
-                `<td><input type="hidden" name="discount_details[bundling_dms_inv_product_id][]" value="${_bundlingProduct}">${_bundlingProductName}</td>
+                `<td><input type="hidden" name="discount_details[bundling_dms_inv_product_id][]" value="${_bundlingProduct}"><span class="badge badge-primary">${_bundlingProductName.join('</span><span class="badge badge-primary ml-2">')}</span></td>
                                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}' name="discount_details[min_bundling_qty][]"></td>
                                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}'  name="discount_details[max_bundling_qty][]"></td>`
             if(_hasPackage){
@@ -437,7 +450,7 @@
         }
         const _item = `
             <tr>
-                <td><input type="hidden" name="discount_details[main_dms_inv_product_id][]" value="${_mainProduct}">${_mainProductName}</td>
+                <td><input type="hidden" name="discount_details[main_dms_inv_product_id][]" value="${_mainProduct}"><span class="badge badge-primary">${_mainProductName.join('</span><span class="badge badge-primary ml-2">')}</span></td>
                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}'  name="discount_details[min_main_qty][]"></td>
                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}'  name="discount_details[max_main_qty][]"></td>
                 ${_bundlingItemRow}

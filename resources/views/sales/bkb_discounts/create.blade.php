@@ -35,9 +35,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
-                                    <div id="listbkb"></div>
-                                </div>
+                                <div class="row col-md-12" id="listbkb"></div>
 
                             </div>
                             <div class="card-footer">

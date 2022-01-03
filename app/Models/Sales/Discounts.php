@@ -140,9 +140,9 @@ class Discounts extends Model
         'jenis' => 'required|string',
         'name' => 'required|string|max:100',
         'period' => 'required',                
-        'main_dms_inv_product_id' => 'required|string|max:10',
+        'main_dms_inv_product_id' => 'required',
         'main_quota' => 'required|integer',
-        'bundling_dms_inv_product_id' => 'nullable|string|max:10',
+        'bundling_dms_inv_product_id' => 'nullable',
         'bundling_quota' => 'nullable|integer',
         'max_quota' => 'required|integer',        
     ];
@@ -152,9 +152,9 @@ class Discounts extends Model
         'name' => 'required|string|max:100',
         'period' => 'required',
         'split' => 'required|integer',     
-        'main_dms_inv_product_id' => 'required|string|max:10',
+        'main_dms_inv_product_id' => 'required',
         'main_quota' => 'required|integer',
-        'bundling_dms_inv_product_id' => 'nullable|string|max:10',
+        'bundling_dms_inv_product_id' => 'nullable',
         'bundling_quota' => 'nullable|integer',
         'max_quota' => 'required|integer',
     ];
@@ -193,7 +193,7 @@ class Discounts extends Model
     public function bundlingProduct(): BelongsTo
     {
         return $this->belongsTo(DmsInvProduct::class, 'bundling_dms_inv_product_id', 'szId');
-    }
+    }    
 
     public function getStartDateAttribute($value)
     {

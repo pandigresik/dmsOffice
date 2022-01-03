@@ -99,6 +99,7 @@ class DiscountsController extends AppBaseController
         $details = $discounts->details;
         $typeMember = $members->first()->tipe;
         $listMember = $members->pluck('member_id')->toArray();
+        
         $discounts->discount_members = [
             'tipe' => $typeMember,
             'member_id' => $listMember
@@ -115,8 +116,8 @@ class DiscountsController extends AppBaseController
             $optionItems['customerItems'] = $customer->whereIn('szId',$listMember)->pluck('szName','szId');
         }
                 
-        $optionItems['mainProductItems'] = $product->pluck(['szId' => $discounts->main_dms_inv_product_id], null, null, 'szId', 'szName');
-        $optionItems['bundlingProductItems'] = $discounts->bundling_dms_inv_product_id ? $product->pluck(['szId' => $discounts->bundling_dms_inv_product_id], null, null, 'szId', 'szName') : [];
+        $optionItems['mainProductItems'] = $product->allQuery()->whereIn('szId' , explode(',',$discounts->main_dms_inv_product_id))->get()->pluck('szName','szId');
+        $optionItems['bundlingProductItems'] = $discounts->bundling_dms_inv_product_id ? $product->allQuery()->whereIn('szId' , explode(',',$discounts->bundling_dms_inv_product_id))->get()->pluck('szName', 'szId') : [];
         $optionItems['detailItems'] = $details;        
         return view('sales.discounts.edit')->with('discounts', $discounts)->with($optionItems);
     }

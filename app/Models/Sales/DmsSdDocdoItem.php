@@ -280,7 +280,8 @@ class DmsSdDocdoItem extends Model
         $customerHasDiscount = $this->customerHasDiscount($discount);
         
         if($customerHasDiscount){
-            $productDiscount = $this->szProductId == $discount->main_dms_inv_product_id ? true : false;
+            $listMainProduct = explode(',', $discount->main_dms_inv_product_id);
+            $productDiscount = in_array($this->szProductId, $listMainProduct) ? true : false;
             
             if($productDiscount){                
                 $qtyQuotaNota = $this->attributes['decQty'] > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $this->attributes['decQty'];                
@@ -300,12 +301,15 @@ class DmsSdDocdoItem extends Model
         $customerHasDiscount = $this->customerHasDiscount($discount);
         
         if($customerHasDiscount){
-            $productDiscount = $this->szProductId == $discount->main_dms_inv_product_id ? true : false;
+            $listMainProduct = explode(',', $discount->main_dms_inv_product_id);
+            $productDiscount = in_array($this->szProductId, $listMainProduct) ? true : false;
             
             if($productDiscount){
                 /** get other product in this nota */
                 //$bundlingProduct = DmsSdDocdoItem::where(['szProductId' => $discount->bundling_dms_inv_product_id, 'szDocId' => $this->szDocId])->first();
-                $bundlingProduct = $this->getOtherItem()->where('szProductId',$discount->bundling_dms_inv_product_id)->first();
+                $listbundlingProduct = explode(',', $discount->bundling_dms_inv_product_id);
+                $bundlingProduct = $this->getOtherItem()->whereIn('szProductId',$listbundlingProduct)->first();
+                // $bundlingProduct = $this->getOtherItem()->where('szProductId',$discount->bundling_dms_inv_product_id)->first();
                 if($bundlingProduct){
                     $qtyQuotaNota = $this->attributes['decQty'] > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $this->attributes['decQty'];
                     $qtyQuotaNotaBundling = $bundlingProduct->getRawOriginal('decQty');
@@ -329,13 +333,15 @@ class DmsSdDocdoItem extends Model
         $customerHasDiscount = $this->customerHasDiscount($discount);
         
         if($customerHasDiscount){
-            $productDiscount = $this->szProductId == $discount->main_dms_inv_product_id ? true : false;
+            $listMainProduct = explode(',', $discount->main_dms_inv_product_id);
+            $productDiscount = in_array($this->szProductId, $listMainProduct) ? true : false;
             
             if($productDiscount){
                 $qtyQuotaNotaBundling = 0;
                 /** get other product in this nota */
                 //$bundlingProduct = DmsSdDocdoItem::where(['szProductId' => $discount->bundling_dms_inv_product_id, 'szDocId' => $this->szDocId])->first();
-                $bundlingProduct = $this->getOtherItem()->where('szProductId',$discount->bundling_dms_inv_product_id)->first();
+                $listbundlingProduct = explode(',', $discount->bundling_dms_inv_product_id);
+                $bundlingProduct = $this->getOtherItem()->whereIn('szProductId',$listbundlingProduct)->first();
                 if($bundlingProduct){
                     $qtyQuotaNotaBundling = $bundlingProduct->getRawOriginal('decQty');
                 }

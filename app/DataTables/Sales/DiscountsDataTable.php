@@ -2,6 +2,7 @@
 
 namespace App\DataTables\Sales;
 
+use App\Models\Inventory\DmsInvProduct;
 use App\Models\Sales\Discounts;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
@@ -13,8 +14,8 @@ class DiscountsDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        'main_product.szName' => \App\DataTables\FilterClass\RelationContainKeyword::class,
-        'bundling_product.szName' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        //'main_product.szName' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        //'bundling_product.szName' => \App\DataTables\FilterClass\RelationContainKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -36,6 +37,23 @@ class DiscountsDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
+        $dataTable->editColumn('main_dms_inv_product_id', function($p){
+            $listProduct = DmsInvProduct::select('szName')->whereIn('szId', explode(',', $p->main_dms_inv_product_id))->get()->map(function($item){
+
+                return $item->szName;
+            });
+
+            return !empty($listProduct) ? '<div>'.implode('</div><div>', $listProduct->toArray()).'</div>' : '-';
+
+        })->editColumn('bundling_dms_inv_product_id', function($p){
+            $listProduct = DmsInvProduct::select('szName')->whereIn('szId', explode(',', $p->bundling_dms_inv_product_id))->get()->map(function($item){
+
+                return $item->szName;
+            });             
+
+            return !empty($listProduct) ? '<div>'.implode('</div><div>', $listProduct->toArray()).'</div>' : '-';
+
+        })->escapeColumns([]);
         return $dataTable->addColumn('action', 'sales.discounts.datatables_actions');
     }
 
@@ -47,7 +65,8 @@ class DiscountsDataTable extends DataTable
      */
     public function query(Discounts $model)
     {
-        return $model->with(['mainProduct','bundlingProduct'])->newQuery();
+        //return $model->with(['mainProduct','bundlingProduct'])->newQuery();
+        return $model->newQuery();
     }
 
     /**
@@ -122,9 +141,9 @@ class DiscountsDataTable extends DataTable
             'start_date' => new Column(['title' => __('models/discounts.fields.start_date'), 'data' => 'start_date', 'searchable' => true, 'elmsearch' => 'text']),
             'end_date' => new Column(['title' => __('models/discounts.fields.end_date'), 'data' => 'end_date', 'searchable' => true, 'elmsearch' => 'text']),
             //'split' => new Column(['title' => __('models/discounts.fields.split'), 'data' => 'split', 'searchable' => true, 'elmsearch' => 'text']),
-            'main_dms_inv_product_id' => new Column(['title' => __('models/discounts.fields.main_dms_inv_product_id'), 'data' => 'main_product.szName','defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),
+            'main_dms_inv_product_id' => new Column(['title' => __('models/discounts.fields.main_dms_inv_product_id'), 'data' => 'main_dms_inv_product_id','defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),
             //'main_quota' => new Column(['title' => __('models/discounts.fields.main_quota'), 'data' => 'main_quota', 'searchable' => true, 'elmsearch' => 'text']),
-            'bundling_dms_inv_product_id' => new Column(['title' => __('models/discounts.fields.bundling_dms_inv_product_id'), 'data' => 'bundling_product.szName','defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),
+            'bundling_dms_inv_product_id' => new Column(['title' => __('models/discounts.fields.bundling_dms_inv_product_id'), 'data' => 'bundling_dms_inv_product_id','defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),
             //'bundling_quota' => new Column(['title' => __('models/discounts.fields.bundling_quota'), 'data' => 'bundling_quota', 'searchable' => true, 'elmsearch' => 'text']),
             'max_quota' => new Column(['title' => __('models/discounts.fields.max_quota'), 'data' => 'max_quota', 'searchable' => false, 'elmsearch' => 'text']),            
         ];
