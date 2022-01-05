@@ -44,7 +44,8 @@ class DiscountsController extends AppBaseController
      */
     public function create()
     {
-        return view('sales.discounts.create')->with($this->getOptionItems());
+        $discounts = new Discounts(['conversion_main_dms_inv_product_id' => 1, 'conversion_bundling_dms_inv_product_id' => 1]);
+        return view('sales.discounts.create')->with('discounts', $discounts)->with($this->getOptionItems());
     }
 
     /**

@@ -91,7 +91,7 @@ class Discounts extends Model
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    const OPTION_ITEM_JENIS = ['promo','bundling','combine','kontrak'];
+    const OPTION_ITEM_JENIS = ['promo','bundling','combine','kontrak', 'combo', 'extension'];
     const OPTION_ITEM_SEGMENT = ['customer_segment','customer'];
     protected $dates = ['deleted_at'];
 
@@ -105,8 +105,10 @@ class Discounts extends Model
         'split',
         'main_dms_inv_product_id',
         'main_quota',
+        'conversion_main_dms_inv_product_id',
         'bundling_dms_inv_product_id',
         'bundling_quota',
+        'conversion_bundling_dms_inv_product_id',
         'max_quota',
         'state'
     ];

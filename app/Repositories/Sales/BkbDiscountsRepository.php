@@ -62,11 +62,13 @@ class BkbDiscountsRepository extends BaseRepository
                 if($discount->tipe == 'kontrak'){
                     $discountProduct = array_merge($discountProduct, $discount->details->pluck('main_dms_inv_product_id')->toArray());
                 }else{
-                    array_push($discountProduct, $discount->main_dms_inv_product_id);
+                    $listMainProduct = explode(',', $discount->main_dms_inv_product_id);
+                    $discountProduct = array_merge($discountProduct, $listMainProduct);
                     if(!empty($discount->bundling_dms_inv_product_id)){
-                        array_push($discountProduct, $discount->bundling_dms_inv_product_id);
-                    }
-                    
+                        $listBundlingProduct = explode(',', $discount->bundling_dms_inv_product_id);                        
+                        // array_push($discountProduct, $discount->bundling_dms_inv_product_id);
+                        $discountProduct = array_merge($discountProduct, $listBundlingProduct);
+                    }                    
                 }
             }
         }

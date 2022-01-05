@@ -20,6 +20,8 @@ return array (
     'state' => 'State',
     'discount_members_tipe' => 'Target Program',
     'discount_members_customer_segment' => 'Segment Pelanggan',
-    'discount_members_customer' => 'Pelanggan'
+    'discount_members_customer' => 'Pelanggan',
+    'conversion_main_dms_inv_product_id' => 'Konversi Jumlah',
+    'conversion_bundling_dms_inv_product_id' => 'Konversi Jumlah',
   ),
 );

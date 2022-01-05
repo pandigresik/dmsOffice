@@ -63,15 +63,18 @@
     {!! Form::label('discount_members.member_id', __('models/discounts.fields.discount_members_customer').':',
     ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        {!! Form::select('discount_members[member_id][]', $customerItems, null, array_merge(['class' => 'form-control
+        {!! Form::select('discount_members[member_id][]', $customerItems, null, array_merge(['id' => 'discount_members_customer','class' => 'form-control
         select2
         customer','multiple' => 'multiple', 'required' => 'required', 'data-url' => route('selectAjax'), 'data-ajax'
         => 1, 'data-repository' => 'Base\\DmsArCustomerRepository'], config('local.select2.ajax')) ) !!}
     </div>
+    <div class="col-md-3 offset-3">        
+        {!! Form::file('',['class' => 'form-control-file', 'onchange' => 'updateCustomer(this)','accept' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel']) !!}
+        <a href="/vendor/js-xlsx/template-customer.xlsx">Template customer</a>
+    </div>
 </div>
 
 <div class="product-group">
-
     <!-- Main Dms Inv Product Id Field -->
     <div class="form-group row">
         {!! Form::label('main_dms_inv_product_id', __('models/discounts.fields.main_dms_inv_product_id').':', ['class'
@@ -93,6 +96,17 @@
         </div>
     </div>
 
+    <!-- Conversion Main Product Field -->
+    <div class="form-group row">
+        {!! Form::label('conversion_main_dms_inv_product_id', __('models/discounts.fields.conversion_main_dms_inv_product_id').':', ['class' => 'col-md-3
+        col-form-label']) !!}
+        <div class="col-md-9">
+            {!! Form::number('conversion_main_dms_inv_product_id', $discounts->conversion_main_dms_inv_product_id ?? null, ['class' => 'form-control inputmask', 'required' => 'required',
+            'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer'))]) !!}
+        </div>
+    </div>
+
+    <div class="product-bundling">
     <!-- Bundling Dms Inv Product Id Field -->
     <div class="form-group row">
         {!! Form::label('bundling_dms_inv_product_id', __('models/discounts.fields.bundling_dms_inv_product_id').':',
@@ -113,6 +127,17 @@
             {!! Form::number('bundling_quota', null, ['class' => 'form-control inputmask',
             'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer'))]) !!}
         </div>
+    </div>
+
+    <!-- Conversion Budndling Product Field -->
+    <div class="form-group row">
+        {!! Form::label('conversion_bundling_dms_inv_product_id', __('models/discounts.fields.conversion_bundling_dms_inv_product_id').':', ['class' => 'col-md-3
+        col-form-label']) !!}
+        <div class="col-md-9">
+            {!! Form::number('conversion_bundling_dms_inv_product_id', $discounts->conversion_bundling_dms_inv_product_id ?? null, ['class' => 'form-control inputmask', 'required' => 'required',
+            'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer'))]) !!}
+        </div>
+    </div>
     </div>
 
     <!-- Max Quota Field -->
@@ -281,6 +306,8 @@
     </div>
 </div>
 @push('scripts')
+<script src="/vendor/js-xlsx/shim.js"></script>
+<script src="/vendor/js-xlsx/xlsx.full.min.js"></script>
 <script type="text/javascript">
     let _previousType
     $(function () {
@@ -371,7 +398,7 @@
     function addItemList(elm) {
         const _form = $(elm).closest('form')
         const _jenis = _form.find('select[name=jenis]').val()
-        const _hasPackage = _jenis == 'bundling' ? 1 : 0
+        const _hasPackage = _.includes(['bundling', 'extension'], _jenis) ? 1 : 0
         const _detailDiscount = _form.find('#detail_discount')
         let _table = _detailDiscount.find('table')
         const _mainProductElm = _form.find('select[name="main_dms_inv_product_id"]')
@@ -447,6 +474,10 @@
             if(_hasPackage){
                 _packageItemRow = `<td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}' name="discount_details[package][]"></td>`
             }
+        }else{
+            if(_hasPackage){
+                _packageItemRow = `<td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}' name="discount_details[package][]"></td>`
+            }
         }
         const _item = `
             <tr>
@@ -466,12 +497,14 @@
     function setProductGroup(elm) {
         const _form = $(elm).closest('form')
         const _val = $(elm).val()
+        const _hasBundling = _.includes(['combine','bundling'],_val) ? 1 : 0
         if (_previousType !== undefined) {
             _form.find('#detail_discount').empty()
         }
 
         _form.find('input[name=split]').closest('.form-group').hide()
         _form.find('input[name=split]').prop('required', 0)
+        _form.find('div.product-bundling').hide()
         switch (_val) {
             case 'kontrak':
                 _form.find('div.product-group').hide()
@@ -485,8 +518,68 @@
                 _form.find('div.product-group').show()
                 _form.find('div.product-group').find('input,select,textarea').prop('disabled', 0)
                 _form.find('div.product-group-kontrak').hide()
+                if(_hasBundling) _form.find('div.product-bundling').show()
         }
         _previousType = _val
+    }
+
+    function updateCustomer(elm){
+        let file = elm.files[0];
+        let reader = new FileReader();
+        const customerDropdown = $('#discount_members_customer')
+        reader.onload = function (e) {
+                var data = e.target.result
+                var _error = 0, _message = []
+                var workbook = XLSX.read(data, {
+                    type: 'binary'
+                });
+                var dataJson = xls_to_json(workbook)
+                let _tmp, _option = []
+                for (const _sn in dataJson) {
+                    const _x = dataJson[_sn];
+                    for (let _baris in _x) {
+                        _tmp = _x[_baris];
+                        if(_tmp['szId'] == undefined){                            
+                            _error++
+                            _message.push('kolom szId tidak ditemukan')
+                        }
+                        if(_tmp['szName'] == undefined){
+                            _error++
+                            _message.push('kolom szName tidak ditemukan')
+                        }
+
+                        if(_error){
+                            break;
+                            return false
+                        }
+                        _option.push(`<option selected value='${_tmp['szId']}'>${_tmp['szName']}</option>`)                     
+                    }
+                }
+                
+                if (_error) {
+                    main.alertDialog('Warning', _message.join('\n'))
+                }
+
+                if (!_error) {
+                    customerDropdown.find('option').remove()
+                    $(_option.join('')).appendTo(customerDropdown) 
+                    customerDropdown.trigger('change')
+                }
+
+            };
+
+            reader.readAsBinaryString(file)
+    }
+
+    function xls_to_json(workbook) {
+        var result = {};
+        workbook.SheetNames.forEach(function (sheetName) {
+            var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+            if (roa.length > 0) {
+                result[sheetName] = roa;
+            }
+        });
+        return result;
     }
 </script>
 @endpush
