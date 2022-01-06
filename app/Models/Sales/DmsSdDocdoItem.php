@@ -530,6 +530,11 @@ class DmsSdDocdoItem extends Model
         return $this->selisihPrinciple;
     }
 
+    public function getHasSelisihPrincipleAttribute($value)
+    {
+        return abs($this->selisihPrinciple) > 0 ? 1 : 0;
+    }
+
     /**
      * Get the value of selisihPrinciple
      */ 

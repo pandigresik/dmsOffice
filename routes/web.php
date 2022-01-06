@@ -30,16 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('permissions', App\Http\Controllers\Base\PermissionController::class, ['as' => 'base']);
         Route::resource('users', App\Http\Controllers\Base\UserController::class, ['as' => 'base']);
         Route::resource('menus', App\Http\Controllers\Base\MenusController::class, ['as' => 'base']);
-        // Route::resource('menuPermissions', App\Http\Controllers\Base\MenuPermissionsController::class, ["as" => 'base']);
-        // Route::resource('vehicleGroups', App\Http\Controllers\Base\VehicleGroupController::class, ['as' => 'base']);
-        // Route::resource('vendors', App\Http\Controllers\Base\VendorController::class, ['as' => 'base']);
-        // Route::resource('vendorsContacts', App\Http\Controllers\Base\VendorContactController::class, ["as" => 'base']);
-        //Route::get('vendors/contacts/form/{json?}', 'App\Http\Controllers\Base\VendorContactController@form')->name('base.vendors.contacts.form');
-        //Route::resource('vendorsLocations', App\Http\Controllers\Base\VendorLocationController::class, ["as" => 'base']);
-        //Route::get('vendors/locations/form/{json?}', 'App\Http\Controllers\Base\VendorLocationController@form')->name('base.vendors.locations.form');
-        //Route::resource('vendorsVehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
-        //Route::get('vendors/vehicles/form/{json?}', 'App\Http\Controllers\Base\VehicleController@form')->name('base.vendors.vehicles.form');
-        //Route::resource('vehicles', App\Http\Controllers\Base\VehicleController::class, ['as' => 'base']);
+        
         Route::resource('cities', App\Http\Controllers\Base\CityController::class, ['as' => 'base']);
         Route::resource('trips', App\Http\Controllers\Base\TripController::class, ['as' => 'base']);
         Route::resource('entities', App\Http\Controllers\Base\EntityController::class, ['as' => 'base']);

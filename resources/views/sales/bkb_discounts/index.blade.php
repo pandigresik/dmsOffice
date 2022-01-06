@@ -11,7 +11,7 @@
              @include('flash::message')
              <div class="row">
                     <div class="col-lg-12">
-                        {!! Form::open(['route' => 'sales.bkbDiscounts.store']) !!}
+                        {!! Form::open(['method' => 'GET','route' => 'sales.bkbDiscounts.index']) !!}
                         <div class="card">
                             <div class="card-header">                                
                                 <strong>Rekap @lang('models/bkbDiscounts.singular')</strong>
@@ -31,6 +31,7 @@
                                     </div>
                                     <div class="clo-md-2">
                                         {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listbkb', 'data-url' => route('sales.bkbDiscounts.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id],select[name=type]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
+                                        {!! Form::button(__('crud.download'), ['class' => 'btn btn-primary', 'type' => 'submit', 'name' => 'download_xls', 'value' => 1]) !!}
                                     </div>
                                 </div>
 

@@ -142,7 +142,7 @@ class BkbDiscountsRepository extends BaseRepository
         
         return $result->sortBy([            
             ['bkb_date','asc'],
-            ['selisih_principle','desc']
+            ['has_selisih_principle','desc']
         ]);
 
 
@@ -166,11 +166,12 @@ class BkbDiscountsRepository extends BaseRepository
                         'szProductId' => $d['szProductId'],
                         'szBranchId' => $d['szBranchId'],
                         'bkbDate' => $d['bkbDate'],
+                        'decQty' => $d['decQty']
                     ];
                     foreach ($detailProgram['principle'] as $_index => $program) {
                         $item['discount_id'] = $program['id'];
                         $item['principle_amount'] = $program['amount'];
-                        $item['distributor_amount'] = $detailProgram['distributor'][$_index]['amount'];
+                        $item['distributor_amount'] = $detailProgram['distributor'][$_index]['amount'];                        
                         BkbDiscountDetail::create($item);
                     }
                 }
@@ -199,6 +200,16 @@ class BkbDiscountsRepository extends BaseRepository
         return BkbDiscountDetail::select(['szBranchId', 'szProductId', 'discount_id'])->selectRaw('sum(principle_amount) as principle_amount, sum(distributor_amount) as distributor_amount')->with(['product'])->whereBetween('bkbDate', [$startDate, $endDate])
             ->with(['depo'])
             ->groupBy(['szBranchId', 'szProductId', 'discount_id'])
+            ->get()->groupBy('discount_id');
+    }
+
+    public function listDiscountRekapExcel($startDate, $endDate)
+    {
+        return BkbDiscountDetail::select(['szBranchId', 'szDocId','szProductId','decQty', 'discount_id', 'principle_amount','distributor_amount','bkbDate'])->with(['product'])->whereBetween('bkbDate', [$startDate, $endDate])
+            ->with(['depo', 'promo', 'product', 'bkb' => function($q){
+                $q->with(['customer']);
+            }])
+            ->orderBy('szBranchId')->orderBy('bkbDate')     
             ->get()->groupBy('discount_id');
     }
 

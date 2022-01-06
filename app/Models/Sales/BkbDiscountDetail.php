@@ -74,6 +74,7 @@ class BkbDiscountDetail extends Model
         'szProductId',
         'szBranchId',
         'bkbDate',
+        'decQty',
         'discount_id',
         'principle_amount',
         'distributor_amount'

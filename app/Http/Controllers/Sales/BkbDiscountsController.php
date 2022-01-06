@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers\Sales;
 
-use Flash;
-use Response;
-use App\Http\Requests\Sales;
-use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
-
 use App\DataTables\Sales\BkbDiscountsDataTable;
-use App\Repositories\Base\DmsSmBranchRepository;
-use App\Repositories\Sales\BkbDiscountsRepository;
+use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\Sales;
 use App\Http\Requests\Sales\CreateBkbDiscountsRequest;
 use App\Http\Requests\Sales\UpdateBkbDiscountsRequest;
 use App\Models\Base\DmsSmBranch;
 use App\Models\Sales\Discounts;
+use App\Repositories\Base\DmsSmBranchRepository;
+use App\Repositories\Sales\BkbDiscountsRepository;
+use Flash;
+use Illuminate\Http\Request;
+use Response;
 
 class BkbDiscountsController extends AppBaseController
 {
-    /** @var  BkbDiscountsRepository */
+    /** @var BkbDiscountsRepository */
     protected $repository;
 
     public function __construct()
@@ -30,6 +29,7 @@ class BkbDiscountsController extends AppBaseController
      * Display a listing of the BkbDiscounts.
      *
      * @param BkbDiscountsDataTable $bkbDiscountsDataTable
+     *
      * @return Response
      */
     // public function index(BkbDiscountsDataTable $bkbDiscountsDataTable)
@@ -45,22 +45,33 @@ class BkbDiscountsController extends AppBaseController
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $type = $request->get('type');
-            switch($type){
+            switch ($type) {
                 case 'detail':
-                    $datas = $this->getRepositoryObj()->listDiscount($startDate, $endDate, $branchId);                                        
+                    $datas = $this->getRepositoryObj()->listDiscount($startDate, $endDate, $branchId);
                     $discountMaster = Discounts::whereIn('id', $datas->keys())->get()->keyBy('id');
+
                     return view('sales.bkb_discounts.list_discount')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'depo' => DmsSmBranch::where(['szId' => $branchId])->first(), 'discountMaster' => $discountMaster]);
+
                 break;
                 default:
                     $datas = $this->getRepositoryObj()->listDiscountRekap($startDate, $endDate);
                     $discountMaster = Discounts::whereIn('id', $datas->keys())->get()->keyBy('id');
+
                     return view('sales.bkb_discounts.list_discount_rekap')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'discountMaster' => $discountMaster]);
             }
-            
-            
         }
+
+        $downloadXls = $request->get('download_xls');
+        if($downloadXls){
+            $period = explode('__', $request->get('period_range'));            
+            $startDate = $period[0];
+            $endDate = $period[1];
+            return $this->exportExcel($startDate, $endDate);
+        }
+
         return view('sales.bkb_discounts.index')->with($this->getOptionItems());
     }
+
     /**
      * Show the form for creating a new BkbValidate.
      *
@@ -74,16 +85,15 @@ class BkbDiscountsController extends AppBaseController
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $datas = $this->getRepositoryObj()->processDiscount($startDate, $endDate, $branchId);
-            
+
             return view('sales.bkb_discounts.list_filter')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'branchId' => $branchId]);
         }
+
         return view('sales.bkb_discounts.create')->with($this->getOptionItems());
     }
 
     /**
      * Store a newly created BkbDiscounts in storage.
-     *
-     * @param CreateBkbDiscountsRequest $request
      *
      * @return Response
      */
@@ -101,7 +111,7 @@ class BkbDiscountsController extends AppBaseController
     /**
      * Display the specified BkbDiscounts.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -121,7 +131,7 @@ class BkbDiscountsController extends AppBaseController
     /**
      * Show the form for editing the specified BkbDiscounts.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -141,8 +151,7 @@ class BkbDiscountsController extends AppBaseController
     /**
      * Update the specified BkbDiscounts in storage.
      *
-     * @param  int              $id
-     * @param UpdateBkbDiscountsRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -166,7 +175,7 @@ class BkbDiscountsController extends AppBaseController
     /**
      * Remove the specified BkbDiscounts from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -188,17 +197,26 @@ class BkbDiscountsController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model BkbDiscounts from storage.         
+     * Provide options item based on relationship model BkbDiscounts from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $branch = new DmsSmBranchRepository(app());
+
         return [
-            'branchItems' => $branch->pluck([],null,null,'szId','szName'),
-            'typeItems' => ['detail' => 'Detail', 'rekap' => 'Rekap']
+            'branchItems' => $branch->pluck([], null, null, 'szId', 'szName'),
+            'typeItems' => ['detail' => 'Detail', 'rekap' => 'Rekap'],
         ];
+    }
+
+    private function exportExcel($startDate, $endDate){        
+        $modelEksport = '\\App\Exports\\Template\\Sales\\RekapDiscountsExport';
+        $fileName = 'rekap_discount_'.$startDate.'_'.$endDate;
+        $collection = $this->getRepositoryObj()->listDiscountRekapExcel($startDate, $endDate);        
+        return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }
 }
