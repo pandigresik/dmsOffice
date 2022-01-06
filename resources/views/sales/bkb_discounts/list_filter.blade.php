@@ -90,7 +90,7 @@
                             'szProductId' => $item->szProductId,
                             'szSalesId' => $additionalInfo['szSalesId'],
                             'szBranchId' => $additionalInfo['szBranchId'],
-                            'bkbDate' => $additionalInfo['dtmDoc'],
+                            'bkbDate' => $item->bkbDate,
                             'decQty' => $item->decQty,
                             'discPrinciple' => $item->getRawOriginal('decDiscPrinciple'),
                             'discDistributor' => $item->getRawOriginal('decDiscDistributor'),
