@@ -52,9 +52,9 @@
                     <td>{{ $additionalInfo['szCustomerId'] }}</td>
                     <td>{{ $additionalInfo['customerName'] }}</td>
                     <td>{{ $additionalInfo['customerAddress'] }}</td>
-                    <td>{{ $item->szDocId }}</td>
-                    <td>{{ $additionalInfo['szSalesId'] }}</td>
+                    <td>{{ $item->szDocId }}</td>                    
                     <td>{{ $additionalInfo['salesName'] }}</td>
+                    <td>{{ $item->product->szName ?? '-' }}</td>
                     <td class="text-right">{{ $item->decQty }}</td>
                     <td class="text-right">{{ $item->decDiscPrinciple }}</td>
                     <td class="text-right">{{ $item->decDiscDistributor }}</td>
