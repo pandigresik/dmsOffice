@@ -119,7 +119,7 @@ class BkbDiscountsRepository extends BaseRepository
                 
                 if ($item->getHasDiscount()) {
                     $totalItemDiscountPrinciple = collect($item->getDiscountPrinciple())->sum('amount');
-                    $item->setSelisihPrinciple($item->decDiscPrinciple - $totalItemDiscountPrinciple);
+                    $item->setSelisihPrinciple($item->getRawOriginal('decDiscPrinciple') - $totalItemDiscountPrinciple);
                     $data->setCountedDiscount(1);
                     $additionalInfo = [
                         'szSalesId' => $data->szSalesId,
