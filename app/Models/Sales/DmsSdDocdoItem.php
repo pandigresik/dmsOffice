@@ -128,6 +128,9 @@ class DmsSdDocdoItem extends Model
     private $customer;
     private $bkbDate;
     private $otherItem;
+    private $hasDiscount = 0;
+    private $selisihPrinciple = 0;
+    private $additionalInfo = [];
 
     /**
      * Get the product that owns the DmsSdDocdoItem.
@@ -155,6 +158,12 @@ class DmsSdDocdoItem extends Model
     public function getDecDiscDistributorAttribute($value)
     {
         return localNumberFormat($value, 0);
+    }
+
+    public function getBkbDateAttribute($value)
+    {
+
+        return $this->bkbDate;
     }
 
     /**
@@ -276,6 +285,14 @@ class DmsSdDocdoItem extends Model
 
         foreach ($discountActive as $da) {
             $this->getDetailDiscounts($da);
+        }
+
+        if(!empty($this->discounts['principle'])){
+            $this->setHasDiscount(1);
+        }
+
+        if(!empty($this->discounts['distributor'])){
+            $this->setHasDiscount(1);
         }
     }
 
@@ -485,5 +502,83 @@ class DmsSdDocdoItem extends Model
     private function convertToBox($value, $discount){
 
         return floor($value / $discount->attributes['conversion_main_dms_inv_product_id']);
+    }    
+
+    /**
+     * Get the value of hasDiscount
+     */ 
+    public function getHasDiscount()
+    {
+        return $this->hasDiscount;
+    }
+
+    /**
+     * Set the value of hasDiscount
+     *
+     * @return  self
+     */ 
+    public function setHasDiscount($hasDiscount)
+    {
+        $this->hasDiscount = $hasDiscount;
+
+        return $this;
+    }
+
+
+    public function getSelisihPrincipleAttribute($value)
+    {
+        return $this->selisihPrinciple;
+    }
+
+    /**
+     * Get the value of selisihPrinciple
+     */ 
+    public function getSelisihPrinciple()
+    {
+        return $this->selisihPrinciple;
+    }
+
+    /**
+     * Set the value of selisihPrinciple
+     *
+     * @return  self
+     */ 
+    public function addSelisihPrinciple($selisihPrinciple)
+    {
+        $this->selisihPrinciple += $selisihPrinciple;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of selisihPrinciple
+     *
+     * @return  self
+     */ 
+    public function setSelisihPrinciple($selisihPrinciple)
+    {
+        $this->selisihPrinciple = $selisihPrinciple;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of additionalInfo
+     */ 
+    public function getAdditionalInfo()
+    {
+        return $this->additionalInfo;
+    }
+
+    /**
+     * Set the value of additionalInfo
+     *
+     * @return  self
+     */ 
+    public function setAdditionalInfo($additionalInfo)
+    {
+        $this->additionalInfo = $additionalInfo;
+
+        return $this;
     }
 }

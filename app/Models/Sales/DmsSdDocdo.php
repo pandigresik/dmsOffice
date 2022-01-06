@@ -2,11 +2,10 @@
 
 namespace App\Models\Sales;
 
+use App\Models\Base\DmsSmBranch;
 use App\Models\Base\DmsArCustomer;
 use App\Models\Base\DmsPiEmployee;
-use App\Models\Base\DmsSmBranch;
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -225,19 +224,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class DmsSdDocdo extends Model
-{    
+{
     use HasFactory;
 
-    public $table = 'dms_sd_docdo';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-    
-
+    public $table = 'dms_sd_docdo';
+    private $countedDiscount = 0;
     public $fillable = [
         'iId',
         'szDocId',
@@ -277,8 +271,57 @@ class DmsSdDocdo extends Model
         'dtmLastUpdated',
         'dtmMobileTransaction',
         'szMobileId',
-        'szManualNo'
+        'szManualNo',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'iId' => 'required|string|max:50',
+        'szDocId' => 'required|string|max:50',
+        'dtmDoc' => 'required',
+        'szCustomerId' => 'required|string|max:50',
+        'szEmployeeId' => 'required|string|max:50',
+        'szOrderTypeId' => 'required|string|max:50',
+        'bCash' => 'required|boolean',
+        'bInvoiced' => 'required|boolean',
+        'szPaymentTermId' => 'required|string|max:50',
+        'szDocSoId' => 'required|string|max:50',
+        'szCarrier' => 'required|string|max:50',
+        'szVehicleId' => 'required|string|max:50',
+        'szHelper1' => 'required|string|max:50',
+        'szHelper2' => 'required|string|max:50',
+        'bDirectWarehouse' => 'required|boolean',
+        'szWarehouseId' => 'required|string|max:50',
+        'szStockTypeId' => 'required|string|max:50',
+        'szCustomerPO' => 'required|string|max:50',
+        'dtmCustomerPO' => 'required',
+        'szSalesId' => 'required|string|max:50',
+        'szDocStockOutCustomerId' => 'required|string|max:50',
+        'szReturnFromId' => 'required|string|max:50',
+        'szVehicle2' => 'required|string|max:50',
+        'szDriver2' => 'required|string|max:50',
+        'szVehicle3' => 'required|string|max:50',
+        'szDriver3' => 'required|string|max:50',
+        'szDescription' => 'required|string|max:500',
+        'szPromoDesc' => 'required|string|max:500',
+        'intPrintedCount' => 'required|integer',
+        'szBranchId' => 'required|string|max:50',
+        'szCompanyId' => 'required|string|max:50',
+        'szDocStatus' => 'required|string|max:50',
+        'szUserCreatedId' => 'required|string|max:20',
+        'szUserUpdatedId' => 'required|string|max:20',
+        'dtmCreated' => 'required',
+        'dtmLastUpdated' => 'required',
+        'dtmMobileTransaction' => 'required',
+        'szMobileId' => 'required|string|max:50',
+        'szManualNo' => 'required|string|max:50',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -325,58 +368,11 @@ class DmsSdDocdo extends Model
         'dtmLastUpdated' => 'datetime',
         'dtmMobileTransaction' => 'datetime',
         'szMobileId' => 'string',
-        'szManualNo' => 'string'
+        'szManualNo' => 'string',
     ];
 
     /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'iId' => 'required|string|max:50',
-        'szDocId' => 'required|string|max:50',
-        'dtmDoc' => 'required',
-        'szCustomerId' => 'required|string|max:50',
-        'szEmployeeId' => 'required|string|max:50',
-        'szOrderTypeId' => 'required|string|max:50',
-        'bCash' => 'required|boolean',
-        'bInvoiced' => 'required|boolean',
-        'szPaymentTermId' => 'required|string|max:50',
-        'szDocSoId' => 'required|string|max:50',
-        'szCarrier' => 'required|string|max:50',
-        'szVehicleId' => 'required|string|max:50',
-        'szHelper1' => 'required|string|max:50',
-        'szHelper2' => 'required|string|max:50',
-        'bDirectWarehouse' => 'required|boolean',
-        'szWarehouseId' => 'required|string|max:50',
-        'szStockTypeId' => 'required|string|max:50',
-        'szCustomerPO' => 'required|string|max:50',
-        'dtmCustomerPO' => 'required',
-        'szSalesId' => 'required|string|max:50',
-        'szDocStockOutCustomerId' => 'required|string|max:50',
-        'szReturnFromId' => 'required|string|max:50',
-        'szVehicle2' => 'required|string|max:50',
-        'szDriver2' => 'required|string|max:50',
-        'szVehicle3' => 'required|string|max:50',
-        'szDriver3' => 'required|string|max:50',
-        'szDescription' => 'required|string|max:500',
-        'szPromoDesc' => 'required|string|max:500',
-        'intPrintedCount' => 'required|integer',
-        'szBranchId' => 'required|string|max:50',
-        'szCompanyId' => 'required|string|max:50',
-        'szDocStatus' => 'required|string|max:50',
-        'szUserCreatedId' => 'required|string|max:20',
-        'szUserUpdatedId' => 'required|string|max:20',
-        'dtmCreated' => 'required',
-        'dtmLastUpdated' => 'required',
-        'dtmMobileTransaction' => 'required',
-        'szMobileId' => 'required|string|max:50',
-        'szManualNo' => 'required|string|max:50'
-    ];
-
-    /**
-     * Get all of the items for the DmsSdDocdo
+     * Get all of the items for the DmsSdDocdo.
      *
      * @return \Illuminate\Database\Relations\HasMany
      */
@@ -386,19 +382,15 @@ class DmsSdDocdo extends Model
     }
 
     /**
-     * Get the customer that owns the DmsSdDocdo
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the customer that owns the DmsSdDocdo.
      */
     public function customer(): BelongsTo
     {
         return $this->belongsTo(DmsArCustomer::class, 'szCustomerId', 'szId');
     }
-    
+
     /**
-     * Get the sales that owns the DmsSdDocdo
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the sales that owns the DmsSdDocdo.
      */
     public function sales(): BelongsTo
     {
@@ -406,12 +398,30 @@ class DmsSdDocdo extends Model
     }
 
     /**
-     * Get the depo that owns the DmsSdDocdo
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the depo that owns the DmsSdDocdo.
      */
     public function depo(): BelongsTo
     {
         return $this->belongsTo(DmsSmBranch::class, 'szBranchId', 'szId');
+    }
+
+    /**
+     * Get the value of countedDiscount
+     */ 
+    public function getCountedDiscount()
+    {
+        return $this->countedDiscount;
+    }
+
+    /**
+     * Set the value of countedDiscount
+     *
+     * @return  self
+     */ 
+    public function setCountedDiscount($countedDiscount)
+    {
+        $this->countedDiscount = $countedDiscount;
+
+        return $this;
     }
 }

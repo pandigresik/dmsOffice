@@ -73,8 +73,8 @@ class BkbDiscountsController extends AppBaseController
             $branchId = $request->get('branch_id');
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-            $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate, $branchId);
-
+            $datas = $this->getRepositoryObj()->processDiscount($startDate, $endDate, $branchId);
+            
             return view('sales.bkb_discounts.list_filter')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'branchId' => $branchId]);
         }
         return view('sales.bkb_discounts.create')->with($this->getOptionItems());

@@ -38,29 +38,23 @@
                 $totalSelisihDistributor = 0;
                 $number = 0;
             @endphp
-            @forelse($datas as $data)          
-                @foreach ($data->items as $index => $item)  
+            @forelse($datas as $index => $item)                
                     @php
-                        $item->setOtherItem($data->items);
-                        $item->setCustomer($data->customer);
-                        $item->setBkbDate($data->getRawOriginal('dtmDoc'));
+                        $additionalInfo = $item->getAdditionalInfo();
                         $totalDiscountPrinciple = 0;
                         $totalDiscountDistributor = 0;
-                        $discounts = $item->getDiscounts();                                                
-                    @endphp
-                    @if(empty($item->decDiscPrinciple) && empty($item->decDiscDistributor))
-                        @continue;
-                    @endif
+                                                                        
+                    @endphp                    
                 <tr>
                     <td>{{ ++$number }}</td>
-                    <td>{{ $data->depo->szName }}</td>
-                    <td>{{ localFormatDate($data->dtmDoc) }}</td>
-                    <td>{{ $data->szCustomerId }}</td>
-                    <td>{{ $data->customer->szName ?? '-' }}</td>
-                    <td>{{ $data->customer->description ?? '-' }}</td>
-                    <td>{{ $data->szDocId }}</td>
-                    <td>{{ $data->sales->szName ?? '-' }}</td>                                                        
-                    <td>{{ $item->product->szName ?? '-'}}</td>
+                    <td>{{ $additionalInfo['depo'] }}</td>
+                    <td>{{ localFormatDate($additionalInfo['dtmDoc']) }}</td>
+                    <td>{{ $additionalInfo['szCustomerId'] }}</td>
+                    <td>{{ $additionalInfo['customerName'] }}</td>
+                    <td>{{ $additionalInfo['customerAddress'] }}</td>
+                    <td>{{ $item->szDocId }}</td>
+                    <td>{{ $additionalInfo['szSalesId'] }}</td>
+                    <td>{{ $additionalInfo['salesName'] }}</td>
                     <td class="text-right">{{ $item->decQty }}</td>
                     <td class="text-right">{{ $item->decDiscPrinciple }}</td>
                     <td class="text-right">{{ $item->decDiscDistributor }}</td>
@@ -92,17 +86,17 @@
                         $selisihPrinciple = $item->getRawOriginal('decDiscPrinciple') - $totalDiscountPrinciple;
                         $selisihDistributor = $item->getRawOriginal('decDiscDistributor') - $totalDiscountDistributor;                        
                         $saveData = [
-                            'szDocId' => $data->szDocId,
+                            'szDocId' => $item->szDocId,
                             'szProductId' => $item->szProductId,
-                            'szSalesId' => $data->szSalesId,
-                            'szBranchId' => $data->szBranchId,
-                            'bkbDate' => $data->getRawOriginal('dtmDoc'),
+                            'szSalesId' => $additionalInfo['szSalesId'],
+                            'szBranchId' => $additionalInfo['szBranchId'],
+                            'bkbDate' => $additionalInfo['dtmDoc'],
                             'decQty' => $item->decQty,
                             'discPrinciple' => $item->getRawOriginal('decDiscPrinciple'),
                             'discDistributor' => $item->getRawOriginal('decDiscDistributor'),
                             'sistemPrinciple' => $totalDiscountPrinciple,
                             'sistemDistributor' => $totalDiscountDistributor,
-                            'detailProgram' => $discounts,
+                            'detailProgram' => $item->getDiscounts(),
                             'selisihPrinciple' => $selisihPrinciple,
                             'selisihDistributor' => $selisihDistributor
                         ];
@@ -111,8 +105,7 @@
                     <td class="text-right {{ $selisihPrinciple != 0 ? 'text-danger' : ''}}">{{ localNumberAccountingFormat($selisihPrinciple, 0) }}</td>
                     <td class="text-right {{ $selisihDistributor != 0 ? 'text-danger' : ''}}">{{ localNumberAccountingFormat($selisihDistributor, 0) }}</td>
                     <input type="hidden" name="szDocId[]" value="{{ json_encode($saveData) }}"  >                        
-                </tr>
-                @endforeach
+                </tr>                
             @empty
             <tr>
                 <td colspan=16>Data tidak ditemukan</td>
