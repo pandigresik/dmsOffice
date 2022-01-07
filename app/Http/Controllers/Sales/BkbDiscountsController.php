@@ -63,9 +63,9 @@ class BkbDiscountsController extends AppBaseController
 
         $downloadXls = $request->get('download_xls');
         if($downloadXls){
-            $period = explode('__', $request->get('period_range'));            
-            $startDate = $period[0];
-            $endDate = $period[1];
+            $period = explode(' - ', $request->get('period_range'));            
+            $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
+            $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             return $this->exportExcel($startDate, $endDate);
         }
 

@@ -11,7 +11,7 @@
              @include('flash::message')
              <div class="row">
                     <div class="col-lg-12">
-                        {!! Form::open(['method' => 'GET','route' => 'sales.bkbDiscounts.index']) !!}
+                        {!! Form::open(['route' => 'sales.bkbDiscounts.index']) !!}
                         <div class="card">
                             <div class="card-header">                                
                                 <strong>Rekap @lang('models/bkbDiscounts.singular')</strong>
@@ -31,7 +31,7 @@
                                     </div>
                                     <div class="clo-md-2">
                                         {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listbkb', 'data-url' => route('sales.bkbDiscounts.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id],select[name=type]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
-                                        {!! Form::button(__('crud.download'), ['class' => 'btn btn-primary', 'type' => 'submit', 'name' => 'download_xls', 'value' => 1]) !!}
+                                        {!! Form::button(__('crud.download'), ['class' => 'btn btn-primary', 'type' => 'button', 'onclick' => 'downloadXls(this)']) !!}
                                     </div>
                                 </div>
 
@@ -51,3 +51,22 @@
     </div>
 @endsection
 
+@push('scripts')
+<script type="text/javascript">        
+    function downloadXls(elm) {
+        const _form = $(elm).closest('form')
+        const _url = _form.attr('action')
+        const _json = {'download_xls' : 1, 'period_range': _form.find('input[name=period_range]').val()}
+
+        $.redirect(
+            _url, 
+            _json,
+            'GET',
+            '_blank'
+        )    
+
+    }
+
+    
+</script>
+@endpush
