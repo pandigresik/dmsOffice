@@ -17,4 +17,7 @@
         </tbody>
     </table>
     @include('exports.sales.rekapDiscountPromo',['data' => $data])
+    <br>
+    <br>
+    @include('exports.sales.rekapDiscountDepo',['data' => $data->groupBy('szBranchId'), 'depo' => $depoMaster])
 @endforeach

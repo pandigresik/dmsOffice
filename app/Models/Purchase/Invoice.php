@@ -254,7 +254,7 @@ class Invoice extends Model
 
     public function getFullIdentityAttribute($value)
     {
-        $partnerName = $this->attributes['partner_type'] == self::SUPPLIER ? $this->supplier->szName : $this->ekspedisi->szName;
+        $partnerName = $this->attributes['partner_type'] == self::SUPPLIER ? $this->partner->szName : $this->ekspedisi->szName;
         
         return $this->attributes['number'].'('.$partnerName.' - '.$this->attributes['reference'].')';
     }

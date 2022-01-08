@@ -2,14 +2,14 @@
 
 namespace App\Exports\Template\Sales;
 
-use App\Models\Base\DmsSmBranch;
 use App\Models\Sales\Discounts;
+use App\Models\Base\DmsPiEmployee;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\Exportable;
 
-class RekapDiscountsExport implements FromView
+class RejectDiscountsExport implements FromView
 {
     use Exportable;
 
@@ -26,12 +26,10 @@ class RekapDiscountsExport implements FromView
 
     public function view(): View
     {
-        $discountMaster = Discounts::select('id','name')->whereIn('id', $this->collection->keys())->get()->keyBy('id');
-        $depoMaster = DmsSmBranch::select('szId', 'szName')->get()->keyBy('szId');
-        return view('exports.sales.rekapDiscount', [
+        $salesMaster = DmsPiEmployee::whereIn('szId', $this->collection->keys())->get()->keyBy('szId');        
+        return view('exports.sales.rejectDiscount', [
             'collection' => $this->collection,
-            'discountMaster' => $discountMaster,
-            'depoMaster' => $depoMaster,
+            'salesMaster' => $salesMaster,
             'startDate' => $this->getStartDate(),
             'endDate' => $this->getEndDate()
         ]);

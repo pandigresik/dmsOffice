@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
+                                <div class="">
                                     <div id="listbtb"></div>
                                 </div>
 

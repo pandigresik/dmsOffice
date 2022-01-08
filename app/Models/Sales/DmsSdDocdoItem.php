@@ -131,6 +131,7 @@ class DmsSdDocdoItem extends Model
     private $hasDiscount = 0;
     private $selisihPrinciple = 0;
     private $additionalInfo = [];
+    private $skipCountComboPromo = 0;
 
     /**
      * Get the product that owns the DmsSdDocdoItem.
@@ -312,7 +313,10 @@ class DmsSdDocdoItem extends Model
 
                 break;
             case 'combo':
-                $this->discountCombo($discount);
+                /** untuk combo hanya dihitung satu kali aja */
+                if(!$this->getSkipCountComboPromo()){
+                    $this->discountCombo($discount);
+                }                
 
                 break;
             case 'extension':
@@ -583,6 +587,26 @@ class DmsSdDocdoItem extends Model
     public function setAdditionalInfo($additionalInfo)
     {
         $this->additionalInfo = $additionalInfo;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of skipCountComboPromo
+     */ 
+    public function getSkipCountComboPromo()
+    {
+        return $this->skipCountComboPromo;
+    }
+
+    /**
+     * Set the value of skipCountComboPromo
+     *
+     * @return  self
+     */ 
+    public function setSkipCountComboPromo($skipCountComboPromo)
+    {
+        $this->skipCountComboPromo = $skipCountComboPromo;
 
         return $this;
     }

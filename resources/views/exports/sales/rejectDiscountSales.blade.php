@@ -47,12 +47,12 @@
                     <td>{{ $data->bkb->customer->szName ?? '-' }}</td>                    
                     <td>{{ $data->szDocId }}</td>                                                                         
                     <td>{{ $data->product->szName ?? '-'}}</td>
-                    <td class="text-right">{{ localNumberFormat($data->getRawOriginal('discPrinciple'), 0) }}</td>
-                    <td class="text-right">{{ localNumberFormat($data->getRawOriginal('discDistributor'), 0) }}</td>
-                    <td class="text-right">{{ localNumberFormat($data->getRawOriginal('sistemPrinciple'), 0) }}</td>
-                    <td class="text-right">{{ localNumberFormat($data->getRawOriginal('sistemDistributor'), 0) }}</td>
-                    <td class="text-right">{{ localNumberFormat($data->getRawOriginal('selisihPrinciple'), 0) }}</td>
-                    <td class="text-right">{{ localNumberFormat($data->getRawOriginal('selisihDistributor'), 0) }}</td>                    
+                    <td>{{ $data->getRawOriginal('discPrinciple') }}</td>
+                    <td class="text-right">{{ $data->getRawOriginal('discDistributor') }}</td>
+                    <td class="text-right">{{ $data->getRawOriginal('sistemPrinciple') }}</td>
+                    <td class="text-right">{{ $data->getRawOriginal('sistemDistributor') }}</td>
+                    <td class="text-right">{{ $data->getRawOriginal('selisihPrinciple') }}</td>
+                    <td class="text-right">{{ $data->getRawOriginal('selisihDistributor') }}</td>                    
                 </tr>                
             @empty
             <tr>
@@ -63,12 +63,12 @@
         <tfoot>
             <tr>
                 <th class="text-right" colspan="6">Total</th>
-                <th class="text-right">{{ localNumberFormat($totalDiskonTivSales,0) }}</th>
-                <th class="text-right">{{ localNumberFormat($totalDiskonDistributorSales,0) }}</th>
-                <th class="text-right">{{ localNumberFormat($totalDiskonTivSistem,0) }}</th>
-                <th class="text-right">{{ localNumberFormat($totalDiskonDistributorSistem,0) }}</th>
-                <th class="text-right">{{ localNumberFormat($totalDiskonTivSales,0) }}</th>
-                <th class="text-right">{{ localNumberFormat($totalDiskonDistributorSales,0) }}</th>                
+                <th class="text-right">{{ $totalDiskonTivSales }}</th>
+                <th class="text-right">{{ $totalDiskonDistributorSales }}</th>
+                <th class="text-right">{{ $totalDiskonTivSistem }}</th>
+                <th class="text-right">{{ $totalDiskonDistributorSistem }}</th>
+                <th class="text-right">{{ $totalDiskonTivSales }}</th>
+                <th class="text-right">{{ $totalDiskonDistributorSales }}</th>                
             </tr>
         </tfoot>
     </table>

@@ -99,7 +99,17 @@ class Main {
 
   showLoading(state) {
     if (state) {
-      this.bootboxInfo = bootbox.alert('Please wait ......')
+      this.bootboxInfo = bootbox.alert({
+            message: 'Please wait ........',
+            callback: function(result){
+                return false;
+            },
+            buttons: {
+                ok: {
+                    className: 'fade'
+                }
+            }
+        });
     } else {
       try {
         const _ini = this

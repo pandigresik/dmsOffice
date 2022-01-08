@@ -13,11 +13,12 @@ class ProductPriceDataTable extends DataTable
      * example mapping filter column to search by keyword, default use %keyword%.
      */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,
+        'dms_inv_product.szName' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'dms_inv_product.szId' => \App\DataTables\FilterClass\RelationContainKeyword::class,
     ];
 
     private $mapColumnSearch = [
-        'dmsInvProduct.szName' => 'dms_inv_product_id',
+        // 'dms_inv_product.szName' => 'dms_inv_product_id',
     ];
 
     /**

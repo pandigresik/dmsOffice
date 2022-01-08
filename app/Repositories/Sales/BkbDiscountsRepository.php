@@ -109,12 +109,14 @@ class BkbDiscountsRepository extends BaseRepository
 
         foreach ($datas as $data) {
             foreach ($data->items as $index => $item) {
-                if ($data->getCountedDiscount()) {
+                if (empty($item->getRawOriginal('DecDiscPrinciple'))) {
                     continue;
                 }
+
+                $item->setSkipCountComboPromo($data->getCountedDiscount());
                 $item->setOtherItem($data->items);
                 $item->setCustomer($data->customer);
-                $item->setBkbDate($data->getRawOriginal('dtmDoc'));                
+                $item->setBkbDate($data->getRawOriginal('dtmDoc'));
                 $item->getDiscounts();
                 
                 if ($item->getHasDiscount()) {
@@ -217,7 +219,9 @@ class BkbDiscountsRepository extends BaseRepository
     {
         return BkbDiscounts::with(['bkb' => function ($q) {
             $q->with(['customer']);
-        }, 'product'])->whereBetween('bkbDate', [$startDate, $endDate])->whereIn('szSalesId', $sales)->get()->groupBy('szSalesId');
+        }, 'product'])
+        // ->where('selisihPrinciple','>',0)
+        ->whereBetween('bkbDate', [$startDate, $endDate])->whereIn('szSalesId', $sales)->get()->groupBy('szSalesId');
     }
 
     private function removePreviousData($input)

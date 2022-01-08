@@ -35,6 +35,7 @@
                                 <div class="form-group row">
                                     <div class="col-md-9 offset-3">
                                         {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listbkb', 'data-url' => route('sales.discountReject.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name="sales[]"]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
+                                        {!! Form::button(__('crud.download'), ['class' => 'btn btn-primary', 'type' => 'button', 'onclick' => 'downloadXls(this)']) !!}
                                     </div>
                                 </div>
                                 <div class="">
@@ -53,3 +54,20 @@
     </div>
 @endsection
 
+@push('scripts')
+<script type="text/javascript">        
+    function downloadXls(elm) {
+        const _form = $(elm).closest('form')
+        const _url = _form.attr('action')
+        const _json = {'download_xls' : 1, 'sales' : $('select[name="sales[]"]').val(), 'period_range': _form.find('input[name=period_range]').val()}
+
+        $.redirect(
+            _url, 
+            _json,
+            'GET',
+            '_blank'
+        )    
+
+    }    
+</script>
+@endpush
