@@ -109,7 +109,8 @@ class BkbDiscountsRepository extends BaseRepository
 
         foreach ($datas as $data) {
             foreach ($data->items as $index => $item) {
-                if (empty($item->getRawOriginal('DecDiscPrinciple'))) {
+                //\Log::error($item->getRawOriginal('decDiscPrinciple'));
+                if ($item->getRawOriginal('decDiscPrinciple') <= 0) {                    
                     continue;
                 }
 
@@ -220,7 +221,7 @@ class BkbDiscountsRepository extends BaseRepository
         return BkbDiscounts::with(['bkb' => function ($q) {
             $q->with(['customer']);
         }, 'product'])
-        // ->where('selisihPrinciple','>',0)
+        ->where('selisihPrinciple','>',0)
         ->whereBetween('bkbDate', [$startDate, $endDate])->whereIn('szSalesId', $sales)->get()->groupBy('szSalesId');
     }
 
