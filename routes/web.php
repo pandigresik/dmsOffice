@@ -94,6 +94,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Table DMS
         Route::resource('dmsFinAccounts', App\Http\Controllers\Accounting\DmsFinAccountController::class, ['as' => 'accounting']);
         Route::resource('dmsFinSubaccounts', App\Http\Controllers\Accounting\DmsFinSubaccountController::class, ['as' => 'accounting']);
+        Route::resource('profitLoss', App\Http\Controllers\Accounting\ProfitLossController::class, ['as' => 'accounting'])->only(['index']);
     });
 
     Route::group(['prefix' => 'sales'], function () {
