@@ -99,7 +99,10 @@ class AccountMoveController extends AppBaseController
             return redirect(route('finance.accountMoves.index'));
         }
 
-        return view('finance.account_moves.edit')->with('accountMove', $accountMove)->with($this->getOptionItems());
+        return view('finance.account_moves.edit')
+                ->with('accountMove', $accountMove)
+                ->with('lines', $accountMove->lines)
+                ->with($this->getOptionItems());
     }
 
     /**

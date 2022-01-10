@@ -13,7 +13,7 @@ class AccountMoveDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'date' => \App\DataTables\FilterClass\BetweenKeyword::class
     ];
     
     private $mapColumnSearch = [
@@ -116,10 +116,10 @@ class AccountMoveDataTable extends DataTable
     {
         return [
             'number' => new Column(['title' => __('models/accountMoves.fields.number'), 'data' => 'number', 'searchable' => true, 'elmsearch' => 'text']),
-            'date' => new Column(['title' => __('models/accountMoves.fields.date'), 'data' => 'date', 'searchable' => true, 'elmsearch' => 'text']),
+            'date' => new Column(['title' => __('models/accountMoves.fields.date'), 'data' => 'date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'reference' => new Column(['title' => __('models/accountMoves.fields.reference'), 'data' => 'reference', 'searchable' => true, 'elmsearch' => 'text']),
-            'narration' => new Column(['title' => __('models/accountMoves.fields.narration'), 'data' => 'narration', 'searchable' => true, 'elmsearch' => 'text']),
-            'state' => new Column(['title' => __('models/accountMoves.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text'])
+            //'narration' => new Column(['title' => __('models/accountMoves.fields.narration'), 'data' => 'narration', 'searchable' => true, 'elmsearch' => 'text']),
+            //'state' => new Column(['title' => __('models/accountMoves.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 

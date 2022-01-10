@@ -112,6 +112,21 @@ class AccountMoveLine extends Model
         'balance' => 'required|numeric'
     ];
 
+    public function getDebitAttribute($value)
+    {    
+        return localNumberFormat($value);
+    }
+
+    public function getCreditAttribute($value)
+    {    
+        return localNumberFormat($value);
+    }
+
+    public function getBalanceAttribute($value)
+    {    
+        return localNumberFormat($value);
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/

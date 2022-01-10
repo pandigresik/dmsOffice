@@ -23,7 +23,6 @@
                           <div class="card-body">                              
 
                               @include('finance.account_moves.fields')
-
                               
                             </div>
                           <div class="card-footer">

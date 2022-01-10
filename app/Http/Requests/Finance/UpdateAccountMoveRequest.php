@@ -45,6 +45,7 @@ class UpdateAccountMoveRequest extends FormRequest
     public function all($keys = null){
         $keys = (new AccountMove)->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+        $keys = array_merge(['account_move_line'], $keys);
         return parent::all($keys);
     }
 }

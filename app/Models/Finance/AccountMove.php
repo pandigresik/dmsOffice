@@ -4,6 +4,7 @@ namespace App\Models\Finance;
 
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -54,7 +55,7 @@ class AccountMove extends Model
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    const POSTED = 'posted';
 
     protected $dates = ['deleted_at'];
 
@@ -94,6 +95,11 @@ class AccountMove extends Model
         'state' => 'nullable|string|max:15'
     ];
 
+    public function getDateAttribute($value)
+    {
+        return localFormatDate($value);
+    }
+
     public function getNextNumber()
     {
         $pattern = 'AM/'.date('Ym').'/';
@@ -104,5 +110,15 @@ class AccountMove extends Model
         $newId = [$pattern, str_pad($nextId, $sequenceLength, '0', STR_PAD_LEFT)];
 
         return implode('', $newId);
+    }
+
+    /**
+     * Get all of the lines for the AccountMove
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function lines(): HasMany
+    {
+        return $this->hasMany(AccountMoveLine::class);
     }
 }

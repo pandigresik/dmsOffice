@@ -39,7 +39,8 @@ class CreateAccountMoveRequest extends FormRequest
      * @return array
     */
     public function all($keys = null){
-        $keys = (new AccountMove)->fillable;
+        $keys = (new AccountMove)->fillable;        
+        $keys = array_merge(['account_move_line'], $keys);
         return parent::all($keys);
     }
 }

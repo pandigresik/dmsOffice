@@ -12,7 +12,7 @@
         'required']) !!}
         </td>
         <td>
-            {!! Form::text('account_move_line[debet][]', $item->debet ?? '', ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' =>
+            {!! Form::text('account_move_line[debit][]', $item->debit ?? '', ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' =>
         1, 'data-optionmask' => json_encode(config('local.number.currency'))]) !!}
         </td>
         <td>

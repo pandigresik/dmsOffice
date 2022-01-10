@@ -41,4 +41,69 @@ class AccountMoveRepository extends BaseRepository
     {
         return AccountMove::class;
     }
+
+    public function create($input)
+    {
+        $this->model->getConnection()->beginTransaction();        
+        try {
+            $model = $this->model->newInstance($input);
+            $lines = $input['account_move_line'];
+            $model->number = $model->getNextNumber();
+            $model->state = AccountMove::POSTED;
+            $model->save();
+            
+            $this->setAccountLines($lines, $model);
+            $this->model->getConnection()->commit();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }
+
+        return $this->model;
+    }
+
+    public function update($input, $id)
+    {
+        $this->model->getConnection()->beginTransaction();        
+        try {
+            $model = $this->model->newInstance($input);
+            $lines = $input['account_move_line'];
+            $model = parent::update($input, $id);            
+            $this->setAccountLines($lines, $model);
+            $this->model->getConnection()->commit();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }
+
+        return $this->model;
+    }
+
+    private function setAccountLines($lines, $model)
+    {
+        if (!empty($lines)) {
+            $model->lines()->forceDelete();
+            foreach ($lines['account_id'] as $key => $line) {                
+                $model->lines()->create([
+                    'name' => $lines['name'][$key],
+                    'description' => $lines['description'][$key],
+                    'account_id' => $lines['account_id'][$key],
+                    'debit' => $lines['debit'][$key],
+                    'credit' => $lines['credit'][$key],
+                    'balance' => $lines['debit'][$key] - $lines['credit'][$key],
+                ]);
+            }
+        }
+    }
+
+    public function delete($id)
+    {
+        $query = $this->model->newQuery();
+
+        $model = $query->findOrFail($id);
+        $model->lines()->forceDelete();
+        return $model->delete();
+    }
 }
