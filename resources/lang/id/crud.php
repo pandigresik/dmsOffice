@@ -23,6 +23,7 @@ return [
     'add_new' => 'Baru',
     'cancel' => 'Batal',
     'action' => 'Aksi',
+    'create' => 'Tambah',
     'state_active' => 'Aktif',
     'state_nonactive' => 'Non Aktif',    
     'option' => [

@@ -683,6 +683,43 @@ class Main {
     }
     return _form
   }
+
+  addRow(_elm, _callback) {
+        let _tr = $(_elm).closest("tr");
+        let _tbody = _tr.closest("tbody");
+        let _newTr = _tr.clone();
+        let _target = $(_elm).data('target');
+        let _urut = _newTr.find("td.no").text();
+        _newTr.find("input").not(':checkbox,:radio').val("");
+        _newTr.find("td.no").text(++_urut);
+        if (_target !== undefined) {
+            switch (_target) {
+                case 'before':
+                    _newTr.insertBefore(_tr);
+                    break;
+                default:
+                    _newTr.insertAfter(_tr);
+            }
+        } else {
+            _tbody.append(_newTr);
+        }
+
+        $(_elm).replaceWith(
+            '<button onclick="main.removeRow(this)" class="btn btn-primary btn-sm"><i class="fa fa-minus"></i></button>'
+        );
+        _newTr.find("input").trigger("change");        
+        if (_callback !== undefined) {
+            _callback(_newTr);
+        }
+    }
+
+    removeRow(_elm, _callback) {
+        let _tr = $(_elm).closest("tr");
+        _tr.remove();
+        if (_callback !== undefined) {
+            _callback();
+        }
+    }
 }
 
 export default new Main()

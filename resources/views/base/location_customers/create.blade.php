@@ -6,7 +6,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
-                                <strong>Create @lang('models/locationCustomers.singular')</strong>
+                                <strong>@lang('crud.create')  @lang('models/locationCustomers.singular')</strong>
                             </div>
                             <div class="card-body">                                
                                    @include('base.location_customers.fields')                                

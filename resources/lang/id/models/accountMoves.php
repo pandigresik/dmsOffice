@@ -1,20 +1,15 @@
 <?php
 
 return array (
-  'singular' => 'AccountMove',
-  'plural' => 'AccountMoves',
+  'singular' => 'Jurnal Manual',
+  'plural' => 'Jurnal Manual',
   'fields' => 
   array (
     'id' => 'Id',
-    'name' => 'Name',
-    'company_id' => 'Company Id',
-    'account_journal_id' => 'Account Journal Id',
-    'ref' => 'Ref',
-    'date' => 'Date',
+    'number' => 'Nomer',
+    'date' => 'Tanggal',
+    'reference' => 'Referensi',
+    'narration' => 'Keterangan',
     'state' => 'State',
-    'amount' => 'Amount',
-    'move_type' => 'Move Type',
-    'narration' => 'Narration',
-    'stock_picking_id' => 'Stock Picking Id',
   ),
 );

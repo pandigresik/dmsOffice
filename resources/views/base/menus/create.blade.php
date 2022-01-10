@@ -17,7 +17,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
-                                <strong>Create @lang('models/menus.singular')</strong>
+                                <strong>@lang('crud.create')  @lang('models/menus.singular')</strong>
                             </div>
                             <div class="card-body">
                                 {!! Form::open(['route' => 'base.menus.store']) !!}

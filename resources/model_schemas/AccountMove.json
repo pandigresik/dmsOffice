@@ -12,46 +12,10 @@
         "inView": false
     },
     {
-        "name": "name",
-        "dbType": "string,100:nullable",
+        "name": "number",
+        "dbType": "string,20",
         "htmlType": "text",
-        "validations": "nullable|string|max:100|nullable|string|max:100",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": true,
-        "inView": true
-    },
-    {
-        "name": "company_id",
-        "dbType": "bigInteger,false,true",
-        "htmlType": null,
-        "validations": "required",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": true,
-        "inView": true
-    },
-    {
-        "name": "account_journal_id",
-        "dbType": "bigInteger,false,true",
-        "htmlType": null,
-        "validations": "required",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": true,
-        "inView": true
-    },
-    {
-        "name": "ref",
-        "dbType": "string,50:nullable",
-        "htmlType": "text",
-        "validations": "nullable|string|max:50|nullable|string|max:50",
+        "validations": "required|string|max:20|string|max:20",
         "searchable": true,
         "fillable": true,
         "primary": false,
@@ -72,34 +36,10 @@
         "inView": true
     },
     {
-        "name": "state",
-        "dbType": "string,10",
+        "name": "reference",
+        "dbType": "string,80",
         "htmlType": "text",
-        "validations": "required|string|max:10|string|max:10",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": true,
-        "inView": true
-    },
-    {
-        "name": "amount",
-        "dbType": "decimal,15,2",
-        "htmlType": null,
-        "validations": "required|numeric|numeric",
-        "searchable": true,
-        "fillable": true,
-        "primary": false,
-        "inForm": true,
-        "inIndex": true,
-        "inView": true
-    },
-    {
-        "name": "move_type",
-        "dbType": "string",
-        "htmlType": "text",
-        "validations": "required|string|string",
+        "validations": "required|string|max:80|string|max:80",
         "searchable": true,
         "fillable": true,
         "primary": false,
@@ -120,31 +60,15 @@
         "inView": true
     },
     {
-        "name": "stock_picking_id",
-        "dbType": "bigInteger,false,true",
-        "htmlType": null,
-        "validations": "nullable|nullable",
+        "name": "state",
+        "dbType": "string,15:nullable",
+        "htmlType": "text",
+        "validations": "nullable|string|max:15|nullable|string|max:15",
         "searchable": true,
         "fillable": true,
         "primary": false,
         "inForm": true,
         "inIndex": true,
         "inView": true
-    },
-    {
-        "type": "relation",
-        "relation": "mt1,AccountJournal,account_journal_id"
-    },
-    {
-        "type": "relation",
-        "relation": "mt1,Company,company_id"
-    },
-    {
-        "type": "relation",
-        "relation": "mt1,StockPicking,stock_picking_id"
-    },
-    {
-        "type": "relation",
-        "relation": "1tm,AccountMoveLine,account_move_id"
     }
 ]

@@ -6,7 +6,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
-                                <strong>Create @lang('models/contactCustomers.singular')</strong>
+                                <strong>@lang('crud.create')  @lang('models/contactCustomers.singular')</strong>
                             </div>
                             <div class="card-body">                                
                                    @include('base.contact_customers.fields')                                

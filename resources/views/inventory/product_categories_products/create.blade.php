@@ -6,7 +6,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
-                                <strong>Create @lang('models/productCategoriesProducts.singular')</strong>
+                                <strong>@lang('crud.create')  @lang('models/productCategoriesProducts.singular')</strong>
                             </div>
                             <div class="card-body">                                
                                    @include('inventory.product_categories_products.fields')                                
