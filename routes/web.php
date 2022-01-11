@@ -91,10 +91,10 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::group(['prefix' => 'accounting'], function () {
-        // Table DMS
-        Route::resource('dmsFinAccounts', App\Http\Controllers\Accounting\DmsFinAccountController::class, ['as' => 'accounting']);
-        Route::resource('dmsFinSubaccounts', App\Http\Controllers\Accounting\DmsFinSubaccountController::class, ['as' => 'accounting']);
+        // Table DMS        
+        Route::resource('accounts', App\Http\Controllers\Accounting\AccountController::class, ["as" => 'accounting']);        
         Route::resource('profitLoss', App\Http\Controllers\Accounting\ProfitLossController::class, ['as' => 'accounting'])->only(['index']);
+        Route::resource('reportSettingAccounts', App\Http\Controllers\Accounting\ReportSettingAccountController::class, ["as" => 'accounting'])->except(['show']);
     });
 
     Route::group(['prefix' => 'sales'], function () {

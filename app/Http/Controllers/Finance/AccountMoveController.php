@@ -10,7 +10,7 @@ use App\Repositories\Finance\AccountMoveRepository;
 
 use Flash;
 use App\Http\Controllers\AppBaseController;
-use App\Repositories\Accounting\DmsFinAccountRepository;
+use App\Repositories\Accounting\AccountRepository;
 use Response;
 
 class AccountMoveController extends AppBaseController
@@ -162,11 +162,11 @@ class AccountMoveController extends AppBaseController
      * @return Response
      */
     private function getOptionItems(){        
-        $account = new DmsFinAccountRepository(app());
-        $accountData = $account->all([], null, null ,['szId', 'szName']);
-        $accountOptionItems = $accountData->keyBy('szId')->toArray();
+        $account = new AccountRepository(app());
+        $accountData = $account->all([], null, null ,['code', 'name']);
+        $accountOptionItems = $accountData->keyBy('code')->toArray();
         return [
-            'accountItems' => ['' => __('crud.option.ekspedisi_placeholder')] + $accountData->pluck('szId', 'szId')->toArray(),
+            'accountItems' => ['' => __('crud.option.ekspedisi_placeholder')] + $accountData->pluck('code', 'code')->toArray(),
             'accountOptionItems' => $accountOptionItems
         ];
     }

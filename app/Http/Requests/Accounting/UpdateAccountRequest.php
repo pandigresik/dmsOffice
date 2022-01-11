@@ -2,12 +2,14 @@
 
 namespace App\Http\Requests\Accounting;
 
-use App\Models\Accounting\Account;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Accounting\Account;
 
 class UpdateAccountRequest extends FormRequest
 {
-    private $excludeKeys = [];
+    private $excludeKeys = []; 
 
     /**
      * Determine if the user is authorized to make this request.
@@ -16,8 +18,7 @@ class UpdateAccountRequest extends FormRequest
      */
     public function authorize()
     {
-        $permissionName = 'dms_fin_account-update';
-
+        $permissionName = 'account-update';
         return \Auth::user()->can($permissionName);
     }
 
@@ -29,8 +30,9 @@ class UpdateAccountRequest extends FormRequest
     public function rules()
     {
         $rules = Account::$rules;
-
-        return $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
+        
+        $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
+        return $rules;
     }
 
     /**
@@ -39,12 +41,10 @@ class UpdateAccountRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-     */
-    public function all($keys = null)
-    {
-        $keys = (new Account())->fillable;
+    */
+    public function all($keys = null){
+        $keys = (new Account)->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
-
         return parent::all($keys);
     }
 }

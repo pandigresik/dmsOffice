@@ -29,7 +29,7 @@
         function setNameAccountLine(elm){
             const _tr = $(elm).closest('tr')
             const _nameElm = _tr.find('input[name="account_move_line[name][]"]')
-            _nameElm.val($(elm).find('option:selected').attr('szName'))
+            _nameElm.val($(elm).find('option:selected').attr('name'))
         }
 
         function addRowSelect2(_elm){

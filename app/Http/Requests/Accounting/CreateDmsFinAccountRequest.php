@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Accounting;
 
-use App\Models\Accounting\DmsFinAccount;
+use App\Models\Accounting\Account;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateDmsFinAccountRequest extends FormRequest
+class CreateAccountRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class CreateDmsFinAccountRequest extends FormRequest
      */
     public function rules()
     {
-        return DmsFinAccount::$rules;
+        return Account::$rules;
     }
 
     /**
@@ -38,7 +38,7 @@ class CreateDmsFinAccountRequest extends FormRequest
      */
     public function all($keys = null)
     {
-        $keys = (new DmsFinAccount())->fillable;
+        $keys = (new Account())->fillable;
 
         return parent::all($keys);
     }
