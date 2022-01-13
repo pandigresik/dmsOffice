@@ -2,9 +2,12 @@
 
 namespace App\Models\Finance;
 
+use App\Models\Accounting\JournalAccount;
+use App\Models\Base\DmsSmBranch;
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -66,6 +69,7 @@ class AccountMove extends Model
         'date',
         'reference',
         'narration',
+        'branch_id',
         'state'
     ];
 
@@ -80,6 +84,7 @@ class AccountMove extends Model
         'date' => 'date',
         'reference' => 'string',
         'narration' => 'string',
+        'branch_id' => 'string',
         'state' => 'string'
     ];
 
@@ -120,5 +125,30 @@ class AccountMove extends Model
     public function lines(): HasMany
     {
         return $this->hasMany(AccountMoveLine::class);
+    }
+
+    /**
+     * Get the depo that owns the AccountMove
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function dmsSmBranch(): BelongsTo
+    {
+        return $this->belongsTo(DmsSmBranch::class, 'branch_id', 'szId');
+    }
+
+    public function depo(): BelongsTo
+    {
+        return $this->belongsTo(DmsSmBranch::class, 'branch_id', 'szId');
+    }
+
+    /**
+     * Get all of the journals for the AccountMove
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function journals(): HasMany
+    {
+        return $this->hasMany(JournalAccount::class, 'reference', 'number');
     }
 }

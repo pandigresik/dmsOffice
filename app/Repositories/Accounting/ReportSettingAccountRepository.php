@@ -17,6 +17,7 @@ class ReportSettingAccountRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [
+        'code',
         'group',
         'group_type'
     ];

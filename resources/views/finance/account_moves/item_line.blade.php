@@ -20,7 +20,12 @@
         1, 'data-optionmask' => json_encode(config('local.number.currency'))]) !!}
         </td>
         <td>
-            <button onclick="addRowSelect2(this)" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></button>
+            @if ($lastIndex)
+                <button onclick="addRowSelect2(this)" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></button>
+            @else
+                <button onclick="removeRow(this)" class="btn btn-primary btn-sm"><i class="fa fa-minus"></i></button>
+            @endif
+            
         </td>
     </tr>
 
@@ -40,6 +45,7 @@
         function reinitSelect2(_newTr){
             //_newTr.find('.select2').select2('destroy')
             main.initSelect(_newTr.closest('tbody'))
+            _newTr.find('select,input').prop('required',1)
             main.initInputmask(_newTr)
         }
     </script>

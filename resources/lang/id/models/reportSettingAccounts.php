@@ -7,6 +7,7 @@ return array (
   array (
     'id' => 'Id',
     'group' => 'Group',
+    'code' => 'Kode',
     'group_type' => 'Group Type',
   ),
 );

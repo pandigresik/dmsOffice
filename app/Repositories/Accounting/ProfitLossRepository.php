@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Accounting;
 
-use App\Models\Sales\BkbDiscounts;
+use App\Models\Accounting\JournalAccount;
+use App\Models\Accounting\ReportSettingAccount;
+use App\Models\Base\DmsSmBranch;
 use App\Repositories\BaseRepository;
 
 /**
@@ -12,11 +14,12 @@ use App\Repositories\BaseRepository;
  */
 class ProfitLossRepository extends BaseRepository
 {
+    private $groupCode = 'LR';
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'szBranchId',
+        
     ];
 
     /**
@@ -34,6 +37,47 @@ class ProfitLossRepository extends BaseRepository
      */
     public function model()
     {
-        return BkbDiscounts::class;
+        return JournalAccount::class;
+    }
+
+    public function list($startDate, $endDate, $branchId)
+    {
+        $listAccount = $this->listAccount();
+        $data = JournalAccount::with(['account'])->selectRaw('branch_id, account_id, sum(debit) as debit, sum(credit) as credit, sum(balance) as balance')
+            ->whereBetween('date',[$startDate, $endDate])
+            ->whereIn('branch_id',$branchId)
+            // ->whereIn('account_id',function($q){
+            //     $q->select('account.code')->from('report_setting_account_detail')
+            //         ->join('report_setting_account', function($join){
+            //             $join->on('report_setting_account.id', '=', 'report_setting_account_detail.report_setting_account_id')
+            //                 ->where('group_type',$this->groupCode);
+            //         })
+            //         ->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
+            // })
+            ->whereIn('account_id', $this->profitLossAccountCode($listAccount))
+            ->groupBy('account_id')
+            ->groupBy('branch_id')
+            ->get()
+            ->groupBy('branch_id');
+        return [
+            'data' => $data,
+            'branchMaster' => DmsSmBranch::whereIn('szId',$branchId)->get()->keyBy('szId'),
+            'listAccount' => $listAccount
+        ];
+    }
+
+    private function listAccount(){    
+        return ReportSettingAccount::with(['details' => function($q){
+            $q->select(['report_setting_account_detail.*','account.code','account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
+        }])->whereGroupType($this->groupCode)->get();
+    }
+
+    private function profitLossAccountCode($listAccount){
+        $result = [];
+        $listAccount->map(function($item) use (&$result){
+            $result = array_merge($result, $item->details->pluck('code')->toArray());
+        });
+
+        return $result;
     }
 }

@@ -11,6 +11,7 @@ use App\Repositories\Finance\AccountMoveRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Accounting\AccountRepository;
+use App\Repositories\Base\DmsSmBranchRepository;
 use Response;
 
 class AccountMoveController extends AppBaseController
@@ -165,7 +166,10 @@ class AccountMoveController extends AppBaseController
         $account = new AccountRepository(app());
         $accountData = $account->all([], null, null ,['code', 'name']);
         $accountOptionItems = $accountData->keyBy('code')->toArray();
+        $branch = new DmsSmBranchRepository(app());
+
         return [
+            'branchItems' => $branch->pluck([], null, null, 'szId', 'szName'),
             'accountItems' => ['' => __('crud.option.ekspedisi_placeholder')] + $accountData->pluck('code', 'code')->toArray(),
             'accountOptionItems' => $accountOptionItems
         ];

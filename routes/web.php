@@ -95,6 +95,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('accounts', App\Http\Controllers\Accounting\AccountController::class, ["as" => 'accounting']);        
         Route::resource('profitLoss', App\Http\Controllers\Accounting\ProfitLossController::class, ['as' => 'accounting'])->only(['index']);
         Route::resource('reportSettingAccounts', App\Http\Controllers\Accounting\ReportSettingAccountController::class, ["as" => 'accounting'])->except(['show']);
+        Route::resource('journalAccounts', App\Http\Controllers\Accounting\JournalAccountController::class, ["as" => 'accounting']);
     });
 
     Route::group(['prefix' => 'sales'], function () {

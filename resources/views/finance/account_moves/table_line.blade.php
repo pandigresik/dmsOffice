@@ -11,11 +11,11 @@
     </thead>
     <tbody onchange="updateSummaryBalance(this)">
         @if(isset($lines))
-            @foreach ($lines as $item)
-                @include('finance.account_moves.item_line', ['item' => $item])    
+            @foreach ($lines as $index => $item)
+                @include('finance.account_moves.item_line', ['item' => $item, 'lastIndex' => count($lines) == $index + 1 ? 1 : 0])    
             @endforeach
         @else
-            @include('finance.account_moves.item_line', ['item' => null])
+            @include('finance.account_moves.item_line', ['item' => null, 'lastIndex' => 1])
         @endif        
     </tbody>
     <tfoot>

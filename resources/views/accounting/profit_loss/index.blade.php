@@ -32,13 +32,13 @@
                                 </div>
                                 <div class="form-group row">                                    
                                     <div class="col-md-6 offset-3">
-                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listbkb', 'data-url' => route('accounting.profitLoss.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id],select[name=type]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
+                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listprofitloss', 'data-url' => route('accounting.profitLoss.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
                                         {!! Form::button(__('crud.download'), ['class' => 'btn btn-primary', 'type' => 'button', 'onclick' => 'downloadXls(this)']) !!}
                                     </div>
                                 </div>
 
                                 <div class="">
-                                    <div id="listprofitloss"></div>
+                                    <div class="table-responsive" id="listprofitloss"></div>
                                 </div>
 
                             </div>

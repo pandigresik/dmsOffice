@@ -11,5 +11,7 @@ return array (
     'reference' => 'Referensi',
     'narration' => 'Keterangan',
     'state' => 'State',
+    'szBranchId' => 'Depo',
+    'branch_id' => 'Depo',
   ),
 );

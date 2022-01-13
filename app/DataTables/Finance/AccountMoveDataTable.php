@@ -2,6 +2,7 @@
 
 namespace App\DataTables\Finance;
 
+use App\Models\Base\DmsSmBranch;
 use App\Models\Finance\AccountMove;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
@@ -13,11 +14,12 @@ class AccountMoveDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        'date' => \App\DataTables\FilterClass\BetweenKeyword::class
+        'date' => \App\DataTables\FilterClass\BetweenKeyword::class,
+        'branch_id' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
     
     private $mapColumnSearch = [
-        //'entity.name' => 'entity_id',
+        //'depo.szName' => 'branch_id',
     ];
 
     /**
@@ -31,7 +33,7 @@ class AccountMoveDataTable extends DataTable
         $dataTable = new EloquentDataTable($query);
         if (!empty($this->columnFilterOperator)) {
             foreach ($this->columnFilterOperator as $column => $operator) {
-                $columnSearch = $this->mapColumnSearch[$column] ?? $column;
+                $columnSearch = $this->mapColumnSearch[$column] ?? $column;                
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
@@ -46,7 +48,7 @@ class AccountMoveDataTable extends DataTable
      */
     public function query(AccountMove $model)
     {
-        return $model->newQuery();
+        return $model->with(['depo'])->newQuery();
     }
 
     /**
@@ -114,10 +116,12 @@ class AccountMoveDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']] , convertArrayPairValueWithKey(DmsSmBranch::pluck('szName','szId')->toArray()));
         return [
             'number' => new Column(['title' => __('models/accountMoves.fields.number'), 'data' => 'number', 'searchable' => true, 'elmsearch' => 'text']),
             'date' => new Column(['title' => __('models/accountMoves.fields.date'), 'data' => 'date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'reference' => new Column(['title' => __('models/accountMoves.fields.reference'), 'data' => 'reference', 'searchable' => true, 'elmsearch' => 'text']),
+            'branch_id' => new Column(['title' => __('models/accountMoves.fields.branch_id'), 'name' => 'branch_id', 'data' => 'depo.szName','defaultContent' => '-','orderable' => false ,'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem]),
             //'narration' => new Column(['title' => __('models/accountMoves.fields.narration'), 'data' => 'narration', 'searchable' => true, 'elmsearch' => 'text']),
             //'state' => new Column(['title' => __('models/accountMoves.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text'])
         ];

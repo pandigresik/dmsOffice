@@ -24,24 +24,14 @@ class ProfitLossController extends AppBaseController
     {
         if ($request->ajax()) {
             $period = explode(' - ', $request->get('period_range'));
-            $branchId = $request->get('branch_id');
+            $branchId = $request->get('branch_id');            
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
-            $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-            $type = $request->get('type');
-            switch ($type) {
-                case 'detail':
-                    $datas = $this->getRepositoryObj()->listDiscount($startDate, $endDate, $branchId);
-                    $discountMaster = Discounts::whereIn('id', $datas->keys())->get()->keyBy('id');
-
-                    return view('accounting.profit_loss.list')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'depo' => DmsSmBranch::where(['szId' => $branchId])->first(), 'discountMaster' => $discountMaster]);
-
-                break;
-                default:
-                    $datas = $this->getRepositoryObj()->listDiscountRekap($startDate, $endDate);
-                    $discountMaster = Discounts::whereIn('id', $datas->keys())->get()->keyBy('id');
-
-                    return view('accounting.profit_loss.list_rekap')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'discountMaster' => $discountMaster]);
-            }
+            $endDate = createLocalFormatDate($period[1])->format('Y-m-d');            
+            $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId);
+            
+            return view('accounting.profit_loss.list')
+                ->with($datas)
+                ->with(['startDate' => $startDate, 'endDate' => $endDate]);
         }
 
         $downloadXls = $request->get('download_xls');

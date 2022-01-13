@@ -44,6 +44,7 @@ class ReportSettingAccount extends Model
     public $table = 'report_setting_account';
 
     public $fillable = [
+        'code',
         'group',
         'group_type',
     ];
@@ -54,6 +55,7 @@ class ReportSettingAccount extends Model
      * @var array
      */
     public static $rules = [
+        'code' => 'required|string|max:10',
         'group' => 'required|string|max:50',
         'group_type' => 'required|string|max:20',
     ];
@@ -67,6 +69,7 @@ class ReportSettingAccount extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'code' => 'string',
         'group' => 'string',
         'group_type' => 'string',
     ];

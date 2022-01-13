@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccountMoveLine extends Migration
+class CreateJournalAccount extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,21 @@ class CreateAccountMoveLine extends Migration
      */
     public function up()
     {
-        Schema::create('account_move_line', function (Blueprint $table) {
+        Schema::create('journal_account', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('account_move_id');
+            $table->string('account_id',15);
+            $table->date('date');
+            $table->string('branch_id', 50)->nullable();
             $table->string('name', 100);
-            $table->string('description', 256)->nullable();
-            $table->string('account_id', 15);
+            $table->string('description', 255)->nullable();
+            $table->string('reference', 255)->nullable();
             $table->decimal('debit', 15, 2, true);
             $table->decimal('credit', 15, 2, true);
             $table->decimal('balance', 15, 2, false);
+            $table->string('state', 15)->nullable()->default('posted');
             $table->blameable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('account_move_id', 'fk_account_move_line_account_move')->references('id')->on('account_move');
         });
     }
 
@@ -36,6 +38,6 @@ class CreateAccountMoveLine extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account_move_line');
+        Schema::dropIfExists('journal_account');
     }
 }

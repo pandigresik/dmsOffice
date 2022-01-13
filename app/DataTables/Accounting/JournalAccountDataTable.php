@@ -2,18 +2,18 @@
 
 namespace App\DataTables\Accounting;
 
-use App\Models\Accounting\ReportSettingAccount;
+use App\Models\Accounting\JournalAccount;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class ReportSettingAccountDataTable extends DataTable
+class JournalAccountDataTable extends DataTable
 {
     /**
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        'group_type' => \App\DataTables\FilterClass\MatchKeyword::class,
+        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
     ];
     
     private $mapColumnSearch = [
@@ -35,20 +35,16 @@ class ReportSettingAccountDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        $dataTable->editColumn('group_type', function($item){            
-
-            return ReportSettingAccount::GROUP_TYPE[$item->group_type] ?? '-';
-        });
-        return $dataTable->addColumn('action', 'accounting.report_setting_accounts.datatables_actions');
+        return $dataTable->addColumn('action', 'accounting.journal_accounts.datatables_actions');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\ReportSettingAccount $model
+     * @param \App\Models\JournalAccount $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(ReportSettingAccount $model)
+    public function query(JournalAccount $model)
     {
         return $model->newQuery();
     }
@@ -71,6 +67,11 @@ class ReportSettingAccountDataTable extends DataTable
                        'className' => 'btn btn-default btn-sm no-corner',
                        'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
                     ],                    
+                    [
+                       'extend' => 'print',
+                       'className' => 'btn btn-default btn-sm no-corner',
+                       'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
+                    ],
                     [
                        'extend' => 'reset',
                        'className' => 'btn btn-default btn-sm no-corner',
@@ -109,9 +110,13 @@ class ReportSettingAccountDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'code' => new Column(['title' => __('models/reportSettingAccounts.fields.code'), 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
-            'group' => new Column(['title' => __('models/reportSettingAccounts.fields.group'), 'data' => 'group', 'searchable' => true, 'elmsearch' => 'text']),
-            'group_type' => new Column(['title' => __('models/reportSettingAccounts.fields.group_type'), 'data' => 'group_type', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => convertArrayPairValueWithKey(['' => 'Pilih type'] + ReportSettingAccount::GROUP_TYPE)])
+            'account_id' => new Column(['title' => __('models/journalAccounts.fields.account_id'), 'data' => 'account_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'branch_id' => new Column(['title' => __('models/journalAccounts.fields.branch_id'), 'data' => 'branch_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'name' => new Column(['title' => __('models/journalAccounts.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
+            'debit' => new Column(['title' => __('models/journalAccounts.fields.debit'), 'data' => 'debit', 'searchable' => true, 'elmsearch' => 'text']),
+            'credit' => new Column(['title' => __('models/journalAccounts.fields.credit'), 'data' => 'credit', 'searchable' => true, 'elmsearch' => 'text']),
+            'balance' => new Column(['title' => __('models/journalAccounts.fields.balance'), 'data' => 'balance', 'searchable' => true, 'elmsearch' => 'text']),
+            'state' => new Column(['title' => __('models/journalAccounts.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text'])
         ];
     }
 
@@ -122,6 +127,6 @@ class ReportSettingAccountDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'report_setting_accounts_datatable_' . time();
+        return 'journal_accounts_datatable_' . time();
     }
 }

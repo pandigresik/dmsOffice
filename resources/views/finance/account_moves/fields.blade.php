@@ -6,6 +6,14 @@
     </div>
 </div>
 
+<!-- Branch Field -->
+<div class="form-group row">
+    {!! Form::label('branch_id', __('models/accountMoves.fields.branch_id').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9">
+        {!! Form::select('branch_id', $branchItems, null, ['class' => 'form-control select2']) !!}
+    </div>
+</div>
+
 <!-- Date Field -->
 <div class="form-group row">
     {!! Form::label('date', __('models/accountMoves.fields.date').':', ['class' => 'col-md-3 col-form-label']) !!}
@@ -14,6 +22,7 @@
         json_encode( ['locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'date']) !!}
     </div>
 </div>
+
 
 <!-- Reference Field -->
 <div class="form-group row">
