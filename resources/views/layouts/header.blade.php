@@ -10,11 +10,13 @@
         data-class="c-sidebar-lg-show" responsive="true">
         <i class="cil-menu"></i>
     </button>
+    <!--
     <ul class="c-header-nav d-md-down-none">
         <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Dashboard</a></li>
         <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Users</a></li>
         <li class="c-header-nav-item px-3"><a class="c-header-nav-link" href="#">Settings</a></li>
     </ul>
+    -->
     <ul class="c-header-nav ml-auto mr-4">
         <!--
         <li class="c-header-nav-item d-md-down-none mx-2"><a class="c-header-nav-link" href="#">
@@ -51,9 +53,10 @@
                     href="#">
                     <i class="cil-user"></i>
                     Profile</a><a class="dropdown-item" href="#">
+                <!--
                     <i class="cil-settings"></i>                    
                     Settings</a>
-                <!--    
+                    
                     <a class="dropdown-item" href="#">
                     <i class="cil-credit-card"></i>
                     Payments<span class="badge badge-secondary ml-auto">42</span></a><a class="dropdown-item" href="#">
