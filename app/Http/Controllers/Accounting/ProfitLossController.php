@@ -37,10 +37,11 @@ class ProfitLossController extends AppBaseController
         $downloadXls = $request->get('download_xls');
         if ($downloadXls) {
             $period = explode(' - ', $request->get('period_range'));
+            $branchId = $request->get('branch_id'); 
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-
-            return $this->exportExcel($startDate, $endDate);
+            $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId);
+            return $this->exportExcel($startDate, $endDate, $datas);
         }
 
         return view('accounting.profit_loss.index')->with($this->getOptionItems());
@@ -63,11 +64,10 @@ class ProfitLossController extends AppBaseController
         ];
     }
 
-    private function exportExcel($startDate, $endDate)
+    private function exportExcel($startDate, $endDate, $collection)
     {
         $modelEksport = '\\App\Exports\\Template\\Sales\\RekapDiscountsExport';
-        $fileName = 'rekap_discount_'.$startDate.'_'.$endDate;
-        $collection = $this->getRepositoryObj()->listDiscountRekapExcel($startDate, $endDate);
+        $fileName = 'rekap_discount_'.$startDate.'_'.$endDate;        
 
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }

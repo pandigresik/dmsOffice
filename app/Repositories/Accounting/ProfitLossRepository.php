@@ -43,20 +43,22 @@ class ProfitLossRepository extends BaseRepository
     public function list($startDate, $endDate, $branchId)
     {
         $listAccount = $this->listAccount();
-        $data = JournalAccount::with(['account'])->selectRaw('branch_id, account_id, sum(debit) as debit, sum(credit) as credit, sum(balance) as balance')
+        $claimTiv = JournalAccount::with(['account'])->selectRaw('branch_id, \'919901\' as account_id, sum(debit) as debit, sum(credit) as credit, abs(sum(balance)) as balance')
+            ->disableModelCaching()
             ->whereBetween('date',[$startDate, $endDate])
-            ->whereIn('branch_id',$branchId)
-            // ->whereIn('account_id',function($q){
-            //     $q->select('account.code')->from('report_setting_account_detail')
-            //         ->join('report_setting_account', function($join){
-            //             $join->on('report_setting_account.id', '=', 'report_setting_account_detail.report_setting_account_id')
-            //                 ->where('group_type',$this->groupCode);
-            //         })
-            //         ->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
-            // })
+            ->whereIn('branch_id',$branchId)            
+            ->whereIn('account_id', ['411011','411111'])
+            ->groupBy('account_id')
+            ->groupBy('branch_id');
+        
+        $data = JournalAccount::with(['account'])->selectRaw('branch_id, account_id, sum(debit) as debit, sum(credit) as credit, sum(balance) as balance')
+            ->disableModelCaching()
+            ->whereBetween('date',[$startDate, $endDate])
+            ->whereIn('branch_id',$branchId)            
             ->whereIn('account_id', $this->profitLossAccountCode($listAccount))
             ->groupBy('account_id')
             ->groupBy('branch_id')
+            ->union($claimTiv)
             ->get()
             ->groupBy('branch_id');
         return [

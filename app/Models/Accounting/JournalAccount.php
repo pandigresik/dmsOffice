@@ -142,6 +142,13 @@ class JournalAccount extends Model
                 and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-05', 'LR-06')
             where szBranchId = '{$branchId}'             
             and dtmDoc between '{$startDate}' and '{$endDate}'
+            union all 
+            -- account cashback
+            SELECT '829220', account.name, decCredit, decDebit, (-1 * decAmount), dtmDoc, szBranchId, szDocId, '{$type}' 
+            FROM dms_cas_cashbalance 
+            join account on account.code = dms_cas_cashbalance.szAccountId
+            where szBranchId = '{$branchId}' and szAccountId = '829207'
+            and dtmDoc between '{$startDate}' and '{$endDate}'
         SQL;
         $this->fromQuery($sql);
     }
@@ -153,7 +160,7 @@ class JournalAccount extends Model
         $coaGalonTunai  = $settingCompany["coa_galon_tunai"];
         $coaPotDistTunai = $settingCompany["coa_pot_dist_tunai"];
         $coaPotIntTunai = $settingCompany["coa_pot_int_tunai"];        
-
+        $coaPotTivTunai = $settingCompany["coa_pot_tiv_tunai"];
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
@@ -192,6 +199,16 @@ class JournalAccount extends Model
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and dip.decDiscInternal > 0  and do.bCash = 1 
                 and do.szBranchId = '{$branchId}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'
+            -- potongan TIV
+            union all
+            select '{$coaPotTivTunai}' as coa,
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join bkb_discount_details bkd on bkd.szDocId = do.szDocId and bkd.szProductId = di.szProductId and bkd.szBranchId = '{$branchId}'
+            where do.szDocStatus = 'Applied' and do.bCash = 1
+                and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'            
             )x 
             join account on account.code = x.coa
@@ -210,7 +227,8 @@ class JournalAccount extends Model
         $coaGalonKredit = $settingCompany["coa_galon_kredit"];        
         $coaPotDistKredit = $settingCompany["coa_pot_dist_kredit"];
         $coaPotIntKredit = $settingCompany["coa_pot_int_kredit"];
-
+        $coaPotTivKredit = $settingCompany["coa_pot_tiv_kredit"];
+        
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
@@ -249,7 +267,17 @@ class JournalAccount extends Model
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and dip.decDiscInternal > 0  and do.bCash = 0
                 and do.szBranchId = '{$branchId}'
-                and do.dtmDoc between '{$startDate}' and '{$endDate}'            
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'
+            -- potongan TIV
+            union all
+            select '{$coaPotTivKredit}' as coa,
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join bkb_discount_details bkd on bkd.szDocId = do.szDocId and bkd.szProductId = di.szProductId and bkd.szBranchId = '{$branchId}'
+            where do.szDocStatus = 'Applied' and do.bCash = 0
+                and do.szBranchId = '{$branchId}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'
             )x 
             join account on account.code = x.coa
             join report_setting_account_detail on report_setting_account_detail.account_id = account.id
@@ -290,5 +318,6 @@ class JournalAccount extends Model
             and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-03')                        
         SQL;
         $this->fromQuery($sql);
-    }    
+    }
+
 }
