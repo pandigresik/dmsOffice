@@ -6,8 +6,8 @@ return array (
   'fields' => 
   array (
     'id' => 'Id',
-    'name' => 'Name',
     'code' => 'Code',
+    'description' => 'Description',
     'value' => 'Value',
   ),
 );

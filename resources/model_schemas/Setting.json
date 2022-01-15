@@ -12,10 +12,10 @@
         "inView": false
     },
     {
-        "name": "name",
-        "dbType": "string,255",
+        "name": "code",
+        "dbType": "string,20",
         "htmlType": "text",
-        "validations": "required|string|max:255|string|max:255",
+        "validations": "required|string|max:20|string|max:20",
         "searchable": true,
         "fillable": true,
         "primary": false,
@@ -24,10 +24,10 @@
         "inView": true
     },
     {
-        "name": "code",
-        "dbType": "string,50",
+        "name": "description",
+        "dbType": "string,100:nullable",
         "htmlType": "text",
-        "validations": "required|string|max:50|string|max:50",
+        "validations": "nullable|string|max:100|nullable|string|max:100",
         "searchable": true,
         "fillable": true,
         "primary": false,
@@ -37,9 +37,9 @@
     },
     {
         "name": "value",
-        "dbType": "string,150",
+        "dbType": "string,50",
         "htmlType": "text",
-        "validations": "required|string|max:150|string|max:150",
+        "validations": "required|string|max:50|string|max:50",
         "searchable": true,
         "fillable": true,
         "primary": false,

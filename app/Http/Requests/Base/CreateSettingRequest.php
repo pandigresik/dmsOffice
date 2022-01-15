@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests\Base;
 
-use App\Models\Base\Setting;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Base\Setting;
 
 class CreateSettingRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -15,7 +18,6 @@ class CreateSettingRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'setting-create';
-
         return \Auth::user()->can($permissionName);
     }
 
@@ -35,11 +37,9 @@ class CreateSettingRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-     */
-    public function all($keys = null)
-    {
-        $keys = (new Setting())->fillable;
-
+    */
+    public function all($keys = null){
+        $keys = (new Setting)->fillable;
         return parent::all($keys);
     }
 }

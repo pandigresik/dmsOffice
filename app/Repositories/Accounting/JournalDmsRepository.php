@@ -49,10 +49,13 @@ class JournalDmsRepository extends BaseRepository
                     $this->model->jurnalBiaya($input);                    
                 break;
                 case 'JPT':
-
+                    $this->model->jurnalPenjualanTunai($input);
                 break;
                 case 'JPK':
-
+                    $this->model->jurnalPenjualanKredit($input);
+                break;
+                case 'JBL':
+                    $this->model->jurnalPembelian($input);
                 break;
                 default:
             }

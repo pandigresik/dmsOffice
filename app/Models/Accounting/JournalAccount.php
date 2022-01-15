@@ -2,6 +2,7 @@
 
 namespace App\Models\Accounting;
 
+use App\Models\Base\Setting;
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -144,4 +145,150 @@ class JournalAccount extends Model
         SQL;
         $this->fromQuery($sql);
     }
+
+    public function jurnalPenjualanTunai($input){        
+        $settingCompany = Setting::pluck('value', 'code');        
+        $kodeGalon = "'".implode("','",explode(',',$settingCompany["kode_galon"]))."'";
+        $coaPenjualanTunai = $settingCompany['coa_penjualan_tunai'];
+        $coaGalonTunai  = $settingCompany["coa_galon_tunai"];
+        $coaPotDistTunai = $settingCompany["coa_pot_dist_tunai"];
+        $coaPotIntTunai = $settingCompany["coa_pot_int_tunai"];        
+
+        list($startDate, $endDate) = explode('__', $input['period_range']);
+        $branchId = $input['branch_id'];
+        $type = $input['type'];
+
+        $sql = <<<SQL
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type) 
+            select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szDocId, '{$type}' from (
+            -- penjualan produk
+            select case 
+                    when di.szProductId in ({$kodeGalon}) then $coaGalonTunai                         
+                    else $coaPenjualanTunai
+                end as coa,
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, dip.decAmount as debit, 0 as credit, dip.decAmount as amount , do.szDocId 
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            where do.szDocStatus = 'Applied' and do.bCash = 1 
+                and do.szBranchId = '{$branchId}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'
+            union all
+            -- potongan distributor
+            select '{$coaPotDistTunai}' as coa,
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, dip.decDiscDistributor as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            where do.szDocStatus = 'Applied' and dip.decDiscDistributor > 0  and do.bCash = 1
+                and do.szBranchId = '{$branchId}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'
+            union all
+            -- potongan internal
+            select '{$coaPotIntTunai}' as coa,
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, dip.decDiscInternal as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            where do.szDocStatus = 'Applied' and dip.decDiscInternal > 0  and do.bCash = 1 
+                and do.szBranchId = '{$branchId}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'            
+            )x 
+            join account on account.code = x.coa
+            join report_setting_account_detail on report_setting_account_detail.account_id = account.id
+            join report_setting_account on report_setting_account.id = report_setting_account_detail.report_setting_account_id 
+            and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-01')
+                        
+        SQL;
+        $this->fromQuery($sql);
+    }
+
+    public function jurnalPenjualanKredit($input){        
+        $settingCompany = Setting::pluck('value', 'code');                
+        $kodeGalon = "'".implode("','",explode(',',$settingCompany["kode_galon"]))."'";        
+        $coaPenjualanKredit = $settingCompany["coa_penjualan_kredit"];
+        $coaGalonKredit = $settingCompany["coa_galon_kredit"];        
+        $coaPotDistKredit = $settingCompany["coa_pot_dist_kredit"];
+        $coaPotIntKredit = $settingCompany["coa_pot_int_kredit"];
+
+        list($startDate, $endDate) = explode('__', $input['period_range']);
+        $branchId = $input['branch_id'];
+        $type = $input['type'];
+
+        $sql = <<<SQL
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type) 
+            select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szDocId, '{$type}' from (
+            -- penjualan produk
+            select case 
+                    when di.szProductId in ({$kodeGalon}) then $coaGalonKredit
+                    else $coaPenjualanKredit
+                end as coa,
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, dip.decAmount as debit, 0 as credit, dip.decAmount as amount , do.szDocId 
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            where do.szDocStatus = 'Applied' and do.bCash = 0
+                and do.szBranchId = '{$branchId}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'
+            union all
+            -- potongan distributor
+            select '{$coaPotDistKredit}' as coa,
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, dip.decDiscDistributor as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            where do.szDocStatus = 'Applied' and dip.decDiscDistributor > 0  and do.bCash = 0
+                and do.szBranchId = '{$branchId}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'
+            union all
+            -- potongan internal
+            select '{$coaPotIntKredit}' as coa,
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, dip.decDiscInternal as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            where do.szDocStatus = 'Applied' and dip.decDiscInternal > 0  and do.bCash = 0
+                and do.szBranchId = '{$branchId}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'            
+            )x 
+            join account on account.code = x.coa
+            join report_setting_account_detail on report_setting_account_detail.account_id = account.id
+            join report_setting_account on report_setting_account.id = report_setting_account_detail.report_setting_account_id 
+            and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-02')
+                        
+        SQL;
+        $this->fromQuery($sql);
+    }
+
+    public function jurnalPembelian($input){        
+        $settingCompany = Setting::pluck('value', 'code');        
+        $marginDpp = $settingCompany["margin_dpp"];
+        $kodeGalon = "'".implode("','",explode(',',$settingCompany["kode_galon"]))."'";        
+
+        list($startDate, $endDate) = explode('__', $input['period_range']);
+        $branchId = $input['branch_id'];
+        $type = $input['type'];
+
+        $sql = <<<SQL
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type)             
+            select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szDocId, '{$type}' from (
+            select case 
+                    when di.szProductId in ({$kodeGalon}) then 'HPPGKP'
+                    else 'HPPP'
+                end as coa,
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, di.decQty * (dip.decPrice - {$marginDpp}) as debit, 0 as credit, di.decQty * (dip.decPrice - {$marginDpp}) as amount, do.szDocId 
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            where do.szDocStatus = 'Applied' and dip.decPrice > $marginDpp
+                and do.szBranchId = '{$branchId}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'
+            )x 
+            join account on account.code = x.coa
+            join report_setting_account_detail on report_setting_account_detail.account_id = account.id
+            join report_setting_account on report_setting_account.id = report_setting_account_detail.report_setting_account_id 
+            and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-03')                        
+        SQL;
+        $this->fromQuery($sql);
+    }    
 }

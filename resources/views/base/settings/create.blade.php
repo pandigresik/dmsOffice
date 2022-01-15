@@ -18,7 +18,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <i class="fa fa-plus-square-o fa-lg"></i>
-                                <strong>@lang('crud.create')  @lang('models/settings.singular')</strong>
+                                <strong>Create @lang('models/settings.singular')</strong>
                             </div>
                             <div class="card-body">                                
 

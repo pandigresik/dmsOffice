@@ -6,23 +6,24 @@ use App\Models\Base\Setting;
 use App\Repositories\BaseRepository;
 
 /**
- * Class SettingRepository.
- *
- * @version August 15, 2021, 3:20 pm UTC
- */
+ * Class SettingRepository
+ * @package App\Repositories\Base
+ * @version January 14, 2022, 8:20 pm WIB
+*/
+
 class SettingRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'name',
         'code',
-        'value',
+        'description',
+        'value'
     ];
 
     /**
-     * Return searchable fields.
+     * Return searchable fields
      *
      * @return array
      */
@@ -32,8 +33,8 @@ class SettingRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model.
-     */
+     * Configure the Model
+     **/
     public function model()
     {
         return Setting::class;
