@@ -21,5 +21,11 @@
 </div>
 </div>
 
-<!-- List Account Field -->
-@include('accounting.report_setting_accounts.account_fields')
+<!-- Group Type Field -->
+<div class="form-group row">    
+<div class="col-md-9 offset-3"> 
+    <!-- List Account Field -->
+    @include('accounting.report_setting_accounts.account_fields')
+</div>
+</div>
+

@@ -21,7 +21,7 @@
                                 <strong>Create @lang('models/reportSettingAccounts.singular')</strong>
                             </div>
                             <div class="card-body">                                
-
+                                    
                                    @include('accounting.report_setting_accounts.fields')
                                 
                             </div>

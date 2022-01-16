@@ -78,5 +78,9 @@ class Account extends Model
         'description' => 'nullable|string|max:100'
     ];
 
+    public function getFullIdentityAttribute($value)
+    {
+        return $this->attributes['name'].' ( '.$this->attributes['code'].' )';
+    }
     
 }

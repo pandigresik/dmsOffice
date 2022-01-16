@@ -42,8 +42,10 @@ class ReportSettingAccountController extends AppBaseController
      */
     public function create()
     {
+        $accounts = $this->listAccount();
         return view('accounting.report_setting_accounts.create')
-                ->with('accounts',$this->listAccount())
+                ->with('accounts',$accounts->keyBy('id'))
+                ->with('accountItems', $accounts->pluck('full_identity','id'))
                 ->with($this->getOptionItems());
     }
 
@@ -82,10 +84,11 @@ class ReportSettingAccountController extends AppBaseController
 
             return redirect(route('accounting.reportSettingAccounts.index'));
         }
-
+        $accounts = $this->listAccount();
         return view('accounting.report_setting_accounts.edit')
                 ->with('reportSettingAccount', $reportSettingAccount)
-                ->with('accounts',$this->listAccount())
+                ->with('accounts',$accounts->keyBy('id'))
+                ->with('accountItems', $accounts->pluck('full_identity','id'))
                 ->with($this->getOptionItems());
     }
 
@@ -157,10 +160,11 @@ class ReportSettingAccountController extends AppBaseController
     {        
         $account = new AccountRepository(app());
 
-        return $account->allQuery()->orderBy('code')->get()->mapToGroups(function ($message) {
-            $index = substr($message->code,0,4);
+        // return $account->allQuery()->orderBy('code')->get()->mapToGroups(function ($message) {
+        //     $index = substr($message->code,0,4);
 
-            return [$index => $message];
-        });
+        //     return [$index => $message];
+        // });
+        return $account->all([], null, null, ['id', 'code', 'name']);
     }
 }
