@@ -57,7 +57,7 @@ class ProfitLossRepository extends BaseRepository
             ->whereIn('branch_id',$branchId)            
             ->whereIn('account_id', $this->profitLossAccountCode($listAccount))
             ->groupBy('account_id')
-            ->groupBy('branch_id')
+            ->groupBy('branch_id')            
             ->union($claimTiv)
             ->get()
             ->groupBy('branch_id');
@@ -71,7 +71,7 @@ class ProfitLossRepository extends BaseRepository
     private function listAccount(){    
         return ReportSettingAccount::with(['details' => function($q){
             $q->select(['report_setting_account_detail.*','account.code','account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
-        }])->whereGroupType($this->groupCode)->get();
+        }])->orderBy('code')->whereGroupType($this->groupCode)->get();
     }
 
     private function profitLossAccountCode($listAccount){
