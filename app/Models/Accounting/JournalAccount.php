@@ -173,7 +173,7 @@ class JournalAccount extends Model
                     when di.szProductId in ({$kodeGalon}) then $coaGalonTunai                         
                     else $coaPenjualanTunai
                 end as coa,
-                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, abs(dip.decAmount) as debit, 0 as credit, abs(dip.decAmount) as amount , do.szDocId 
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, (abs(dip.decPrice) * di.decQty) as debit, 0 as credit, (dip.decPrice * di.decQty) as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
@@ -241,7 +241,7 @@ class JournalAccount extends Model
                     when di.szProductId in ({$kodeGalon}) then $coaGalonKredit
                     else $coaPenjualanKredit
                 end as coa,
-                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, abs(dip.decAmount) as debit, 0 as credit, abs(dip.decAmount) as amount , do.szDocId 
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, (abs(dip.decPrice) * di.decQty) as debit, 0 as credit, (dip.decPrice * di.decQty) as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
