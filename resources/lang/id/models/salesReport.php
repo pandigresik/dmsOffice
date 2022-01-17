@@ -1,8 +1,8 @@
 <?php
 
 return array (
-  'singular' => 'BkbDiscounts',
-  'plural' => 'BkbDiscounts',
+  'singular' => 'Laporan Penjualan',
+  'plural' => 'Laporan Penjualan',
   'fields' => 
   array (
     'id' => 'Id',
