@@ -2,7 +2,7 @@
     $headerGroup = [
         'LR-01' => 'Penjualan',
         'LR-06' => 'Beban Usaha',
-        'LR-06' => 'Pendapatan (Beban) lain-lain',
+        'LR-07' => 'Pendapatan (Beban) lain-lain',
     ];
     
 @endphp
