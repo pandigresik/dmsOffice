@@ -105,6 +105,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('dmsSdRouteitems', App\Http\Controllers\Sales\DmsSdRouteitemController::class, ['as' => 'sales']);        
         Route::resource('discounts', App\Http\Controllers\Sales\DiscountsController::class, ["as" => 'sales']);
         Route::resource('bkbDiscounts', App\Http\Controllers\Sales\BkbDiscountsController::class, ["as" => 'sales'])->except(['destroy', 'update', 'edit', 'show']);
+        Route::resource('salesReport', App\Http\Controllers\Sales\SalesReportController::class, ["as" => 'sales'])->only(['index']);
         Route::get('discountReject', [App\Http\Controllers\Sales\DiscountRejectController::class, 'index'])->name('sales.discountReject.index');
     });
 
