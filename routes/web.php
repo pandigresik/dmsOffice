@@ -94,6 +94,7 @@ Route::group(['middleware' => ['auth']], function () {
         // Table DMS        
         Route::resource('accounts', App\Http\Controllers\Accounting\AccountController::class, ["as" => 'accounting']);        
         Route::resource('profitLoss', App\Http\Controllers\Accounting\ProfitLossController::class, ['as' => 'accounting'])->only(['index']);
+        Route::resource('profitLossCompany', App\Http\Controllers\Accounting\ProfitLossCompanyController::class, ['as' => 'accounting'])->only(['index']);
         Route::resource('reportSettingAccounts', App\Http\Controllers\Accounting\ReportSettingAccountController::class, ["as" => 'accounting'])->except(['show']);
         Route::resource('journalAccounts', App\Http\Controllers\Accounting\JournalAccountController::class, ["as" => 'accounting']);
         Route::resource('journalDms', App\Http\Controllers\Accounting\JournalDmsController::class, ["as" => 'accounting'])->only(['create','store']);
@@ -105,7 +106,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('dmsSdRouteitems', App\Http\Controllers\Sales\DmsSdRouteitemController::class, ['as' => 'sales']);        
         Route::resource('discounts', App\Http\Controllers\Sales\DiscountsController::class, ["as" => 'sales']);
         Route::resource('bkbDiscounts', App\Http\Controllers\Sales\BkbDiscountsController::class, ["as" => 'sales'])->except(['destroy', 'update', 'edit', 'show']);
-        Route::resource('salesReport', App\Http\Controllers\Sales\SalesReportController::class, ["as" => 'sales'])->only(['index']);
+        Route::get('salesReport', [App\Http\Controllers\Sales\SalesReportController::class, 'index'])->name('sales.salesReport.index');
+        Route::get('salesReport/rekap', [App\Http\Controllers\Sales\SalesReportController::class, 'rekap'])->name('sales.salesReport.rekap');
         Route::get('discountReject', [App\Http\Controllers\Sales\DiscountRejectController::class, 'index'])->name('sales.discountReject.index');
     });
 

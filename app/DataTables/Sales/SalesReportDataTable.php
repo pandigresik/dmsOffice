@@ -91,8 +91,7 @@ class SalesReportDataTable extends DataTable
                  'dms_sd_docdoitemprice.decPrice','dms_sd_docdoitemprice.decAmount','dms_sd_docdoitemprice.decDiscPrinciple','dms_sd_docdoitemprice.decDiscDistributor','dms_sd_docdoitemprice.decDiscInternal'
             ])->join('dms_sm_branch','dms_sm_branch.szId','=','dms_sd_docdo.szBranchId')
             ->join('dms_sd_docdoitem','dms_sd_docdoitem.szDocId','=','dms_sd_docdo.szDocId')
-            ->join('dms_inv_product','dms_inv_product.szId','=','dms_sd_docdoitem.szProductId')
-            
+            ->join('dms_inv_product','dms_inv_product.szId','=','dms_sd_docdoitem.szProductId')            
             ->join('dms_sd_docdoitemprice', function($q){
                 $q->on('dms_sd_docdoitemprice.szDocId','=','dms_sd_docdoitem.szDocId')
                     ->on('dms_sd_docdoitemprice.intItemNumber','=','dms_sd_docdoitem.intItemNumber');

@@ -62,10 +62,11 @@ class BkbDiscountsController extends AppBaseController
         }
 
         $downloadXls = $request->get('download_xls');
-        if($downloadXls){
-            $period = explode(' - ', $request->get('period_range'));            
+        if ($downloadXls) {
+            $period = explode(' - ', $request->get('period_range'));
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
+
             return $this->exportExcel($startDate, $endDate);
         }
 
@@ -213,10 +214,12 @@ class BkbDiscountsController extends AppBaseController
         ];
     }
 
-    private function exportExcel($startDate, $endDate){        
+    private function exportExcel($startDate, $endDate)
+    {
         $modelEksport = '\\App\Exports\\Template\\Sales\\RekapDiscountsExport';
         $fileName = 'rekap_discount_'.$startDate.'_'.$endDate;
-        $collection = $this->getRepositoryObj()->listDiscountRekapExcel($startDate, $endDate);        
+        $collection = $this->getRepositoryObj()->listDiscountRekapExcel($startDate, $endDate);
+
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }
 }

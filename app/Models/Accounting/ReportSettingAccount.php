@@ -38,6 +38,7 @@ class ReportSettingAccount extends Model
     const UPDATED_AT = 'updated_at';
     const GROUP_TYPE = [
         'LR' => 'Laba Rugi',
+        'LRC' => 'Laba Rugi PT',
         'NRC' => 'Neraca'        
     ];
 

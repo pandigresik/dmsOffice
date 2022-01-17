@@ -3,7 +3,7 @@
 @section('content')
     @push('breadcrumb')
     <ol class="breadcrumb border-0 m-0">
-        <li class="breadcrumb-item">@lang('models/profitLoss.plural')</li>
+        <li class="breadcrumb-item">@lang('models/profitLossCompany.plural')</li>
     </ol>
     @endpush
     <div class="container-fluid">
@@ -11,28 +11,22 @@
              @include('flash::message')
              <div class="row">
                     <div class="col-lg-12">
-                        {!! Form::open(['route' => 'accounting.profitLoss.index']) !!}
+                        {!! Form::open(['route' => 'accounting.profitLossCompany.index']) !!}
                         <div class="card">
                             <div class="card-header">                                
-                                <strong>Rekap @lang('models/profitLoss.singular')</strong>
+                                <strong>Rekap @lang('models/profitLossCompany.singular')</strong>
                             </div>
                             <div class="card-body">                   
                                 <!-- Range Period Field -->
                                 <div class="form-group row">
-                                    {!! Form::label('period_range', __('models/profitLoss.fields.period_range').':', ['class' => 'col-md-3 col-form-label']) !!}
+                                    {!! Form::label('period_range', __('models/profitLossCompany.fields.period_range').':', ['class' => 'col-md-3 col-form-label']) !!}
                                     <div class="col-md-9"> 
                                         {!! Form::text('period_range', null, ['class' => 'form-control datetime', 'data-optiondate' => json_encode( ['singleDatePicker' => false, 'locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'period_range']) !!}
                                     </div>                                    
-                                </div>
-                                <div class="form-group row">
-                                    {!! Form::label('branch_id', 'Depo:', ['class' => 'col-md-3 col-form-label']) !!}                                   
-                                    <div class="col-md-9">
-                                        {!! Form::select('branch_id', $branchItems, null, ['class' => 'form-control select2', 'multiple' => 'multiple', 'required' => 'required']) !!}
-                                    </div>                                                                        
-                                </div>
+                                </div>                                
                                 <div class="form-group row">                                    
                                     <div class="col-md-6 offset-3">
-                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listprofitloss', 'data-url' => route('accounting.profitLoss.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
+                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listprofitloss', 'data-url' => route('accounting.profitLossCompany.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
                                         {!! Form::button(__('crud.download'), ['class' => 'btn btn-primary', 'type' => 'button', 'onclick' => 'downloadXls(this)']) !!}
                                     </div>
                                 </div>
