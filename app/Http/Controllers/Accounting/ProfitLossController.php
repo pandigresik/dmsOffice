@@ -66,9 +66,9 @@ class ProfitLossController extends AppBaseController
 
     private function exportExcel($startDate, $endDate, $collection)
     {
-        $modelEksport = '\\App\Exports\\Template\\Sales\\RekapDiscountsExport';
-        $fileName = 'rekap_discount_'.$startDate.'_'.$endDate;
-
+        $modelEksport = '\\App\Exports\\Template\\Accounting\\ProfitLossExport';
+        $fileName = 'profit_loss_depo'.$startDate.'_'.$endDate;
+        
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }
 }

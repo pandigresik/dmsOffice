@@ -86,7 +86,9 @@ class BkbDiscountsRepository extends BaseRepository
                             ;
                         })
                     ;
-        }, 'customer', 'sales', 'depo'])->whereBetween('dtmDoc', [$startDate, $endDate])
+        }, 'customer' => function($q){
+            return $q->with(['address']);
+        }, 'sales', 'depo'])->whereBetween('dtmDoc', [$startDate, $endDate])
             ->join('dms_sd_docdoitem', function ($join) {
                     $join->on('dms_sd_docdoitem.szDocId', '=', 'dms_sd_docdo.szDocId')
                         ->on('dms_sd_docdoitem.intItemNumber', '=', \DB::raw('0'))
@@ -131,7 +133,7 @@ class BkbDiscountsRepository extends BaseRepository
                         'dtmDoc' => $data->dtmDoc,
                         'szCustomerId' => $data->szCustomerId,
                         'customerName' => $data->customer->szName ?? '-' ,
-                        'customerAddress' => $data->customer->description ?? '-',
+                        'customerAddress' => $data->customer->address->fullAddress ?? '-',
                         'salesName' => $data->sales->szName ?? '-'                        
                     ];
                     $item->setAdditionalInfo($additionalInfo);
@@ -210,7 +212,9 @@ class BkbDiscountsRepository extends BaseRepository
     {
         return BkbDiscountDetail::select(['szBranchId', 'szDocId','szProductId','decQty', 'discount_id', 'principle_amount','distributor_amount','bkbDate'])->with(['product'])->whereBetween('bkbDate', [$startDate, $endDate])
             ->with(['depo', 'promo', 'product', 'bkb' => function($q){
-                $q->with(['customer']);
+                $q->with(['customer' => function($r){
+                    $r->with(['address']);
+                }]);
             }])
             ->orderBy('szBranchId')->orderBy('bkbDate')     
             ->get()->groupBy('discount_id');
@@ -219,7 +223,9 @@ class BkbDiscountsRepository extends BaseRepository
     public function listSalesReject($startDate, $endDate, $sales)
     {
         return BkbDiscounts::with(['bkb' => function ($q) {
-            $q->with(['customer']);
+            $q->with(['customer' => function($r){
+                    $r->with(['address']);
+                }]);
         }, 'product'])
         ->where('selisihPrinciple','>',0)
         ->whereBetween('bkbDate', [$startDate, $endDate])->whereIn('szSalesId', $sales)->get()->groupBy('szSalesId');

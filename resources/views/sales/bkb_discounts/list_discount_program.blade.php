@@ -29,7 +29,7 @@
                     <td>{{ localFormatDate($data->bkb->dtmDoc) }}</td>
                     <td>{{ $data->bkb->szCustomerId }}</td>
                     <td>{{ $data->bkb->customer->szName ?? '-' }}</td>
-                    <td>{{ $data->bkb->customer->description ?? '-' }}</td>
+                    <td>{{ $data->bkb->customer->address->fullAddress ?? '-' }}</td>
                     <td>{{ $data->szDocId }}</td>
                     <td>{{ $data->bkb->sales->szName ?? '-' }}</td>                                                        
                     <td>{{ $data->product->szName ?? '-'}}</td>                    

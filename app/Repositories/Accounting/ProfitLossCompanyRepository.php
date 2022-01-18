@@ -41,14 +41,7 @@ class ProfitLossCompanyRepository extends BaseRepository
 
     public function list($startDate, $endDate)
     {
-        $listAccount = $this->listAccount();
-        // $claimTiv = JournalAccount::with(['account'])->selectRaw('branch_id, \'919901\' as account_id, sum(debit) as debit, sum(credit) as credit, abs(sum(balance)) as balance')
-        //     ->disableModelCaching()
-        //     ->whereBetween('date',[$startDate, $endDate])
-        //     ->whereIn('branch_id',$branchId)
-        //     ->whereIn('account_id', ['411011','411111'])
-        //     ->groupBy('account_id')
-        //     ->groupBy('branch_id');
+        $listAccount = $this->listAccount();        
 
         $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(debit) as debit, sum(credit) as credit, sum(balance) as balance')
             ->disableModelCaching()
@@ -68,11 +61,36 @@ class ProfitLossCompanyRepository extends BaseRepository
         ];
     }
 
+    private function totalPendapatanUsaha($startDate, $endDate){
+        $listAccountPendapatanUsaha = $this->listAccountPendapatanUsaha();
+        $claimTiv = JournalAccount::with(['account'])->selectRaw('branch_id, \'919901\' as account_id, sum(debit) as debit, sum(credit) as credit, abs(sum(balance)) as balance')
+            ->disableModelCaching()
+            ->whereBetween('date',[$startDate, $endDate])            
+            ->whereIn('account_id', ['411011','411111'])
+            ->groupBy('account_id')
+            ->groupBy('branch_id');
+        $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(debit) as debit, sum(credit) as credit, sum(balance) as balance')
+            ->disableModelCaching()
+            ->whereBetween('date', [$startDate, $endDate])            
+            ->whereIn('account_id', $this->profitLossAccountCode($listAccountPendapatanUsaha))
+            ->groupBy('account_id')           
+            ->union($claimTiv)
+            ->get()
+            ->keyBy('account_id')
+        ;
+    }
     private function listAccount()
     {
         return ReportSettingAccount::with(['details' => function ($q) {
             $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
         }])->orderBy('code')->whereGroupType($this->groupCode)->get();
+    }
+
+    private function listAccountPendapatanUsaha()
+    {
+        return ReportSettingAccount::with(['details' => function ($q) {
+            $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
+        }])->orderBy('code')->whereIn('group_type',['LR-01', 'LR-02', 'LR-05'])->get();
     }
 
     private function profitLossAccountCode($listAccount)

@@ -27,7 +27,7 @@
                 <td>{{ $item->bkb->szCustomerId }}</td>
                 <td>{{ $item->bkb->customer->szHierarchyId ?? '-'  }}</td>
                 <td>{{ $item->bkb->customer->szName ?? '-'  }}</td>
-                <td>{{ $item->bkb->customer->description ?? '-'  }}</td>
+                <td>{{ $item->bkb->customer->address->fullAddress ?? '-'  }}</td>
                 <td>{{ $item->szDocId  }}</td>
                 <td>{{ $item->product->szName ?? '-'  }}</td>
                 <td>{{ $item->decQty }}</td>

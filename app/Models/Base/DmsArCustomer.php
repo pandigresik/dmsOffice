@@ -5,7 +5,7 @@ namespace App\Models\Base;
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+use Illuminate\Database\Eloquent\Relations\HasOne;
 /**
  * @SWG\Definition(
  *      definition="DmsArCustomer",
@@ -150,5 +150,15 @@ class DmsArCustomer extends Model
     public function locationCustomers(): HasMany
     {
         return $this->hasMany(LocationCustomer::class, 'dms_ar_customer_id', 'iInternalId');
+    }
+
+    /**
+     * Get the address associated with the DmsArCustomer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function address(): HasOne
+    {
+        return $this->hasOne(DmsSmAddressinfo::class, 'szId', 'szId')->where(['szObjectId' => 'DMSCustomer']);
     }
 }

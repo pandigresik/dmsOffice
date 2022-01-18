@@ -52,7 +52,11 @@ return [
         ['name' => 'dms_sd_docdoitemprice', 'filter' => 'dtmLastUpdated', 'key' => ['szDocId','intItemNumber'], 'references' => ['table' => 'dms_sd_docdo', 'column' => 'szDocId']],
         //['name' => 'dms_sd_docdoitempromo', 'filter' => 'dtmLastUpdated', 'key' => 'szId', 'references' => ['table' => 'dms_sd_docdo', 'column' => 'szDocId']],
         ['name' => 'dms_pi_employee', 'filter' => 'dtmLastUpdated', 'key' => 'szId', 'references' => []],
-        // // ['name' => 'dms_sd_docdoitemreason', 'filter' => 'dtmLastUpdated', 'key' => 'szId', 'references' => ['table' => 'dms_sd_docdo', 'column' => 'szDocId']],
+        
+        ['name' => 'dms_cas_cashbalance', 'filter' => 'dtmLastUpdated', 'key' => 'iId', 'references' => []],
+        ['name' => 'dms_cas_cashbalancesaldo', 'filter' => 'dtmLastUpdated', 'key' => 'iId', 'references' => []],
+        ['name' => 'dms_cas_cashtempbalance', 'filter' => 'dtmLastUpdated', 'key' => 'iId', 'references' => []],
+        ['name' => 'dms_cas_cashtempbalancesaldo', 'filter' => 'dtmLastUpdated', 'key' => 'iId', 'references' => []],
     ],
 
     'skip_tables' => [],
