@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Accounting;
 
 use App\Http\Controllers\AppBaseController;
-use App\Models\Base\DmsSmBranch;
-use App\Models\Sales\Discounts;
-use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Accounting\ProfitLossRepository;
+use App\Repositories\Base\DmsSmBranchRepository;
 use Illuminate\Http\Request;
 use Response;
 
@@ -24,23 +22,25 @@ class ProfitLossController extends AppBaseController
     {
         if ($request->ajax()) {
             $period = explode(' - ', $request->get('period_range'));
-            $branchId = $request->get('branch_id');            
+            $branchId = $request->get('branch_id');
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
-            $endDate = createLocalFormatDate($period[1])->format('Y-m-d');            
+            $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId);
-            
+
             return view('accounting.profit_loss.list')
                 ->with($datas)
-                ->with(['startDate' => $startDate, 'endDate' => $endDate]);
+                ->with(['startDate' => $startDate, 'endDate' => $endDate])
+            ;
         }
 
         $downloadXls = $request->get('download_xls');
         if ($downloadXls) {
             $period = explode(' - ', $request->get('period_range'));
-            $branchId = $request->get('branch_id'); 
+            $branchId = $request->get('branch_id');
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId);
+
             return $this->exportExcel($startDate, $endDate, $datas);
         }
 
@@ -67,7 +67,7 @@ class ProfitLossController extends AppBaseController
     private function exportExcel($startDate, $endDate, $collection)
     {
         $modelEksport = '\\App\Exports\\Template\\Sales\\RekapDiscountsExport';
-        $fileName = 'rekap_discount_'.$startDate.'_'.$endDate;        
+        $fileName = 'rekap_discount_'.$startDate.'_'.$endDate;
 
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }

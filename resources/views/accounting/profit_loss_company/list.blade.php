@@ -26,7 +26,7 @@
                 <tr>
                     <td>{{ $account->code }}</td>
                     <td>{{ $account->name }}</td>
-                    <td>{{ localNumberFormat($data[$account->id]->balance ?? 0) }}</td>
+                    <td>{{ localNumberFormat($data[$account->code]->balance ?? 0) }}</td>
                     <th></th>
                 </tr>                
             @endforeach

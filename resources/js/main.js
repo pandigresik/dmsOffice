@@ -293,7 +293,7 @@ class Main {
         timePicker: false,
         showDropdowns: true,
         autoApply: true
-        // autoUpdateInput: false
+        // autoUpdateInput: true
       }
       const _option = {
         ..._defaultOption,
@@ -306,6 +306,16 @@ class Main {
         })
       } else {
         $(this).daterangepicker(_option)
+      }
+
+      if(!_option.autoApply){
+         $(this).on('apply.daterangepicker', function(ev, picker) {
+              $(this).val(picker.startDate.format(_option.locale.format) + ' - ' + picker.endDate.format(_option.locale.format));
+         });
+
+         $(this).on('cancel.daterangepicker', function(ev, picker) {
+              $(this).val('');
+         });
       }
     })
   }
@@ -651,6 +661,7 @@ class Main {
   getValueDateSQL(elm) {
     let result = null
     try {
+      if(_.isEmpty($(elm).val())) return ''
       const _v = $(elm).data('daterangepicker')
       let _format = 'YYYY-MM-DD'
       // @ts-ignore

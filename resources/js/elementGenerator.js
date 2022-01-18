@@ -50,7 +50,7 @@ class ElementGenerator {
     switch (element.elmsearch) {
       case 'daterange':
         _options.class = 'form-control datetime'
-        _options['data-optiondate'] = JSON.stringify(localOption.daterange)
+        _options['data-optiondate'] = JSON.stringify(localOption.daterange_search)
         break
       case 'datesingle':
         _options.class = 'form-control datetime'

@@ -16,6 +16,7 @@ return [
         'tag' => ['tags' => true, 'multiple' => true, 'tokenSeparators' => [',']],        
     ],
     'daterange' => ['singleDatePicker' => false, 'locale' => ['format' => 'DD MMM YYYY']],
+    'daterange_search' => ['singleDatePicker' => false, 'locale' => ['format' => 'DD MMM YYYY'], 'autoApply' => false, 'autoUpdateInput' => false ],
     'time' => ['locale' => ['format' => 'HH:mm']],
     'date_format' => 'd M Y',
     'datetime_format' => 'd M Y H:i:s',
