@@ -13,7 +13,12 @@
         </tr>        
     </thead>
     <tbody>
-        
+        <tr>
+            <td></td>
+            <td>Total Pendapatan Usaha</td>
+            <td class="text-right">{{ localNumberFormat($pendapatanUsaha) }}</td>
+            <td class="text-right"></td>
+        </tr>
         @foreach($listAccount as $group)
             
             @if (isset($headerGroup[$group->code]))
@@ -28,7 +33,7 @@
                     <td>{{ $account->name }}</td>
                     <td class="text-right">{{ localNumberFormat($data[$account->code]->balance ?? 0) }}</td>
                     <td class="text-right"></td>
-                </tr>                
+                </tr>
             @endforeach
         @endforeach
     </tbody>

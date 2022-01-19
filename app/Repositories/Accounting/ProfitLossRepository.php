@@ -43,7 +43,7 @@ class ProfitLossRepository extends BaseRepository
     public function list($startDate, $endDate, $branchId)
     {
         $listAccount = $this->listAccount();
-        $claimTiv = JournalAccount::with(['account'])->selectRaw('branch_id, \'919901\' as account_id, sum(debit) as debit, sum(credit) as credit, abs(sum(balance)) as balance')
+        $claimTiv = JournalAccount::with(['account'])->selectRaw('branch_id, \'919901\' as account_id, abs(sum(balance)) as balance')
             ->disableModelCaching()
             ->whereBetween('date',[$startDate, $endDate])
             ->whereIn('branch_id',$branchId)            
@@ -51,7 +51,7 @@ class ProfitLossRepository extends BaseRepository
             ->groupBy('account_id')
             ->groupBy('branch_id');
         
-        $data = JournalAccount::with(['account'])->selectRaw('branch_id, account_id, sum(debit) as debit, sum(credit) as credit, sum(balance) as balance')
+        $data = JournalAccount::with(['account'])->selectRaw('branch_id, account_id, sum(balance) as balance')
             ->disableModelCaching()
             ->whereBetween('date',[$startDate, $endDate])
             ->whereIn('branch_id',$branchId)            

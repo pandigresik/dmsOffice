@@ -59,15 +59,15 @@ class BkbDiscountsRepository extends BaseRepository
         ;
         if ($tmpDiscountProduct) {
             foreach ($tmpDiscountProduct as $discount) {
-                if ('kontrak' == $discount->tipe) {
-                    $discountProduct = array_merge($discountProduct, $discount->details->pluck('main_dms_inv_product_id')->toArray());
+                if ('kontrak' == $discount->jenis) {
+                    $discountProduct = array_merge($discountProduct, $discount->details->pluck('main_dms_inv_product_id')->toArray());                    
                 } else {
                     $listMainProduct = explode(',', $discount->main_dms_inv_product_id);
-                    $discountProduct = array_merge($discountProduct, $listMainProduct);
+                    $discountProduct = array_merge($discountProduct, $listMainProduct);                    
                     if (!empty($discount->bundling_dms_inv_product_id)) {
                         $listBundlingProduct = explode(',', $discount->bundling_dms_inv_product_id);
                         // array_push($discountProduct, $discount->bundling_dms_inv_product_id);
-                        $discountProduct = array_merge($discountProduct, $listBundlingProduct);
+                        $discountProduct = array_merge($discountProduct, $listBundlingProduct);                        
                     }
                 }
             }
@@ -79,7 +79,7 @@ class BkbDiscountsRepository extends BaseRepository
         return DmsSdDocdo::with(['items' => function ($q) use ($discountProduct) {
             $q->select(['dms_sd_docdoitem.szDocId', 'dms_sd_docdoitem.szProductId', 'dms_sd_docdoitem.intItemNumber', 'dms_sd_docdoitem.decQty', 'dms_sd_docdoitemprice.decDiscPrinciple', 'dms_sd_docdoitemprice.decDiscDistributor'])
                 ->with(['product'])
-                ->whereIn('szProductId', $discountProduct)
+                ->whereIn('szProductId', array_unique($discountProduct))
                 ->join('dms_sd_docdoitemprice', function ($join) {
                             $join->on('dms_sd_docdoitemprice.szDocId', '=', 'dms_sd_docdoitem.szDocId')
                                 ->on('dms_sd_docdoitemprice.intItemNumber', '=', 'dms_sd_docdoitem.intItemNumber')

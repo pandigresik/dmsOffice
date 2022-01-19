@@ -43,40 +43,29 @@ class ProfitLossCompanyRepository extends BaseRepository
     {
         $listAccount = $this->listAccount();        
 
-        $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(debit) as debit, sum(credit) as credit, sum(balance) as balance')
+        $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(balance) as balance')
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])            
             ->whereIn('account_id', $this->profitLossAccountCode($listAccount))
-            ->groupBy('account_id')
-            // ->groupBy('branch_id')
-            // ->union($claimTiv)
+            ->groupBy('account_id')            
             ->get()
             ->keyBy('account_id')
         ;
 
         return [
             'data' => $data,
-            //'branchMaster' => DmsSmBranch::whereIn('szId',$branchId)->get()->keyBy('szId'),
+            'pendapatanUsaha' => $this->totalPendapatanUsaha($startDate, $endDate),
+            'HppPabrik' => $this->totalHppPabrik($startDate, $endDate),
             'listAccount' => $listAccount,
         ];
     }
 
     private function totalPendapatanUsaha($startDate, $endDate){
-        $listAccountPendapatanUsaha = $this->listAccountPendapatanUsaha();
-        $claimTiv = JournalAccount::with(['account'])->selectRaw('branch_id, \'919901\' as account_id, sum(debit) as debit, sum(credit) as credit, abs(sum(balance)) as balance')
+        $listAccountPendapatanUsaha = $this->listAccountPendapatanUsaha();        
+        return JournalAccount::whereBetween('date', [$startDate, $endDate])            
             ->disableModelCaching()
-            ->whereBetween('date',[$startDate, $endDate])            
-            ->whereIn('account_id', ['411011','411111'])
-            ->groupBy('account_id')
-            ->groupBy('branch_id');
-        $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(debit) as debit, sum(credit) as credit, sum(balance) as balance')
-            ->disableModelCaching()
-            ->whereBetween('date', [$startDate, $endDate])            
-            ->whereIn('account_id', $this->profitLossAccountCode($listAccountPendapatanUsaha))
-            ->groupBy('account_id')           
-            ->union($claimTiv)
-            ->get()
-            ->keyBy('account_id')
+            ->whereIn('account_id', array_diff($this->profitLossAccountCode($listAccountPendapatanUsaha), ['411011','411111']))                                 
+            ->sum('balance')            
         ;
     }
     private function listAccount()
@@ -90,7 +79,7 @@ class ProfitLossCompanyRepository extends BaseRepository
     {
         return ReportSettingAccount::with(['details' => function ($q) {
             $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
-        }])->orderBy('code')->whereIn('group_type',['LR-01', 'LR-02', 'LR-05'])->get();
+        }])->orderBy('code')->whereIn('code',['LR-01', 'LR-02', 'LR-05'])->get();
     }
 
     private function profitLossAccountCode($listAccount)
@@ -101,5 +90,10 @@ class ProfitLossCompanyRepository extends BaseRepository
         });
 
         return $result;
+    }
+
+    private function totalHppPabrik($startDate, $endDate){
+
+        return 90900000;
     }
 }
