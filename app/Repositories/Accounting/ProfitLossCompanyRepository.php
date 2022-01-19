@@ -55,7 +55,7 @@ class ProfitLossCompanyRepository extends BaseRepository
         return [
             'data' => $data,
             'pendapatanUsaha' => $this->totalPendapatanUsaha($startDate, $endDate),
-            'HppPabrik' => $this->totalHppPabrik($startDate, $endDate),
+            'hppPabrik' => $this->totalHppPabrik($startDate, $endDate),
             'listAccount' => $listAccount,
         ];
     }
@@ -97,3 +97,17 @@ class ProfitLossCompanyRepository extends BaseRepository
         return 90900000;
     }
 }
+
+/**
+select b.szDocId, a.dtmDoc, b.szProductId, b.szOrderItemTypeId, b.szTrnType 
+	, b.decQty * (select ppl.price from product_price_log ppl
+join dms_inv_product d on d.iInternalId = ppl.dms_inv_product_id and d.szId = b.szProductId 
+where ppl.start_date <= a.dtmDoc and (ppl.end_date is null or ppl.end_date >= a.dtmDoc))
+as hpp
+from dms_sd_docdo a
+join dms_sd_docdoitem b on a.szDocId  = b.szDocId
+where a.dtmDoc between '2021-11-01' and '2021-11-30'
+
+
+
+ */

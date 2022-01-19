@@ -76,7 +76,7 @@ class BkbDiscountsRepository extends BaseRepository
             return [];
         }
 
-        return DmsSdDocdo::with(['items' => function ($q) use ($discountProduct) {
+        return DmsSdDocdo::select(['dms_sd_docdo.*'])->with(['items' => function ($q) use ($discountProduct) {
             $q->select(['dms_sd_docdoitem.szDocId', 'dms_sd_docdoitem.szProductId', 'dms_sd_docdoitem.intItemNumber', 'dms_sd_docdoitem.decQty', 'dms_sd_docdoitemprice.decDiscPrinciple', 'dms_sd_docdoitemprice.decDiscDistributor'])
                 ->with(['product'])
                 ->whereIn('szProductId', array_unique($discountProduct))
@@ -93,7 +93,7 @@ class BkbDiscountsRepository extends BaseRepository
                     $join->on('dms_sd_docdoitem.szDocId', '=', 'dms_sd_docdo.szDocId')
                         ->on('dms_sd_docdoitem.intItemNumber', '=', \DB::raw('0'))
                     ;
-                })->whereIn('dms_sd_docdoitem.szProductId', $discountProduct)
+                })->whereIn('dms_sd_docdoitem.szProductId', array_unique($discountProduct))
             ->where('szBranchId', $branchId)
             ->where('szDocStatus', 'Applied')
             ->disableModelCaching()
