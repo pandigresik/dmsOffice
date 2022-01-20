@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Accounting;
 
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateJournalDmsRequest;
+use App\Models\Accounting\JournalAccount;
 use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Accounting\JournalDmsRepository;
 use Flash;
@@ -38,9 +39,13 @@ class JournalDmsController extends AppBaseController
     {
         $input = $request->all();
 
-        $this->getRepositoryObj()->create($input);
+        $model = $this->getRepositoryObj()->create($input);
 
-        Flash::success(__('messages.saved', ['model' => __('models/JournalDms.singular')]));
+        if($model instanceof JournalAccount){
+            Flash::success(__('messages.saved', ['model' => __('models/JournalDms.singular')]));
+        }else{
+            Flash::error($model);            
+        }        
 
         return redirect(route('accounting.journalDms.create'));
     }

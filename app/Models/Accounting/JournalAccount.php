@@ -315,7 +315,23 @@ class JournalAccount extends Model
             join account on account.code = x.coa
             join report_setting_account_detail on report_setting_account_detail.account_id = account.id
             join report_setting_account on report_setting_account.id = report_setting_account_detail.report_setting_account_id 
-            and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-03')                        
+            and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-03')            
+            -- menghitung hpp pabrik untuk PT
+            union all            
+            select y.coa, 'HPP PABRIK', debit, credit, amount, dtmDoc, szBranchId, szDocId, '{$type}' from (
+            select 'HPPPT' as coa
+                ,do.dtmDoc, do.bCash, do.szBranchId, di.szProductId
+                , di.decQty * coalesce((select ppl.price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as debit
+                , 0 as credit
+                , di.decQty * coalesce((select ppl.price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as amount
+                , do.szDocId 
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber and dip.decPrice > 0
+            where do.szDocStatus = 'Applied' 
+                and do.szBranchId = '{$branchId}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'
+            )y
         SQL;
         $this->fromQuery($sql);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Inventory;
 
+use App\Models\Inventory\DmsInvProduct;
 use App\Models\Inventory\ProductPrice;
 use App\Repositories\BaseRepository;
 
@@ -42,15 +43,17 @@ class ProductPriceRepository extends BaseRepository
     public function create($input)
     {
         /** transaction menjadikan cache tidak berjalan dengan baik */
-        //$this->model->getConnection()->transaction(function() use ($input){
-        $model = $this->model->firstOrCreate(['dms_inv_product_id' => $input['dms_inv_product_id']]);
-        $model->fill($input);
-        $model->save();
+        $this->model->getConnection()->transaction(function() use ($input){
+            $model = $this->model->firstOrCreate(['dms_inv_product_id' => $input['dms_inv_product_id']]);
+            $product = DmsInvProduct::find($input['dms_inv_product_id']);
+            $input['product_id'] = $product->szId;
+            $model->fill($input);
+            $model->save();
 
-        $priceLog = new ProductPriceLogRepository(app());
-        $priceLog->create($input);
+            $priceLog = new ProductPriceLogRepository(app());
+            $priceLog->create($input);
 
-        return $model;
-        //});
+            return $model;
+        });
     }
 }

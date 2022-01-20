@@ -52,6 +52,7 @@ class ProductPrice extends Model
         'price',
         'dpp_price',
         'start_date',
+        'product_id'
     ];
 
     /**

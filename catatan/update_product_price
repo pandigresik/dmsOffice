@@ -1,0 +1,2 @@
+update product_price set product_id = (select szId from dms_inv_product where iInternalId = dms_inv_product_id)
+update product_price_log set product_id = (select szId from dms_inv_product where iInternalId = dms_inv_product_id)

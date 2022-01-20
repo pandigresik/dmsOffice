@@ -65,7 +65,7 @@ class JournalDmsRepository extends BaseRepository
             \Log::error($e->getMessage());
             $this->model->getConnection()->rollBack();
 
-            return $e;
+            return $e->getMessage();
         }
 
         return $this->model;
