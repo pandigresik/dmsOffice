@@ -105,6 +105,7 @@ mix.webpackConfig({
 // @ts-ignore
 mix.sass('resources/sass/app.scss', 'public/css')
   .sass('resources/sass/datatables.scss', 'public/css')
+  .css('resources/css/app.css', 'public/css')
   .extract(['jquery', 'lodash', 'axios'])
   .extract(['bootstrap', 'moment', 'bootstrap-daterangepicker', 'ckeditor', 'toastr'])
   .extract(['@coreui/coreui', 'select2', 'inputmask', 'inputmask/lib/jquery.inputmask', 'inputmask/lib/extensions/inputmask.extensions', 'inputmask/lib/extensions/inputmask.date.extensions', 'inputmask/lib/extensions/inputmask.numeric.extensions'])

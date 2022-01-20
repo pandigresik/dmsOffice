@@ -33,4 +33,13 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
         });
     }
+
+    public function render($request, Throwable $e) 
+{
+    if ($request->ajax()) {
+        return response()->json(['message' => $e->getMessage()], 500);
+    }
+
+    return parent::render($request, $e);
+}
 }

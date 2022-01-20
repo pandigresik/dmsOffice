@@ -230,6 +230,7 @@ class DmsSdDocdo extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
+    protected $primaryKey = 'iId';
     public $table = 'dms_sd_docdo';
     private $countedDiscount = 0;
     public $fillable = [

@@ -1,0 +1,3 @@
+div.modal-body > button.bootbox-close-button.close{
+    z-index: 99999;
+}

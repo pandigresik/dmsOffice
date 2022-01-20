@@ -34,6 +34,7 @@ class Main {
   }
 
   getAjaxData(_url, _type, _data, _callback) {
+    // @ts-ignore
     $.ajax({
       url: _url,
       data: _data,
@@ -79,6 +80,7 @@ class Main {
 
   getHtmlData(_url, _type, _data, _callback) {
     let _ini = this;
+    // @ts-ignore
     $.ajax({
       url: _url,
       data: _data,
@@ -89,7 +91,12 @@ class Main {
       },
       success: function(data) {
         _ini.showLoading(false)
-      }
+      },      
+      error: function (xhr, status, text) {
+        _ini.showLoading(false)
+				const pesan = xhr.responseText;
+				bootbox.alert('Terjadi error di server \n' + pesan, function () {});
+			}
     }).done(function(data) {
       if (_callback !== undefined) {
         _callback(data)
@@ -125,6 +132,7 @@ class Main {
   loadContent(_url, _data, _type, _target, _callback) {
     const _mainElm = $(_target)
     const _ini = this
+    // @ts-ignore
     $.ajax({
       url: _url,
       data: _data,
@@ -135,7 +143,12 @@ class Main {
       },
       success: function(data) {
         _mainElm.html(data)
-      }
+      },
+      error: function (xhr, status, text) {
+        _ini.showLoading(false)
+				const pesan = xhr.responseText;
+				bootbox.alert('Terjadi error di server \n' + pesan, function () {});
+			}
     }).done(function() {
       _ini.initFormatInput(_mainElm)
       if (_callback !== undefined) {

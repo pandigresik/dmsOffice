@@ -15,6 +15,8 @@ use App\Repositories\BaseRepository;
  */
 class BkbDiscountsRepository extends BaseRepository
 {
+    
+    private $resultDiscount;
     /**
      * @var array
      */
@@ -96,23 +98,20 @@ class BkbDiscountsRepository extends BaseRepository
                 })->whereIn('dms_sd_docdoitem.szProductId', array_unique($discountProduct))
             ->where('szBranchId', $branchId)
             ->where('szDocStatus', 'Applied')
-            ->disableModelCaching()
-            ->get()
+            ->disableModelCaching()            
         ;
     }
 
     public function processDiscount($startDate, $endDate, $branchId)
-    {
-        $result = collect();
-        $datas = $this->mustValidate($startDate, $endDate, $branchId);
-        if (empty($datas)) {
-            return $result;
-        }
+    {        
+        $this->resultDiscount = collect();
+        $datas = $this->mustValidate($startDate, $endDate, $branchId);        
 
-        foreach ($datas as $data) {
+    $datas->chunk(500, function($dataTmp) {
+        foreach ($dataTmp as $data) {
             foreach ($data->items as $index => $item) {
                 //\Log::error($item->getRawOriginal('decDiscPrinciple'));
-                if ($item->getRawOriginal('decDiscPrinciple') <= 0) {                    
+                if ($item->getRawOriginal('decDiscPrinciple') <= 0) {
                     continue;
                 }
 
@@ -121,7 +120,7 @@ class BkbDiscountsRepository extends BaseRepository
                 $item->setCustomer($data->customer);
                 $item->setBkbDate($data->getRawOriginal('dtmDoc'));
                 $item->getDiscounts();
-                
+
                 if ($item->getHasDiscount()) {
                     $totalItemDiscountPrinciple = collect($item->getDiscountPrinciple())->sum('amount');
                     $item->setSelisihPrinciple($item->getRawOriginal('decDiscPrinciple') - $totalItemDiscountPrinciple);
@@ -132,20 +131,21 @@ class BkbDiscountsRepository extends BaseRepository
                         'depo' => $data->depo->szName,
                         'dtmDoc' => $data->dtmDoc,
                         'szCustomerId' => $data->szCustomerId,
-                        'customerName' => $data->customer->szName ?? '-' ,
+                        'customerName' => $data->customer->szName ?? '-',
                         'customerAddress' => $data->customer->address->fullAddress ?? '-',
-                        'salesName' => $data->sales->szName ?? '-'                        
+                        'salesName' => $data->sales->szName ?? '-',
                     ];
                     $item->setAdditionalInfo($additionalInfo);
-                }else{
-                    continue;   
+                } else {
+                    continue;
                 }
 
-                $result->push($item);
+                $this->resultDiscount->push($item);                
             }
         }
+        });
         
-        return $result->sortBy([            
+        return $this->resultDiscount->sortBy([            
             ['bkb_date','asc'],
             ['has_selisih_principle','desc']
         ]);
