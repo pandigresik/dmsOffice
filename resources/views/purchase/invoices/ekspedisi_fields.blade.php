@@ -37,12 +37,20 @@
     {!! Form::text('amount', null, ['class' => 'form-control inputmask amount', 'readonly' => 'readonly','required' => 'required', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer'))]) !!}
 </div>
 </div>
-
+<hr>
 <!-- Date Due Field -->
 <div class="form-group row">
     {!! Form::label('period', __('models/invoices.fields.period').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-6"> 
     {!! Form::text('period', null, ['class' => 'form-control datetime period', 'required' => 'required' ,'data-optiondate' => json_encode( ['singleDatePicker' => false, 'locale' => ['format' => config('local.date_format_javascript') ]])]) !!}
+</div>
+</div>
+
+<!-- Branch Depo Field -->
+<div class="form-group row">
+    {!! Form::label('branch_id', __('models/invoices.fields.branch_id').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-6"> 
+    {!! Form::select('branch_id', $branchItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
 </div>
 </div>
 

@@ -2,7 +2,7 @@
      <div class="container-fluid">
           <div class="animated fadeIn">
                 @include('coreui-templates::common.errors')
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-lg-12">
                         {!! Form::open(['data-submitable' => 0]) !!}
                         <div class="card">

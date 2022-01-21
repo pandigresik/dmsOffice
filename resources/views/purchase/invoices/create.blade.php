@@ -35,6 +35,7 @@
     function addListDoc(elm){
             const _form = $(elm).closest('form')
             const _invoiceLines = _form.find('.invoice-lines')
+            const _branchId = _form.find('select[name=branch_id]').val()
             let _invoiceLinesTable = _invoiceLines.find('table')
             let _docId = []
             let _json = $(elm).data('json')
@@ -42,6 +43,7 @@
             let _format = 'YYYY-MM-DD'
             _json.startDate = _period.startDate.format(_format)
             _json.endDate = _period.endDate.format(_format)
+            _json.branchId = _branchId
             if(_invoiceLinesTable.length){
                 _invoiceLinesTable.find('tbody>tr>td>input[name^=invoice_line]').each(function(){
                     _docId.push($(this).data('docid'))

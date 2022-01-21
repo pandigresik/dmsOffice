@@ -64,14 +64,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('btbViewTmps', App\Http\Controllers\Inventory\BtbViewTmpController::class, ['as' => 'inventory']);
 
         // DMS Table
-        Route::resource('dmsInvCarriers', App\Http\Controllers\Inventory\DmsInvCarrierController::class, ['as' => 'inventory']);
-        // Route::resource('dmsInvCarrierdrivers', App\Http\Controllers\Inventory\DmsInvCarrierdriverController::class, ["as" => 'inventory']);
-        // Route::resource('dmsInvCarriervehicles', App\Http\Controllers\Inventory\DmsInvCarriervehicleController::class, ["as" => 'inventory']);
-        Route::resource('dmsInvProducts', App\Http\Controllers\Inventory\DmsInvProductController::class, ['as' => 'inventory']);
-        // Route::resource('dmsInvProductcategories', App\Http\Controllers\Inventory\DmsInvProductcategoryController::class, ["as" => 'inventory']);
-        // Route::resource('dmsInvProductcategorytypes', App\Http\Controllers\Inventory\DmsInvProductcategorytypeController::class, ["as" => 'inventory']);
-        // Route::resource('dmsInvProductitemcategories', App\Http\Controllers\Inventory\DmsInvProductitemcategoryController::class, ["as" => 'inventory']);
-        // Route::resource('dmsInvProductkitinfos', App\Http\Controllers\Inventory\DmsInvProductkitinfoController::class, ["as" => 'inventory']);
+        Route::resource('dmsInvCarriers', App\Http\Controllers\Inventory\DmsInvCarrierController::class, ['as' => 'inventory']);        
+        Route::resource('dmsInvProducts', App\Http\Controllers\Inventory\DmsInvProductController::class, ['as' => 'inventory']);        
         Route::resource('dmsInvUoms', App\Http\Controllers\Inventory\DmsInvUomController::class, ['as' => 'inventory']);
         Route::resource('dmsInvVehicles', App\Http\Controllers\Inventory\DmsInvVehicleController::class, ['as' => 'inventory']);
         Route::resource('dmsInvVehicletypes', App\Http\Controllers\Inventory\DmsInvVehicletypeController::class, ['as' => 'inventory']);
@@ -99,6 +93,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('reportSettingAccounts', App\Http\Controllers\Accounting\ReportSettingAccountController::class, ["as" => 'accounting'])->except(['show']);
         Route::resource('journalAccounts', App\Http\Controllers\Accounting\JournalAccountController::class, ["as" => 'accounting']);
         Route::resource('journalDms', App\Http\Controllers\Accounting\JournalDmsController::class, ["as" => 'accounting'])->only(['create','store']);
+        Route::resource('accountBalances', App\Http\Controllers\Accounting\AccountBalanceController::class, ["as" => 'accounting']);
     });
 
     Route::group(['prefix' => 'sales'], function () {

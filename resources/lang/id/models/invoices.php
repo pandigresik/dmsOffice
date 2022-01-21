@@ -16,6 +16,7 @@ return array (
     'state' => 'State',
     'date_invoice' => 'Date Invoice',
     'period' => 'Periode',
+    'branch_id' => 'Depo',
     'date_due' => 'Date Due',
     'partner_id' => 'Partner Id',
   ),

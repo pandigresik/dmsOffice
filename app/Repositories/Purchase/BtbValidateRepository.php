@@ -46,9 +46,9 @@ class BtbValidateRepository extends BaseRepository
         return BtbValidate::class;
     }
 
-    public function mustValidate($startDate, $endDate)
+    public function mustValidate($startDate, $endDate, $branchId)
     {
-        return $this->model->mustValidate($startDate, $endDate);
+        return $this->model->mustValidate($startDate, $endDate, $branchId);
     }
 
     /**

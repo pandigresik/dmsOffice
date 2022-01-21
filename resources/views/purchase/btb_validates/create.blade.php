@@ -23,12 +23,15 @@
                             <div class="card-body">                   
                                 <!-- Range Period Field -->
                                 <div class="form-group row">
-                                    {!! Form::label('period_range', __('models/btbValidates.fields.period_range').':', ['class' => 'col-md-3 col-form-label']) !!}
-                                    <div class="col-md-6"> 
+                                    {!! Form::label('period_range', __('models/btbValidates.fields.period_range').':', ['class' => 'col-md-2 col-form-label']) !!}
+                                    <div class="col-md-4"> 
                                         {!! Form::text('period_range', null, ['class' => 'form-control datetime', 'data-optiondate' => json_encode( ['singleDatePicker' => false, 'locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'period_range']) !!}
                                     </div>
+                                    <div class="clo-md-3 mr-2">
+                                        {!! Form::select('branch_id', $branchItems, null, ['class' => 'form-control', 'required' => 'required']) !!}
+                                    </div>
                                     <div class="clo-md-3">
-                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listbtb', 'data-url' => route('purchase.btbValidates.create'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range]' ,'onclick' => 'main.loadDetailPage(this,\'get\')']) !!}
+                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listbtb', 'data-url' => route('purchase.btbValidates.create'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'get\')']) !!}
                                     </div>
                                 </div>
 

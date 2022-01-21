@@ -15,7 +15,14 @@ class CreateAccountBalance extends Migration
     {
         Schema::create('account_balance', function (Blueprint $table) {
             $table->id();
+            $table->string('code', 10);
+            $table->decimal('amount', 15, 2)->default(0);
+            $table->date('balance_date');
+            $table->blameable();
             $table->timestamps();
+            $table->softDeletes(); 
+            $table->unique('code');
+            $table->foreign('code', 'fk_account_balance_code')->references('code')->on('account');           
         });
     }
 

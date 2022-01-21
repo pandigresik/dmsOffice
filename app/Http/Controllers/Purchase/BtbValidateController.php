@@ -8,6 +8,7 @@ use App\Http\Requests\Purchase\CreateBtbValidateRequest;
 use App\Http\Requests\Purchase\UpdateBtbValidateRequest;
 use App\Models\Purchase\BtbValidate;
 use App\Models\Purchase\ListBtbValidate;
+use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Purchase\BtbValidateRepository;
 use Flash;
 use Illuminate\Http\Request;
@@ -41,10 +42,12 @@ class BtbValidateController extends AppBaseController
     public function create(Request $request)
     {
         if ($request->ajax()) {
-            $period = explode(' - ', $request->get('ref'));
+            // $period = explode(' - ', $request->get('ref'));
+            $period = explode(' - ', $request->get('period_range'));
+            $branchId = $request->get('branch_id');            
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-            $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate);
+            $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate, $branchId);
 
             return view('purchase.btb_validates.list')->with('datas', $datas);
         }
@@ -174,8 +177,10 @@ class BtbValidateController extends AppBaseController
     {
         $btbItems = ListBtbValidate::all();
         $btbDataOptions = $btbItems->keyBy('reference_id')->toArray();
+        $branch = new DmsSmBranchRepository(app());
 
         return [
+            'branchItems' => $branch->pluck([], null, null, 'szId', 'szName'),
             'btbItems' => ['' => __('crud.option.btbitems_placeholder')] + $btbItems->pluck('full_identity', 'reference_id')->toArray(),
             'btbDataOptions' => $btbDataOptions,
         ];
