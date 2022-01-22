@@ -98,7 +98,7 @@ class DebitCreditNoteDataTable extends DataTable
             ->minifiedAjax()
             ->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')])
             ->parameters([
-                'dom' => 'Brtip',
+                'dom' => '<"row" <"col-md-6"B><"col-md-6 text-right"l>>rtip',
                 'stateSave' => true,
                 'order' => [[0, 'desc']],
                 'buttons' => $buttons,

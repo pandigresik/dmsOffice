@@ -66,7 +66,7 @@ class InvoiceSubmitDataTable extends InvoiceDataTable
             ->minifiedAjax()
             ->initComplete('function( settings, json ){ $(this).find(\'[data-toggle=tooltip]\').tooltip()}')
             ->parameters([
-                'dom' => 'Brtip',
+                'dom' => '<"row" <"col-md-6"B><"col-md-6 text-right"l>>rtip',
                 'stateSave' => true,
                 'order' => [[0, 'desc']],
                 'buttons' => $buttons,
