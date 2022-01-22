@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Accounting;
 
 use App\DataTables\Accounting\AccountBalanceDataTable;
-use App\Http\Requests\Accounting;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateAccountBalanceRequest;
 use App\Http\Requests\Accounting\UpdateAccountBalanceRequest;
 use App\Repositories\Accounting\AccountBalanceRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class AccountBalanceController extends AppBaseController
 {
-    /** @var  AccountBalanceRepository */
+    /** @var AccountBalanceRepository */
     protected $repository;
 
     public function __construct()
@@ -25,7 +23,6 @@ class AccountBalanceController extends AppBaseController
     /**
      * Display a listing of the AccountBalance.
      *
-     * @param AccountBalanceDataTable $accountBalanceDataTable
      * @return Response
      */
     public function index(AccountBalanceDataTable $accountBalanceDataTable)
@@ -46,8 +43,6 @@ class AccountBalanceController extends AppBaseController
     /**
      * Store a newly created AccountBalance in storage.
      *
-     * @param CreateAccountBalanceRequest $request
-     *
      * @return Response
      */
     public function store(CreateAccountBalanceRequest $request)
@@ -64,7 +59,7 @@ class AccountBalanceController extends AppBaseController
     /**
      * Display the specified AccountBalance.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class AccountBalanceController extends AppBaseController
     /**
      * Show the form for editing the specified AccountBalance.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class AccountBalanceController extends AppBaseController
     /**
      * Update the specified AccountBalance in storage.
      *
-     * @param  int              $id
-     * @param UpdateAccountBalanceRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class AccountBalanceController extends AppBaseController
     /**
      * Remove the specified AccountBalance from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class AccountBalanceController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model AccountBalance from storage.         
+     * Provide options item based on relationship model AccountBalance from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

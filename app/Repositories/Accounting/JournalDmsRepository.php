@@ -57,6 +57,9 @@ class JournalDmsRepository extends BaseRepository
                 case 'JBL':
                     $this->model->jurnalPembelian($input);
                 break;
+                case 'NRC':
+                    $this->model->jurnalNeraca($input);
+                break;
                 default:
             }
             $this->model->getConnection()->commit();

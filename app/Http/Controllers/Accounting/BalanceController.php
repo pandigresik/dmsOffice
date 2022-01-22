@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Accounting;
 
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Accounting\BalanceRepository;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Response;
 
@@ -20,27 +19,25 @@ class BalanceController extends AppBaseController
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {            
-
-            $endDate = createLocalFormatDate($request->get('ref'))->format('Y-m-d');
+        if ($request->ajax()) {
+            $endDateObj = createLocalFormatDate($request->get('ref'));
+            $endDate = $endDateObj->format('Y-m-d');
             $startDate = substr($endDate, 0, 8).'01';
-            $datas = $this->getRepositoryObj()->list($startDate,$endDate);
+            $datas = $this->getRepositoryObj()->list($startDate, $endDate);
+            $currentMonth = $endDateObj->format('M');
+            $previousMonth = $endDateObj->subMonth()->format('M');
 
             return view('accounting.balance.list')
                 ->with($datas)
-                ->with(['endDate' => $endDate])
+                ->with(['endDate' => $endDate, 'currentMonth' => $currentMonth, 'previousMonth' => $previousMonth])
             ;
         }
 
         $downloadXls = $request->get('download_xls');
         if ($downloadXls) {
-            $period = explode(' - ', $request->get('ref'));
+            $endDateObj = createLocalFormatDate($request->get('period_range'));
 
-            $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
-            $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-            $datas = $this->getRepositoryObj()->list($startDate, $endDate);
-
-            return $this->exportExcel($startDate, $endDate, $datas);
+            return $this->exportExcel($endDateObj);
         }
 
         return view('accounting.balance.index')->with($this->getOptionItems());
@@ -59,10 +56,13 @@ class BalanceController extends AppBaseController
         ];
     }
 
-    private function exportExcel($startDate, $endDate, $collection)
+    private function exportExcel($endDateObj)
     {
-        $modelEksport = '\\App\Exports\\Template\\Sales\\RekapDiscountsExport';
-        $fileName = 'rekap_discount_'.$startDate.'_'.$endDate;
+        $endDate = $endDateObj->format('Y-m-d');
+        $startDate = substr($endDate, 0, 8).'01';        
+        $collection = $this->getRepositoryObj()->list($startDate, $endDate);
+        $modelEksport = '\\App\Exports\\Template\\Accounting\\BalanceExport';
+        $fileName = 'neraca_'.$endDate;
 
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }

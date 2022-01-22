@@ -1,8 +1,8 @@
 <?php
 
 return array (
-  'singular' => 'Saldo Akun',
-  'plural' => 'Saldo Akun',
+  'singular' => 'Saldo Awal Akun',
+  'plural' => 'Saldo Awal Akun',
   'fields' => 
   array (
     'id' => 'Id',
@@ -10,5 +10,6 @@ return array (
     'name' => 'Nama',
     'amount' => 'Jumlah',
     'balance_date' => 'tanggal',
+    'period' => 'Periode'
   ),
 );

@@ -63,7 +63,7 @@ class JournalDmsController extends AppBaseController
 
         return [
             'branchItems' => ['' => 'Pilih depo'] + $branch->pluck([], null, null, 'szId', 'szName'),
-            'typeItems' => ['' => 'Pilih tipe'] + ['JBL' => 'Pembelian','JPK' => 'Penjualan Kredit', 'JPT' => 'Penjualan Tunai', 'JBY' => 'Beban Biaya'],
+            'typeItems' => ['' => 'Pilih tipe'] + ['JBL' => 'Pembelian','JPK' => 'Penjualan Kredit', 'JPT' => 'Penjualan Tunai', 'JBY' => 'Beban Biaya', 'NRC' => 'Neraca'],
         ];
     }
 }

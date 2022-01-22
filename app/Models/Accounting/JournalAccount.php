@@ -153,6 +153,24 @@ class JournalAccount extends Model
         $this->fromQuery($sql);
     }
 
+    public function jurnalNeraca($input){
+        list($startDate, $endDate) = explode('__', $input['period_range']);
+        $branchId = $input['branch_id'];
+        $type = $input['type'];
+        $sql = <<<SQL
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type) 
+            SELECT szAccountId, account.name, decDebit, decCredit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}' 
+            FROM dms_cas_cashbalance 
+            join account on account.code = dms_cas_cashbalance.szAccountId
+            join report_setting_account_detail on report_setting_account_detail.account_id = account.id
+            join report_setting_account on report_setting_account.id = report_setting_account_detail.report_setting_account_id 
+                and report_setting_account.group_type = 'NRC'
+            where szBranchId = '{$branchId}'             
+            and dtmDoc between '{$startDate}' and '{$endDate}'            
+        SQL;
+        $this->fromQuery($sql);
+    }
+
     public function jurnalPenjualanTunai($input){        
         $settingCompany = Setting::pluck('value', 'code');        
         $kodeGalon = "'".implode("','",explode(',',$settingCompany["kode_galon"]))."'";

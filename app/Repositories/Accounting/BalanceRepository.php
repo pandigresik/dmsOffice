@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Accounting;
 
+use App\Models\Accounting\AccountBalance;
 use App\Models\Accounting\JournalAccount;
 use App\Models\Accounting\ReportSettingAccount;
 use App\Repositories\BaseRepository;
@@ -44,14 +45,15 @@ class BalanceRepository extends BaseRepository
         $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(balance) as balance')
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
-            ->whereIn('account_id', $listAccount)
+            ->whereIn('account_id', $this->balanceAccountCode($listAccount))
             ->groupBy('account_id')
             ->get()
             ->keyBy('account_id')
         ;
 
         return [
-            'data' => $data,     
+            'data' => $data,
+            'saldo' => $this->getSaldo($startDate, $listAccount),     
             'listAccount' => $listAccount,
         ];
     }    
@@ -61,5 +63,22 @@ class BalanceRepository extends BaseRepository
         return ReportSettingAccount::with(['details' => function ($q) {
             $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
         }])->orderBy('code')->whereGroupType($this->groupCode)->get();
+    }
+
+    private function getSaldo($startDate, $listAccount)
+    {
+        
+        return AccountBalance::whereBalanceDate($startDate)
+                ->whereIn('code', $this->balanceAccountCode($listAccount))
+                ->get()->keyBy('code');
+    }
+
+    private function balanceAccountCode($listAccount){
+        $result = [];
+        $listAccount->map(function($item) use (&$result){
+            $result = array_merge($result, $item->details->pluck('code')->toArray());
+        });
+
+        return $result;
     }
 }
