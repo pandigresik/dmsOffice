@@ -3,9 +3,7 @@
         'NRC-02' => 'Pendapatan (Beban) lain-lain'
     ];
     $totalGroup = [];
-    $saldoGroup = [];       
-    $pendapatanUsaha = 1;
-    $hppPabrik = 0;
+    $saldoGroup = [];    
 @endphp
 <table class="table table-bordered">
     <thead class="text-center">
@@ -32,7 +30,7 @@
             @foreach ($group->details as $account)
                 @php
                     $saldoAwal = isset($saldo[$account->code]) ? $saldo[$account->code]->getRawOriginal('amount') : 0;
-                    $amount = $saldoAwal + $data[$account->code]->balance ?? 0;
+                    $amount = $saldoAwal + (isset($data[$account->code]) ? $data[$account->code]->balance : 0);
                     $totalGroup[$group->code] += $amount;                    
                     $saldoGroup[$group->code] += $saldoAwal;
                     $selisih = $amount - $saldoAwal;

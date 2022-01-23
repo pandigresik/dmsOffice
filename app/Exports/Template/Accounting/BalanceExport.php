@@ -24,10 +24,9 @@ class BalanceExport implements FromView
     }
 
     public function view(): View
-    {
-        $endDateObj = \Carbon\Carbon::createFromFormat('Y-m-d', $this->getStartDate());
-        $currentMonth = $endDateObj->format('M');
-        $previousMonth = $endDateObj->subMonth()->format('M');
+    {        
+        $currentMonth = \Carbon\Carbon::createFromFormat('Y-m-d', $this->getStartDate())->format('M');
+        $previousMonth = \Carbon\Carbon::createFromFormat('Y-m-d', $this->getStartDate())->subDay()->format('M');
         return view('accounting.balance.list', [
             'data' => $this->collection['data'],
             'saldo' => $this->collection['saldo'],

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Accounting;
 
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Accounting\BalanceRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Response;
 
@@ -23,9 +24,10 @@ class BalanceController extends AppBaseController
             $endDateObj = createLocalFormatDate($request->get('ref'));
             $endDate = $endDateObj->format('Y-m-d');
             $startDate = substr($endDate, 0, 8).'01';
+            $startDateObj = Carbon::createFromFormat('Y-m-d', $startDate);
             $datas = $this->getRepositoryObj()->list($startDate, $endDate);
             $currentMonth = $endDateObj->format('M');
-            $previousMonth = $endDateObj->subMonth()->format('M');
+            $previousMonth = $startDateObj->subDay()->format('M');
 
             return view('accounting.balance.list')
                 ->with($datas)
