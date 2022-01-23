@@ -50,7 +50,7 @@ class AccountBalance extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $connection = "mysql_sejati";
+    
 
     public $fillable = [
         'code',
@@ -75,9 +75,7 @@ class AccountBalance extends Model
      *
      * @var array
      */
-    public static $rules = [
-        'code' => 'required|string|max:10',
-        'amount' => 'required|numeric',
+    public static $rules = [        
         'balance_date' => 'required'
     ];
 
@@ -95,5 +93,43 @@ class AccountBalance extends Model
 
     //     return localNumberFormat($value);
     // }
+
+    public function copyBalance($balanceDate){
+        $lastDayPreviousMonth = \Carbon\Carbon::createFromFormat('Y-m-d', $balanceDate)->subDay()->format('Y-m-d');
+        $firstDayPreviousMonth = substr($lastDayPreviousMonth, 0, 8).'01';        
+
+        $sql = <<<SQL
+            insert into {$this->getTable()} (code, amount, balance_date) 
+            SELECT ac.code
+                , coalesce((select amount from account_balance where account_balance.code = ac.code and balance_date = '{$firstDayPreviousMonth}'),0) + (select coalesce(sum(balance),0) from journal_account where journal_account.account_id = ac.code and date between '{$firstDayPreviousMonth}' and '{$lastDayPreviousMonth}')
+                , '{$balanceDate}' as balance_date
+            FROM report_setting_account rst
+            join report_setting_account_detail rstd on rstd.report_setting_account_id = rst.id            
+            join account ac on ac.id = rstd.account_id
+            where rst.group_type in ('NRC')            
+        SQL;
+        $this->fromQuery($sql);
+    }
+
+    private function listAccount()
+    {
+        return ReportSettingAccount::with(['details' => function ($q) {
+            $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
+        }])->orderBy('code')->whereGroupType('NRC')->get();
+    }    
+
+    private function balanceAccountCode(){
+        $result = [];
+        $listAccount = $this->listAccount();
+        $listAccount->map(function($item) use (&$result){
+            $result = array_merge($result, $item->details->pluck('code')->toArray());
+        });
+
+        return $result;
+    }
     
+    public function getBalanceDateAttribute($value){
+
+        return localFormatDate($value);
+    }
 }

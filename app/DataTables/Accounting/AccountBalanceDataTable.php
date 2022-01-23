@@ -13,7 +13,8 @@ class AccountBalanceDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        'account.name' => \App\DataTables\FilterClass\RelationContainKeyword::class
+        'account.name' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'balance_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -35,7 +36,11 @@ class AccountBalanceDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', 'accounting.account_balances.datatables_actions');
+        $dataTable->editColumn('amount', function($item){
+
+            return '<div class="text-right">'.localNumberFormat($item['amount']).'</div>';
+        })->escapeColumns([]);
+        return $dataTable; //->addColumn('action', 'accounting.account_balances.datatables_actions');
     }
 
     /**
@@ -113,7 +118,7 @@ class AccountBalanceDataTable extends DataTable
             'code' => new Column(['title' => __('models/accountBalances.fields.code'), 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
             'name' => new Column(['title' => __('models/accountBalances.fields.name'), 'data' => 'account.name', 'searchable' => true, 'elmsearch' => 'text']),
             'amount' => new Column(['title' => __('models/accountBalances.fields.amount'), 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'text']),
-            'balance_date' => new Column(['title' => __('models/accountBalances.fields.balance_date'), 'data' => 'balance_date', 'searchable' => true, 'elmsearch' => 'date'])
+            'balance_date' => new Column(['title' => __('models/accountBalances.fields.balance_date'), 'data' => 'balance_date', 'searchable' => true, 'elmsearch' => 'daterange'])
         ];
     }
 

@@ -31,9 +31,9 @@
             
             @foreach ($group->details as $account)
                 @php
-                    $amount = $data[$account->code]->balance ?? 0;
-                    $totalGroup[$group->code] += $amount;
                     $saldoAwal = isset($saldo[$account->code]) ? $saldo[$account->code]->getRawOriginal('amount') : 0;
+                    $amount = $saldoAwal + $data[$account->code]->balance ?? 0;
+                    $totalGroup[$group->code] += $amount;                    
                     $saldoGroup[$group->code] += $saldoAwal;
                     $selisih = $amount - $saldoAwal;
                     $prosenSelisih = $amount > 0 ? ($selisih / $amount * 100) : 0;

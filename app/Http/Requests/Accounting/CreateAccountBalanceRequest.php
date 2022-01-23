@@ -16,7 +16,7 @@ class CreateAccountBalanceRequest extends FormRequest
      * @return bool
      */
     public function authorize()
-    {
+    {        
         $permissionName = 'account_balance-create';
         return \Auth::user()->can($permissionName);
     }

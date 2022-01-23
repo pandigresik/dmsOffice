@@ -39,4 +39,29 @@ class AccountBalanceRepository extends BaseRepository
     {
         return AccountBalance::class;
     }
+
+    public function create($input)
+    {
+        $this->model->getConnection()->beginTransaction();
+
+        try {            
+            $startDate = $input['balance_date'];
+            $this->removePreviousData($startDate);
+            $this->model->copyBalance($startDate);
+            $this->model->getConnection()->commit();
+            $this->model->flushCache();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            $this->model->getConnection()->rollBack();
+
+            return $e->getMessage();
+        }
+
+        return $this->model;
+    }
+
+    private function removePreviousData($startDate)
+    {        
+        $this->model->whereBalanceDate($startDate)->forceDelete();
+    }
 }

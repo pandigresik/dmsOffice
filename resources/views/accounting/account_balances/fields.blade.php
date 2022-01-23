@@ -10,6 +10,7 @@
     <script type="text/javascript">
         $(function(){
             const minYear = parseInt(moment().format('YYYY')) - 2
+            const maxYear = parseInt(moment().format('YYYY')) + 2
             $('#balance_date').daterangepicker({                
                 locale: {
                     format: 'DD MMM YYYY'
@@ -18,6 +19,7 @@
                 timePicker: false,
                 showDropdowns: true,
                 minYear: minYear,
+                maxYear: maxYear,
                 autoApply: true,
                 isInvalidDate: function(date) {                    
                     //if (date.day() == 0 || date.day() == 6)

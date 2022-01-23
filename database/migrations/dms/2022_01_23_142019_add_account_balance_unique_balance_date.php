@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccountBalance extends Migration
+class AddAccountBalanceUniqueBalanceDate extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,8 @@ class CreateAccountBalance extends Migration
      * @return void
      */
     public function up()
-    {
+    {        
+        Schema::dropIfExists('account_balance');
         Schema::create('account_balance', function (Blueprint $table) {
             $table->id();
             $table->string('code', 10);
