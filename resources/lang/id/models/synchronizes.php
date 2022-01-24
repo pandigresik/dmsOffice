@@ -1,11 +1,12 @@
 <?php
 
 return array (
-  'singular' => 'Synchronize',
-  'plural' => 'Synchronizes',
+  'singular' => 'Sinkronisasi',
+  'plural' => 'Sinkronisasi',
   'fields' => 
   array (
     'id' => 'Id',
-    'table_name' => 'Table Name',
+    'table_name' => 'Nama Tabel',
+    'updated_at' => 'Diubah pada'
   ),
 );

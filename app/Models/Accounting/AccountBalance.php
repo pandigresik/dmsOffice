@@ -103,10 +103,8 @@ class AccountBalance extends Model
             SELECT ac.code
                 , coalesce((select amount from account_balance where account_balance.code = ac.code and balance_date = '{$firstDayPreviousMonth}'),0) + (select coalesce(sum(balance),0) from journal_account where journal_account.account_id = ac.code and date between '{$firstDayPreviousMonth}' and '{$lastDayPreviousMonth}')
                 , '{$balanceDate}' as balance_date
-            FROM report_setting_account rst
-            join report_setting_account_detail rstd on rstd.report_setting_account_id = rst.id            
-            join account ac on ac.id = rstd.account_id
-            where rst.group_type in ('NRC')            
+            FROM account ac
+            where ac.has_balance = 1
         SQL;
         $this->fromQuery($sql);
     }

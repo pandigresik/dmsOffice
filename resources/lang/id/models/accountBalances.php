@@ -9,7 +9,7 @@ return array (
     'code' => 'COA',
     'name' => 'Nama',
     'amount' => 'Jumlah',
-    'balance_date' => 'tanggal',
+    'balance_date' => 'Tanggal',
     'period' => 'Periode'
   ),
 );
