@@ -49,7 +49,7 @@ class SalesReportRepository extends BaseRepository
 
     public function listRekap($startDate, $endDate, $branchId, $cash){
         return DmsSdDocdo::select(['dms_sd_docdoitem.szProductId','dms_inv_product.szName as szProductName'])
-            ->selectRaw('sum(dms_sd_docdoitem.decQty) as decQty, sum(dms_sd_docdoitem.decQty * dms_sd_docdoitemprice.decPrice) as amount,
+            ->selectRaw('sum(if(dms_sd_docdoitemprice.decPrice < 0,-1 * dms_sd_docdoitem.decQty,dms_sd_docdoitem.decQty)) as decQty, sum(dms_sd_docdoitem.decQty * dms_sd_docdoitemprice.decPrice) as amount,
                 sum(dms_sd_docdoitemprice.decDiscPrinciple) as decDiscPrinciple, sum(dms_sd_docdoitemprice.decDiscDistributor) as decDiscDistributor,sum(dms_sd_docdoitemprice.decDiscInternal) as decDiscInternal'
             )
             // ->join('dms_sm_branch','dms_sm_branch.szId','=','dms_sd_docdo.szBranchId')
