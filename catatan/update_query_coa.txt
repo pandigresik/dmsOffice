@@ -1,0 +1,141 @@
+insert into account (code, name,created_by, created_at)
+select x.code, trim(x.name),2,now() from (
+	select '110101' as code,'KAS BESAR' as name union all
+select '110102' as code,'KAS OPERASI' as name union all
+select '110201' as code,'BANK BCA DIREKSI' as name union all
+select '110201A' as code,'BANK CIMB DIREKSI' as name union all
+select '110210' as code,'BANK SEJATI 55' as name union all
+select '110212' as code,'BANK PUSAT PT' as name union all
+select '110301' as code,'HUB R/K PUSAT' as name union all
+select '110902' as code,'KAS KE KAS' as name union all
+select '130120' as code,'PIUTANG DAGANG RETAIL KREDIT' as name union all
+select '130121' as code,'PIUTANG DAGANG RETAIL TUNAI' as name union all
+select '130130' as code,'PIUTANG TIV' as name union all
+select '130131' as code,'PIUTANG PUSAT' as name union all
+select '130501' as code,'PIUTANG MSSUPPORT' as name union all
+select '130502' as code,'PIUTANG JAMSOSTEK' as name union all
+select '130504' as code,'PIUTANG KARYAWAN' as name union all
+select '130507' as code,'PIUTANG DIVISI ' as name union all
+select '140101' as code,'SEWA DI BAYAR DIMUKA' as name union all
+select '140301' as code,'BIAYA THR DIBAYAR DIMUKA' as name union all
+select '147001' as code,'BEBAN DIBAYAR DIMUKA' as name union all
+select '150101' as code,'PPN MASUKAN' as name union all
+select '160101' as code,'PERSEDIAAN' as name union all
+select '161101' as code,'PERSEDIAAN GUDANG TEMBOK' as name union all
+select '161201' as code,'PERSEDIAAN TAC' as name union all
+select '211001' as code,'HUTANG DAGANG TIV' as name union all
+select '211003' as code,'BIAYA YMHD-BUNGA MODAL KERJA' as name union all
+select '211011' as code,'BIAYA YMHD-GAJI DEWA ASTA NUSANTARA' as name union all
+select '211012' as code,'BIAYA YMHD-GAJI G0 CLEAN INDONESIA' as name union all
+select '211013' as code,'BIAYA YMHD-GAJI G0 CLEAN INDONESIA OB' as name union all
+select '211014' as code,'BIAYA YMHD-GAJI PAM' as name union all
+select '211015' as code,'BIAYA YMHD-GAJI SEMANGG1 3' as name union all
+select '211016' as code,'BIAYA YMHD-GAJI SEMANGG1 3 SECURITY' as name union all
+select '211017' as code,'BIAYA YMHD-GAJI SSS' as name union all
+select '211018' as code,'BIAYA YMHD-GAJI TWO WIN' as name union all
+select '211101' as code,'BIAYA YMHD-GAJI' as name union all
+select '211102' as code,'BIAYA YHMD-BBM' as name union all
+select '211103' as code,'BIAYA YMHD-INSENTIF' as name union all
+select '211104' as code,'BIAYA YMHD-ONGKOS ANGKUT' as name union all
+select '211105' as code,'BIAYA YMHD-JASA MANAGEMEN FEE' as name union all
+select '211201' as code,'HUTANG MS SUPPORT' as name union all
+select '211202' as code,'BIAYA YMHD-JAMSOSTEK' as name union all
+select '211203' as code,'HUTANG PUSAT' as name union all
+select '212001' as code,'PAJAK YMHD-PPN DN' as name union all
+select '213001' as code,'PPN KELUARAN' as name union all
+select '214001' as code,'PAJAK YMHD-PPh25' as name union all
+select '214002' as code,'PAJAK YMHD-PPh23' as name union all
+select '310706' as code,'REK.LISTRIK, TELP,PAM YMH DIBAYAR' as name union all
+select '311001' as code,'MODAL' as name union all
+select '311100' as code,'JAMINAN PELANGGAN' as name union all
+select '311101' as code,'LABA DITAHAN' as name union all
+select '311110' as code,'TITIPAN PELANGGAN' as name union all
+select '311113' as code,'TITIPAN KOPERASI' as name union all
+select '311114' as code,'TITIPAN JAMSOSTEK' as name union all
+select '311116' as code,'TITIPAN PELANGGAN MO' as name union all
+select '311117' as code,'TITIPAN PELANGGAN KE REK PT' as name union all
+select '311118' as code,'TITIPAN TOKO 55' as name union all
+select '311119' as code,'TITIPAN DENDA' as name union all
+select '311120' as code,'TITIPAN KLAIM' as name union all
+select '311201' as code,'LABA TAHUN TAHUN LALU' as name union all
+select '312002' as code,'LABA  TAHUN BERJALAN' as name union all
+select '312003' as code,'LABA BULAN BERJALAN' as name union all
+select '411001' as code,'PENJUALAN TUNAI' as name union all
+select '411002' as code,'PENJUALAN TUNAI GALON BOTOL' as name union all
+select '411003' as code,'PENJUALAN TUNAI PALLET' as name union all
+select '411011' as code,'POT PENJUALAN TUNAI TIV' as name union all
+select '411012' as code,'POT PENJUALAN TUNAI DISTRIBUTOR' as name union all
+select '411013' as code,'POT PENJUALAN TUNAI INTERNAL' as name union all
+select '411014' as code,'POT PENJUALAN TUNAI INTERNAL CN' as name union all
+select '411015' as code,'POT PENJUALAN TUNAI INTERNAL CASH BACK' as name union all
+select '411016' as code,'POT PENJUALAN TUNAI GALON BOTOL TIV' as name union all
+select '411017' as code,'POT PENJUALAN TUNAI GALON BOTOL DISTRIBUTOR' as name union all
+select '411018' as code,'POT PENJUALAN TUNAI GALON BOTOL INTERNAL' as name union all
+select '411101' as code,'PENJUALAN KREDIT' as name union all
+select '411102' as code,'PENJUALAN KREDIT GALON BOTOL' as name union all
+select '411103' as code,'PENJUALAN KREDIT PALLET' as name union all
+select '411111' as code,'POT PENJUALAN KREDIT TIV' as name union all
+select '411112' as code,'POT PENJUALAN KREDIT DISTRIBUTOR' as name union all
+select '411113' as code,'POT PENJUALAN KREDIT INTERNAL' as name union all
+select '411114' as code,'POT PENJUALAN KREDIT INTERNAL CN' as name union all
+select '411115' as code,'POT PENJUALAN KREDIT INTERNAL CASH BACK' as name union all
+select '411116' as code,'POT PENJUALAN KREDIT GALON BOTOL KREDIT TIV' as name union all
+select '411117' as code,'POT PENJUALAN KREDIT GALON BOTOL DISTRIBUTOR' as name union all
+select '411118' as code,'POT PENJUALAN KREDIT GALON BOTOL INTERNAL' as name union all
+select '510001' as code,'HPP' as name union all
+select '511001' as code,'PEMBELIAN' as name union all
+select '511002' as code,'PEMBELIAN GALLON BOTOL' as name union all
+select '511003' as code,'PEMBELIAN PALLET' as name union all
+select '811001' as code,'LEMBUR' as name union all
+select '811002' as code,'INCENTIVE' as name union all
+select '811003' as code,'BBM' as name union all
+select '811004' as code,'PEMELIHARAAN KENDARAAN' as name union all
+select '811005' as code,'PARKIR & TOL' as name union all
+select '811006' as code,'PAKET/PENGIRIMAN DOKUMEN' as name union all
+select '821000' as code,'PERLENGKAPAN KANTOR' as name union all
+select '821001' as code,'GAJI DAN TUNJANGAN' as name union all
+select '821002' as code,'JAMSOSTEK' as name union all
+select '821004' as code,'KONSUMSI' as name union all
+select '821005' as code,'PENGOBATAN' as name union all
+select '821006' as code,'THR/BONUS' as name union all
+select '821007' as code,'PPH PASAL 21' as name union all
+select '821015' as code,'PPH PASAL 25' as name union all
+select '822001' as code,'PEMELIHARAAN BANGUNAN' as name union all
+select '822005' as code,'PEMELIHARAAN INVENTARIS KANTOR' as name union all
+select '824001' as code,'LISTRIK' as name union all
+select '824002' as code,'ALAT TULIS & CETAKAN' as name union all
+select '824003' as code,'TELEPHONE/FAX/SPEEDY' as name union all
+select '824004' as code,'SUMBANGAN/IURAN & MAJALAH' as name union all
+select '824005' as code,'PERJALANAN DINAS' as name union all
+select '824006' as code,'TRAINNING/SEMINAR/RAPAT' as name union all
+select '824007' as code,'BIAYA RUMAH TANGGA' as name union all
+select '824008' as code,'SEWA KENDARAAN' as name union all
+select '824009' as code,'SEWA KANTOR' as name union all
+select '824010' as code,'SEWA INVENTARIS' as name union all
+select '824011' as code,'PEMBELIAN TRIPLEK' as name union all
+select '824013' as code,'PENGHAPUSAN PIUTANG' as name union all
+select '824019' as code,'PERIJINAN DAN PBB' as name union all
+select '824021' as code,'BIAYA STNK/KEUR/DISPENSASI' as name union all
+select '824033' as code,'BIAYA KEAMANAN DAN KEBERSIHAN' as name union all
+select '824037' as code,'BENDA POS/MATERAI' as name union all
+select '824041' as code,'AIR ( PAM )' as name union all
+select '824042' as code,'REPACKING , BONGKAR MUAT,dll' as name union all
+select '824045' as code,'SEWA JUGRACK' as name union all
+select '825002' as code,'BUNGA DAN BIAYA BANK' as name union all
+select '825010' as code,'BIAYA PENGANGKUTAN' as name union all
+select '825011' as code,'BIAYA  PAJAK' as name union all
+select '825012' as code,'ADMINISTRASI BANK' as name union all
+select '825013' as code,'BIAYA JASA MANAGEMENT' as name union all
+select '825015' as code,'REKRUITMEN KARYAWAN' as name union all
+select '825017' as code,'PEMUSNAHAN PALLET,TRIPLEK' as name union all
+select '829207' as code,'BIAYA PROMOSI DAGANG' as name union all
+select '829210' as code,'CANANG DAN DUPA' as name union all
+select '829220' as code,'CASH BACK ' as name union all
+select '929900' as code,'BEBAN LAIN-LAIN' as name
+)x where x.code not in (select code from account)
+
+
+INSERT INTO setting (code,description,value,created_by,updated_by,created_at,updated_at,deleted_at) VALUES
+('coa_cashback','code COA untuk cashback','829220',2,NULL,'2022-01-14 20:29:41.0','2022-01-14 20:29:41.0',NULL),
+('coa_biaya_promosi','code COA untuk biaya promosi','829207',2,NULL,'2022-01-14 20:29:41.0','2022-01-14 20:29:41.0',NULL),
+('coa_ppn_keluaran','code COA untuk ppn keluaran','213001',2,NULL,'2022-01-14 20:29:41.0','2022-01-14 20:29:41.0',NULL)

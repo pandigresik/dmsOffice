@@ -180,7 +180,7 @@ class BtbValidateController extends AppBaseController
         $branch = new DmsSmBranchRepository(app());
 
         return [
-            'branchItems' => $branch->pluck([], null, null, 'szId', 'szName'),
+            'branchItems' => ['' => 'Semua'] + $branch->pluck([], null, null, 'szId', 'szName'),
             'btbItems' => ['' => __('crud.option.btbitems_placeholder')] + $btbItems->pluck('full_identity', 'reference_id')->toArray(),
             'btbDataOptions' => $btbDataOptions,
         ];

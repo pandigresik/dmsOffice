@@ -12,11 +12,11 @@
         'required']) !!}
         </td>
         <td>
-            {!! Form::text('account_move_line[debit][]', $item->debit ?? '', ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' =>
+            {!! Form::text('account_move_line[debit][]', $item->debit ?? '0', ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' =>
         1, 'data-optionmask' => json_encode(config('local.number.currency'))]) !!}
         </td>
         <td>
-            {!! Form::text('account_move_line[credit][]', $item->credit ?? '', ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' =>
+            {!! Form::text('account_move_line[credit][]', $item->credit ?? '0', ['class' => 'form-control inputmask', 'required' => 'required', 'data-unmask' =>
         1, 'data-optionmask' => json_encode(config('local.number.currency'))]) !!}
         </td>
         <td>
@@ -43,7 +43,7 @@
             main.addRow($(_elm), reinitSelect2 )
         }
         function reinitSelect2(_newTr){
-            //_newTr.find('.select2').select2('destroy')
+            _newTr.find('.is-valid').removeClass('is-valid')
             main.initSelect(_newTr.closest('tbody'))
             _newTr.find('select,input').prop('required',1)
             main.initInputmask(_newTr)

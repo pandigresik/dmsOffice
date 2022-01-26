@@ -265,6 +265,7 @@ class BtbValidate extends Model
 
     private function btbSupplierSql($startDate, $endDate, $branchId)
     {
+        $whereBranchId = !empty($branchId) ? " and dsd.szBranchId = '{$branchId}'" : '';
         return <<<SQL
         select
             'BTB Supplier' as jenis,
@@ -295,12 +296,13 @@ class BtbValidate extends Model
         left join btb_validate bv on bv.doc_id = dsd.szDocId and bv.deleted_at is null
         where dsd.szDocStatus = 'Applied' and bv.reference_id is null        
             and dsd.dtmCreated between '{$startDate}' and '{$endDate}'
-            and dsd.szBranchId = '{$branchId}'
+            {$whereBranchId}            
         SQL;
     }
 
     private function btbDistribusiSql($startDate, $endDate, $branchId)
     {
+        $whereBranchId = !empty($branchId) ? " and dsd.szBranchId = '{$branchId}'" : '';
         return <<<SQL
         select
             'BTB Distribusi' as jenis,
@@ -329,7 +331,7 @@ class BtbValidate extends Model
         left join btb_validate bv on bv.doc_id = dsd.szDocId and bv.deleted_at is null
         where dsd.szDocStatus = 'Applied' and bv.reference_id is null        
         and dsd.dtmCreated between '{$startDate}' and '{$endDate}'
-        and dsd.szBranchId = '{$branchId}'
+        {$whereBranchId}
         SQL;
     }
 }

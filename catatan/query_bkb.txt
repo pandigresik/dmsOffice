@@ -1,9 +1,0 @@
-select dsd.szDocId as no_bkb, dsd.szBranchId, dsb.szName , dsd.szCompanyId , dsd.szCustomerId, dac.szName , dsd.szDocStatus, divi.szName as nama_barang 
-, dsdi.decQty , dsdi.intItemNumber, dsdip.decPrice, dsdip.decAmount , dsdip.decTax , dsdip.decDpp 
-from dms_sd_docdo dsd
-join dms_sd_docdoitem dsdi on dsdi.szDocId = dsd.szDocId
-join dms_sd_docdoitemprice dsdip on dsdip.szDocId = dsdi.szDocId and dsdip.intItemNumber = dsdi.intItemNumber 
-join dms_inv_product divi on divi.szId = dsdi.szProductId
-join dms_ar_customer dac on dac.szId = dsd.szCustomerId 
-join dms_sm_branch dsb on dsb.szId = dsd.szBranchId 
-where dsd.szDocStatus  = 'Applied' and dsd.bCash = 0

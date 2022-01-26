@@ -69,11 +69,7 @@ class JournalAccount extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-    
-
+    protected $dates = ['deleted_at'];    
     public $fillable = [
         'account_id',
         'branch_id',
@@ -129,6 +125,9 @@ class JournalAccount extends Model
     }
 
     public function jurnalBiaya($input){
+        $settingCompany = Setting::pluck('value', 'code');
+        $coaCashback = $settingCompany['coa_cashback']; // 829220
+        $coaBiayaPromosi = $settingCompany['coa_biaya_promosi']; // 829207
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
@@ -144,10 +143,10 @@ class JournalAccount extends Model
             and dtmDoc between '{$startDate}' and '{$endDate}'
             union all 
             -- account cashback
-            SELECT '829220', account.name, decCredit, decDebit, (-1 * decAmount), dtmDoc, szBranchId, szDocId, '{$type}' 
+            SELECT '{$coaCashback}', account.name, decCredit, decDebit, (-1 * decAmount), dtmDoc, szBranchId, szDocId, '{$type}' 
             FROM dms_cas_cashbalance 
             join account on account.code = dms_cas_cashbalance.szAccountId
-            where szBranchId = '{$branchId}' and szAccountId = '829207'
+            where szBranchId = '{$branchId}' and szAccountId = '{$coaBiayaPromosi}'
             and dtmDoc between '{$startDate}' and '{$endDate}'
         SQL;
         $this->fromQuery($sql);
@@ -172,7 +171,7 @@ class JournalAccount extends Model
     }
 
     public function jurnalPenjualanTunai($input){        
-        $settingCompany = Setting::pluck('value', 'code');        
+        $settingCompany = Setting::pluck('value', 'code');  
         $kodeGalon = "'".implode("','",explode(',',$settingCompany["kode_galon"]))."'";
         $coaPenjualanTunai = $settingCompany['coa_penjualan_tunai'];
         $coaGalonTunai  = $settingCompany["coa_galon_tunai"];
@@ -242,7 +241,7 @@ class JournalAccount extends Model
         $settingCompany = Setting::pluck('value', 'code');                
         $kodeGalon = "'".implode("','",explode(',',$settingCompany["kode_galon"]))."'";        
         $coaPenjualanKredit = $settingCompany["coa_penjualan_kredit"];
-        $coaGalonKredit = $settingCompany["coa_galon_kredit"];        
+        $coaGalonKredit = $settingCompany["coa_galon_kredit"];
         $coaPotDistKredit = $settingCompany["coa_pot_dist_kredit"];
         $coaPotIntKredit = $settingCompany["coa_pot_int_kredit"];
         $coaPotTivKredit = $settingCompany["coa_pot_tiv_kredit"];
@@ -304,6 +303,33 @@ class JournalAccount extends Model
                         
         SQL;
         $this->fromQuery($sql);
+    }
+
+    public function jurnalPPNKeluaran($input){
+        $settingCompany = Setting::pluck('value', 'code');                        
+        $coaGalonKredit = $settingCompany["coa_galon_kredit"];
+        $coaGalonTunai = $settingCompany["coa_galon_tunai"];
+        $coaPpnKeluaran = $settingCompany["coa_ppn_keluaran"];   // 213001
+        list($startDate, $endDate) = explode('__', $input['period_range']);
+        $branchId = $input['branch_id'];
+        $type = $input['type'];
+
+        $sql = <<<SQL
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type)
+            select '{$coaPpnKeluaran}' as account_id, name, (0.1 * debit) as debit, credit,(0.1 * balance) as balance,date, branch_id, reference, type
+            from journal_account 
+            where type = '{$type}' and branch_id = '{$branchId}' and date between '{$startDate}' and '{$endDate}'
+            and account_id not in ('{$coaGalonKredit}','{$coaGalonTunai}')
+        SQL;
+        $this->fromQuery($sql);
+
+        $sql = <<<SQL
+            update journal_account set debit = debit / 1.1, balance = balance / 1.1             
+            where type = '{$type}' and branch_id = '{$branchId}' and date between '{$startDate}' and '{$endDate}'
+            and account_id not in ('{$coaGalonKredit}','{$coaGalonTunai}','{$coaPpnKeluaran}')
+        SQL;
+        $this->fromQuery($sql);
+
     }
 
     public function jurnalPembelian($input){        
