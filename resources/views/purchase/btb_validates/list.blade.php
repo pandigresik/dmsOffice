@@ -50,7 +50,7 @@
                 <td>{{ $data->id_gudang }} - {{ $data->nama_gudang }}</td>                
                 <td>{{ $data->sj_pabrik }}</td>                
                 <td>{{ $data->nama_ekspedisi }}</td>
-                <td class="text-right">{{ $skip ? '' : localNumberFormat($data->shipping_cost) }}</td>
+                <td class="text-right">{{ $skip ? '' : $data->shipping_cost }}</td>
                 <td>{{ $data->nopol }}</td>
                 <td>
                     @if (!$skip)                                            
