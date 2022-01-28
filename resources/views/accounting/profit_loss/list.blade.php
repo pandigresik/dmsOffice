@@ -68,7 +68,7 @@
                 @endphp
                 <tr>
                     <td>{{ $account->code }}</td>
-                    <td>{{ $account->name }}</td>
+                    <td>{{ ucwords($account->name) }}</td>
                     @foreach ($branchMaster as $item)
                         @php                            
                             $pembagi = $totalPenjualan[$item->szId];

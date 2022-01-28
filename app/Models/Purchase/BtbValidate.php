@@ -3,10 +3,12 @@
 namespace App\Models\Purchase;
 
 use App\Models\BaseEntity as Model;
+use App\Models\Inventory\DmsInvCarrier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+
 
 /**
  * @SWG\Definition(
@@ -179,6 +181,16 @@ class BtbValidate extends Model
         }
 
         return $query->canInvoicedExpedition()->whereDmsInvCarrierId($supplierId)->whereNotIn('doc_id', $listDoc);
+    }
+
+    /**
+     * Get the ekspedisi that owns the BtbValidate
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function ekspedisi(): BelongsTo
+    {
+        return $this->belongsTo(DmsInvCarrier::class, 'szId', 'dms_inv_carrier_id');
     }
 
     public function insertBtbSupplier($btbs)

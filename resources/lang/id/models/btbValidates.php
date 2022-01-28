@@ -19,6 +19,7 @@ return array (
     'product_name' => 'Nama Barang',
     'period_range' => 'Periode',
     'price' => 'Harga',
-    'shipping_cost' => 'Ongkos Angkut'
+    'shipping_cost' => 'Ongkos Angkut',
+    'dmsInvCarrierId' => 'Ekspedisi'
   ),
 );

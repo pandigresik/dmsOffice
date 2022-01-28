@@ -4,26 +4,27 @@
             <tr>                
                 <th>Tanggal</th>
                 <th>No. CO</th>
-                <th>No. Dokumen</th>
-                <th>Nama Produk</th>
-                <th>Satuan</th>
+                <th>No. Dokumen</th>                                
                 <th>Jumlah</th>
                 <th>Harga</th>
-                <th>Total</th>                
+                <th>Total</th>          
             </tr>
         </thead>
         <tbody>
-            @forelse($invoice->invoiceLines as $data)
-            <tr>                
-                <td>{{ localFormatDate($data->btb_date) }}</td>
-                <td>{{ $data->co_reference }}</td>
-                <td>{{ $data->doc_id }}</td>
-                <td>{{ $data->product_name }}</td>
-                <td>{{ $data->uom_id }}</td>
-                <td class="text-right">{{ $data->qty }}</td>
-                <td class="text-right">{{ $data->price }}</td>                                          
-                <td class="text-right">{{ $data->amount_total }}</td>                                          
-            </tr>
+            @forelse($invoice->invoiceLines->groupBy('product_name') as $product_name => $products)
+                <tr>
+                    <td colspan="6" class="bg-info">{{ $product_name }}</td>
+                </tr>
+                @foreach ($products as $data)
+                    <tr>                
+                        <td>{{ localFormatDate($data->btb_date) }}</td>
+                        <td>{{ $data->co_reference }}</td>
+                        <td>{{ $data->doc_id }}</td>                                        
+                        <td class="text-right">{{ $data->qty }}</td>
+                        <td class="text-right">{{ $data->price }}</td>                                          
+                        <td class="text-right">{{ $data->amount_total }}</td>                                          
+                    </tr>    
+                @endforeach            
             @empty
             <tr>
                 <td colspan=10>Data tidak ditemukan</td>

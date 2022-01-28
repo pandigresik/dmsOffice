@@ -83,6 +83,17 @@
                 
             _form.closest('.bootbox').find('button.bootbox-close-button').click()
             
+        }
+
+        function expandRow(elm){
+            const _tbody = $(elm).closest('tbody')
+            if($(elm).hasClass('fa-plus')){
+                _tbody.find('tr.detail_group').fadeIn()
+            }else{
+                _tbody.find('tr.detail_group').fadeOut()
+            }
+            $(elm).toggleClass('fa-plus fa-minus')
+
         }        
     </script>
 

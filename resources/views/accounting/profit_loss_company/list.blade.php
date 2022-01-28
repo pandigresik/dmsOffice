@@ -67,7 +67,7 @@
                 @endphp                                
                 <tr>
                     <td>{{ $account->code }}</td>
-                    <td>{{ $account->name }}</td>
+                    <td>{{ ucwords($account->name) }}</td>
                     <td class="text-right">{{ localNumberAccountingFormat($data[$account->code]->balance ?? 0) }}</td>
                     <td class="text-right">{{ localNumberFormat(($data[$account->code]->balance ?? 0) / $pendapatanUsaha * 100) }}%</td>
                 </tr>

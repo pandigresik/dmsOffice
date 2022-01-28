@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('profitLoss', App\Http\Controllers\Accounting\ProfitLossController::class, ['as' => 'accounting'])->only(['index']);
         Route::resource('profitLossCompany', App\Http\Controllers\Accounting\ProfitLossCompanyController::class, ['as' => 'accounting'])->only(['index']);
         Route::resource('balance', App\Http\Controllers\Accounting\BalanceController::class, ['as' => 'accounting'])->only(['index']);
+        Route::resource('cashFlow', App\Http\Controllers\Accounting\CashFlowController::class, ['as' => 'accounting'])->only(['index']);
         Route::resource('reportSettingAccounts', App\Http\Controllers\Accounting\ReportSettingAccountController::class, ["as" => 'accounting'])->except(['show']);
         Route::resource('journalAccounts', App\Http\Controllers\Accounting\JournalAccountController::class, ["as" => 'accounting']);
         Route::resource('journalDms', App\Http\Controllers\Accounting\JournalDmsController::class, ["as" => 'accounting'])->only(['create','store']);

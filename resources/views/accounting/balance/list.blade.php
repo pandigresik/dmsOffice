@@ -38,7 +38,7 @@
                 @endphp                                
                 <tr>
                     <td>{{ $account->code }}</td>
-                    <td>{{ $account->name }}</td>
+                    <td>{{ ucwords($account->name) }}</td>
                     <td class="text-right">{{ localNumberAccountingFormat($amount) }}</td>
                     <td class="text-right">{{ localNumberAccountingFormat($saldoAwal) }}</td>
                     <td class="text-right">{{ localNumberFormat($prosenSelisih) }}%</td>

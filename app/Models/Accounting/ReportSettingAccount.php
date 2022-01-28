@@ -39,7 +39,8 @@ class ReportSettingAccount extends Model
     const GROUP_TYPE = [
         'LR' => 'Laba Rugi',
         'LRC' => 'Laba Rugi PT',
-        'NRC' => 'Neraca'        
+        'NRC' => 'Neraca',
+        'LCF' => 'Aliran Kas'       
     ];
 
     public $table = 'report_setting_account';
