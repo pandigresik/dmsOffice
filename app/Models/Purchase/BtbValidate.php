@@ -91,6 +91,7 @@ class BtbValidate extends Model
         'btb_date',
         'invoiced',
         'invoiced_expedition',
+        'dms_inv_carrier_id',
         'price',
     ];
 
@@ -190,7 +191,25 @@ class BtbValidate extends Model
      */
     public function ekspedisi(): BelongsTo
     {
-        return $this->belongsTo(DmsInvCarrier::class, 'szId', 'dms_inv_carrier_id');
+        return $this->belongsTo(DmsInvCarrier::class, 'dms_inv_carrier_id', 'szId');
+    }
+
+
+    public function updateEkspedisi($id, $input){
+        $ongkir = $this->getOngkir($input);        
+        $listBtb = $this->where(['doc_id' => $input['doc_id']])->get();        
+        foreach($listBtb as $model){
+            $model->shipping_cost = $ongkir;
+            $model->dms_inv_carrier_id = $input['dms_inv_carrier_id'];
+            $model->save();
+        }
+        
+        return $model;
+    }
+
+    private function getOngkir($input){
+
+        return 450000;
     }
 
     public function insertBtbSupplier($btbs)

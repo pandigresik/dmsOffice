@@ -20,6 +20,7 @@ return array (
     'period_range' => 'Periode',
     'price' => 'Harga',
     'shipping_cost' => 'Ongkos Angkut',
-    'dmsInvCarrierId' => 'Ekspedisi'
+    'dmsInvCarrierId' => 'Ekspedisi',
+    'dms_inv_carrier_id' => 'Ekspedisi'
   ),
 );

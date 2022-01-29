@@ -5,7 +5,7 @@
             
             @if ($dataCard['stateForm'] == 'update')                        
             <a class="card-header-action btn-close" href="#" 
-                onclick="$(this).closest('div.card').fadeOut();$(this).closest('div.card').find('.form-hidden').append('<input type=\'hidden\' name=\'tripEkspedisis[{{ $dataCard['iInternalId'] }}][stateForm]\' value=\'delete\' >');return false">
+                onclick="$(this).closest('div.card').fadeOut();$(this).closest('div.card').find('.form-hidden').append('<input type=\'hidden\' name=\'tripEkspedisis[{{ $dataCard['id'] }}][stateForm]\' value=\'delete\' >');return false">
                 <i class="fa fa-trash"></i>
             </a>
             @elseif ($dataCard['stateForm'] == 'insert')
@@ -14,7 +14,7 @@
             </a>    
             @else
             <a class="card-header-action btn-close" href="#" 
-                onclick="$(this).closest('div.card').fadeOut();$(this).closest('div.card').find('.form-hidden').append('<input type=\'hidden\' name=\'tripEkspedisis[{{ $dataCard['iInternalId'] }}][stateForm]\' value=\'delete\' >');return false">
+                onclick="$(this).closest('div.card').fadeOut();$(this).closest('div.card').find('.form-hidden').append('<input type=\'hidden\' name=\'tripEkspedisis[{{ $dataCard['id'] }}][stateForm]\' value=\'delete\' >');return false">
                 <i class="fa fa-trash"></i>
             </a>
             @endif
@@ -25,11 +25,14 @@
             <div class="card-content">
                 <div>Code - {{ $dataCard['code'] ?? '{tripCode}' }}</div>
                 <div>Nama - {{ $dataCard['name'] ?? '{tripName}' }}</div>                
-                <div>Jarak - {{ $dataCard['distance'] ?? '{tripDistance}' }}</div>                
-                <div>Harga - {{ $dataCard['price'] ?? '{tripPrice}' }}</div>
-                <div>Biaya Tambahan - {{ $dataCard['destination_additional_price'] ?? '{tripAdditionalPrice}' }}</div>
+                <div>Jarak - {{ $dataCard['distance'] ?? '{tripDistance}' }}</div>                                
                 <div>Jumlah - {{ $dataCard['quantity'] ?? '{tripQuantity}' }}</div>
                 <div>Jenis - {{ $dataCard['productCategories']['name'] ?? '{tripProductCategories}' }}</div>                
+                <hr>
+                <div>Tarif - {{ $dataCard['price'] ?? '{tripPrice}' }}</div>
+                <div>Biaya Tambahan - {{ $dataCard['origin_additional_price'] ?? '{tripOriginPrice}' }}</div>
+                <div>Biaya Tambahan Bongkar - {{ $dataCard['destination_additional_price'] ?? '{tripAdditionalPrice}' }}</div>
+                <div>Mulai Berlaku - {{ $dataCard['start_date'] ?? '{tripStartDate}' }}</div>
             </div>
             <div class="form-hidden collapse">{tripForm}</div>
         </div>

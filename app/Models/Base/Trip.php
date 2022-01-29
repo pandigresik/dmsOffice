@@ -208,4 +208,9 @@ class Trip extends Model
     {
         return implode(' | ', ['Code::'.$this->attributes['code'], 'Nama::'.$this->attributes['name'], 'Harga::'.$this->attributes['price'], 'Jarak::'.$this->attributes['distance'], 'Jumlah::'.$this->attributes['quantity'], 'Jenis::'.$this->productCategories->name]);
     }
+
+    public function getSimpleIdentityAttribute($value)
+    {
+        return implode(' | ', ['Code::'.$this->attributes['code'], 'Nama::'.$this->attributes['name'], 'Jarak::'.$this->attributes['distance'], 'Jumlah::'.$this->attributes['quantity'], 'Jenis::'.$this->productCategories->name]);
+    }
 }

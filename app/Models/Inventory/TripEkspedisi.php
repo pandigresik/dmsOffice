@@ -3,8 +3,10 @@
 namespace App\Models\Inventory;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @SWG\Definition(
@@ -86,4 +88,19 @@ class TripEkspedisi extends Model
     {
         return $this->belongsTo(\App\Models\Base\Trip::class, 'trip_id');
     }
+
+        /**
+     * Get all of the price for the Trip
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function price(): HasMany
+    {
+        return $this->hasMany(TripEkspedisiPrice::class,'trip_ekspedisi_id', 'id');
+    }
+
+    public function lastPrice(): HasOne
+    {
+        return $this->hasOne(TripEkspedisiPrice::class,'trip_ekspedisi_id', 'id')->latest();
+    }    
 }

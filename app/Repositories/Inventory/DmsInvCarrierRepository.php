@@ -122,11 +122,13 @@ class DmsInvCarrierRepository extends BaseRepository
                     $stateForm = $vc['stateForm'];
                     switch ($stateForm) {
                         case 'insert':
-                            $model->tripEkspedisis()->create($vc);
+                            $this->createEkspedisi($vc, $id);                            
 
                             break;
                         case 'delete':
-                            TripEkspedisi::where(['trip_id' => $key, 'dms_inv_carrier_id' => $id])->delete();
+                            $tripEkspedisi = TripEkspedisi::where(['trip_id' => $key, 'dms_inv_carrier_id' => $id])->first();
+                            $tripEkspedisi->price()->delete();
+                            $tripEkspedisi->delete();
 
                             break;
                     }
@@ -141,5 +143,14 @@ class DmsInvCarrierRepository extends BaseRepository
 
             return $e;
         }
+    }
+
+    private function createEkspedisi($data, $id){
+        $trip = TripEkspedisi::create([
+            'dms_inv_carrier_id' => $id,
+            'trip_id' => $data['trip_id']
+        ]);
+        unset($data['trip_id']);
+        $trip->price()->create($data);
     }
 }

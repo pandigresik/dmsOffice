@@ -99,6 +99,25 @@ class BtbValidateRepository extends BaseRepository
         }
     }
 
+    public function update($input, $id)
+    {
+        $this->model->getConnection()->beginTransaction();
+
+        try {                    
+            $this->model->getConnection()->commit();
+            $model = $this->model->updateEkspedisi($id, $input);            
+
+            // flush cache karena menggunakan from query untuk eksekusi statement insert into
+            $this->model->flushCache();
+
+            return $model;
+        } catch (\Exception $e) {            
+            Log::error($e);
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }
+    }
+
     /**
      * @param int $id
      *

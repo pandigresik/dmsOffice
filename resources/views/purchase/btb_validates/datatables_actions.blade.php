@@ -4,10 +4,11 @@
     <a href="{{ route('purchase.btbValidates.show', $id) }}" class='btn btn-ghost-success'>
        <i class="fa fa-eye"></i>
     </a>
-    <a href="{{ route('purchase.btbValidates.edit', $id) }}" class='btn btn-ghost-info'>
-       <i class="fa fa-edit"></i>
-    </a>
 -->
+    <a href="{{ route('purchase.btbValidates.edit', $id) }}" class='btn btn-ghost-info' title="update ekspedisi">
+       <i class="fa fa-truck"></i>
+    </a>
+
     {!! Form::button('<i class="fa fa-trash"></i>', [
         'type' => 'submit',
         'class' => 'btn btn-ghost-danger',

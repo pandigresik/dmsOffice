@@ -6,9 +6,11 @@ use App\DataTables\Purchase\BtbValidateDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateBtbValidateRequest;
 use App\Http\Requests\Purchase\UpdateBtbValidateRequest;
+use App\Models\Inventory\DmsInvCarrier;
 use App\Models\Purchase\BtbValidate;
 use App\Models\Purchase\ListBtbValidate;
 use App\Repositories\Base\DmsSmBranchRepository;
+use App\Repositories\Inventory\DmsInvCarrierRepository;
 use App\Repositories\Purchase\BtbValidateRepository;
 use Flash;
 use Illuminate\Http\Request;
@@ -107,15 +109,19 @@ class BtbValidateController extends AppBaseController
 
             return redirect(route('purchase.btbValidates.index'));
         }
-        $btbDataOptions = $this->getOptionItems();
-        $btbValidateArray = $btbValidate->toArray();
-        $btbValidateArray['no_btb'] = $btbValidate->doc_id;
-        $btbValidateArray['sj_pabrik'] = $btbValidate->ref_doc;
-        $btbValidateArray['decqty'] = $btbValidate->getRawOriginal('qty');
-        $btbDataOptions['btbDataOptions'][$btbValidate->reference_id] = $btbValidateArray;
-        $btbDataOptions['btbItems'][$btbValidate->reference_id] = implode(' | ', ['BTB::'.$btbValidate->doc_id, 'CO::'.$btbValidate->co_reference, 'Product::'.$btbValidate->product_name]);
+        // $btbDataOptions = $this->getOptionItems();
+        // $btbValidateArray = $btbValidate->toArray();
+        // $btbValidateArray['no_btb'] = $btbValidate->doc_id;
+        // $btbValidateArray['sj_pabrik'] = $btbValidate->ref_doc;
+        // $btbValidateArray['decqty'] = $btbValidate->getRawOriginal('qty');
+        // $btbDataOptions['btbDataOptions'][$btbValidate->reference_id] = $btbValidateArray;
+        // $btbDataOptions['btbItems'][$btbValidate->reference_id] = implode(' | ', ['BTB::'.$btbValidate->doc_id, 'CO::'.$btbValidate->co_reference, 'Product::'.$btbValidate->product_name]);
+        $carrier = new DmsInvCarrierRepository(app());
+        $btbDataOptions = [
+            'carrierItems' => $carrier->pluck([], null, null, 'szId', 'szName')
+        ];
 
-        return view('purchase.btb_validates.edit')->with('btbValidate', $btbValidate)->with($btbDataOptions);
+        return view('purchase.btb_validates.edit_ekspedisi')->with('btbValidate', $btbValidate)->with($btbDataOptions);
     }
 
     /**

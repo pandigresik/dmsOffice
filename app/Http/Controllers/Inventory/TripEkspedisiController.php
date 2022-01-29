@@ -32,8 +32,12 @@ class TripEkspedisiController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $trips = $this->getRepositoryObj()->with(['trip'])
-            ->all(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->map(function ($q) {
+        $trips = $this->getRepositoryObj()->with(['trip', 'lastPrice'])
+            ->allQuery()->where(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->get()->map(function ($q) {
+                $q->trip->price = $q->lastPrice->price;
+                $q->trip->origin_additional_price = $q->lastPrice->origin_additional_price;
+                $q->trip->destination_additional_price = $q->lastPrice->destination_additional_price;
+                $q->trip->start_date = localFormatDate($q->lastPrice->start_date);
                 return $q->trip;
             });
         $buttonView = view('inventory.dms_inv_carriers.partials.trip_button', ['json' => ['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')], 'url' => route('inventory.tripEkspedisis.create')])->render();
@@ -200,7 +204,7 @@ class TripEkspedisiController extends AppBaseController
                 ->whereDoesntHave('tripEkspedisis', function ($q) use ($carrierId) {
                     $q->where(['dms_inv_carrier_id' => $carrierId]);
                 })
-                ->with(['productCategories'])->get()->pluck('full_identity', 'id')->toArray(),
+                ->with(['productCategories'])->get()->pluck('simple_identity', 'id')->toArray(),
         ];
     }
 }

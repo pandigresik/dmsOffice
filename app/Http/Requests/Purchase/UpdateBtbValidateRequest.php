@@ -27,10 +27,11 @@ class UpdateBtbValidateRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
-        $rules = BtbValidate::$rules;
-
-        return $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
+    {        
+        return [
+            'dms_inv_carrier_id' => 'required',
+            'doc_id' => 'required'
+        ];
     }
 
     /**
