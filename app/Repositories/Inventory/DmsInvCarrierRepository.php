@@ -6,6 +6,7 @@ use App\Models\Inventory\ContactEkspedisi;
 use App\Models\Inventory\DmsInvCarrier;
 use App\Models\Inventory\LocationEkspedisi;
 use App\Models\Inventory\TripEkspedisi;
+use App\Models\Inventory\TripEkspedisiPrice;
 use App\Models\Inventory\VehicleEkspedisi;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
@@ -125,6 +126,10 @@ class DmsInvCarrierRepository extends BaseRepository
                             $this->createEkspedisi($vc, $id);                            
 
                             break;
+                        case 'update':
+                            $this->updatePrice($vc, $key);
+
+                            break;
                         case 'delete':
                             $tripEkspedisi = TripEkspedisi::where(['trip_id' => $key, 'dms_inv_carrier_id' => $id])->first();
                             $tripEkspedisi->price()->delete();
@@ -152,5 +157,13 @@ class DmsInvCarrierRepository extends BaseRepository
         ]);
         unset($data['trip_id']);
         $trip->price()->create($data);
+    }
+
+    private function updatePrice($data, $tripEkspedisiId){
+        $lastPrice = TripEkspedisiPrice::where('trip_ekspedisi_id',$tripEkspedisiId)->latest()->first();
+        $lastPrice->end_date = \Carbon\Carbon::createFromFormat('Y-m-d', $data['start_date'])->subDay();
+        $lastPrice->save();
+        $data['trip_ekspedisi_id'] = $tripEkspedisiId;
+        TripEkspedisiPrice::create($data);
     }
 }

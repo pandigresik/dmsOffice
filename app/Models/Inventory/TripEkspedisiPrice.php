@@ -110,4 +110,24 @@ class TripEkspedisiPrice extends Model
     {
         return $this->belongsTo(\App\Models\Inventory\TripEkspedisi::class, 'trip_ekspedisi_id');
     }
+
+    public function getStartDateAttribute($value){
+
+        return localFormatDate($value);
+    }
+
+    public function getPriceAttribute($value){
+
+        return localNumberFormat($value, 0);
+    }
+
+    public function getOriginAdditionalPriceAttribute($value){
+
+        return localNumberFormat($value, 0);
+    }
+
+    public function getDestinationAdditionalPriceAttribute($value){
+
+        return localNumberFormat($value, 0);
+    }
 }

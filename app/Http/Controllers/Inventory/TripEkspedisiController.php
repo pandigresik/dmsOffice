@@ -6,6 +6,7 @@ use App\DataTables\Inventory\TripEkspedisiDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateTripEkspedisiRequest;
 use App\Http\Requests\Inventory\UpdateTripEkspedisiRequest;
+use App\Models\Inventory\TripEkspedisiPrice;
 use App\Repositories\Base\TripRepository;
 use App\Repositories\Inventory\TripEkspedisiRepository;
 use Flash;
@@ -34,10 +35,11 @@ class TripEkspedisiController extends AppBaseController
     {
         $trips = $this->getRepositoryObj()->with(['trip', 'lastPrice'])
             ->allQuery()->where(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->get()->map(function ($q) {
-                $q->trip->price = $q->lastPrice->price;
-                $q->trip->origin_additional_price = $q->lastPrice->origin_additional_price;
-                $q->trip->destination_additional_price = $q->lastPrice->destination_additional_price;
-                $q->trip->start_date = localFormatDate($q->lastPrice->start_date);
+                $q->trip->price = $q->lastPrice->getRawOriginal('price');
+                $q->trip->price_log_id = $q->lastPrice->id;
+                $q->trip->origin_additional_price = $q->lastPrice->getRawOriginal('origin_additional_price');
+                $q->trip->destination_additional_price = $q->lastPrice->getRawOriginal('destination_additional_price');
+                $q->trip->start_date = $q->lastPrice->start_date;
                 return $q->trip;
             });
         $buttonView = view('inventory.dms_inv_carriers.partials.trip_button', ['json' => ['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')], 'url' => route('inventory.tripEkspedisis.create')])->render();
@@ -85,8 +87,7 @@ class TripEkspedisiController extends AppBaseController
      */
     public function show($id)
     {
-        $tripEkspedisi = $this->getRepositoryObj()->find($id);
-
+        $tripEkspedisi = $this->getRepositoryObj()->find($id);        
         if (empty($tripEkspedisi)) {
             Flash::error(__('models/tripEkspedisis.singular').' '.__('messages.not_found'));
 
@@ -97,7 +98,7 @@ class TripEkspedisiController extends AppBaseController
     }
 
     /**
-     * Show the form for editing the specified TripEkspedisi.
+     * Show the form for editing the specified trip ekspedisi price
      *
      * @param int $id
      *
@@ -105,15 +106,16 @@ class TripEkspedisiController extends AppBaseController
      */
     public function edit($id)
     {
-        $tripEkspedisi = $this->getRepositoryObj()->find($id);
-
-        if (empty($tripEkspedisi)) {
+        $tripEkspedisiPrice = TripEkspedisiPrice::with(['tripEkspedisi'])->find($id);
+        $idForm = $tripEkspedisiPrice->trip_ekspedisi_id;
+        if (empty($tripEkspedisiPrice)) {
             Flash::error(__('messages.not_found', ['model' => __('models/tripEkspedisis.singular')]));
 
             return redirect(route('inventory.tripEkspedisis.index'));
         }
 
-        return view('inventory.trip_ekspedisis.edit')->with('tripEkspedisi', $tripEkspedisi)->with($this->getOptionItems());
+        
+        return view('inventory.trip_ekspedisis.edit')->with(['tripEkspedisiPrice' =>  $tripEkspedisiPrice, 'idForm' => $idForm]);
     }
 
     /**
