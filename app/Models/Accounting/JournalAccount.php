@@ -308,23 +308,27 @@ class JournalAccount extends Model
     public function jurnalPPNKeluaran($input){
         $settingCompany = Setting::pluck('value', 'code');                        
         $coaGalonKredit = $settingCompany["coa_galon_kredit"];
-        $coaGalonTunai = $settingCompany["coa_galon_tunai"];
+        $coaGalonTunai = $settingCompany["coa_galon_tunai"];   
+        // $coaPenjualanKredit = $settingCompany["coa_penjualan_kredit"];  
+        // $coaPenjualanTunai = $settingCompany['coa_penjualan_tunai'];   
         $coaPpnKeluaran = $settingCompany["coa_ppn_keluaran"];   // 213001
+        $besarPPN = floatval($settingCompany["ppn_prosentase"]);
+        $pembagiPPN = floatval($settingCompany["ppn_pembagi"]);
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
 
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type)
-            select '{$coaPpnKeluaran}' as account_id, name, (0.1 * debit) as debit, credit,(0.1 * balance) as balance,date, branch_id, reference, type
+            select '{$coaPpnKeluaran}' as account_id, name, ({$besarPPN} * debit) as debit, credit,({$besarPPN} * balance) as balance,date, branch_id, reference, type
             from journal_account 
             where type = '{$type}' and branch_id = '{$branchId}' and date between '{$startDate}' and '{$endDate}'
-            and account_id not in ('{$coaGalonKredit}','{$coaGalonTunai}')
+            and account_id in ('{$coaGalonKredit}','{$coaGalonTunai}')
         SQL;
         $this->fromQuery($sql);
 
         $sql = <<<SQL
-            update journal_account set debit = debit / 1.1, balance = balance / 1.1             
+            update journal_account set debit = debit / {$pembagiPPN}, balance = balance / {$pembagiPPN}
             where type = '{$type}' and branch_id = '{$branchId}' and date between '{$startDate}' and '{$endDate}'
             and account_id not in ('{$coaGalonKredit}','{$coaGalonTunai}','{$coaPpnKeluaran}')
         SQL;
@@ -348,11 +352,21 @@ class JournalAccount extends Model
                     when di.szProductId in ({$kodeGalon}) then 'HPPGKP'
                     else 'HPPP'
                 end as coa,
-                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, di.decQty * (dip.decPrice - {$marginDpp}) as debit, 0 as credit, di.decQty * (dip.decPrice - {$marginDpp}) as amount, do.szDocId 
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 
+                case 
+                    when di.szProductId in ({$kodeGalon}) then di.decQty * abs(dip.decPrice)
+                    else di.decQty * (abs(dip.decPrice) - {$marginDpp})
+                end as debit,
+                0 as credit, 
+                case 
+                    when di.szProductId in ({$kodeGalon}) then di.decQty * dip.decPrice
+                    else di.decQty * (dip.decPrice - {$marginDpp})
+                end as amount,        
+                do.szDocId 
             from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
-            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
-            where do.szDocStatus = 'Applied' and dip.decPrice > $marginDpp
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId  -- and di.szOrderItemTypeId in ('JUAL','JAMINAN')
+            join dms_sd_docdoitemprice dip on dip.szDocId = di.szDocId and dip.intItemNumber = di.intItemNumber
+            where do.szDocStatus = 'Applied' and abs(dip.decPrice) > 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             )x 
@@ -370,7 +384,7 @@ class JournalAccount extends Model
                 , di.decQty * coalesce((select ppl.price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as amount
                 , do.szDocId 
             from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId and di.szOrderItemTypeId = 'JUAL' 
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber and dip.decPrice > 0
             where do.szDocStatus = 'Applied' 
                 and do.szBranchId = '{$branchId}'
