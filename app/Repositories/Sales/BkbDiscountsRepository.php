@@ -91,11 +91,11 @@ class BkbDiscountsRepository extends BaseRepository
         }, 'customer' => function($q){
             return $q->with(['address']);
         }, 'sales', 'depo'])->whereBetween('dtmDoc', [$startDate, $endDate])
-            ->join('dms_sd_docdoitem', function ($join) {
-                    $join->on('dms_sd_docdoitem.szDocId', '=', 'dms_sd_docdo.szDocId')
-                        ->on('dms_sd_docdoitem.intItemNumber', '=', \DB::raw('0'))
-                    ;
-                })->whereIn('dms_sd_docdoitem.szProductId', array_unique($discountProduct))
+            // ->join('dms_sd_docdoitem', function ($join) {
+            //         $join->on('dms_sd_docdoitem.szDocId', '=', 'dms_sd_docdo.szDocId')
+            //             ->on('dms_sd_docdoitem.intItemNumber', '=', \DB::raw('0'))
+            //         ;
+            //     })->whereIn('dms_sd_docdoitem.szProductId', array_unique($discountProduct))
             ->where('szBranchId', $branchId)
             ->where('szDocStatus', 'Applied')
             ->disableModelCaching()            
