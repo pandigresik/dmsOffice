@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateGetShippingCost extends Migration
 {
@@ -13,7 +14,8 @@ class CreateGetShippingCost extends Migration
      */
     public function up()
     {
-        DB::statement($this->createFunction());
+        DB::raw($this->dropFunction());
+        DB::raw($this->createFunction());
     }
 
     /**
@@ -23,14 +25,12 @@ class CreateGetShippingCost extends Migration
      */
     public function down()
     {
-        DB::statement($this->dropFunction());
+        DB::raw($this->dropFunction());
     }
 
     private function createFunction(){
-        $sql = <<<SQL
-            DROP FUNCTION IF EXISTS getShippingCost;
-            DELIMITER $$
-            $$
+        return <<<SQL
+            DELIMITER $$            
             CREATE FUNCTION getShippingCost(btbDate date, ekspedisiId varchar(15) , supplierId varchar(15), warehouseId varchar(15), productId varchar(15)) RETURNS decimal(15,2)
                 DETERMINISTIC
             BEGIN
@@ -50,7 +50,7 @@ class CreateGetShippingCost extends Migration
     }
 
     private function dropFunction(){
-        $sql = <<<SQL
+        return <<<SQL
             DROP FUNCTION IF EXISTS getShippingCost;            
         SQL;
     }
