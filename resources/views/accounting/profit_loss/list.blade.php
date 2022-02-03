@@ -4,7 +4,8 @@
         'LR-06' => 'Beban Usaha',
         'LR-07' => 'Pendapatan (Beban) lain-lain',
     ];
-    
+    $plusAccount = ['919900'];
+    $minusAccount = ['929900'];
 @endphp
 <table class="table table-bordered">
     <thead class="text-center">
@@ -40,7 +41,19 @@
             @php                
                 foreach ($branchMaster as $item) {
                 $summaryBranch[$item->szId][$group->code] = 0;
-                    foreach ($group->details as $account) {                    
+                    foreach ($group->details as $account) {
+                        if(in_array($account->code,$plusAccount)){
+                            if(isset($dataBranch[$item->szId][$account->code])){
+                                $dataBranch[$item->szId][$account->code]->balance = abs($dataBranch[$item->szId][$account->code]->balance ?? 0);
+                            }
+                            
+                        }
+                        if(in_array($account->code,$minusAccount)){
+                            if(isset($dataBranch[$item->szId][$account->code])){
+                                $dataBranch[$item->szId][$account->code]->balance = -1 * ($dataBranch[$item->szId][$account->code]->balance ?? 0);
+                            }
+                            
+                        }                    
                         $summaryBranch[$item->szId][$group->code] += $dataBranch[$item->szId][$account->code]->balance ?? 0;
                     }                    
                 }               

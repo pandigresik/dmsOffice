@@ -384,7 +384,7 @@ class JournalAccount extends Model
                 , di.decQty * coalesce((select ppl.price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as amount
                 , do.szDocId 
             from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId and di.szOrderItemTypeId = 'JUAL' 
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId -- and di.szOrderItemTypeId = 'JUAL' 
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber and dip.decPrice > 0
             where do.szDocStatus = 'Applied' 
                 and do.szBranchId = '{$branchId}'
