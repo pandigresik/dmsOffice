@@ -200,31 +200,34 @@ class JournalAccount extends Model
             union all
             -- potongan distributor
             select '{$coaPotDistTunai}' as coa,
-                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, dip.decDiscDistributor as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscDistributor) as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
-            where do.szDocStatus = 'Applied' and dip.decDiscDistributor > 0  and do.bCash = 1
+            where do.szDocStatus = 'Applied' and abs(dip.decDiscDistributor) > 0  and do.bCash = 1
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             union all
             -- potongan internal
             select '{$coaPotIntTunai}' as coa,
-                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, dip.decDiscInternal as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscInternal) as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
-            where do.szDocStatus = 'Applied' and dip.decDiscInternal > 0  and do.bCash = 1 
+            where do.szDocStatus = 'Applied' and abs(dip.decDiscInternal) > 0  and do.bCash = 1 
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             -- potongan TIV
             union all
             select '{$coaPotTivTunai}' as coa,
-                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
+                -- do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
+                    do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscPrinciple) as credit, -1 * dip.decDiscPrinciple as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
-            join bkb_discount_details bkd on bkd.szDocId = do.szDocId and bkd.szProductId = di.szProductId and bkd.szBranchId = '{$branchId}'
-            where do.szDocStatus = 'Applied' and do.bCash = 1
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            -- join bkb_discount_details bkd on bkd.szDocId = do.szDocId and bkd.szProductId = di.szProductId and bkd.szBranchId = '{$branchId}'
+            -- where do.szDocStatus = 'Applied' and do.bCash = 1
+             where do.szDocStatus = 'Applied' and do.bCash = 1 and abs(dip.decDiscPrinciple) > 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'            
             )x 
@@ -268,31 +271,34 @@ class JournalAccount extends Model
             union all
             -- potongan distributor
             select '{$coaPotDistKredit}' as coa,
-                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, dip.decDiscDistributor as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscDistributor) as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
-            where do.szDocStatus = 'Applied' and dip.decDiscDistributor > 0  and do.bCash = 0
+            where do.szDocStatus = 'Applied' and abs(dip.decDiscDistributor) > 0  and do.bCash = 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             union all
             -- potongan internal
             select '{$coaPotIntKredit}' as coa,
-                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, dip.decDiscInternal as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
+                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscInternal) as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
-            where do.szDocStatus = 'Applied' and dip.decDiscInternal > 0  and do.bCash = 0
+            where do.szDocStatus = 'Applied' and abs(dip.decDiscInternal) > 0  and do.bCash = 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             -- potongan TIV
             union all
             select '{$coaPotTivKredit}' as coa,
-                do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
+              --  do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
+                  do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscPrinciple) as credit, -1 * dip.decDiscPrinciple as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
-            join bkb_discount_details bkd on bkd.szDocId = do.szDocId and bkd.szProductId = di.szProductId and bkd.szBranchId = '{$branchId}'
-            where do.szDocStatus = 'Applied' and do.bCash = 0
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            -- join bkb_discount_details bkd on bkd.szDocId = do.szDocId and bkd.szProductId = di.szProductId and bkd.szBranchId = '{$branchId}'
+            -- where do.szDocStatus = 'Applied' and do.bCash = 0
+            where do.szDocStatus = 'Applied' and do.bCash = 0 and abs(dip.decDiscPrinciple) > 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             )x 
@@ -312,8 +318,8 @@ class JournalAccount extends Model
         // $coaPenjualanKredit = $settingCompany["coa_penjualan_kredit"];  
         // $coaPenjualanTunai = $settingCompany['coa_penjualan_tunai'];   
         $coaPpnKeluaran = $settingCompany["coa_ppn_keluaran"];   // 213001
-        $besarPPN = floatval($settingCompany["ppn_prosentase"]);
-        $pembagiPPN = floatval($settingCompany["ppn_pembagi"]);
+        $besarPPN = $settingCompany['ppn_prosentase'];
+        $pembagiPPN = $settingCompany["ppn_pembagi"];
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
@@ -366,7 +372,7 @@ class JournalAccount extends Model
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId  -- and di.szOrderItemTypeId in ('JUAL','JAMINAN')
             join dms_sd_docdoitemprice dip on dip.szDocId = di.szDocId and dip.intItemNumber = di.intItemNumber
-            where do.szDocStatus = 'Applied' and abs(dip.decPrice) > 0
+            where do.szDocStatus = 'Applied' -- and abs(dip.decPrice) > 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             )x 
