@@ -360,19 +360,19 @@ class JournalAccount extends Model
                 end as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 
                 case 
-                    when di.szProductId in ({$kodeGalon}) then di.decQty * abs(dip.decPrice)
-                    else di.decQty * (abs(dip.decPrice) - {$marginDpp})
+                    when di.szProductId in ({$kodeGalon}) then abs(di.decQty * dip.decPrice)
+                    else abs(di.decQty * coalesce((select ppl.branch_price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1) - {$marginDpp},0))
                 end as debit,
                 0 as credit, 
                 case 
                     when di.szProductId in ({$kodeGalon}) then di.decQty * dip.decPrice
-                    else di.decQty * (dip.decPrice - {$marginDpp})
+                    else di.decQty * coalesce((select ppl.branch_price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1) - {$marginDpp},0)
                 end as amount,        
                 do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId  -- and di.szOrderItemTypeId in ('JUAL','JAMINAN')
             join dms_sd_docdoitemprice dip on dip.szDocId = di.szDocId and dip.intItemNumber = di.intItemNumber
-            where do.szDocStatus = 'Applied' -- and abs(dip.decPrice) > 0
+            where do.szDocStatus = 'Applied' and abs(dip.decPrice) > 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             )x 

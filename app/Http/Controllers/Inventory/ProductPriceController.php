@@ -6,6 +6,7 @@ use App\DataTables\Inventory\ProductPriceDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateProductPriceRequest;
 use App\Http\Requests\Inventory\UpdateProductPriceRequest;
+use App\Models\Inventory\ProductPrice;
 use App\Repositories\Inventory\DmsInvProductRepository;
 use App\Repositories\Inventory\ProductPriceRepository;
 use Flash;
@@ -155,9 +156,10 @@ class ProductPriceController extends AppBaseController
     private function getOptionItems()
     {
         $dmsInvProduct = new DmsInvProductRepository(app());
-
+        $productPriceItem = ProductPrice::select(['dms_inv_product_id','price','dpp_price','branch_price','start_date'])->get()->keyBy('dms_inv_product_id')->toArray();
         return [
             'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->disableModelCaching()->whereHas('productCategoriesProduct')->get()->pluck('szName', 'iInternalId')->toArray(),
+            'productPriceItem' => $productPriceItem
         ];
     }
 }

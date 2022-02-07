@@ -9,6 +9,7 @@ return array (
     'dms_inv_product_id' => 'Produk',
     'price' => 'Harga',
     'dpp_price' => 'Harga DPP',
+    'branch_price' => 'Harga Depo',
     'start_date' => 'Tanggal Mulai',
   ),
 );

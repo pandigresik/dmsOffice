@@ -51,6 +51,7 @@ class ProductPrice extends Model
         'dms_inv_product_id',
         'price',
         'dpp_price',
+        'branch_price',
         'start_date',
         'product_id'
     ];
@@ -64,6 +65,7 @@ class ProductPrice extends Model
         'dms_inv_product_id' => 'required|integer',
         'price' => 'required|numeric',
         'dpp_price' => 'required|numeric',
+        'branch_price' => 'required|numeric',
         'start_date' => 'nullable',
     ];
 
@@ -78,6 +80,8 @@ class ProductPrice extends Model
         'id' => 'integer',
         'dms_inv_product_id' => 'integer',
         'price' => 'decimal:2',
+        'dpp_price' => 'decimal:2',
+        'branch_price' => 'decimal:2',
         'start_date' => 'date',
     ];
 
@@ -95,6 +99,11 @@ class ProductPrice extends Model
     }
 
     public function getDppPriceAttribute($value)
+    {
+        return localNumberFormat($value);
+    }
+
+    public function getBranchPriceAttribute($value)
     {
         return localNumberFormat($value);
     }
