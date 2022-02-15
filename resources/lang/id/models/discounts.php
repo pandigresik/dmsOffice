@@ -6,6 +6,7 @@ return array (
   'fields' => 
   array (
     'id' => 'Id',
+    'type' => 'Tipe',
     'jenis' => 'Jenis Program',
     'name' => 'Nama Program',
     'start_date' => 'Start Date',

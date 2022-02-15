@@ -93,11 +93,13 @@ class Discounts extends Model
     const UPDATED_AT = 'updated_at';
     const OPTION_ITEM_JENIS = ['promo','bundling','combine','kontrak', 'combo', 'extension'];
     const OPTION_ITEM_SEGMENT = ['customer_segment','customer'];
+    const OPTION_ITEM_TYPE = ['principle','internal'];
     protected $dates = ['deleted_at'];
 
     
 
     public $fillable = [
+        'type',
         'jenis',
         'name',
         'start_date',
@@ -120,6 +122,7 @@ class Discounts extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'type' => 'string',
         'jenis' => 'string',
         'name' => 'string',
         'start_date' => 'date',
@@ -139,6 +142,7 @@ class Discounts extends Model
      * @var array
      */
     public static $rules = [
+        'type' => 'required|string',
         'jenis' => 'required|string',
         'name' => 'required|string|max:100',
         'period' => 'required',                
@@ -150,6 +154,7 @@ class Discounts extends Model
     ];
 
     public static $rulesCombine = [
+        'type' => 'required|string',
         'jenis' => 'required|string',
         'name' => 'required|string|max:100',
         'period' => 'required',
@@ -162,6 +167,7 @@ class Discounts extends Model
     ];
 
     public static $rulesKontrak = [
+        'type' => 'required|string',
         'jenis' => 'required|string',
         'name' => 'required|string|max:100',
         'period' => 'required',        

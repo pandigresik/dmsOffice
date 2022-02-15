@@ -55,8 +55,9 @@ class BkbDiscountsController extends AppBaseController
                 break;
                 default:
                     $datas = $this->getRepositoryObj()->listDiscountRekap($startDate, $endDate);
-                    
-                    $discountMaster = Discounts::whereIn('id', $datas->keys())->get()->keyBy('id');                    
+
+                    $discountMaster = Discounts::whereIn('id', $datas->keys())->get()->keyBy('id');
+
                     return view('sales.bkb_discounts.list_discount_rekap')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'discountMaster' => $discountMaster]);
             }
         }

@@ -191,6 +191,11 @@ class DmsSdDocdoItem extends Model
         return $this->getDiscounts()['distributor'];
     }
 
+    public function getDiscountInternal()
+    {
+        return $this->getDiscounts()['internal'];
+    }
+
     /**
      * Get the value of customer.
      */
@@ -279,7 +284,7 @@ class DmsSdDocdoItem extends Model
     {
         /** get all discounts active */
         $discountActive = Discounts::with(['members', 'details'])->whereRaw("'".$this->getBkbDate()."' between start_date and end_date and state = 'A'")->get();
-        $this->discounts = ['distributor' => [], 'principle' => []];
+        $this->discounts = ['distributor' => [], 'principle' => [], 'internal' => []];
         if (!$discountActive) {
             return;
         }
@@ -293,6 +298,10 @@ class DmsSdDocdoItem extends Model
         }
 
         if(!empty($this->discounts['distributor'])){
+            $this->setHasDiscount(1);
+        }
+
+        if(!empty($this->discounts['internal'])){
             $this->setHasDiscount(1);
         }
     }

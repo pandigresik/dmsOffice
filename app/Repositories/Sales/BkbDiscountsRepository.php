@@ -109,8 +109,7 @@ class BkbDiscountsRepository extends BaseRepository
 
     $datas->chunk(500, function($dataTmp) {
         foreach ($dataTmp as $data) {
-            foreach ($data->items as $index => $item) {
-                //\Log::error($item->getRawOriginal('decDiscPrinciple'));
+            foreach ($data->items as $index => $item) {                
                 if ($item->getRawOriginal('decDiscPrinciple') <= 0) {
                     continue;
                 }

@@ -1,8 +1,17 @@
+<!-- Type Field -->
+<div class="form-group row">
+    {!! Form::label('type', __('models/discounts.fields.type').':', ['class' => 'col-md-3 col-form-label']) !!}
+    <div class="col-md-9">
+        {!! Form::select('type',$typeOptionItems, null, ['class' => 'form-control', 'required' => 'required'])
+        !!}
+    </div>
+</div>
+
 <!-- Jenis Field -->
 <div class="form-group row">
     {!! Form::label('jenis', __('models/discounts.fields.jenis').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        {!! Form::select('jenis',$typeOptionItems, null, ['class' => 'form-control select2', 'required' => 'required',
+        {!! Form::select('jenis',$jenisOptionItems, null, ['class' => 'form-control select2', 'required' => 'required',
         'onchange' => 'setProductGroup(this)'])
         !!}
     </div>

@@ -16,6 +16,8 @@ class DiscountsDataTable extends DataTable
     private $columnFilterOperator = [
         //'main_product.szName' => \App\DataTables\FilterClass\RelationContainKeyword::class,
         //'bundling_product.szName' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+        'type' => \App\DataTables\FilterClass\MatchKeyword::class,
+        'jenis' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
     
     private $mapColumnSearch = [
@@ -135,16 +137,15 @@ class DiscountsDataTable extends DataTable
     protected function getColumns()
     {
         $jenisDiscountItem = array_merge([['text' => 'Pilih Jenis', 'value' => '']] , convertArrayPairValueWithKey(array_combine(Discounts::OPTION_ITEM_JENIS,Discounts::OPTION_ITEM_JENIS)));
+        $typeDiscountItem = array_merge([['text' => 'Pilih Type', 'value' => '']] , convertArrayPairValueWithKey(array_combine(Discounts::OPTION_ITEM_TYPE,Discounts::OPTION_ITEM_TYPE)));
         return [
+            'type' => new Column(['title' => __('models/discounts.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $typeDiscountItem]),
             'jenis' => new Column(['title' => __('models/discounts.fields.jenis'), 'data' => 'jenis', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $jenisDiscountItem]),
             'name' => new Column(['title' => __('models/discounts.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
             'start_date' => new Column(['title' => __('models/discounts.fields.start_date'), 'data' => 'start_date', 'searchable' => true, 'elmsearch' => 'text']),
-            'end_date' => new Column(['title' => __('models/discounts.fields.end_date'), 'data' => 'end_date', 'searchable' => true, 'elmsearch' => 'text']),
-            //'split' => new Column(['title' => __('models/discounts.fields.split'), 'data' => 'split', 'searchable' => true, 'elmsearch' => 'text']),
-            'main_dms_inv_product_id' => new Column(['title' => __('models/discounts.fields.main_dms_inv_product_id'), 'data' => 'main_dms_inv_product_id','defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),
-            //'main_quota' => new Column(['title' => __('models/discounts.fields.main_quota'), 'data' => 'main_quota', 'searchable' => true, 'elmsearch' => 'text']),
-            'bundling_dms_inv_product_id' => new Column(['title' => __('models/discounts.fields.bundling_dms_inv_product_id'), 'data' => 'bundling_dms_inv_product_id','defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),
-            //'bundling_quota' => new Column(['title' => __('models/discounts.fields.bundling_quota'), 'data' => 'bundling_quota', 'searchable' => true, 'elmsearch' => 'text']),
+            'end_date' => new Column(['title' => __('models/discounts.fields.end_date'), 'data' => 'end_date', 'searchable' => true, 'elmsearch' => 'text']),            
+            'main_dms_inv_product_id' => new Column(['title' => __('models/discounts.fields.main_dms_inv_product_id'), 'data' => 'main_dms_inv_product_id','defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),            
+            'bundling_dms_inv_product_id' => new Column(['title' => __('models/discounts.fields.bundling_dms_inv_product_id'), 'data' => 'bundling_dms_inv_product_id','defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'text']),            
             'max_quota' => new Column(['title' => __('models/discounts.fields.max_quota'), 'data' => 'max_quota', 'searchable' => false, 'elmsearch' => 'text']),            
         ];
     }
