@@ -102,10 +102,13 @@ class BkbDiscounts extends Model
         'decQty',
         'discPrinciple',
         'discDistributor',
+        'discInternal',
         'sistemPrinciple',
         'sistemDistributor',
+        'sistemInternal',
         'selisihPrinciple',
         'selisihDistributor',
+        'selisihInternal',
     ];
 
     /**

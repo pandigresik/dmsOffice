@@ -79,7 +79,7 @@ class BkbDiscountsRepository extends BaseRepository
         }
 
         return DmsSdDocdo::select(['dms_sd_docdo.*'])->with(['items' => function ($q) use ($discountProduct) {
-            $q->select(['dms_sd_docdoitem.szDocId', 'dms_sd_docdoitem.szProductId', 'dms_sd_docdoitem.intItemNumber', 'dms_sd_docdoitem.decQty', 'dms_sd_docdoitemprice.decDiscPrinciple', 'dms_sd_docdoitemprice.decDiscDistributor'])
+            $q->select(['dms_sd_docdoitem.szDocId', 'dms_sd_docdoitem.szProductId', 'dms_sd_docdoitem.intItemNumber', 'dms_sd_docdoitem.decQty', 'dms_sd_docdoitemprice.decDiscPrinciple', 'dms_sd_docdoitemprice.decDiscDistributor', 'dms_sd_docdoitemprice.decDiscInternal'])
                 ->with(['product'])
                 ->whereIn('szProductId', array_unique($discountProduct))
                 ->join('dms_sd_docdoitemprice', function ($join) {
@@ -105,14 +105,14 @@ class BkbDiscountsRepository extends BaseRepository
     public function processDiscount($startDate, $endDate, $branchId)
     {        
         $this->resultDiscount = collect();
-        $datas = $this->mustValidate($startDate, $endDate, $branchId);        
+        $datas = $this->mustValidate($startDate, $endDate, $branchId);
 
     $datas->chunk(500, function($dataTmp) {
         foreach ($dataTmp as $data) {
             foreach ($data->items as $index => $item) {                
-                if ($item->getRawOriginal('decDiscPrinciple') <= 0) {
-                    continue;
-                }
+                // if ($item->getRawOriginal('decDiscPrinciple') <= 0) {
+                //     continue;
+                // }
 
                 $item->setSkipCountComboPromo($data->getCountedDiscount());
                 $item->setOtherItem($data->items);
@@ -178,6 +178,23 @@ class BkbDiscountsRepository extends BaseRepository
                         $item['distributor_amount'] = $detailProgram['distributor'][$_index]['amount'];                        
                         BkbDiscountDetail::create($item);
                     }
+                    
+                }
+                if (!empty($detailProgram['internal'])) {
+                    $item = [
+                        'szDocId' => $d['szDocId'],
+                        'szProductId' => $d['szProductId'],
+                        'szBranchId' => $d['szBranchId'],
+                        'bkbDate' => $d['bkbDate'],
+                        'decQty' => $d['decQty']
+                    ];
+                    foreach ($detailProgram['internal'] as $_index => $program) {
+                        $item['discount_id'] = $program['id'];
+                        $item['principle_amount'] = $program['amount'];
+                        $item['distributor_amount'] = 0;
+                        BkbDiscountDetail::create($item);
+                    }
+                    
                 }
             }
 

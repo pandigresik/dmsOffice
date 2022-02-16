@@ -198,5 +198,9 @@ class DmsSdDocdoItemPrice extends Model
     public function getDecDiscDistributorAttribute($value){
         return localNumberFormat($value, 0);
     }
+
+    public function getDecDiscInternalAttribute($value){
+        return localNumberFormat($value, 0);
+    }
     
 }

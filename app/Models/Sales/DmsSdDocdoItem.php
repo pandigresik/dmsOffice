@@ -161,6 +161,11 @@ class DmsSdDocdoItem extends Model
         return localNumberFormat($value, 0);
     }
 
+    public function getDecDiscInternalAttribute($value)
+    {
+        return localNumberFormat($value, 0);
+    }
+
     public function getBkbDateAttribute($value)
     {
 
@@ -340,7 +345,7 @@ class DmsSdDocdoItem extends Model
     private function customerHasDiscount($discount)
     {
         $member = $discount->members->first();
-        $tipe = $member->tipe;
+        $tipe = $member->type;
         $listMembers = $discount->members->keyBy('member_id');
         $indexMember = 'customer' == $tipe ? $this->getCustomer()->szId : $this->getCustomer()->szHierarchyId;
 
@@ -356,8 +361,12 @@ class DmsSdDocdoItem extends Model
             $productDiscount = $listProduct[$this->szProductId] ?? null;
 
             if ($productDiscount) {
-                $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $productDiscount->principle_amount * $this->attributes['decQty']];
-                $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $productDiscount->distributor_amount * $this->attributes['decQty']];
+                if ('principle' == $discount->type) {
+                    $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $productDiscount->principle_amount * $this->attributes['decQty']];
+                    $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $productDiscount->distributor_amount * $this->attributes['decQty']];
+                }else{
+                    $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $productDiscount->principle_amount * $this->attributes['decQty']];
+                }                                
             }
         }
     }
@@ -374,9 +383,13 @@ class DmsSdDocdoItem extends Model
                 $qtyQuotaNota = $this->attributes['decQty'] > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $this->attributes['decQty'];
                 foreach ($discount->details as $d) {
                     if ($qtyQuotaNota >= $d->getRawOriginal('min_main_qty') && $qtyQuotaNota <= $d->getRawOriginal('max_main_qty')) {
-                        $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $d->principle_amount * $qtyQuotaNota];
-                        $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $d->distributor_amount * $qtyQuotaNota];
-
+                        if ('principle' == $discount->type) {
+                            $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $d->principle_amount * $qtyQuotaNota];
+                            $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $d->distributor_amount * $qtyQuotaNota];
+                        }else{
+                            $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $d->principle_amount * $qtyQuotaNota];
+                        }
+                        
                         break;
                     }
                 }
@@ -408,8 +421,13 @@ class DmsSdDocdoItem extends Model
                         }
                     }
                     if (!empty($selectedPackage)) {
-                        $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
-                        $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $selectedPackage->getRawOriginal('package')];
+                        if ('principle' == $discount->type) {
+                            $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
+                            $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $selectedPackage->getRawOriginal('package')];
+                        }else{
+                            $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
+                        }
+                        
                     }
                 }
             }
@@ -433,8 +451,13 @@ class DmsSdDocdoItem extends Model
                     }
                 }
                 if (!empty($selectedPackage)) {
-                    $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
-                    $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $selectedPackage->getRawOriginal('package')];
+                    if ('principle' == $discount->type) {
+                        $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
+                        $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $selectedPackage->getRawOriginal('package')];
+                    }else{
+                        $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
+                    }
+                    
                 }
             }
         }
@@ -469,8 +492,12 @@ class DmsSdDocdoItem extends Model
                     $totalNota = $discount->getRawOriginal('max_quota');
                 }
                 if (!empty($selectedPackage)) {
-                    $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
-                    $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $totalNota];
+                    if ('principle' == $discount->type) {
+                        $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
+                        $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $totalNota];
+                    }else{
+                        $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
+                    }
                 }
 
                 //}
@@ -503,8 +530,12 @@ class DmsSdDocdoItem extends Model
                 }                
                 
                 if (!empty($selectedPackage)) {
-                    $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
-                    $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $totalNota];
+                    if ('principle' == $discount->type) {
+                        $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
+                        $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $totalNota];
+                    }else{
+                        $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
+                    }
                 }
 
                 //}
