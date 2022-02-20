@@ -42,9 +42,10 @@ class CashFlowRepository extends BaseRepository
 
     public function list($startDate, $endDate)
     {
+        $coaPendapatanLain2 = '919900';
         $listAccount = $this->listAccount();
         $data = [];
-        JournalAccount::selectRaw("account_id, sum(balance) as balance, (DATE_FORMAT(date, '%m-%Y')) as month_year")
+        JournalAccount::selectRaw("account_id, sum(case when account_id = '$coaPendapatanLain2' then -1 * balance else balance end) as balance, (DATE_FORMAT(date, '%m-%Y')) as month_year")
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
             ->whereIn('account_id', $this->cashFlowAccountCode($listAccount))

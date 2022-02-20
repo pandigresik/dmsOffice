@@ -2,7 +2,7 @@
 <div class="form-group row">
     {!! Form::label('type', __('models/discounts.fields.type').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-9">
-        {!! Form::select('type',$typeOptionItems, null, ['class' => 'form-control', 'required' => 'required'])
+        {!! Form::select('type',$typeOptionItems, null, ['class' => 'form-control', 'required' => 'required', 'onchange' => 'resetEntri(this)'])
         !!}
     </div>
 </div>
@@ -194,7 +194,7 @@
                 <thead>
                     <tr>
                         <th>Nama</th>
-                        <th>Potongan TIV</th>
+                        <th>Potongan {{ $discounts->type == 'internal' ? 'Internal' : 'TIV' }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -222,7 +222,7 @@
                         <th>Nama</th>
                         <th>Qty Min</th>
                         <th>Qty Maks</th>
-                        <th>TIV</th>
+                        <th>{{ $discounts->type == 'internal' ? 'Internal' : 'TIV' }}</th>
                         <th>Distributor</th>
                     </tr>
                 </thead>
@@ -319,6 +319,7 @@
 <script src="/vendor/js-xlsx/xlsx.full.min.js"></script>
 <script type="text/javascript">
     let _previousType
+    const _labelHeader = { 'principle' : 'TIV', 'internal' : 'Internal' }
     $(function () {
         $('select[name="discount_members[tipe]"]').trigger('change')
         $('select[name=jenis]').trigger('change')
@@ -347,6 +348,7 @@
 
     function addItemListKontrak(elm) {
         const _form = $(elm).closest('form')
+        const _type = _form.find('select[name=type]').val()
         const _form_group = $(elm).closest('.form-group')
         const _detailDiscount = _form.find('#detail_discount')
         let _table = _detailDiscount.find('table')
@@ -369,7 +371,7 @@
                 <thead>                    
                     <tr>
                         <th>Nama</th>                       
-                        <th>Potongan TIV</th>                        
+                        <th>Potongan ${_labelHeader[_type]}</th>                        
                     </tr>
                 </thead>
                 <tbody>
@@ -407,6 +409,7 @@
     function addItemList(elm) {
         const _form = $(elm).closest('form')
         const _jenis = _form.find('select[name=jenis]').val()
+        const _type = _form.find('select[name=type]').val()
         const _hasPackage = _.includes(['bundling', 'extension'], _jenis) ? 1 : 0
         const _detailDiscount = _form.find('#detail_discount')
         let _table = _detailDiscount.find('table')
@@ -459,7 +462,7 @@
                         <th>Qty Min</th>
                         <th>Qty Maks</th>
                         ${_additionalHeaderItem}
-                        <th>TIV</th>
+                        <th>${_labelHeader[_type]}</th>
                         <th>Distributor</th>
                         ${_packageHeader}
                     </tr>
@@ -495,12 +498,17 @@
                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}'  name="discount_details[max_main_qty][]"></td>
                 ${_bundlingItemRow}
                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}'  name="discount_details[principle_amount][]"></td>
-                <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}'  name="discount_details[distributor_amount][]"></td>
+                <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}' value="0"  name="discount_details[distributor_amount][]"></td>
                 ${_packageItemRow}
             </tr>
         `
         $(_item).appendTo(_detailDiscount.find('tbody'))
         main.initInputmask(_detailDiscount.find('tbody>tr:last'))
+    }
+
+    function resetEntri(elm){
+        const _form = $(elm).closest('form')
+        _form.find('#detail_discount').empty()
     }
 
     function setProductGroup(elm) {

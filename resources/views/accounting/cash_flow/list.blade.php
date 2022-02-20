@@ -5,6 +5,7 @@
         'LR-07' => 'Pendapatan (Beban) lain-lain',
     ];    
     $totalGroup = [];
+    $totalGroupMonth = [];
     $totalBarisAccount = [];
 @endphp
 <table class="table table-bordered">
@@ -19,7 +20,7 @@
         </tr>
     </thead>
     <tbody>                
-        @forelse ($listAccount as $group)
+        @foreach ($listAccount as $group)
             @php
                 $totalGroup[$group->code] = [];
             @endphp
@@ -48,6 +49,9 @@
 
                             $totalGroup[$group->code][$indexBulan] += $amount;
                             $totalBarisAccount[$account->code] += $amount;
+
+                            if(!isset($totalGroupMonth[$indexBulan])) $totalGroupMonth[$indexBulan] = 0;
+                            $totalGroupMonth[$indexBulan] += $amount;
                         @endphp
                         <td class="text-right">{{ localNumberFormat( $amount , 0) }}</td>
                     @endforeach
@@ -62,14 +66,15 @@
                     <td class="text-right">{{ localNumberFormat( $totalGroup[$group->code][$p->format('m-Y')], 0) }}</td>
                 @endforeach
                 <td></td>
+            </tr>        
+        @endforeach
+        <tr class="font-weight-bold">
+                <td></td>
+                <td>Saldo Akhir</td>
+                @foreach ($period as $p)
+                    <td class="text-right">{{ localNumberFormat( $totalGroupMonth[$p->format('m-Y')], 0) }}</td>
+                @endforeach
+                <td></td>
             </tr>
-
-                                    
-
-        @empty
-            <tr>
-                <td colspan="3">Data tidak ditemukan</td>
-            </tr>
-        @endforelse
     </tbody>
 </table>

@@ -194,7 +194,7 @@ class JournalAccount extends Model
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
-            where do.szDocStatus = 'Applied' and do.bCash = 1 
+            where do.szDocStatus = 'Applied' and do.bCash = 1
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             union all
