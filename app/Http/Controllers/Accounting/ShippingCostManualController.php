@@ -39,7 +39,7 @@ class ShippingCostManualController extends AppBaseController
      */
     public function create()
     {
-        return view('accounting.shipping_cost_manuals.create')->with($this->getOptionItems());
+        return view('accounting.shipping_cost_manuals.create')->with($this->getOptionItems())->with('details',[] );
     }
 
     /**
