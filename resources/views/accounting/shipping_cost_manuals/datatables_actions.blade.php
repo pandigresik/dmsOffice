@@ -1,8 +1,5 @@
 {!! Form::open(['route' => ['accounting.shippingCostManuals.destroy', $id], 'method' => 'delete']) !!}
-<div class='btn-group'>
-    <a href="{{ route('accounting.shippingCostManuals.show', $id) }}" class='btn btn-ghost-success'>
-       <i class="fa fa-eye"></i>
-    </a>
+<div class='btn-group'>    
     <a href="{{ route('accounting.shippingCostManuals.edit', $id) }}" class='btn btn-ghost-info'>
        <i class="fa fa-edit"></i>
     </a>

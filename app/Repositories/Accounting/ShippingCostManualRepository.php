@@ -107,4 +107,13 @@ class ShippingCostManualRepository extends BaseRepository
             $model->details()->create($r);
         }
     }
+
+    public function delete($id)
+    {
+        $query = $this->model->newQuery();
+
+        $model = $query->findOrFail($id);
+        $model->details()->forceDelete();        
+        return $model->forceDelete();
+    }
 }
