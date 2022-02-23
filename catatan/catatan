@@ -56,6 +56,10 @@ php artisan migrate --database=mysql_sejati --path=database/migrations/dms
 -- generate export 
 php artisan make:export CustomersExport
 
+php artisan schedule:run
+php artisan queue:work database_sejati --timeout=599
+
+
 -- artisan tinker, test faker
 $faker = Faker\Factory::create();
 => Faker\Generator {#5679}

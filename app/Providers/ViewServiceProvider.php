@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Providers;
+use App\Models\Accounting\Carrier;
+use App\Models\Accounting\DestinationBranch;
+use App\Models\Accounting\OriginBranch;
 use App\Models\Accounting\Account;
 
 use App\Models\Finance\Partner;

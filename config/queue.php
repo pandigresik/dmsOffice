@@ -41,6 +41,14 @@ return [
             'retry_after' => 90,
         ],
 
+        'database_sejati' => [
+            'driver' => 'database',
+            'connection' => 'mysql_sejati',
+            'table' => 'jobs',
+            'queue' => 'mysql_sejati',
+            'retry_after' => 600,
+        ],
+
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => 'localhost',

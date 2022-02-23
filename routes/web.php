@@ -95,6 +95,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('journalAccounts', App\Http\Controllers\Accounting\JournalAccountController::class, ["as" => 'accounting']);
         Route::resource('journalDms', App\Http\Controllers\Accounting\JournalDmsController::class, ["as" => 'accounting'])->only(['create','store']);
         Route::resource('accountBalances', App\Http\Controllers\Accounting\AccountBalanceController::class, ["as" => 'accounting'])->only(['index', 'create', 'store']);
+        Route::resource('shippingCostManuals', App\Http\Controllers\Accounting\ShippingCostManualController::class, ["as" => 'accounting']);
     });
 
     Route::group(['prefix' => 'sales'], function () {

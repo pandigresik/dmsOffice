@@ -78,7 +78,7 @@ class BkbDiscountsRepository extends BaseRepository
             return [];
         }
 
-        return DmsSdDocdo::select(['dms_sd_docdo.*'])->with(['items' => function ($q) use ($discountProduct) {
+        $query = DmsSdDocdo::select(['dms_sd_docdo.*'])->with(['items' => function ($q) use ($discountProduct) {
             $q->select(['dms_sd_docdoitem.szDocId', 'dms_sd_docdoitem.szProductId', 'dms_sd_docdoitem.intItemNumber', 'dms_sd_docdoitem.decQty', 'dms_sd_docdoitemprice.decDiscPrinciple', 'dms_sd_docdoitemprice.decDiscDistributor', 'dms_sd_docdoitemprice.decDiscInternal'])
                 ->with(['product'])
                 ->whereIn('szProductId', array_unique($discountProduct))
@@ -90,58 +90,61 @@ class BkbDiscountsRepository extends BaseRepository
                     ;
         }, 'customer' => function($q){
             return $q->with(['address']);
-        }, 'sales', 'depo'])->whereBetween('dtmDoc', [$startDate, $endDate])
-            // ->join('dms_sd_docdoitem', function ($join) {
-            //         $join->on('dms_sd_docdoitem.szDocId', '=', 'dms_sd_docdo.szDocId')
-            //             ->on('dms_sd_docdoitem.intItemNumber', '=', \DB::raw('0'))
-            //         ;
-            //     })->whereIn('dms_sd_docdoitem.szProductId', array_unique($discountProduct))
-            ->where('szBranchId', $branchId)
+        }, 'sales', 'depo'])->whereBetween('dtmDoc', [$startDate, $endDate])                       
             ->where('szDocStatus', 'Applied')
             ->disableModelCaching()            
         ;
+
+        if(!empty($branchId)){
+            $query->whereIn('szBranchId', $branchId);
+        }
+        return $query;
     }
 
     public function processDiscount($startDate, $endDate, $branchId)
     {        
-        $this->resultDiscount = collect();
+        $this->resultDiscount = collect();        
         $datas = $this->mustValidate($startDate, $endDate, $branchId);
-
-    $datas->chunk(500, function($dataTmp) {
-        foreach ($dataTmp as $data) {
-            foreach ($data->items as $index => $item) {                
-                // if ($item->getRawOriginal('decDiscPrinciple') <= 0) {
-                //     continue;
-                // }
-
-                $item->setSkipCountComboPromo($data->getCountedDiscount());
-                $item->setOtherItem($data->items);
-                $item->setCustomer($data->customer);
-                $item->setBkbDate($data->getRawOriginal('dtmDoc'));
-                $item->getDiscounts();
-
-                if ($item->getHasDiscount()) {
-                    $totalItemDiscountPrinciple = collect($item->getDiscountPrinciple())->sum('amount');
-                    $item->setSelisihPrinciple($item->getRawOriginal('decDiscPrinciple') - $totalItemDiscountPrinciple);
-                    $data->setCountedDiscount(1);
-                    $additionalInfo = [
-                        'szSalesId' => $data->szSalesId,
-                        'szBranchId' => $data->szBranchId,
-                        'depo' => $data->depo->szName,
-                        'dtmDoc' => $data->dtmDoc,
-                        'szCustomerId' => $data->szCustomerId,
-                        'customerName' => $data->customer->szName ?? '-',
-                        'customerAddress' => $data->customer->address->fullAddress ?? '-',
-                        'salesName' => $data->sales->szName ?? '-',
-                    ];
-                    $item->setAdditionalInfo($additionalInfo);
-                } else {
-                    continue;
-                }
-
-                $this->resultDiscount->push($item);                
-            }
+        
+        if (empty($datas)) {
+            return [];
         }
+
+        $datas->chunk(5000, function($dataTmp) {
+            foreach ($dataTmp as $data) {
+                foreach ($data->items as $index => $item) {                
+                    if ($item->getRawOriginal('decDiscPrinciple') <= 0 && $item->getRawOriginal('decDiscInternal') <= 0) {
+                        continue;
+                    }
+
+                    $item->setSkipCountComboPromo($data->getCountedDiscount());
+                    $item->setOtherItem($data->items);
+                    $item->setCustomer($data->customer);
+                    $item->setBkbDate($data->getRawOriginal('dtmDoc'));
+                    $item->getDiscounts();
+
+                    if ($item->getHasDiscount()) {
+                        $totalItemDiscountPrinciple = collect($item->getDiscountPrinciple())->sum('amount');
+                        $item->setSelisihPrinciple($item->getRawOriginal('decDiscPrinciple') - $totalItemDiscountPrinciple);
+                        $data->setCountedDiscount(1);
+                        $additionalInfo = [
+                            'szSalesId' => $data->szSalesId,
+                            'szBranchId' => $data->szBranchId,
+                            'depo' => $data->depo->szName,
+                            'dtmDoc' => $data->dtmDoc,
+                            'szCustomerId' => $data->szCustomerId,
+                            'customerName' => $data->customer->szName ?? '-',
+                            'customerAddress' => $data->customer->address->fullAddress ?? '-',
+                            'salesName' => $data->sales->szName ?? '-',
+                        ];
+                        $item->setAdditionalInfo($additionalInfo);
+                    } else {
+                        continue;
+                    }
+
+                    $this->resultDiscount->push($item);                
+                }
+            }
         });
         
         return $this->resultDiscount->sortBy([            
@@ -150,6 +153,59 @@ class BkbDiscountsRepository extends BaseRepository
         ]);
 
 
+    }
+
+    public function processDiscountSave($startDate, $endDate, $branchId){
+        $datas = $this->processDiscount($startDate, $endDate, $branchId);
+        if($datas){
+            $this->create($this->buildDataInput($datas, $startDate, $endDate, $branchId));
+        }
+    }
+
+    private function buildDataInput($datas, $startDate, $endDate, $branchId){
+        $result = ['szDocId' => [], 'start_date' => $startDate, 'end_date' => $endDate, 'branch_id' => $branchId];
+        foreach($datas as $index => $item){
+            $additionalInfo = $item->getAdditionalInfo();
+                        $totalDiscountPrinciple = 0;
+                        $totalDiscountDistributor = 0;
+                        $totalDiscountInternal = 0;
+            foreach($item->getDiscountPrinciple() as $itemDiscount){
+                $totalDiscountPrinciple += $itemDiscount['amount'];    
+            }
+
+            foreach($item->getDiscountDistributor() as $itemDiscount){
+                $totalDiscountDistributor += $itemDiscount['amount'];    
+            }
+
+            foreach($item->getDiscountInternal() as $itemDiscount){
+                $totalDiscountInternal += $itemDiscount['amount'];    
+            }
+
+            $selisihPrinciple = $item->getRawOriginal('decDiscPrinciple') - $totalDiscountPrinciple;
+                        $selisihDistributor = $item->getRawOriginal('decDiscDistributor') - $totalDiscountDistributor;
+                        $selisihInternal = $item->getRawOriginal('decDiscInternal') - $totalDiscountInternal;
+            $saveData = [
+                            'szDocId' => $item->szDocId,
+                            'szProductId' => $item->szProductId,
+                            'szSalesId' => $additionalInfo['szSalesId'],
+                            'szBranchId' => $additionalInfo['szBranchId'],
+                            'bkbDate' => $item->bkbDate,
+                            'decQty' => $item->decQty,
+                            'discPrinciple' => $item->getRawOriginal('decDiscPrinciple'),
+                            'discDistributor' => $item->getRawOriginal('decDiscDistributor'),
+                            'discInternal' => $item->getRawOriginal('decDiscInternal'),
+                            'sistemPrinciple' => $totalDiscountPrinciple,
+                            'sistemDistributor' => $totalDiscountDistributor,
+                            'sistemInternal' => $totalDiscountInternal,
+                            'detailProgram' => $item->getDiscounts(),
+                            'selisihPrinciple' => $selisihPrinciple,
+                            'selisihDistributor' => $selisihDistributor,
+                            'selisihInternal' => $selisihInternal
+                        ];
+            $result['szDocId'][] = json_encode($saveData);
+        }
+
+        return $result;
     }
 
     public function create($input)
@@ -251,8 +307,8 @@ class BkbDiscountsRepository extends BaseRepository
     {
         $startDate = $input['start_date'];
         $endDate = $input['end_date'];
-        $branchId = $input['branch_id'];
-        BkbDiscountDetail::whereBetween('bkbDate', [$startDate, $endDate])->where(['szBranchId' => $branchId])->forceDelete();
-        BkbDiscounts::whereBetween('bkbDate', [$startDate, $endDate])->where(['szBranchId' => $branchId])->forceDelete();
+        $branchId = is_array($input['branch_id']) ? $input['branch_id'] : [$input['branch_id']];
+        BkbDiscountDetail::whereBetween('bkbDate', [$startDate, $endDate])->whereIn('szBranchId', $branchId)->forceDelete();
+        BkbDiscounts::whereBetween('bkbDate', [$startDate, $endDate])->whereIn('szBranchId', $branchId)->forceDelete();
     }
 }

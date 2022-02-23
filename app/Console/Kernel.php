@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\CalculateDiscount;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -20,7 +21,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $user = \App\Models\Base\User::where('entity_id', 1)->first();
+        $schedule->job(new CalculateDiscount($user->id),'mysql_sejati','database_sejati')->user($user);
     }
 
     /**
