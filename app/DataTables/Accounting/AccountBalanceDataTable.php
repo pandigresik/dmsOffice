@@ -3,7 +3,7 @@
 namespace App\DataTables\Accounting;
 
 use App\Models\Accounting\AccountBalance;
-use Yajra\DataTables\Services\DataTable;
+use App\DataTables\BaseDataTable as DataTable;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 

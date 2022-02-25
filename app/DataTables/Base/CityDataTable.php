@@ -5,7 +5,7 @@ namespace App\DataTables\Base;
 use App\Models\Base\City;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Services\DataTable;
+use App\DataTables\BaseDataTable as DataTable;
 
 class CityDataTable extends DataTable
 {

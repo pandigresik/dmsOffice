@@ -5,7 +5,7 @@ namespace App\DataTables;
 use App\Models\Synchronize;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Services\DataTable;
+use App\DataTables\BaseDataTable as DataTable;
 
 class SynchronizeDataTable extends DataTable
 {

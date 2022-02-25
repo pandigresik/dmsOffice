@@ -5,7 +5,7 @@ namespace App\DataTables\Finance;
 use App\Models\Finance\DebitCreditNote;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Services\DataTable;
+use App\DataTables\BaseDataTable as DataTable;
 
 class DebitCreditNoteDataTable extends DataTable
 {

@@ -4,7 +4,7 @@ namespace App\DataTables\Base;
 
 use App\Models\Base\User;
 use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Services\DataTable;
+use App\DataTables\BaseDataTable as DataTable;
 
 class UserDataTable extends DataTable
 {

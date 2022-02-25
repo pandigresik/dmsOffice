@@ -3,7 +3,7 @@
 namespace App\DataTables\Purchase;
 
 use App\Models\Purchase\Invoice;
-use Yajra\DataTables\Services\DataTable;
+use App\DataTables\BaseDataTable as DataTable;
 
 class InvoiceSubmitDataTable extends InvoiceDataTable
 {

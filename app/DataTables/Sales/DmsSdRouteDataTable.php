@@ -5,7 +5,7 @@ namespace App\DataTables\Sales;
 use App\Models\Sales\DmsSdRoute;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Services\DataTable;
+use App\DataTables\BaseDataTable as DataTable;
 
 class DmsSdRouteDataTable extends DataTable
 {

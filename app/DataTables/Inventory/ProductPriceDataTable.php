@@ -5,7 +5,7 @@ namespace App\DataTables\Inventory;
 use App\Models\Inventory\ProductPrice;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Services\DataTable;
+use App\DataTables\BaseDataTable as DataTable;
 
 class ProductPriceDataTable extends DataTable
 {

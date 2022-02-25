@@ -6,7 +6,7 @@ use App\Models\Base\DmsSmBranch;
 use App\Models\Sales\DmsSdDocdo;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Services\DataTable;
+use App\DataTables\BaseDataTable as DataTable;
 
 class SalesReportDataTable extends DataTable
 {

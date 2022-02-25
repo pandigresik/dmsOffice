@@ -51,7 +51,7 @@ class ProfitLossRepository extends BaseRepository
             ->groupBy('account_id')
             ->groupBy('branch_id');
         
-        $data = JournalAccount::with(['account'])->selectRaw('branch_id, account_id, sum(balance) as balance')
+        $data = JournalAccount::with(['account'])->selectRaw('branch_id, account_id, sum(case when type=\'JM\' then (-1 * balance) else balance end) as balance')
             ->disableModelCaching()
             ->whereBetween('date',[$startDate, $endDate])
             ->whereIn('branch_id',$branchId)            
