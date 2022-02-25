@@ -97,7 +97,8 @@ class AccountBalance extends Model
     public function copyBalance($balanceDate){
         $lastDayPreviousMonth = \Carbon\Carbon::createFromFormat('Y-m-d', $balanceDate)->subDay()->format('Y-m-d');
         $firstDayPreviousMonth = substr($lastDayPreviousMonth, 0, 8).'01';        
-
+        $cashFlow = new CashFlowAccount();
+        $cashFlowBalance = $cashFlow->calcStartingBalance($balanceDate);
         $sql = <<<SQL
             insert into {$this->getTable()} (code, amount, balance_date) 
             SELECT ac.code
@@ -105,6 +106,8 @@ class AccountBalance extends Model
                 , '{$balanceDate}' as balance_date
             FROM account ac
             where ac.has_balance = 1
+            union all
+            Select 'SAAK' as code , {$cashFlowBalance} as amount, '{$balanceDate}' as balance_date
         SQL;
         $this->fromQuery($sql);
     }

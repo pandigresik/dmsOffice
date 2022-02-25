@@ -1,9 +1,11 @@
 @php
-    $headerGroup = [
-        'LR-01' => 'Penjualan',
-        'LR-06' => 'Beban Usaha',
-        'LR-07' => 'Pendapatan (Beban) lain-lain',
-    ];    
+    $pengaliGroup = [
+        'LCF-01' => 1,
+        'LCF-02' => 1,
+        'LCF-03' => -1,
+        'LCF-04' => -1,
+    ];
+    $headerGroup = [];    
     $totalGroup = [];
     $totalGroupMonth = [];
     $totalBarisAccount = [];
@@ -51,7 +53,7 @@
                             $totalBarisAccount[$account->code] += $amount;
 
                             if(!isset($totalGroupMonth[$indexBulan])) $totalGroupMonth[$indexBulan] = 0;
-                            $totalGroupMonth[$indexBulan] += $amount;
+                            $totalGroupMonth[$indexBulan] += ($pengaliGroup[$group->code] * $amount);
                         @endphp
                         <td class="text-right">{{ localNumberFormat( $amount , 0) }}</td>
                     @endforeach
@@ -59,6 +61,7 @@
                 </tr>                            
             @endforeach
 
+            @if ($group->code != 'LCF-01')
             <tr class="font-weight-bold">
                 <td></td>
                 <td>Total {{ $group->group }}</td>
@@ -66,7 +69,13 @@
                     <td class="text-right">{{ localNumberFormat( $totalGroup[$group->code][$p->format('m-Y')], 0) }}</td>
                 @endforeach
                 <td></td>
-            </tr>        
+            </tr>    
+            @else
+            <tr>
+                <td colspan="{{ 3 + count($period)}}"></td>
+            </tr>
+            @endif                                        
+            
         @endforeach
         <tr class="font-weight-bold">
                 <td></td>
