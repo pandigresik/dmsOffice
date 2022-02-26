@@ -13,7 +13,7 @@ class JournalAccountDataTable extends DataTable
     * example mapping filter column to search by keyword, default use %keyword%
     */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,        
+        'date' => \App\DataTables\FilterClass\BetweenKeyword::class
     ];
     
     private $mapColumnSearch = [
@@ -35,7 +35,21 @@ class JournalAccountDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));                
             }
         }
-        return $dataTable->addColumn('action', 'accounting.journal_accounts.datatables_actions');
+        $dataTable->editColumn('debit', function($item){
+
+            return '<div class="text-right">'.localNumberFormat($item['debit']).'</div>';
+        })->editColumn('credit', function($item){
+
+            return '<div class="text-right">'.localNumberFormat($item['credit']).'</div>';
+        })->editColumn('balance', function($item){
+
+            return '<div class="text-right">'.localNumberFormat($item['balance']).'</div>';
+        })->editColumn('date', function($item){
+
+            return '<div class="text-right">'.localFormatDate($item['date']).'</div>';
+        })
+        ->escapeColumns([]);
+        return $dataTable; //->addColumn('action', 'accounting.journal_accounts.datatables_actions');
     }
 
     /**
@@ -112,11 +126,14 @@ class JournalAccountDataTable extends DataTable
         return [
             'account_id' => new Column(['title' => __('models/journalAccounts.fields.account_id'), 'data' => 'account_id', 'searchable' => true, 'elmsearch' => 'text']),
             'branch_id' => new Column(['title' => __('models/journalAccounts.fields.branch_id'), 'data' => 'branch_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'description' => new Column(['title' => __('models/journalAccounts.fields.description'), 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
+            'reference' => new Column(['title' => __('models/journalAccounts.fields.reference'), 'data' => 'reference', 'searchable' => true, 'elmsearch' => 'text']),
             'name' => new Column(['title' => __('models/journalAccounts.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
-            'debit' => new Column(['title' => __('models/journalAccounts.fields.debit'), 'data' => 'debit', 'searchable' => true, 'elmsearch' => 'text']),
-            'credit' => new Column(['title' => __('models/journalAccounts.fields.credit'), 'data' => 'credit', 'searchable' => true, 'elmsearch' => 'text']),
-            'balance' => new Column(['title' => __('models/journalAccounts.fields.balance'), 'data' => 'balance', 'searchable' => true, 'elmsearch' => 'text']),
-            'state' => new Column(['title' => __('models/journalAccounts.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text'])
+            'debit' => new Column(['title' => __('models/journalAccounts.fields.debit'), 'data' => 'debit', 'searchable' => false, 'elmsearch' => 'text']),
+            'credit' => new Column(['title' => __('models/journalAccounts.fields.credit'), 'data' => 'credit', 'searchable' => false, 'elmsearch' => 'text']),
+            'balance' => new Column(['title' => __('models/journalAccounts.fields.balance'), 'data' => 'balance', 'searchable' => false, 'elmsearch' => 'text']),
+            'date' => new Column(['title' => __('models/journalAccounts.fields.date'), 'data' => 'date', 'searchable' => true, 'elmsearch' => 'daterange']),
+            'type' => new Column(['title' => __('models/journalAccounts.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
         ];
     }
 
