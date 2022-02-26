@@ -14,7 +14,7 @@ class CashFlowAccount extends JournalAccount
         'LCF-04' => -1,
     ];
     public function calcStartingBalance($balanceDate){
-        $result = 0;
+        $result = 0.00;
         $dateObj = Carbon::createFromFormat('Y-m-d', $balanceDate)->subMonth();
         $lastDateMonth = $dateObj->endOfMonth()->format('Y-m-d');
         $firstDateMonth = $dateObj->format('Y-m-').'01'; 
@@ -24,13 +24,14 @@ class CashFlowAccount extends JournalAccount
         
         foreach($listAccount as $group){            
             foreach($group->details as $account){
-                $amount = 0;
+                $amount = 0.00;                
                 if(isset($amountAccount[$account->code])){
-                    $amount = $amountAccount[$account->code][$dateObj->format('m-Y')]->amount ?? 0;
-                }
-                $result += $this->pengaliGroup[$group->code] * $amount;
-            }
+                    $amount = $amountAccount[$account->code][$dateObj->format('m-Y')]->getRawOriginal('balance') ?? 0.00;
+                }      
+                $result += ($this->pengaliGroup[$group->code] * $amount);                
+            }            
         }
+        
         return $result;
     }
 
@@ -39,6 +40,7 @@ class CashFlowAccount extends JournalAccount
         $firstDateMonth = substr($startDate, 0, 8).'01';
         $lastDateMonth = substr($endDate,0,8).'01';
         $saldo = $this->getSaldo($firstDateMonth, $lastDateMonth);
+        $accountPenjualan = $this->penjualanCash($startDate, $endDate);
         $coaPendapatanLain2 = '919900';
         $listAccount = $this->listAccount();
         $data = [];
@@ -54,8 +56,11 @@ class CashFlowAccount extends JournalAccount
             ->groupBy('account_id')
             ->groupByRaw(\DB::raw("DATE_FORMAT(date, '%m-%Y')"))
             ->get()            
-            ->map(function($item) use (&$data){                
+            ->map(function($item) use (&$data, $accountPenjualan){                                
                 $data[$item->account_id][$item->month_year] = $item;                
+                if($item->account_id == '411001'){
+                    $data[$item->account_id][$item->month_year] = $accountPenjualan[$item->month_year];
+                }
             })
         ;
         
@@ -89,6 +94,25 @@ class CashFlowAccount extends JournalAccount
             ->map(function($item) use (&$data){
                 $data[$item->account_id][$item->month_year] = $item;
             });
+
+        return $data;
+    }
+
+    private function penjualanCash($startDate, $endDate)
+    {        
+        
+        $data = [];        
+        JournalAccount::selectRaw("'411001' as account_id, sum(case when account_id in ('411001','411002') then balance else ( -1 * balance ) end) as balance, (DATE_FORMAT(date, '%m-%Y')) as month_year")
+            ->disableModelCaching()
+            ->whereBetween('date', [$startDate, $endDate])
+            ->whereIn('account_id', ['411001','411002','411011','411012','411013','411016','411017','411018'])
+//            ->groupBy('account_id')
+            ->groupByRaw(\DB::raw("DATE_FORMAT(date, '%m-%Y')"))
+            ->get()            
+            ->map(function($item) use (&$data){                
+                $data[$item->month_year] = $item;              
+            })
+        ;
 
         return $data;
     }
