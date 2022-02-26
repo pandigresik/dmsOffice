@@ -346,14 +346,14 @@ class JournalAccount extends Model
         $settingCompany = Setting::pluck('value', 'code');        
         $marginDpp = $settingCompany["margin_dpp"];
         $kodeGalon = "'".implode("','",explode(',',$settingCompany["kode_galon"]))."'";        
-
+        $pembagiPPN = $settingCompany["ppn_pembagi"];
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
 
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, description, reference, type, created_at)             
-            select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szProductId, szDocId, '{$type}',now() from (
+            select x.coa, account.name, debit / {$pembagiPPN}, credit / {$pembagiPPN}, amount / {$pembagiPPN}, dtmDoc, szBranchId, szProductId, szDocId, '{$type}',now() from (
             select case 
                     when di.szProductId in ({$kodeGalon}) then 'HPPGKP'
                     else 'HPPP'
@@ -382,7 +382,7 @@ class JournalAccount extends Model
             and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-03')            
             -- menghitung hpp pabrik untuk PT
             union all            
-            select y.coa, 'HPP PABRIK', debit, credit, amount, dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (
+            select y.coa, 'HPP PABRIK', debit / {$pembagiPPN}, credit / {$pembagiPPN}, amount / {$pembagiPPN}, dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (
             select 'HPPPT' as coa
                 ,do.dtmDoc, do.bCash, do.szBranchId, di.szProductId
                 , di.decQty * coalesce((select ppl.price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as debit
