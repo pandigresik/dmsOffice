@@ -183,8 +183,8 @@ class JournalAccount extends Model
         $type = $input['type'];
 
         $sql = <<<SQL
-            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type) 
-            select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szDocId, '{$type}' from (
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, description, reference, type, created_at) 
+            select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (
             -- penjualan produk
             select case 
                     when di.szProductId in ({$kodeGalon}) then $coaGalonTunai                         
@@ -192,7 +192,7 @@ class JournalAccount extends Model
                 end as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, (abs(dip.decPrice) * di.decQty) as debit, 0 as credit, (dip.decPrice * di.decQty) as amount , do.szDocId 
             from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId and di.szOrderItemTypeId not in ('PRODSUPP')
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and do.bCash = 1
                 and do.szBranchId = '{$branchId}'
@@ -254,8 +254,8 @@ class JournalAccount extends Model
         $type = $input['type'];
 
         $sql = <<<SQL
-            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type) 
-            select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szDocId, '{$type}' from (
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, description, reference, type, created_at) 
+            select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (
             -- penjualan produk
             select case 
                     when di.szProductId in ({$kodeGalon}) then $coaGalonKredit
@@ -263,9 +263,9 @@ class JournalAccount extends Model
                 end as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, (abs(dip.decPrice) * di.decQty) as debit, 0 as credit, (dip.decPrice * di.decQty) as amount , do.szDocId 
             from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId and di.szOrderItemTypeId not in ('PRODSUPP')
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
-            where do.szDocStatus = 'Applied' and do.bCash = 0
+            where do.szDocStatus = 'Applied' and do.bCash = 0 
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             union all
@@ -325,8 +325,8 @@ class JournalAccount extends Model
         $type = $input['type'];
 
         $sql = <<<SQL
-            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type)
-            select '{$coaPpnKeluaran}' as account_id, name, ({$besarPPN} * debit) as debit, credit,({$besarPPN} * balance) as balance,date, branch_id, reference, type
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+            select '{$coaPpnKeluaran}' as account_id, name, ({$besarPPN} * debit) as debit, credit,({$besarPPN} * balance) as balance,date, branch_id, reference, type, now()
             from journal_account 
             where type = '{$type}' and branch_id = '{$branchId}' and date between '{$startDate}' and '{$endDate}'
             and account_id in ('{$coaGalonKredit}','{$coaGalonTunai}')
@@ -352,8 +352,8 @@ class JournalAccount extends Model
         $type = $input['type'];
 
         $sql = <<<SQL
-            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type)             
-            select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szDocId, '{$type}' from (
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, description, reference, type, created_at)             
+            select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szProductId, szDocId, '{$type}',now() from (
             select case 
                     when di.szProductId in ({$kodeGalon}) then 'HPPGKP'
                     else 'HPPP'
@@ -370,7 +370,7 @@ class JournalAccount extends Model
                 end as amount,        
                 do.szDocId 
             from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId  -- and di.szOrderItemTypeId in ('JUAL','JAMINAN')
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId  and di.szOrderItemTypeId not in ('PRODSUPP')
             join dms_sd_docdoitemprice dip on dip.szDocId = di.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and abs(dip.decPrice) > 0
                 and do.szBranchId = '{$branchId}'
@@ -382,7 +382,7 @@ class JournalAccount extends Model
             and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-03')            
             -- menghitung hpp pabrik untuk PT
             union all            
-            select y.coa, 'HPP PABRIK', debit, credit, amount, dtmDoc, szBranchId, szDocId, '{$type}' from (
+            select y.coa, 'HPP PABRIK', debit, credit, amount, dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (
             select 'HPPPT' as coa
                 ,do.dtmDoc, do.bCash, do.szBranchId, di.szProductId
                 , di.decQty * coalesce((select ppl.price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as debit
@@ -390,7 +390,7 @@ class JournalAccount extends Model
                 , di.decQty * coalesce((select ppl.price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as amount
                 , do.szDocId 
             from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId -- and di.szOrderItemTypeId = 'JUAL' 
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId  and di.szOrderItemTypeId not in ('PRODSUPP')
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber and dip.decPrice > 0
             where do.szDocStatus = 'Applied' 
                 and do.szBranchId = '{$branchId}'
