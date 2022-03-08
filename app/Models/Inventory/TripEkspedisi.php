@@ -102,5 +102,5 @@ class TripEkspedisi extends Model
     public function lastPrice(): HasOne
     {
         return $this->hasOne(TripEkspedisiPrice::class,'trip_ekspedisi_id', 'id')->latest();
-    }    
+    }
 }

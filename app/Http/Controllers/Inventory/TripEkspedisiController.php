@@ -34,15 +34,12 @@ class TripEkspedisiController extends AppBaseController
     public function index(Request $request)
     {
         $trips = $this->getRepositoryObj()->with(['trip', 'lastPrice'])
-            ->allQuery()->where(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->get()->map(function ($q) {
-                if($q->lastPrice){
-                    $q->trip->price = $q->lastPrice->getRawOriginal('price');
-                    $q->trip->price_log_id = $q->lastPrice->id;
-                    $q->trip->origin_additional_price = $q->lastPrice->getRawOriginal('origin_additional_price');
-                    $q->trip->destination_additional_price = $q->lastPrice->getRawOriginal('destination_additional_price');
-                    $q->trip->start_date = $q->lastPrice->start_date;
-                }
-                
+            ->allQuery()->where(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->get()->map(function ($q) {                
+                $q->trip->price = $q->lastPrice->getRawOriginal('price');
+                $q->trip->price_log_id = $q->lastPrice->id;
+                $q->trip->origin_additional_price = $q->lastPrice->getRawOriginal('origin_additional_price');
+                $q->trip->destination_additional_price = $q->lastPrice->getRawOriginal('destination_additional_price');
+                $q->trip->start_date = $q->lastPrice->start_date;
                 return $q->trip;
             });
         $buttonView = view('inventory.dms_inv_carriers.partials.trip_button', ['json' => ['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')], 'url' => route('inventory.tripEkspedisis.create')])->render();

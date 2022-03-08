@@ -15,8 +15,8 @@ class TripDataTable extends DataTable
      * example mapping filter column to search by keyword, default use %keyword%.
      */
     private $columnFilterOperator = [
-        'destination.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
-        'origin.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
+        'destination_location_id' => \App\DataTables\FilterClass\MatchKeyword::class,
+        'origin_location_id' => \App\DataTables\FilterClass\MatchKeyword::class,
         'product_categories.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
     ];
 
@@ -146,16 +146,16 @@ class TripDataTable extends DataTable
     {
         $locationItems = new LocationRepository(app());
         $productCategoriesItems = new ProductCategoriesRepository(app());
-        $dropDownOrigin = array_merge([['value' => '', 'text' => __('crud.option.location_placeholder')]], convertArrayPairValue($locationItems->allQuery(['type' => 'origin'])->get()->pluck('full_identity', 'id')));
-        $dropDownDestination = array_merge([['value' => '', 'text' => __('crud.option.location_placeholder')]], convertArrayPairValue($locationItems->allQuery(['type' => 'destination'])->get()->pluck('full_identity', 'id')));
+        $dropDownOrigin = array_merge([['value' => '', 'text' => __('crud.option.location_placeholder')]], convertArrayPairValueWithKey($locationItems->allQuery(['type' => 'origin'])->get()->pluck('full_identity', 'id')));
+        $dropDownDestination = array_merge([['value' => '', 'text' => __('crud.option.location_placeholder')]], convertArrayPairValueWithKey($locationItems->allQuery(['type' => 'destination'])->get()->pluck('full_identity', 'id')));
         $dropDownProductCategories = array_merge([['value' => '', 'text' => __('crud.option.product_categories_placeholder')]], convertArrayPairValue($productCategoriesItems->pluck()));
 
         return [
             'code' => new Column(['title' => __('models/trips.fields.code'), 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
             'name' => new Column(['title' => __('models/trips.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
-            'origin_location_id' => new Column(['title' => __('models/trips.fields.origin_place'), 'data' => 'origin.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $dropDownOrigin]),
+            'origin_location_id' => new Column(['title' => __('models/trips.fields.origin_place'), 'name' => 'origin_location_id', 'data' => 'origin.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $dropDownOrigin]),
             //'origin_additional_price' => new Column(['title' => __('models/trips.fields.origin_additional_price'), 'data' => 'origin_additional_price', 'searchable' => false, 'elmsearch' => 'text']),
-            'destination_location_id' => new Column(['title' => __('models/trips.fields.destination_place'), 'data' => 'destination.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $dropDownDestination]),
+            'destination_location_id' => new Column(['title' => __('models/trips.fields.destination_place'), 'name' => 'destination_location_id', 'data' => 'destination.name', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $dropDownDestination]),
             'destination_additional_price' => new Column(['title' => __('models/trips.fields.destination_additional_price'), 'data' => 'destination_additional_price', 'searchable' => false, 'elmsearch' => 'text']),
             'price' => new Column(['title' => __('models/trips.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text']),
             'distance' => new Column(['title' => __('models/trips.fields.distance'), 'data' => 'distance', 'searchable' => false, 'elmsearch' => 'text']),

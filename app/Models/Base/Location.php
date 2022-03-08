@@ -91,6 +91,6 @@ class Location extends Model
 
     public function getFullIdentityAttribute($value)
     {
-        return $this->attributes['name'].' , '.$this->attributes['district'].' '.$this->attributes['city'];
+        return $this->attributes['name'].' ( '.$this->attributes['reference_id'].' ) , '.$this->attributes['district'].' '.$this->attributes['city'];
     }
 }
