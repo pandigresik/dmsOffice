@@ -256,7 +256,7 @@ class BtbValidate extends Model
             '{$now}' as created_at,
             dsd.szSupplierId,
             coalesce((select ppl.price from product_price_log ppl where ppl.product_id = dsdi.szProductId and ppl.start_date <= dsd.dtmDoc and (ppl.end_date is null or ppl.end_date >= dsd.dtmDoc) order by id desc limit 1),0) as price,
-            coalesce(getShippingCost(dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
+            coalesce(getShippingCost(dsd.szDocId,dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
         from
             dms_inv_docstockinsupplier dsd
         join dms_inv_docstockinsupplieritem dsdi on dsdi.szDocId = dsd.szDocId
@@ -332,7 +332,7 @@ class BtbValidate extends Model
             eks.szName as nama_ekspedisi,        
             dsd.szDocStatus AS szDocStatus,
             coalesce((select ppl.price from product_price_log ppl where ppl.product_id = dsdi.szProductId and ppl.start_date <= dsd.dtmDoc and (ppl.end_date is null or ppl.end_date >= dsd.dtmDoc) order by id desc limit 1),0) as price,
-            coalesce(getShippingCost(dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
+            coalesce(getShippingCost(dsd.szDocId, dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
             -- coalesce((select cost from shippingCost where product_id = dsdi.szProductId and destination_id = dsd.szWarehouseId and origin_id = dsd.szSupplierId limit 1),0) as shipping_cost
         from
             dms_inv_docstockinsupplier dsd
