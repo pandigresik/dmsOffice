@@ -1,0 +1,52 @@
+<table class="table table-bordered" id="table-account-line">
+    <thead>
+        <tr>
+            <th>No. Referensi</th>
+            <th>Account</th>
+            <th>User / PIC</th>
+            <th>Keterangan</th>
+            <th>Jumlah</th>            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody onchange="updateSummaryBalance(this)">
+        @if(isset($lines))
+            @foreach ($lines as $index => $item)
+                @include('accounting.transfer_cash_banks.item_keluar_line', ['item' => $item, 'lastIndex' => count($lines) == $index + 1 ? 1 : 0])    
+            @endforeach
+        @else
+            @include('accounting.transfer_cash_banks.item_keluar_line', ['item' => null, 'lastIndex' => 1])
+        @endif        
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="4">Jumlah</th>
+            <th class="amount">{!! Form::text('', 0, ['class' => 'form-control inputmask', 'required' => 'required', 'readonly' => 'readonly', 'data-optionmask' => json_encode(config('local.number.currency'))]) !!}</th>            
+        </tr>
+    </tfoot>
+</table>
+
+
+@push('scripts')
+    <script type="text/javascript">
+        $(function(){
+            $('#table-account-line tbody').trigger('change')
+        })
+        function updateSummaryBalance(_elm){
+            const _form = $(_elm).closest('form')
+            const _table = $(_elm).closest('table')
+            let _amount = 0, _credit = 0, _unmaskedvalue, _option
+            $(_elm).find('input[name="transfer_cash_bank_detail[amount][]"]').each(function(){
+                _option = $(this).data('optionmask') || {}
+                _unmaskedvalue = $(this).inputmask('unmaskedvalue')  || '0'
+                if (_option.radixPoint === ',') {
+                    _unmaskedvalue = _unmaskedvalue.replace(',', '.')
+                }
+                _amount += parseInt(_unmaskedvalue)
+            })
+
+            _table.find('tfoot th.amount input').val(_amount)
+            _table.find('tfoot th.amount input').trigger('change')
+        }
+    </script>
+@endpush
