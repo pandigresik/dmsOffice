@@ -3,7 +3,6 @@
 namespace App\Models\Accounting;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -51,8 +50,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class TransferCashBankDetail extends Model
-{
-    use SoftDeletes;
+{    
 
     use HasFactory;
 
@@ -60,15 +58,15 @@ class TransferCashBankDetail extends Model
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+    const CREATED_BY = NULL;
+    const UPDATED_BY = NULL;
 
 
-    protected $dates = ['deleted_at'];
-
-    public $connection = "mysql_sejati";
+    protected $dates = ['deleted_at'];    
 
     public $fillable = [
         'transfer_cash_bank_id',
-        'no_reference',
+        'no_reference',        
         'account',
         'description',
         'amount',

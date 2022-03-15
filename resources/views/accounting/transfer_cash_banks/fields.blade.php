@@ -3,6 +3,7 @@
     {!! Form::label('type_account', __('models/transferCashBanks.fields.type_account').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
     {!! Form::select('type_account', $typeAccountItems, null, ['class' => 'form-control', 'required' => 'required']) !!}
+    {!! Form::hidden('type', $type ) !!}
 </div>
 </div>
 

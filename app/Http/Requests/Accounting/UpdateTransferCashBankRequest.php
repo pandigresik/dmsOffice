@@ -44,7 +44,7 @@ class UpdateTransferCashBankRequest extends FormRequest
     */
     public function all($keys = null){
         $keys = (new TransferCashBank)->fillable;
-        $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
+        $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;        
         return parent::all($keys);
     }
 }

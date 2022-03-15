@@ -40,6 +40,7 @@ class CreateTransferCashBankRequest extends FormRequest
     */
     public function all($keys = null){
         $keys = (new TransferCashBank)->fillable;
+        $keys = array_merge(['transfer_cash_bank_detail'], $keys);
         return parent::all($keys);
     }
 }

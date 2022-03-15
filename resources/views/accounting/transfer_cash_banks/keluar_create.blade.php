@@ -6,7 +6,7 @@
                         {!! Form::open(['route' => 'accounting.transferCashBanks.store']) !!}
                         <div class="card">                            
                             <div class="card-body">                                
-                                   @include('accounting.transfer_cash_banks.fields')
+                                   @include('accounting.transfer_cash_banks.fields', ['type' => 'KK'])
                                    <div class="table-responsive">
                                     @include('accounting.transfer_cash_banks.table_keluar_line')                                    
                                     </div>

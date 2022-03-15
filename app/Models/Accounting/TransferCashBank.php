@@ -49,9 +49,7 @@ class TransferCashBank extends Model
     const UPDATED_AT = 'updated_at';
 
 
-    protected $dates = ['deleted_at'];
-
-    public $connection = "mysql_sejati";
+    protected $dates = ['deleted_at'];    
 
     public $fillable = [
         'type_account',
@@ -80,7 +78,7 @@ class TransferCashBank extends Model
      */
     public static $rules = [
         'type_account' => 'required|string|max:10',
-        'number' => 'required|string|max:15',
+      //  'number' => 'required|string|max:15',
         'transaction_date' => 'required',
         'type' => 'required|string|max:5'
     ];
@@ -91,5 +89,18 @@ class TransferCashBank extends Model
     public function transferCashBankDetails()
     {
         return $this->hasMany(\App\Models\Accounting\TransferCashBankDetail::class, 'transfer_cash_bank_id');
+    }
+
+    public function getNextNumber($type)
+    {
+        $monthCode = chr(65 + intval(date('m')));
+        $pattern = $type.'/'.date('y').$monthCode.'/';
+        $columnReference = 'number';
+        $sequenceLength = 4;
+        $nextId = $this->where($columnReference, 'like', $pattern.'%')->max($columnReference);
+        $nextId = !$nextId ? 1 : intval(substr($nextId, strlen($nextId) - $sequenceLength)) + 1;
+        $newId = [$pattern, str_pad($nextId, $sequenceLength, '0', STR_PAD_LEFT)];
+
+        return implode('', $newId);
     }
 }
