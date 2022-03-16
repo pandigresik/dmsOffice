@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Accounting;
 
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Accounting\GeneralLedgerRepository;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Response;
 
@@ -23,8 +22,8 @@ class GeneralLedgerController extends AppBaseController
         if ($request->ajax()) {
             $endDateObj = createLocalFormatDate($request->get('ref'));
             $endDate = $endDateObj->format('Y-m-d');
-            $startDate = substr($endDate, 0, 8).'01';            
-            $datas = $this->getRepositoryObj()->list($startDate, $endDate);            
+            $startDate = substr($endDate, 0, 8).'01';
+            $datas = $this->getRepositoryObj()->list($startDate, $endDate);
 
             return view('accounting.general_ledger.list')
                 ->with($datas)
@@ -58,7 +57,7 @@ class GeneralLedgerController extends AppBaseController
     private function exportExcel($endDateObj)
     {
         $endDate = $endDateObj->format('Y-m-d');
-        $startDate = substr($endDate, 0, 8).'01';        
+        $startDate = substr($endDate, 0, 8).'01';
         $collection = $this->getRepositoryObj()->list($startDate, $endDate);
         $modelEksport = '\\App\Exports\\Template\\Accounting\\GeneralLedgerExport';
         $fileName = 'gl_'.$endDate;

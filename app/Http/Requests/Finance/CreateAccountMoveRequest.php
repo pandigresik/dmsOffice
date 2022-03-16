@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Finance;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Finance\AccountMove;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateAccountMoveRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateAccountMoveRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'account_move-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,10 +35,12 @@ class CreateAccountMoveRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new AccountMove)->fillable;        
+     */
+    public function all($keys = null)
+    {
+        $keys = (new AccountMove())->fillable;
         $keys = array_merge(['account_move_line'], $keys);
+
         return parent::all($keys);
     }
 }

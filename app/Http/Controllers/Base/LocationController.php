@@ -6,7 +6,6 @@ use App\DataTables\Base\LocationDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateLocationRequest;
 use App\Http\Requests\Base\UpdateLocationRequest;
-use App\Models\Base\DmsApSupplier;
 use App\Repositories\Base\CityRepository;
 use App\Repositories\Base\DmsApSupplierRepository;
 use App\Repositories\Base\LocationRepository;
@@ -166,6 +165,7 @@ class LocationController extends AppBaseController
         ];
         $originReference = new DmsApSupplierRepository(app());
         $destinationReference = new DmsInvWarehouseRepository(app());
+
         return [
             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck([], null, null, 'name', 'name'),
             'typeItems' => $typeItems,

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Console\Commands\DatabaseSynchronizer;
 use App\DataTables\SynchronizeDataTable;
 use App\Http\Requests\CreateSynchronizeRequest;
-use App\Models\LogSynchronize;
 use App\Models\Synchronize;
 use App\Repositories\SynchronizeRepository;
 use Exception;
@@ -68,7 +67,7 @@ class SynchronizeController extends AppBaseController
         $to = $connectionStr;
         // $to = $connectionStr.'_origin';
         // $from = $connectionStr;
-        $cacheIdentity = $this->getCacheIdentity($connectionStr);        
+        $cacheIdentity = $this->getCacheIdentity($connectionStr);
 
         try {
             (new DatabaseSynchronizer(
@@ -85,7 +84,7 @@ class SynchronizeController extends AppBaseController
             // foreach ($this->getTables() as $table) {
             //     $tableName = $table['name'];
             //     \Log::error($tableName);
-                
+
             // }
         } catch (Exception $e) {
             \Log::error($e->getMessage());
@@ -148,22 +147,22 @@ class SynchronizeController extends AppBaseController
     {
         $user = Auth::user();
         $connectionStr = config('entity.entityConnection')[$user->entity_id];
-        $resultCondition = [];        
+        $resultCondition = [];
         $columnCondition = config('database-synchronizer.tables', []);
         $tables = $this->getTables();
         $tableReferences = [];
         $cutOff = '2021-11-01';
-        foreach ($tables as $table) {            
-            //$synchronize = Synchronize::whereTableName($table)->max('updated_at') ?? '2021-10-01 01:01:01';            
+        foreach ($tables as $table) {
+            //$synchronize = Synchronize::whereTableName($table)->max('updated_at') ?? '2021-10-01 01:01:01';
             $tableName = $table['name'];
             $tableReferences[$tableName] = $table;
             $references = $table['references'];
-            if (empty($references)) {                
+            if (empty($references)) {
                 $synchronize = \DB::connection($connectionStr)->table($tableName)->max($table['filter']);
-                $lastSinkron = (\Carbon\Carbon::parse($synchronize))->subHour(1);                
+                $lastSinkron = (\Carbon\Carbon::parse($synchronize))->subHour(1);
                 $lastSinkron = $lastSinkron < $cutOff ? $cutOff : $lastSinkron;
                 $resultCondition[$tableName] = $table['filter'].' >= \''.$lastSinkron.'\'';
-            } else {                
+            } else {
                 \Log::error($tableReferences[$references['table']]['filter']);
                 $synchronize = \DB::connection($connectionStr)->table($references['table'])->max($tableReferences[$references['table']]['filter']);
                 $lastSinkron = (\Carbon\Carbon::parse($synchronize))->subHour(1);

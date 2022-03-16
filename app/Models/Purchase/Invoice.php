@@ -90,7 +90,7 @@ class Invoice extends Model
     const READY_PAY = 'ready_pay';
     const PAY = 'pay';
     const SUPPLIER = 'supplier';
-    const EKSPEDISI = 'ekspedisi';    
+    const EKSPEDISI = 'ekspedisi';
 
     public $table = 'invoice';
     public $isCachable = false;
@@ -106,7 +106,7 @@ class Invoice extends Model
         'date_invoice',
         'date_due',
         'partner_id',
-        'partner_type'        
+        'partner_type',
     ];
 
     /**
@@ -114,9 +114,9 @@ class Invoice extends Model
      *
      * @var array
      */
-    public static $rules = [        
-        'external_reference' => 'required|string|max:255',        
-        'amount' => 'required|numeric',        
+    public static $rules = [
+        'external_reference' => 'required|string|max:255',
+        'amount' => 'required|numeric',
         'date_invoice' => 'required',
         'date_due' => 'required',
         // 'partner_id' => 'required|string|max:20',
@@ -254,8 +254,8 @@ class Invoice extends Model
 
     public function getFullIdentityAttribute($value)
     {
-        $partnerName = $this->attributes['partner_type'] == self::SUPPLIER ? $this->partner->szName : $this->ekspedisi->szName;
-        
+        $partnerName = self::SUPPLIER == $this->attributes['partner_type'] ? $this->partner->szName : $this->ekspedisi->szName;
+
         return $this->attributes['number'].'('.$partnerName.' - '.$this->attributes['reference'].')';
     }
 }

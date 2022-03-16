@@ -38,10 +38,11 @@ class ProductCategoriesProductController extends AppBaseController
             $products = $this->getRepositoryObj()->with(['product'])->all(['product_categories_id' => $request->get('product_categories_id')])->map(function ($q) {
                 $q->product['stateForm'] = 'update';
                 $q->product['id'] = $q->id;
+
                 return $q->product;
             });
         }
-        
+
         $buttonView = view('inventory.product_categories.partials.product_button', ['json' => [], 'url' => route('inventory.productCategoriesProducts.create')])->render();
 
         return view('inventory.product_categories_products.index')->with(['products' => $products, 'buttonView' => $buttonView]);

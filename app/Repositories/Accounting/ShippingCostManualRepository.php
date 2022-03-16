@@ -7,11 +7,10 @@ use App\Models\Accounting\ShippingCostManualDetail;
 use App\Repositories\BaseRepository;
 
 /**
- * Class ShippingCostManualRepository
- * @package App\Repositories\Accounting
+ * Class ShippingCostManualRepository.
+ *
  * @version February 22, 2022, 1:58 pm WIB
-*/
-
+ */
 class ShippingCostManualRepository extends BaseRepository
 {
     /**
@@ -25,11 +24,11 @@ class ShippingCostManualRepository extends BaseRepository
         'date',
         'do_references',
         'sj_references',
-        'amount'
+        'amount',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -39,8 +38,8 @@ class ShippingCostManualRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return ShippingCostManual::class;
@@ -58,10 +57,10 @@ class ShippingCostManualRepository extends BaseRepository
         $this->model->getConnection()->beginTransaction();
 
         try {
-            $details = $input['details'];            
+            $details = $input['details'];
             $model = $this->model->newInstance($input);
             $model->number = $model->getNextNumber();
-            $model->save();            
+            $model->save();
             $this->createDetail($details, $model);
 
             $this->model->getConnection()->commit();
@@ -80,9 +79,9 @@ class ShippingCostManualRepository extends BaseRepository
         $this->model->getConnection()->beginTransaction();
 
         try {
-            $details = $input['details'];            
-            $model = parent::update($input, $id);            
-            
+            $details = $input['details'];
+            $model = parent::update($input, $id);
+
             $this->removeDetail($model);
             $this->createDetail($details, $model);
 
@@ -95,17 +94,6 @@ class ShippingCostManualRepository extends BaseRepository
         }
 
         return $model;
-    }    
-
-    private function removeDetail($model){
-        ShippingCostManualDetail::where('shipping_cost_manual_id', $model->id)->forceDelete();
-    }    
-
-    private function createDetail($details, $model)
-    {        
-        foreach ($details as $k => $r) {            
-            $model->details()->create($r);
-        }
     }
 
     public function delete($id)
@@ -113,7 +101,20 @@ class ShippingCostManualRepository extends BaseRepository
         $query = $this->model->newQuery();
 
         $model = $query->findOrFail($id);
-        $model->details()->forceDelete();        
+        $model->details()->forceDelete();
+
         return $model->forceDelete();
+    }
+
+    private function removeDetail($model)
+    {
+        ShippingCostManualDetail::where('shipping_cost_manual_id', $model->id)->forceDelete();
+    }
+
+    private function createDetail($details, $model)
+    {
+        foreach ($details as $k => $r) {
+            $model->details()->create($r);
+        }
     }
 }

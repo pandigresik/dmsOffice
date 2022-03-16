@@ -39,7 +39,7 @@ class SelectAjaxController extends AppBaseController
         $currentPage = $this->request->get('page') || 1;
         $limit = $this->request->get('limit') ?? 10;
         $data = $this->repository->paginate($limit, $currentPage, [$lookupColumn['id'].' as id', $lookupColumn['text'].' as text'], ['keyword' => $q, 'column' => [$lookupColumn['text']]]);
-        
+
         return new JsonResponse($data);
     }
 }

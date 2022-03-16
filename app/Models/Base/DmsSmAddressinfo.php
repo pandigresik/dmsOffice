@@ -3,8 +3,6 @@
 namespace App\Models\Base;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @SWG\Definition(
@@ -136,16 +134,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class DmsSmAddressinfo extends Model
-{     
-
-    public $table = 'dms_sm_addressinfo';
-    
+{
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-    
+    public $table = 'dms_sm_addressinfo';
 
     public $fillable = [
         'iId',
@@ -170,8 +163,41 @@ class DmsSmAddressinfo extends Model
         'szUserCreatedId',
         'szUserUpdatedId',
         'dtmCreated',
-        'dtmLastUpdated'
+        'dtmLastUpdated',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'iId' => 'required|string|max:50',
+        'szObjectId' => 'required|string|max:50',
+        'szId' => 'required|string|max:50',
+        'szAddress' => 'required|string|max:1000',
+        'szProvince' => 'required|string|max:50',
+        'szCity' => 'required|string|max:50',
+        'szDistrict' => 'required|string|max:50',
+        'szSubDistrict' => 'required|string|max:50',
+        'szZipCode' => 'required|string|max:50',
+        'szPhone1' => 'required|string|max:50',
+        'szPhone2' => 'required|string|max:50',
+        'szPhone3' => 'required|string|max:50',
+        'szFaximile' => 'required|string|max:50',
+        'szContactPerson1' => 'required|string|max:50',
+        'szContactPerson2' => 'required|string|max:50',
+        'szEmail' => 'required|string|max:50',
+        'szLongitude' => 'required|string|max:20',
+        'szLatitude' => 'required|string|max:20',
+        'szAddress2' => 'required|string|max:1000',
+        'szUserCreatedId' => 'required|string|max:20',
+        'szUserUpdatedId' => 'required|string|max:20',
+        'dtmCreated' => 'required',
+        'dtmLastUpdated' => 'required',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -202,42 +228,11 @@ class DmsSmAddressinfo extends Model
         'szUserCreatedId' => 'string',
         'szUserUpdatedId' => 'string',
         'dtmCreated' => 'datetime',
-        'dtmLastUpdated' => 'datetime'
+        'dtmLastUpdated' => 'datetime',
     ];
 
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'iId' => 'required|string|max:50',
-        'szObjectId' => 'required|string|max:50',
-        'szId' => 'required|string|max:50',
-        'szAddress' => 'required|string|max:1000',
-        'szProvince' => 'required|string|max:50',
-        'szCity' => 'required|string|max:50',
-        'szDistrict' => 'required|string|max:50',
-        'szSubDistrict' => 'required|string|max:50',
-        'szZipCode' => 'required|string|max:50',
-        'szPhone1' => 'required|string|max:50',
-        'szPhone2' => 'required|string|max:50',
-        'szPhone3' => 'required|string|max:50',
-        'szFaximile' => 'required|string|max:50',
-        'szContactPerson1' => 'required|string|max:50',
-        'szContactPerson2' => 'required|string|max:50',
-        'szEmail' => 'required|string|max:50',
-        'szLongitude' => 'required|string|max:20',
-        'szLatitude' => 'required|string|max:20',
-        'szAddress2' => 'required|string|max:1000',
-        'szUserCreatedId' => 'required|string|max:20',
-        'szUserUpdatedId' => 'required|string|max:20',
-        'dtmCreated' => 'required',
-        'dtmLastUpdated' => 'required'
-    ];
-
-    public function getFullAddressAttribute($value){
-
+    public function getFullAddressAttribute($value)
+    {
         return implode(' ', [$this->attributes['szAddress'], $this->attributes['szSubDistrict'], $this->attributes['szDistrict'], $this->attributes['szCity']]);
     }
 }

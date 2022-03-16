@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\LogSynchronize;
+use App\Models\Synchronize;
 use Exception;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Schema\Blueprint;
@@ -9,8 +11,6 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use App\Models\LogSynchronize;
-use App\Models\Synchronize;
 use PDOException;
 
 class DatabaseSynchronizer
@@ -59,7 +59,7 @@ class DatabaseSynchronizer
             $tableName = $table['name'];
             $this->updateProgress($tableName, 100, 0);
         }
-        
+
         foreach ($this->getTables() as $table) {
             $tableName = $table['name'];
             $this->feedback(PHP_EOL.PHP_EOL."Table: {$tableName}", 'line');
@@ -167,13 +167,13 @@ class DatabaseSynchronizer
         if (!empty($amount)) {
             while ($row = $statement->fetch(\PDO::FETCH_OBJ)) {
                 $tmp = $this->getToDb()->table($tableName);
-                if(is_array($queryColumn)){
-                    foreach($queryColumn as $qc){
+                if (is_array($queryColumn)) {
+                    foreach ($queryColumn as $qc) {
                         $tmp->where($qc, $row->{$qc});
                     }
-                }else{
+                } else {
                     $tmp->where($queryColumn, $row->{$queryColumn});
-                }             
+                }
                 $exists = $tmp->first();
                 // remove iiInternalId because auto increment column
                 if (isset($row->iInternalId)) {
@@ -184,11 +184,11 @@ class DatabaseSynchronizer
                     $this->getToDb()->table($tableName)->insert((array) $row);
                 } else {
                     $tmpUpdate = $this->getToDb()->table($tableName);
-                    if(is_array($queryColumn)){
-                        foreach($queryColumn as $qc){
+                    if (is_array($queryColumn)) {
+                        foreach ($queryColumn as $qc) {
                             $tmpUpdate->where($qc, $row->{$qc});
                         }
-                    }else{
+                    } else {
                         $tmpUpdate->where($queryColumn, $row->{$queryColumn});
                     }
                     $tmpUpdate->update((array) $row);

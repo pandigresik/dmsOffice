@@ -2,10 +2,10 @@
 
 namespace App\DataTables\Purchase;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Purchase\InvoiceLine;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\BaseDataTable as DataTable;
 
 class InvoiceLineDataTable extends DataTable
 {

@@ -3,9 +3,9 @@
 namespace App\Models\Sales;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -79,8 +79,6 @@ class DiscountMember extends Model
 
     /**
      * Get the Discount that owns the DiscountMember.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function Discount(): BelongsTo
     {

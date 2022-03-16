@@ -54,16 +54,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class TripEkspedisiPrice extends Model
-{    
+{
     use HasFactory;
 
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
+
     public $table = 'trip_ekspedisi_price';
-    
-    const CREATED_BY = NULL;
-    const UPDATED_BY = NULL;
-
-
-    protected $dates = ['deleted_at'];
 
     public $fillable = [
         'trip_ekspedisi_id',
@@ -71,8 +68,24 @@ class TripEkspedisiPrice extends Model
         'end_date',
         'price',
         'origin_additional_price',
-        'destination_additional_price'
+        'destination_additional_price',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'trip_ekspedisi_id' => 'required',
+        'start_date' => 'required',
+        'end_date' => 'nullable',
+        'price' => 'required|numeric',
+        'origin_additional_price' => 'nullable|numeric',
+        'destination_additional_price' => 'nullable|numeric',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -86,48 +99,34 @@ class TripEkspedisiPrice extends Model
         'end_date' => 'date',
         'price' => 'decimal:2',
         'origin_additional_price' => 'decimal:2',
-        'destination_additional_price' => 'decimal:2'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'trip_ekspedisi_id' => 'required',
-        'start_date' => 'required',
-        'end_date' => 'nullable',
-        'price' => 'required|numeric',
-        'origin_additional_price' => 'nullable|numeric',
-        'destination_additional_price' => 'nullable|numeric'
+        'destination_additional_price' => 'decimal:2',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function tripEkspedisi()
     {
         return $this->belongsTo(\App\Models\Inventory\TripEkspedisi::class, 'trip_ekspedisi_id');
     }
 
-    public function getStartDateAttribute($value){
-
+    public function getStartDateAttribute($value)
+    {
         return localFormatDate($value);
     }
 
-    public function getPriceAttribute($value){
-
+    public function getPriceAttribute($value)
+    {
         return localNumberFormat($value, 0);
     }
 
-    public function getOriginAdditionalPriceAttribute($value){
-
+    public function getOriginAdditionalPriceAttribute($value)
+    {
         return localNumberFormat($value, 0);
     }
 
-    public function getDestinationAdditionalPriceAttribute($value){
-
+    public function getDestinationAdditionalPriceAttribute($value)
+    {
         return localNumberFormat($value, 0);
     }
 }

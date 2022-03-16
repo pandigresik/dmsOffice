@@ -2,12 +2,8 @@
 
 namespace App\Repositories\Accounting;
 
-use App\Models\Accounting\AccountBalance;
 use App\Models\Accounting\CashFlowAccount;
-use App\Models\Accounting\JournalAccount;
-use App\Models\Accounting\ReportSettingAccount;
 use App\Repositories\BaseRepository;
-use Carbon\Carbon;
 
 /**
  * Class BkbDiscountsRepository.
@@ -21,7 +17,6 @@ class CashFlowRepository extends BaseRepository
      */
     protected $fieldSearchable = [
     ];
-    
 
     /**
      * Return searchable fields.
@@ -42,7 +37,7 @@ class CashFlowRepository extends BaseRepository
     }
 
     public function list($startDate, $endDate)
-    {        
+    {
         return $this->model->list($startDate, $endDate);
     }
 }

@@ -34,12 +34,12 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, Throwable $e) 
-{
-    if ($request->ajax()) {
-        return response()->json(['message' => $e->getMessage()], 500);
-    }
+    public function render($request, Throwable $e)
+    {
+        if ($request->ajax()) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
 
-    return parent::render($request, $e);
-}
+        return parent::render($request, $e);
+    }
 }

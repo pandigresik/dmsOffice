@@ -39,7 +39,7 @@ class ShippingCostManualController extends AppBaseController
      */
     public function create()
     {
-        return view('accounting.shipping_cost_manuals.create')->with($this->getOptionItems())->with('details',[] );
+        return view('accounting.shipping_cost_manuals.create')->with($this->getOptionItems())->with('details', []);
     }
 
     /**
@@ -87,15 +87,15 @@ class ShippingCostManualController extends AppBaseController
      */
     public function edit($id)
     {
-        $shippingCostManual = $this->getRepositoryObj()->find($id);        
-        
+        $shippingCostManual = $this->getRepositoryObj()->find($id);
+
         if (empty($shippingCostManual)) {
             Flash::error(__('messages.not_found', ['model' => __('models/shippingCostManuals.singular')]));
 
             return redirect(route('accounting.shippingCostManuals.index'));
         }
 
-        return view('accounting.shipping_cost_manuals.edit')->with(['shippingCostManual' => $shippingCostManual, 'details' => $shippingCostManual->details ])->with($this->getOptionItems());
+        return view('accounting.shipping_cost_manuals.edit')->with(['shippingCostManual' => $shippingCostManual, 'details' => $shippingCostManual->details])->with($this->getOptionItems());
     }
 
     /**
@@ -155,7 +155,7 @@ class ShippingCostManualController extends AppBaseController
      */
     private function getOptionItems()
     {
-        $branch = new DmsSmBranchRepository(app());        
+        $branch = new DmsSmBranchRepository(app());
         $carrier = new DmsInvCarrierRepository(app());
 
         return [

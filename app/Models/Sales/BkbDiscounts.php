@@ -4,9 +4,9 @@ namespace App\Models\Sales;
 
 use App\Models\BaseEntity as Model;
 use App\Models\Inventory\DmsInvProduct;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(

@@ -34,12 +34,13 @@ class TripEkspedisiController extends AppBaseController
     public function index(Request $request)
     {
         $trips = $this->getRepositoryObj()->with(['trip', 'lastPrice'])
-            ->allQuery()->where(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->get()->map(function ($q) {                
+            ->allQuery()->where(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->get()->map(function ($q) {
                 $q->trip->price = $q->lastPrice->getRawOriginal('price');
                 $q->trip->price_log_id = $q->lastPrice->id;
                 $q->trip->origin_additional_price = $q->lastPrice->getRawOriginal('origin_additional_price');
                 $q->trip->destination_additional_price = $q->lastPrice->getRawOriginal('destination_additional_price');
                 $q->trip->start_date = $q->lastPrice->start_date;
+
                 return $q->trip;
             });
         $buttonView = view('inventory.dms_inv_carriers.partials.trip_button', ['json' => ['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')], 'url' => route('inventory.tripEkspedisis.create')])->render();
@@ -87,7 +88,7 @@ class TripEkspedisiController extends AppBaseController
      */
     public function show($id)
     {
-        $tripEkspedisi = $this->getRepositoryObj()->find($id);        
+        $tripEkspedisi = $this->getRepositoryObj()->find($id);
         if (empty($tripEkspedisi)) {
             Flash::error(__('models/tripEkspedisis.singular').' '.__('messages.not_found'));
 
@@ -98,7 +99,7 @@ class TripEkspedisiController extends AppBaseController
     }
 
     /**
-     * Show the form for editing the specified trip ekspedisi price
+     * Show the form for editing the specified trip ekspedisi price.
      *
      * @param int $id
      *
@@ -114,8 +115,7 @@ class TripEkspedisiController extends AppBaseController
             return redirect(route('inventory.tripEkspedisis.index'));
         }
 
-        
-        return view('inventory.trip_ekspedisis.edit')->with(['tripEkspedisiPrice' =>  $tripEkspedisiPrice, 'idForm' => $idForm]);
+        return view('inventory.trip_ekspedisis.edit')->with(['tripEkspedisiPrice' => $tripEkspedisiPrice, 'idForm' => $idForm]);
     }
 
     /**

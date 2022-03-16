@@ -5,6 +5,7 @@ namespace App\Repositories\Sales;
 use App\Models\Sales\DmsSdDocdo;
 use App\Repositories\BaseRepository;
 use DB;
+
 /**
  * Class BkbDiscountsRepository.
  *
@@ -55,9 +56,9 @@ class SalesReportRepository extends BaseRepository
                 sum(dms_sd_docdoitemprice.decDiscPrinciple) as decDiscPrinciple, sum(dms_sd_docdoitemprice.decDiscDistributor) as decDiscDistributor,sum(dms_sd_docdoitemprice.decDiscInternal) as decDiscInternal'
             )
             // ->join('dms_sm_branch','dms_sm_branch.szId','=','dms_sd_docdo.szBranchId')
-            ->join('dms_sd_docdoitem', function($q){
+            ->join('dms_sd_docdoitem', function ($q) {
                 $q->on('dms_sd_docdoitem.szDocId', '=', 'dms_sd_docdo.szDocId')
-                    ->whereIn('dms_sd_docdoitem.szOrderItemTypeId',['JUAL','RETUR','PRODSUPP','JAMINAN','TARIK JAMINAN','SEWA'])
+                    ->whereIn('dms_sd_docdoitem.szOrderItemTypeId', ['JUAL', 'RETUR', 'PRODSUPP', 'JAMINAN', 'TARIK JAMINAN', 'SEWA'])
                     //->on(DB::raw("dms_sd_docdoitem.szOrderItemTypeId in ('JUAL','RETUR')"), DB::raw(''), DB::raw(''))
                 ;
             })
@@ -65,10 +66,10 @@ class SalesReportRepository extends BaseRepository
             ->join(
                 'dms_sd_docdoitemprice',
                 function ($q) {
-                $q->on('dms_sd_docdoitemprice.szDocId', '=', 'dms_sd_docdoitem.szDocId')
-                    ->on('dms_sd_docdoitemprice.intItemNumber', '=', 'dms_sd_docdoitem.intItemNumber')                    
+                    $q->on('dms_sd_docdoitemprice.szDocId', '=', 'dms_sd_docdoitem.szDocId')
+                        ->on('dms_sd_docdoitemprice.intItemNumber', '=', 'dms_sd_docdoitem.intItemNumber')
                 ;
-            }
+                }
             )->where(['dms_sd_docdo.szDocStatus' => 'Applied', 'szBranchId' => $branchId, 'bCash' => $cash])
             ->whereBetween('dms_sd_docdo.dtmDoc', [$startDate, $endDate])
             ->groupBy('dms_sd_docdoitem.szProductId')

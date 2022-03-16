@@ -4,10 +4,10 @@ namespace App\Exports\Template\Sales;
 
 use App\Models\Base\DmsSmBranch;
 use App\Models\Sales\Discounts;
-use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromView;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromView;
 
 class RekapDiscountsExport implements FromView
 {
@@ -19,6 +19,7 @@ class RekapDiscountsExport implements FromView
     protected $collection;
     private $startDate;
     private $endDate;
+
     public function __construct(Collection $collection)
     {
         $this->collection = $collection;
@@ -26,32 +27,33 @@ class RekapDiscountsExport implements FromView
 
     public function view(): View
     {
-        $discountMaster = Discounts::select('id','name')->whereIn('id', $this->collection->keys())->get()->keyBy('id');
+        $discountMaster = Discounts::select('id', 'name')->whereIn('id', $this->collection->keys())->get()->keyBy('id');
         $depoMaster = DmsSmBranch::select('szId', 'szName')->get()->keyBy('szId');
+
         return view('exports.sales.rekapDiscount', [
             'collection' => $this->collection,
             'discountMaster' => $discountMaster,
             'depoMaster' => $depoMaster,
             'startDate' => $this->getStartDate(),
-            'endDate' => $this->getEndDate()
+            'endDate' => $this->getEndDate(),
         ]);
     }
 
-    
-
     /**
-     * Get the value of endDate
-     */ 
+     * Get the value of endDate.
+     */
     public function getEndDate()
     {
         return $this->endDate;
     }
 
     /**
-     * Set the value of endDate
+     * Set the value of endDate.
      *
-     * @return  self
-     */ 
+     * @param mixed $endDate
+     *
+     * @return self
+     */
     public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
@@ -60,18 +62,20 @@ class RekapDiscountsExport implements FromView
     }
 
     /**
-     * Get the value of startDate
-     */ 
+     * Get the value of startDate.
+     */
     public function getStartDate()
     {
         return $this->startDate;
     }
 
     /**
-     * Set the value of startDate
+     * Set the value of startDate.
      *
-     * @return  self
-     */ 
+     * @param mixed $startDate
+     *
+     * @return self
+     */
     public function setStartDate($startDate)
     {
         $this->startDate = $startDate;

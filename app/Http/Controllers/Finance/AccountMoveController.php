@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\Finance;
 
 use App\DataTables\Finance\AccountMoveDataTable;
-use App\Http\Requests\Finance;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Finance\CreateAccountMoveRequest;
 use App\Http\Requests\Finance\UpdateAccountMoveRequest;
-use App\Repositories\Finance\AccountMoveRepository;
-
-use Flash;
-use App\Http\Controllers\AppBaseController;
 use App\Repositories\Accounting\AccountRepository;
 use App\Repositories\Base\DmsSmBranchRepository;
+use App\Repositories\Finance\AccountMoveRepository;
+use Flash;
 use Response;
 
 class AccountMoveController extends AppBaseController
 {
-    /** @var  AccountMoveRepository */
+    /** @var AccountMoveRepository */
     protected $repository;
 
     public function __construct()
@@ -27,7 +25,6 @@ class AccountMoveController extends AppBaseController
     /**
      * Display a listing of the AccountMove.
      *
-     * @param AccountMoveDataTable $accountMoveDataTable
      * @return Response
      */
     public function index(AccountMoveDataTable $accountMoveDataTable)
@@ -48,8 +45,6 @@ class AccountMoveController extends AppBaseController
     /**
      * Store a newly created AccountMove in storage.
      *
-     * @param CreateAccountMoveRequest $request
-     *
      * @return Response
      */
     public function store(CreateAccountMoveRequest $request)
@@ -66,7 +61,7 @@ class AccountMoveController extends AppBaseController
     /**
      * Display the specified AccountMove.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -86,7 +81,7 @@ class AccountMoveController extends AppBaseController
     /**
      * Show the form for editing the specified AccountMove.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -101,16 +96,16 @@ class AccountMoveController extends AppBaseController
         }
 
         return view('finance.account_moves.edit')
-                ->with('accountMove', $accountMove)
-                ->with('lines', $accountMove->lines)
-                ->with($this->getOptionItems());
+            ->with('accountMove', $accountMove)
+            ->with('lines', $accountMove->lines)
+            ->with($this->getOptionItems())
+        ;
     }
 
     /**
      * Update the specified AccountMove in storage.
      *
-     * @param  int              $id
-     * @param UpdateAccountMoveRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -134,7 +129,7 @@ class AccountMoveController extends AppBaseController
     /**
      * Remove the specified AccountMove from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -156,22 +151,23 @@ class AccountMoveController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model AccountMove from storage.         
+     * Provide options item based on relationship model AccountMove from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $account = new AccountRepository(app());
-        $accountData = $account->all([], null, null ,['code', 'name']);
+        $accountData = $account->all([], null, null, ['code', 'name']);
         $accountOptionItems = $accountData->keyBy('code')->toArray();
         $branch = new DmsSmBranchRepository(app());
 
         return [
             'branchItems' => $branch->pluck([], null, null, 'szId', 'szName'),
             'accountItems' => ['' => __('crud.option.ekspedisi_placeholder')] + $accountData->pluck('code', 'code')->toArray(),
-            'accountOptionItems' => $accountOptionItems
+            'accountOptionItems' => $accountOptionItems,
         ];
     }
 }

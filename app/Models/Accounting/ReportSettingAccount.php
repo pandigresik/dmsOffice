@@ -41,7 +41,7 @@ class ReportSettingAccount extends Model
         'LRC' => 'Laba Rugi PT',
         'NRC' => 'Neraca',
         'LCF' => 'Aliran Kas',
-        'GL'  => 'General Ledger'   
+        'GL' => 'General Ledger',
     ];
 
     public $table = 'report_setting_account';

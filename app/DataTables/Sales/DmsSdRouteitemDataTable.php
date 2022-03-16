@@ -2,10 +2,10 @@
 
 namespace App\DataTables\Sales;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Sales\DmsSdRouteitem;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\BaseDataTable as DataTable;
 
 class DmsSdRouteitemDataTable extends DataTable
 {

@@ -2,22 +2,20 @@
 
 namespace App\Http\Requests\Accounting;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Accounting\AccountBalance;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateAccountBalanceRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
     public function authorize()
-    {        
+    {
         $permissionName = 'account_balance-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateAccountBalanceRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new AccountBalance)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new AccountBalance())->fillable;
+
         return parent::all($keys);
     }
 }

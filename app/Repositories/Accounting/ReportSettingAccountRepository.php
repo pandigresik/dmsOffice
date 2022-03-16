@@ -6,11 +6,10 @@ use App\Models\Accounting\ReportSettingAccount;
 use App\Repositories\BaseRepository;
 
 /**
- * Class ReportSettingAccountRepository
- * @package App\Repositories\Accounting
+ * Class ReportSettingAccountRepository.
+ *
  * @version January 11, 2022, 8:54 pm WIB
-*/
-
+ */
 class ReportSettingAccountRepository extends BaseRepository
 {
     /**
@@ -19,11 +18,11 @@ class ReportSettingAccountRepository extends BaseRepository
     protected $fieldSearchable = [
         'code',
         'group',
-        'group_type'
+        'group_type',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -33,8 +32,8 @@ class ReportSettingAccountRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return ReportSettingAccount::class;
@@ -42,17 +41,19 @@ class ReportSettingAccountRepository extends BaseRepository
 
     public function create($input)
     {
-        $this->model->getConnection()->beginTransaction();        
+        $this->model->getConnection()->beginTransaction();
+
         try {
             $model = $this->model->newInstance($input);
-            $details = $input['details'];            
+            $details = $input['details'];
             $model->save();
-            
+
             $this->setDetails($details, $model);
             $this->model->getConnection()->commit();
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             $this->model->getConnection()->rollBack();
+
             return $e;
         }
 
@@ -61,16 +62,18 @@ class ReportSettingAccountRepository extends BaseRepository
 
     public function update($input, $id)
     {
-        $this->model->getConnection()->beginTransaction();        
+        $this->model->getConnection()->beginTransaction();
+
         try {
             $model = $this->model->newInstance($input);
             $details = $input['details'];
-            $model = parent::update($input, $id);            
+            $model = parent::update($input, $id);
             $this->setDetails($details, $model);
             $this->model->getConnection()->commit();
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             $this->model->getConnection()->rollBack();
+
             return $e;
         }
 
@@ -80,10 +83,10 @@ class ReportSettingAccountRepository extends BaseRepository
     private function setDetails($details, $model)
     {
         if (!empty($details)) {
-            $model->details()->forceDelete();            
+            $model->details()->forceDelete();
             foreach ($details as $key => $accountId) {
                 $model->details()->create([
-                    'account_id' => $accountId
+                    'account_id' => $accountId,
                 ]);
             }
         }

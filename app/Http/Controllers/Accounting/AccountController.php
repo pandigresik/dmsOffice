@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Accounting;
 
 use App\DataTables\Accounting\AccountDataTable;
-use App\Http\Requests\Accounting;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateAccountRequest;
 use App\Http\Requests\Accounting\UpdateAccountRequest;
 use App\Repositories\Accounting\AccountRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class AccountController extends AppBaseController
 {
-    /** @var  AccountRepository */
+    /** @var AccountRepository */
     protected $repository;
 
     public function __construct()
@@ -25,7 +23,6 @@ class AccountController extends AppBaseController
     /**
      * Display a listing of the Account.
      *
-     * @param AccountDataTable $accountDataTable
      * @return Response
      */
     public function index(AccountDataTable $accountDataTable)
@@ -46,8 +43,6 @@ class AccountController extends AppBaseController
     /**
      * Store a newly created Account in storage.
      *
-     * @param CreateAccountRequest $request
-     *
      * @return Response
      */
     public function store(CreateAccountRequest $request)
@@ -64,7 +59,7 @@ class AccountController extends AppBaseController
     /**
      * Display the specified Account.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class AccountController extends AppBaseController
     /**
      * Show the form for editing the specified Account.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class AccountController extends AppBaseController
     /**
      * Update the specified Account in storage.
      *
-     * @param  int              $id
-     * @param UpdateAccountRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class AccountController extends AppBaseController
     /**
      * Remove the specified Account from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class AccountController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model Account from storage.         
+     * Provide options item based on relationship model Account from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

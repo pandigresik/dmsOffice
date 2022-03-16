@@ -120,16 +120,14 @@ class Payment extends Model
 
     public function scopeSupplier($query)
     {
-        return $query->whereHas('invoices', function($q){
-
+        return $query->whereHas('invoices', function ($q) {
             return $q->supplierPartner();
         });
     }
 
     public function scopeEkspedisi($query)
     {
-        return $query->whereHas('invoices', function($q){
-
+        return $query->whereHas('invoices', function ($q) {
             return $q->ekspedisiPartner();
         });
     }

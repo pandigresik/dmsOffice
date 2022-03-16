@@ -6,11 +6,10 @@ use App\Models\Accounting\Account;
 use App\Repositories\BaseRepository;
 
 /**
- * Class AccountRepository
- * @package App\Repositories\Accounting
+ * Class AccountRepository.
+ *
  * @version January 11, 2022, 8:11 pm WIB
-*/
-
+ */
 class AccountRepository extends BaseRepository
 {
     /**
@@ -19,11 +18,11 @@ class AccountRepository extends BaseRepository
     protected $fieldSearchable = [
         'name',
         'code',
-        'description'
+        'description',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -33,8 +32,8 @@ class AccountRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return Account::class;

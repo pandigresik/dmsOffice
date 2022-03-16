@@ -17,18 +17,18 @@ class GeneralLedgerExport implements FromView
     protected $collection;
     private $startDate;
     private $endDate;
-    
-    public function __construct(Array $collection)
+
+    public function __construct(array $collection)
     {
         $this->collection = $collection;
     }
 
     public function view(): View
-    {        
+    {
         return view('accounting.general_ledger.list', [
             'data' => $this->collection['data'],
             'saldo' => $this->collection['saldo'],
-            'listAccount' => $this->collection['listAccount'],            
+            'listAccount' => $this->collection['listAccount'],
             'endDate' => $this->getEndDate(),
         ]);
     }

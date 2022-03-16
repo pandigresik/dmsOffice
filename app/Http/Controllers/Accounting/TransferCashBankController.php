@@ -3,19 +3,17 @@
 namespace App\Http\Controllers\Accounting;
 
 use App\DataTables\Accounting\TransferCashBankDataTable;
-use App\Http\Requests\Accounting;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateTransferCashBankRequest;
 use App\Http\Requests\Accounting\UpdateTransferCashBankRequest;
-use App\Repositories\Accounting\TransferCashBankRepository;
-
-use Flash;
-use App\Http\Controllers\AppBaseController;
 use App\Repositories\Accounting\AccountRepository;
+use App\Repositories\Accounting\TransferCashBankRepository;
+use Flash;
 use Response;
 
 class TransferCashBankController extends AppBaseController
 {
-    /** @var  TransferCashBankRepository */
+    /** @var TransferCashBankRepository */
     protected $repository;
 
     public function __construct()
@@ -26,7 +24,6 @@ class TransferCashBankController extends AppBaseController
     /**
      * Display a listing of the TransferCashBank.
      *
-     * @param TransferCashBankDataTable $transferCashBankDataTable
      * @return Response
      */
     public function index(TransferCashBankDataTable $transferCashBankDataTable)
@@ -53,8 +50,6 @@ class TransferCashBankController extends AppBaseController
     /**
      * Store a newly created TransferCashBank in storage.
      *
-     * @param CreateTransferCashBankRequest $request
-     *
      * @return Response
      */
     public function store(CreateTransferCashBankRequest $request)
@@ -71,7 +66,7 @@ class TransferCashBankController extends AppBaseController
     /**
      * Display the specified TransferCashBank.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -91,7 +86,7 @@ class TransferCashBankController extends AppBaseController
     /**
      * Show the form for editing the specified TransferCashBank.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -111,8 +106,7 @@ class TransferCashBankController extends AppBaseController
     /**
      * Update the specified TransferCashBank in storage.
      *
-     * @param  int              $id
-     * @param UpdateTransferCashBankRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -136,7 +130,7 @@ class TransferCashBankController extends AppBaseController
     /**
      * Remove the specified TransferCashBank from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -158,15 +152,17 @@ class TransferCashBankController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model TransferCashBank from storage.         
+     * Provide options item based on relationship model TransferCashBank from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
+    private function getOptionItems()
+    {
         $account = new AccountRepository(app());
-        $accountData = $account->all([], null, null ,['code', 'name']);
+        $accountData = $account->all([], null, null, ['code', 'name']);
+
         return [
             'typeAccountItems' => ['kas_besar' => 'Kas Besar', 'kas_kecil' => 'Kas Kecil', 'giro' => 'Giro'],
             'accountItems' => ['' => __('crud.option.ekspedisi_placeholder')] + $accountData->pluck('code', 'code')->toArray(),

@@ -3,7 +3,6 @@
 namespace App\Models\Sales;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -110,18 +109,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class DmsSdDocdoItemPrice extends Model
-{   
+{
     use HasFactory;
 
-    public $table = 'dms_sd_docdoitemprice';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-    
+    public $table = 'dms_sd_docdoitemprice';
 
     public $fillable = [
         'iId',
@@ -139,8 +133,34 @@ class DmsSdDocdoItemPrice extends Model
         'decTaxRate',
         'decDiscPrinciple',
         'decDiscDistributor',
-        'decDiscInternal'
+        'decDiscInternal',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'iId' => 'required|string|max:50',
+        'szDocId' => 'required|string|max:50',
+        'intItemNumber' => 'required|integer',
+        'intItemDetailNumber' => 'required|integer',
+        'szPriceId' => 'required|string|max:50',
+        'decPrice' => 'required|numeric',
+        'decDiscount' => 'required|numeric',
+        'bTaxable' => 'required|boolean',
+        'decAmount' => 'required|numeric',
+        'decTax' => 'required|numeric',
+        'decDpp' => 'required|numeric',
+        'szTaxId' => 'required|string|max:50',
+        'decTaxRate' => 'required|numeric',
+        'decDiscPrinciple' => 'required|numeric',
+        'decDiscDistributor' => 'required|numeric',
+        'decDiscInternal' => 'required|numeric',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -164,43 +184,21 @@ class DmsSdDocdoItemPrice extends Model
         'decTaxRate' => 'decimal:4',
         'decDiscPrinciple' => 'decimal:4',
         'decDiscDistributor' => 'decimal:4',
-        'decDiscInternal' => 'decimal:4'
+        'decDiscInternal' => 'decimal:4',
     ];
 
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'iId' => 'required|string|max:50',
-        'szDocId' => 'required|string|max:50',
-        'intItemNumber' => 'required|integer',
-        'intItemDetailNumber' => 'required|integer',
-        'szPriceId' => 'required|string|max:50',
-        'decPrice' => 'required|numeric',
-        'decDiscount' => 'required|numeric',
-        'bTaxable' => 'required|boolean',
-        'decAmount' => 'required|numeric',
-        'decTax' => 'required|numeric',
-        'decDpp' => 'required|numeric',
-        'szTaxId' => 'required|string|max:50',
-        'decTaxRate' => 'required|numeric',
-        'decDiscPrinciple' => 'required|numeric',
-        'decDiscDistributor' => 'required|numeric',
-        'decDiscInternal' => 'required|numeric'
-    ];
-
-    public function getDecDiscPrincipleAttribute($value){
+    public function getDecDiscPrincipleAttribute($value)
+    {
         return localNumberFormat($value, 0);
     }
 
-    public function getDecDiscDistributorAttribute($value){
+    public function getDecDiscDistributorAttribute($value)
+    {
         return localNumberFormat($value, 0);
     }
 
-    public function getDecDiscInternalAttribute($value){
+    public function getDecDiscInternalAttribute($value)
+    {
         return localNumberFormat($value, 0);
     }
-    
 }

@@ -166,7 +166,7 @@ abstract class BaseRepository
     {
         $this->eagerLoadRelations();
         $query = $this->model->newQuery();
-            
+
         return $query->find($id, $columns);
     }
 
@@ -251,7 +251,7 @@ abstract class BaseRepository
     }
 
     public function with($relations)
-    {        
+    {
         if (is_string($relations)) {
             $relations = func_get_args();
         }
@@ -274,7 +274,7 @@ abstract class BaseRepository
     }
 
     protected function eagerLoadRelations()
-    {        
+    {
         if (!is_null($this->with)) {
             foreach ($this->with as $relation) {
                 $this->model->with($relation);

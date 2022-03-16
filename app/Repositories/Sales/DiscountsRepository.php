@@ -68,7 +68,7 @@ class DiscountsRepository extends BaseRepository
             $input['end_date'] = $period[1];
             $input['split'] = $input['split'] ?? 0;
             $input['state'] = $input['state'] ?? 'A';
-            
+
             $model = $this->model->newInstance($input);
             $model->save();
 
@@ -98,8 +98,8 @@ class DiscountsRepository extends BaseRepository
             $input['start_date'] = $period[0];
             $input['end_date'] = $period[1];
             $input['split'] = $input['split'] ?? 0;
-            $input['state'] = $input['state'] ?? 'A';            
-            $model = parent::update($input, $id);            
+            $input['state'] = $input['state'] ?? 'A';
+            $model = parent::update($input, $id);
             $this->removeMember($model);
             $this->createMember($discountMembers, $model);
             $defaultValue = $this->getDefaultValue($model->jenis);
@@ -117,11 +117,13 @@ class DiscountsRepository extends BaseRepository
         return $model;
     }
 
-    private function removeMember($model){
+    private function removeMember($model)
+    {
         DiscountMember::where('discounts_id', $model->id)->forceDelete();
     }
 
-    private function removeDetail($model){
+    private function removeDetail($model)
+    {
         DiscountDetail::where('discounts_id', $model->id)->forceDelete();
     }
 
@@ -134,34 +136,33 @@ class DiscountsRepository extends BaseRepository
     }
 
     private function createDetail($discountDetails, $model, $defaultValue)
-    {        
+    {
         foreach ($discountDetails['main_dms_inv_product_id'] as $k => $r) {
             $insertData = [
                 'main_dms_inv_product_id' => $r,
-                'min_main_qty' => $discountDetails['min_main_qty'][$k] ?? $defaultValue['min_main_qty'],        
-                'max_main_qty'=> $discountDetails['max_main_qty'][$k] ?? $defaultValue['max_main_qty'],
-                'bundling_dms_inv_product_id'=> $discountDetails['bundling_dms_inv_product_id'][$k] ?? $defaultValue['bundling_dms_inv_product_id'],
-                'min_bundling_qty'=> $discountDetails['min_bundling_qty'][$k] ?? $defaultValue['min_bundling_qty'],
-                'max_bundling_qty'=> $discountDetails['max_bundling_qty'][$k] ?? $defaultValue['max_bundling_qty'],
-                'principle_amount'=> $discountDetails['principle_amount'][$k] ?? $defaultValue['principle_amount'],
-                'distributor_amount'=> $discountDetails['distributor_amount'][$k] ?? $defaultValue['distributor_amount'],
-                'package'=> $discountDetails['package'][$k] ?? $defaultValue['package'],
+                'min_main_qty' => $discountDetails['min_main_qty'][$k] ?? $defaultValue['min_main_qty'],
+                'max_main_qty' => $discountDetails['max_main_qty'][$k] ?? $defaultValue['max_main_qty'],
+                'bundling_dms_inv_product_id' => $discountDetails['bundling_dms_inv_product_id'][$k] ?? $defaultValue['bundling_dms_inv_product_id'],
+                'min_bundling_qty' => $discountDetails['min_bundling_qty'][$k] ?? $defaultValue['min_bundling_qty'],
+                'max_bundling_qty' => $discountDetails['max_bundling_qty'][$k] ?? $defaultValue['max_bundling_qty'],
+                'principle_amount' => $discountDetails['principle_amount'][$k] ?? $defaultValue['principle_amount'],
+                'distributor_amount' => $discountDetails['distributor_amount'][$k] ?? $defaultValue['distributor_amount'],
+                'package' => $discountDetails['package'][$k] ?? $defaultValue['package'],
             ];
             $model->details()->create($insertData);
         }
     }
 
-    private function getDefaultValue($jenis){
-        $tmp = [            
+    private function getDefaultValue($jenis)
+    {
+        return [
             'min_main_qty' => 1,
             'max_main_qty' => 99999,
-            'bundling_dms_inv_product_id' => NULL,
-            'min_bundling_qty' => NULL,
-            'max_bundling_qty' => NULL,        
+            'bundling_dms_inv_product_id' => null,
+            'min_bundling_qty' => null,
+            'max_bundling_qty' => null,
             'distributor_amount' => 0,
-            'package' => NULL
-        ];        
-
-        return $tmp;
+            'package' => null,
+        ];
     }
 }

@@ -6,11 +6,10 @@ use App\Models\Finance\AccountMove;
 use App\Repositories\BaseRepository;
 
 /**
- * Class AccountMoveRepository
- * @package App\Repositories\Finance
+ * Class AccountMoveRepository.
+ *
  * @version January 9, 2022, 8:21 pm WIB
-*/
-
+ */
 class AccountMoveRepository extends BaseRepository
 {
     /**
@@ -21,11 +20,11 @@ class AccountMoveRepository extends BaseRepository
         'date',
         'reference',
         'narration',
-        'state'
+        'state',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -35,8 +34,8 @@ class AccountMoveRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return AccountMove::class;
@@ -44,20 +43,22 @@ class AccountMoveRepository extends BaseRepository
 
     public function create($input)
     {
-        $this->model->getConnection()->beginTransaction();        
+        $this->model->getConnection()->beginTransaction();
+
         try {
             $model = $this->model->newInstance($input);
             $lines = $input['account_move_line'];
             $model->number = $model->getNextNumber();
             $model->state = AccountMove::POSTED;
             $model->save();
-            
+
             $this->setAccountLines($lines, $model);
             $this->postJournalLines($lines, $model);
             $this->model->getConnection()->commit();
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             $this->model->getConnection()->rollBack();
+
             return $e;
         }
 
@@ -66,38 +67,23 @@ class AccountMoveRepository extends BaseRepository
 
     public function update($input, $id)
     {
-        $this->model->getConnection()->beginTransaction();        
+        $this->model->getConnection()->beginTransaction();
+
         try {
             $model = $this->model->newInstance($input);
             $lines = $input['account_move_line'];
-            $model = parent::update($input, $id);            
+            $model = parent::update($input, $id);
             $this->setAccountLines($lines, $model);
             $this->postJournalLines($lines, $model);
             $this->model->getConnection()->commit();
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             $this->model->getConnection()->rollBack();
+
             return $e;
         }
 
         return $this->model;
-    }
-
-    private function setAccountLines($lines, $model)
-    {
-        if (!empty($lines)) {
-            $model->lines()->forceDelete();
-            foreach ($lines['account_id'] as $key => $line) {                
-                $model->lines()->create([
-                    'name' => $lines['name'][$key],
-                    'description' => $lines['description'][$key],
-                    'account_id' => $lines['account_id'][$key],
-                    'debit' => $lines['debit'][$key],
-                    'credit' => $lines['credit'][$key],
-                    'balance' => $lines['debit'][$key] - $lines['credit'][$key],
-                ]);
-            }
-        }
     }
 
     public function delete($id)
@@ -107,14 +93,16 @@ class AccountMoveRepository extends BaseRepository
         $model = $query->findOrFail($id);
         $model->lines()->forceDelete();
         $model->journals()->forceDelete();
+
         return $model->delete();
     }
 
-    public function postJournalLines($lines, $model){
+    public function postJournalLines($lines, $model)
+    {
         if (!empty($lines)) {
             $model->journals()->forceDelete();
-            foreach ($lines['account_id'] as $key => $line) {                
-                $model->journals()->create([                    
+            foreach ($lines['account_id'] as $key => $line) {
+                $model->journals()->create([
                     'name' => $lines['name'][$key],
                     'date' => $model->getRawOriginal('date'),
                     'reference' => $model->number,
@@ -123,7 +111,24 @@ class AccountMoveRepository extends BaseRepository
                     'debit' => $lines['debit'][$key],
                     'credit' => $lines['credit'][$key],
                     'balance' => $lines['debit'][$key] - $lines['credit'][$key],
-                    'branch_id' => $model->branch_id ?? NULL
+                    'branch_id' => $model->branch_id ?? null,
+                ]);
+            }
+        }
+    }
+
+    private function setAccountLines($lines, $model)
+    {
+        if (!empty($lines)) {
+            $model->lines()->forceDelete();
+            foreach ($lines['account_id'] as $key => $line) {
+                $model->lines()->create([
+                    'name' => $lines['name'][$key],
+                    'description' => $lines['description'][$key],
+                    'account_id' => $lines['account_id'][$key],
+                    'debit' => $lines['debit'][$key],
+                    'credit' => $lines['credit'][$key],
+                    'balance' => $lines['debit'][$key] - $lines['credit'][$key],
                 ]);
             }
         }

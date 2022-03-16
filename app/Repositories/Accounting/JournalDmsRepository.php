@@ -43,24 +43,29 @@ class JournalDmsRepository extends BaseRepository
         try {
             $this->removePreviousData($input);
             $type = $input['type'];
-            
-            switch($type){
+
+            switch ($type) {
                 case 'JBY':
-                    $this->model->jurnalBiaya($input);                    
+                    $this->model->jurnalBiaya($input);
+
                 break;
                 case 'JPT':
                     $this->model->jurnalPenjualanTunai($input);
                     $this->model->jurnalPPNKeluaran($input);
+
                 break;
                 case 'JPK':
                     $this->model->jurnalPenjualanKredit($input);
                     $this->model->jurnalPPNKeluaran($input);
+
                 break;
                 case 'JBL':
                     $this->model->jurnalPembelian($input);
+
                 break;
                 case 'NRC':
                     $this->model->jurnalNeraca($input);
+
                 break;
                 default:
             }

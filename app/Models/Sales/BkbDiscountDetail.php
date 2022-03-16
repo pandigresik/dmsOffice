@@ -3,12 +3,11 @@
 namespace App\Models\Sales;
 
 use App\Models\Base\DmsSmBranch;
-use App\Models\Sales\DmsSdDocdo;
 use App\Models\BaseEntity as Model;
 use App\Models\Inventory\DmsInvProduct;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -61,13 +60,10 @@ class BkbDiscountDetail extends Model
 
     use HasFactory;
 
-    public $table = 'bkb_discount_details';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];    
+    public $table = 'bkb_discount_details';
 
     public $fillable = [
         'szDocId',
@@ -77,8 +73,24 @@ class BkbDiscountDetail extends Model
         'decQty',
         'discount_id',
         'principle_amount',
-        'distributor_amount'
+        'distributor_amount',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'szDocId' => 'required|string|max:50',
+        'szProductId' => 'required|string|max:50',
+        'szBranchId' => 'required|string|max:50',
+        'discount_id' => 'required',
+        'principle_amount' => 'required|numeric',
+        'distributor_amount' => 'required|numeric',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -92,21 +104,7 @@ class BkbDiscountDetail extends Model
         'szBranchId' => 'string',
         'discount_id' => 'integer',
         'principle_amount' => 'decimal:2',
-        'distributor_amount' => 'decimal:2'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'szDocId' => 'required|string|max:50',
-        'szProductId' => 'required|string|max:50',
-        'szBranchId' => 'required|string|max:50',
-        'discount_id' => 'required',
-        'principle_amount' => 'required|numeric',
-        'distributor_amount' => 'required|numeric'
+        'distributor_amount' => 'decimal:2',
     ];
 
     /**
@@ -118,9 +116,7 @@ class BkbDiscountDetail extends Model
     }
 
     /**
-     * Get the bkb that owns the BkbDiscounts
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the bkb that owns the BkbDiscounts.
      */
     public function bkb(): BelongsTo
     {
@@ -128,7 +124,7 @@ class BkbDiscountDetail extends Model
     }
 
     /**
-     * Get the promo that owns the BkbDiscountDetail
+     * Get the promo that owns the BkbDiscountDetail.
      *
      * @return \IlluminDiscountsDatabase\Ediscount_idatioidsTo
      */
@@ -138,12 +134,10 @@ class BkbDiscountDetail extends Model
     }
 
     /**
-     * Get the depo that owns the DmsSdDocdo
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the depo that owns the DmsSdDocdo.
      */
     public function depo(): BelongsTo
     {
         return $this->belongsTo(DmsSmBranch::class, 'szBranchId', 'szId');
-    }    
+    }
 }

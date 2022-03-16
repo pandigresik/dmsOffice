@@ -2,8 +2,8 @@
 
 namespace App\DataTables\Purchase;
 
-use App\Models\Purchase\Invoice;
 use App\DataTables\BaseDataTable as DataTable;
+use App\Models\Purchase\Invoice;
 
 class InvoiceValidateDataTable extends InvoiceDataTable
 {

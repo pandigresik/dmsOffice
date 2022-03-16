@@ -5,10 +5,10 @@ namespace App\Models\Finance;
 use App\Models\Accounting\JournalAccount;
 use App\Models\Base\DmsSmBranch;
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -54,15 +54,11 @@ class AccountMove extends Model
 
     use HasFactory;
 
-    public $table = 'account_move';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     const POSTED = 'posted';
 
-    protected $dates = ['deleted_at'];
-
-    
+    public $table = 'account_move';
 
     public $fillable = [
         'number',
@@ -70,8 +66,22 @@ class AccountMove extends Model
         'reference',
         'narration',
         'branch_id',
-        'state'
+        'state',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'date' => 'required',
+        'reference' => 'required|string|max:80',
+        'narration' => 'nullable|string',
+        'state' => 'nullable|string|max:15',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -85,19 +95,7 @@ class AccountMove extends Model
         'reference' => 'string',
         'narration' => 'string',
         'branch_id' => 'string',
-        'state' => 'string'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [        
-        'date' => 'required',
-        'reference' => 'required|string|max:80',
-        'narration' => 'nullable|string',
-        'state' => 'nullable|string|max:15'
+        'state' => 'string',
     ];
 
     public function getDateAttribute($value)
@@ -118,9 +116,7 @@ class AccountMove extends Model
     }
 
     /**
-     * Get all of the lines for the AccountMove
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the lines for the AccountMove.
      */
     public function lines(): HasMany
     {
@@ -128,9 +124,7 @@ class AccountMove extends Model
     }
 
     /**
-     * Get the depo that owns the AccountMove
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the depo that owns the AccountMove.
      */
     public function dmsSmBranch(): BelongsTo
     {
@@ -143,9 +137,7 @@ class AccountMove extends Model
     }
 
     /**
-     * Get all of the journals for the AccountMove
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Get all of the journals for the AccountMove.
      */
     public function journals(): HasMany
     {

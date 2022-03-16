@@ -3,8 +3,8 @@
 namespace App\Models\Base;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -39,19 +39,29 @@ class Setting extends Model
 
     use HasFactory;
 
-    public $table = 'setting';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];    
+    public $table = 'setting';
 
     public $fillable = [
         'code',
         'description',
-        'value'
+        'value',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'code' => 'required|string|max:20',
+        'description' => 'nullable|string|max:100',
+        'value' => 'required|string|max:50',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -62,19 +72,6 @@ class Setting extends Model
         'id' => 'integer',
         'code' => 'string',
         'description' => 'string',
-        'value' => 'string'
+        'value' => 'string',
     ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'code' => 'required|string|max:20',
-        'description' => 'nullable|string|max:100',
-        'value' => 'required|string|max:50'
-    ];
-
-    
 }

@@ -3,9 +3,9 @@
 namespace App\Widgets;
 
 use Akaunting\Money\Money;
-use Arrilot\Widgets\AbstractWidget;
-use App\Repositories\Purchase\InvoiceRepository;
 use App\Repositories\Finance\PaymentOutRepository;
+use App\Repositories\Purchase\InvoiceRepository;
+use Arrilot\Widgets\AbstractWidget;
 
 class HutangEkspedisiWidget extends AbstractWidget
 {

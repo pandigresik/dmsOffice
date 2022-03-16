@@ -2,9 +2,9 @@
 
 namespace App\DataTables\Base;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Base\User;
 use Yajra\DataTables\EloquentDataTable;
-use App\DataTables\BaseDataTable as DataTable;
 
 class UserDataTable extends DataTable
 {

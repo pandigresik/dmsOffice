@@ -159,5 +159,5 @@ class DebitCreditNote extends Model
         $pengali = 'CN' == $this->attributes['type'] ? 1 : -1;
 
         return $pengali * $this->attributes['amount'];
-    }    
+    }
 }

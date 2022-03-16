@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
-
 /**
  * @SWG\Definition(
  *      definition="BtbValidate",
@@ -93,6 +92,7 @@ class BtbValidate extends Model
         'invoiced_expedition',
         'dms_inv_carrier_id',
         'price',
+        'shipping_cost'
     ];
 
     /**
@@ -150,7 +150,7 @@ class BtbValidate extends Model
     {
         $sql = implode(' union all ', [
             $this->btbSupplierSql($startDate, $endDate, $branchId),
-           // $this->btbDistribusiSql($startDate, $endDate, $branchId),
+            // $this->btbDistribusiSql($startDate, $endDate, $branchId),
         ]);
 
         return $this->fromQuery($sql);
@@ -164,7 +164,7 @@ class BtbValidate extends Model
     public function scopeCanInvoicedExpedition($query)
     {
         return $query->whereInvoicedExpedition(0);
-    }    
+    }
 
     public function scopeCanInvoicedSupplier($query, $listDoc = [])
     {
@@ -185,47 +185,25 @@ class BtbValidate extends Model
     }
 
     /**
-     * Get the ekspedisi that owns the BtbValidate
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the ekspedisi that owns the BtbValidate.
      */
     public function ekspedisi(): BelongsTo
     {
         return $this->belongsTo(DmsInvCarrier::class, 'dms_inv_carrier_id', 'szId');
     }
 
-
-    public function updateEkspedisi($id, $input){                
-        $listBtb = $this->where(['doc_id' => $input['doc_id']])->get();        
-        $ongkir = $this->getOngkir($listBtb[0], $input);
-        foreach($listBtb as $model){
+    public function updateEkspedisi($id, $input)
+    {
+        $listBtb = $this->where(['doc_id' => $input['doc_id']])->get();
+        // $ongkir = $this->getOngkir($listBtb[0], $input);
+        $ongkir = $input['shipping_cost'];
+        foreach ($listBtb as $model) {
             $model->shipping_cost = $ongkir;
             $model->dms_inv_carrier_id = $input['dms_inv_carrier_id'];
             $model->save();
         }
-        
+
         return $model;
-    }
-
-    private function getOngkir($btb, $input){
-        $btbDate = $btb->getRawOriginal('btb_date');
-        $supplier = $btb->partner_id;
-        $ekspedisi = $input['dms_inv_carrier_id'];
-        $warehouse = $btb->dms_inv_warehouse_id;
-        $product = $btb->product_id;
-        $sql = <<<SQL
-            select ( tep.price + tep.origin_additional_price + tep.destination_additional_price ) as shippingCost from trip t
-            join trip_ekspedisi te on t.id  = te.trip_id and te.dms_inv_carrier_id = (select iInternalId from dms_inv_carrier where szId = '{$ekspedisi}')
-            join trip_ekspedisi_price tep on tep.trip_ekspedisi_id = te.id and tep.start_date <= '{$btbDate}' and ( tep.end_date is null or tep.end_date >= '{$btbDate}')
-            where t.origin_location_id = (select id from location where `type` = 'origin' and reference_type = 'supplier' and reference_id = '{$supplier}')  
-            and t.destination_location_id  = (select id from location where `type` = 'destination' and reference_type = 'warehouse' and reference_id = '{$warehouse}')
-            and t.product_categories_id = (select pcp.product_categories_id from product_categories_product pcp join dms_inv_product dip ON dip.iInternalId = pcp.product_id and pcp.status = 1 where dip.szId = '{$product}' limit 1)
-            order by tep.id desc limit 1
-        SQL;
-
-        $result = $this->fromQuery($sql)->first();
-
-        return $result->shippingCost ?? 0;        
     }
 
     public function insertBtbSupplier($btbs)
@@ -310,9 +288,35 @@ class BtbValidate extends Model
         $this->fromQuery($sql);
     }
 
+    private function getOngkir($btb, $input)
+    {
+        $btbDate = $btb->getRawOriginal('btb_date');
+        $docId = $btb->doc_id;
+        $supplier = $btb->partner_id;
+        $ekspedisi = $input['dms_inv_carrier_id'];
+        $warehouse = $btb->dms_inv_warehouse_id;
+        $product = $btb->product_id;
+        // select coalesce(getShippingCost(dsd.szDocId,dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
+        $sql = <<<SQL
+            select coalesce(getShippingCost('{$docId}','{$btbDate}', '{$ekspedisi}', '{$supplier}' , '{$warehouse}', '{$product}'),0) as shipping_cost
+            -- select ( tep.price + tep.origin_additional_price + tep.destination_additional_price ) as shippingCost from trip t
+            -- join trip_ekspedisi te on t.id  = te.trip_id and te.dms_inv_carrier_id = (select iInternalId from dms_inv_carrier where szId = '{$ekspedisi}')
+            -- join trip_ekspedisi_price tep on tep.trip_ekspedisi_id = te.id and tep.start_date <= '{$btbDate}' and ( tep.end_date is null or tep.end_date >= '{$btbDate}')
+            -- where t.origin_location_id = (select id from location where `type` = 'origin' and reference_type = 'supplier' and reference_id = '{$supplier}')  
+            -- and t.destination_location_id  = (select id from location where `type` = 'destination' and reference_type = 'warehouse' and reference_id = '{$warehouse}')
+            -- and t.product_categories_id = (select pcp.product_categories_id from product_categories_product pcp join dms_inv_product dip ON dip.iInternalId = pcp.product_id and pcp.status = 1 where dip.szId = '{$product}' limit 1)
+            -- order by tep.id desc limit 1
+        SQL;
+
+        $result = $this->fromQuery($sql)->first();
+
+        return $result->shippingCost ?? 0;
+    }
+
     private function btbSupplierSql($startDate, $endDate, $branchId)
     {
         $whereBranchId = !empty($branchId) ? " and dsd.szBranchId = '{$branchId}'" : '';
+
         return <<<SQL
         select
             'BTB Supplier' as jenis,
@@ -351,6 +355,7 @@ class BtbValidate extends Model
     private function btbDistribusiSql($startDate, $endDate, $branchId)
     {
         $whereBranchId = !empty($branchId) ? " and dsd.szBranchId = '{$branchId}'" : '';
+
         return <<<SQL
         select
             'BTB Distribusi' as jenis,

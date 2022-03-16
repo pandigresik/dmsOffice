@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Accounting;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateJournalDmsRequest;
 use App\Models\Accounting\JournalAccount;
-use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Accounting\JournalDmsRepository;
+use App\Repositories\Base\DmsSmBranchRepository;
 use Flash;
 use Response;
 
@@ -41,11 +41,11 @@ class JournalDmsController extends AppBaseController
 
         $model = $this->getRepositoryObj()->create($input);
 
-        if($model instanceof JournalAccount){
+        if ($model instanceof JournalAccount) {
             Flash::success(__('messages.saved', ['model' => __('models/JournalDms.singular')]));
-        }else{
-            Flash::error($model);            
-        }        
+        } else {
+            Flash::error($model);
+        }
 
         return redirect(route('accounting.journalDms.create'));
     }
@@ -63,7 +63,7 @@ class JournalDmsController extends AppBaseController
 
         return [
             'branchItems' => ['' => 'Pilih depo'] + $branch->pluck([], null, null, 'szId', 'szName'),
-            'typeItems' => ['' => 'Pilih tipe'] + ['JBL' => 'Pembelian','JPK' => 'Penjualan Kredit', 'JPT' => 'Penjualan Tunai', 'JBY' => 'Beban Biaya', 'NRC' => 'Neraca'],
+            'typeItems' => ['' => 'Pilih tipe'] + ['JBL' => 'Pembelian', 'JPK' => 'Penjualan Kredit', 'JPT' => 'Penjualan Tunai', 'JBY' => 'Beban Biaya', 'NRC' => 'Neraca'],
         ];
     }
 }

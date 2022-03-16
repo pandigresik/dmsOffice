@@ -3,8 +3,8 @@
 namespace App\Models\Finance;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -63,13 +63,10 @@ class AccountMoveLine extends Model
 
     use HasFactory;
 
-    public $table = 'account_move_line';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
+    public $table = 'account_move_line';
 
     public $fillable = [
         'account_move_id',
@@ -78,8 +75,25 @@ class AccountMoveLine extends Model
         'account_id',
         'debit',
         'credit',
-        'balance'
+        'balance',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'account_move_id' => 'required',
+        'name' => 'required|string|max:100',
+        'description' => 'nullable|string|max:256',
+        'account_id' => 'required|string|max:255',
+        'debit' => 'required|numeric',
+        'credit' => 'required|numeric',
+        'balance' => 'required|numeric',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -94,42 +108,27 @@ class AccountMoveLine extends Model
         'account_id' => 'string',
         'debit' => 'decimal:2',
         'credit' => 'decimal:2',
-        'balance' => 'decimal:2'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'account_move_id' => 'required',
-        'name' => 'required|string|max:100',
-        'description' => 'nullable|string|max:256',
-        'account_id' => 'required|string|max:255',
-        'debit' => 'required|numeric',
-        'credit' => 'required|numeric',
-        'balance' => 'required|numeric'
+        'balance' => 'decimal:2',
     ];
 
     public function getDebitAttribute($value)
-    {    
+    {
         return localNumberFormat($value);
     }
 
     public function getCreditAttribute($value)
-    {    
+    {
         return localNumberFormat($value);
     }
 
     public function getBalanceAttribute($value)
-    {    
+    {
         return localNumberFormat($value);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function accountMove()
     {
         return $this->belongsTo(\App\Models\Finance\AccountMove::class, 'account_move_id');

@@ -123,7 +123,7 @@ class DmsInvCarrierRepository extends BaseRepository
                     $stateForm = $vc['stateForm'];
                     switch ($stateForm) {
                         case 'insert':
-                            $this->createEkspedisi($vc, $id);                            
+                            $this->createEkspedisi($vc, $id);
 
                             break;
                         case 'update':
@@ -150,17 +150,19 @@ class DmsInvCarrierRepository extends BaseRepository
         }
     }
 
-    private function createEkspedisi($data, $id){
+    private function createEkspedisi($data, $id)
+    {
         $trip = TripEkspedisi::create([
             'dms_inv_carrier_id' => $id,
-            'trip_id' => $data['trip_id']
+            'trip_id' => $data['trip_id'],
         ]);
         unset($data['trip_id']);
         $trip->price()->create($data);
     }
 
-    private function updatePrice($data, $tripEkspedisiId){
-        $lastPrice = TripEkspedisiPrice::where('trip_ekspedisi_id',$tripEkspedisiId)->latest()->first();
+    private function updatePrice($data, $tripEkspedisiId)
+    {
+        $lastPrice = TripEkspedisiPrice::where('trip_ekspedisi_id', $tripEkspedisiId)->latest()->first();
         $lastPrice->end_date = \Carbon\Carbon::createFromFormat('Y-m-d', $data['start_date'])->subDay();
         $lastPrice->save();
         $data['trip_ekspedisi_id'] = $tripEkspedisiId;

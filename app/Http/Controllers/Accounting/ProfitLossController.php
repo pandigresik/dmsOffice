@@ -25,7 +25,8 @@ class ProfitLossController extends AppBaseController
             $branchId = $request->get('branch_id');
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-            $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId);
+            $priceChoice = $request->get('price_choice');
+            $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId, $priceChoice);
 
             return view('accounting.profit_loss.list')
                 ->with($datas)
@@ -39,7 +40,8 @@ class ProfitLossController extends AppBaseController
             $branchId = $request->get('branch_id');
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
-            $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId);
+            $priceChoice = $request->get('price_choice');
+            $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId, $priceChoice);
 
             return $this->exportExcel($startDate, $endDate, $datas);
         }
@@ -57,10 +59,11 @@ class ProfitLossController extends AppBaseController
     private function getOptionItems()
     {
         $branch = new DmsSmBranchRepository(app());
-
+        
         return [
             'branchItems' => $branch->pluck([], null, null, 'szId', 'szName'),
             'typeItems' => ['detail' => 'Detail', 'rekap' => 'Rekap'],
+            'priceItems' => ['HPPP' => 'Harga Depo', 'HPPPT' => 'Harga pabrik']
         ];
     }
 
@@ -68,7 +71,7 @@ class ProfitLossController extends AppBaseController
     {
         $modelEksport = '\\App\Exports\\Template\\Accounting\\ProfitLossExport';
         $fileName = 'profit_loss_depo'.$startDate.'_'.$endDate;
-        
+
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }
 }

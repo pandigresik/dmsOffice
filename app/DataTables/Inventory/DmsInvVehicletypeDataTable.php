@@ -2,10 +2,10 @@
 
 namespace App\DataTables\Inventory;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Inventory\DmsInvVehicletype;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\BaseDataTable as DataTable;
 
 class DmsInvVehicletypeDataTable extends DataTable
 {

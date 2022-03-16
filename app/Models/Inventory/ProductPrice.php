@@ -53,7 +53,7 @@ class ProductPrice extends Model
         'dpp_price',
         'branch_price',
         'start_date',
-        'product_id'
+        'product_id',
     ];
 
     /**

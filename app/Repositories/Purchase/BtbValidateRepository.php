@@ -63,7 +63,7 @@ class BtbValidateRepository extends BaseRepository
         DB::beginTransaction();
 
         try {
-            $btb = $input['btb'] ?? [];            
+            $btb = $input['btb'] ?? [];
             $model = null;
             if (!empty($btb)) {
                 $groupingBtb = collect($btb)->mapToGroups(function ($item) {
@@ -103,17 +103,18 @@ class BtbValidateRepository extends BaseRepository
     {
         $this->model->getConnection()->beginTransaction();
 
-        try {                    
+        try {
             $this->model->getConnection()->commit();
-            $model = $this->model->updateEkspedisi($id, $input);            
+            $model = $this->model->updateEkspedisi($id, $input);
 
             // flush cache karena menggunakan from query untuk eksekusi statement insert into
             $this->model->flushCache();
 
             return $model;
-        } catch (\Exception $e) {            
+        } catch (\Exception $e) {
             Log::error($e);
             $this->model->getConnection()->rollBack();
+
             return $e;
         }
     }

@@ -20,11 +20,8 @@
                               <i class="fa fa-edit fa-lg"></i>
                               <strong>Edit @lang('models/btbValidates.singular')</strong>
                           </div>
-                          <div class="card-body">                              
-
+                          <div class="card-body">
                               @include('purchase.btb_validates.ekspedisi_fields')
-
-                              
                             </div>
                           <div class="card-footer">
                           <!-- Submit Field -->

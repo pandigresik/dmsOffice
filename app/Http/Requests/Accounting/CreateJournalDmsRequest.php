@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Accounting;
 
-use App\Models\Accounting\Account;
 use App\Models\Accounting\JournalAccount;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -44,6 +43,7 @@ class CreateJournalDmsRequest extends FormRequest
     {
         $keys = (new JournalAccount())->fillable;
         $keys = array_merge(['period_range'], $keys);
+
         return parent::all($keys);
     }
 }

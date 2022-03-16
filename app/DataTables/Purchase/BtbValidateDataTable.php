@@ -2,10 +2,10 @@
 
 namespace App\DataTables\Purchase;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Purchase\BtbValidate;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\BaseDataTable as DataTable;
 
 class BtbValidateDataTable extends DataTable
 {
@@ -37,7 +37,7 @@ class BtbValidateDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));
             }
         }
-        
+
         return $dataTable->addColumn('action', 'purchase.btb_validates.datatables_actions');
     }
 
@@ -70,7 +70,7 @@ class BtbValidateDataTable extends DataTable
                 'extend' => 'export',
                 'className' => 'btn btn-default btn-sm no-corner',
                 'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
-            ],            
+            ],
             [
                 'extend' => 'reset',
                 'className' => 'btn btn-default btn-sm no-corner',
@@ -117,8 +117,8 @@ class BtbValidateDataTable extends DataTable
             'ref_doc' => new Column(['title' => __('models/btbValidates.fields.ref_doc'), 'data' => 'ref_doc', 'searchable' => true, 'elmsearch' => 'text']),
             'btb_type' => new Column(['title' => __('models/btbValidates.fields.btb_type'), 'data' => 'btb_type', 'searchable' => true, 'elmsearch' => 'text']),
             'btb_date' => new Column(['title' => __('models/btbValidates.fields.btb_date'), 'data' => 'btb_date', 'searchable' => true, 'elmsearch' => 'daterange']),
-            'dmsInvCarrierId' => new Column(['title' => __('models/btbValidates.fields.dmsInvCarrierId'), 'name' => 'dmsInvCarrierId', 'data' => 'ekspedisi.szName','defaultContent' => '' ,'orderable' => false,'searchable' => false, 'elmsearch' => 'text', 'class' => 'ow']),
-            'qty' => new Column(['title' => __('models/btbValidates.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),            
+            'dmsInvCarrierId' => new Column(['title' => __('models/btbValidates.fields.dmsInvCarrierId'), 'name' => 'dmsInvCarrierId', 'data' => 'ekspedisi.szName', 'defaultContent' => '', 'orderable' => false, 'searchable' => false, 'elmsearch' => 'text', 'class' => 'ow']),
+            'qty' => new Column(['title' => __('models/btbValidates.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
             'price' => new Column(['title' => __('models/btbValidates.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text']),
             'shipping_cost' => new Column(['title' => __('models/btbValidates.fields.shipping_cost'), 'data' => 'shipping_cost', 'searchable' => false, 'elmsearch' => 'text']),
         ];

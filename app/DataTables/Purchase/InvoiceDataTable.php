@@ -2,10 +2,10 @@
 
 namespace App\DataTables\Purchase;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Purchase\Invoice;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\BaseDataTable as DataTable;
 
 class InvoiceDataTable extends DataTable
 {
@@ -40,9 +40,10 @@ class InvoiceDataTable extends DataTable
         if ($this->withUpdate) {
             $dataTable->addColumn('action', 'purchase.invoices.datatables_actions');
         }
-        $dataTable->editColumn('partner.szName', function($q){
-            return !empty($q->partner->szName) ? $q->partner->szName : $q->ekspedisi->szName;            
+        $dataTable->editColumn('partner.szName', function ($q) {
+            return !empty($q->partner->szName) ? $q->partner->szName : $q->ekspedisi->szName;
         });
+
         return $dataTable; //->addColumn('action', 'purchase.invoices.datatables_actions');
     }
 
@@ -55,9 +56,9 @@ class InvoiceDataTable extends DataTable
      */
     public function query(Invoice $model)
     {
-        return $model->with(['partner' => function($q){
+        return $model->with(['partner' => function ($q) {
             return $q->select(['szId', 'szName']);
-        },'ekspedisi' => function($q){
+        }, 'ekspedisi' => function ($q) {
             return $q->select(['szId', 'szName']);
         }])->newQuery();
     }

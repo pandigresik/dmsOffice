@@ -2,10 +2,10 @@
 
 namespace App\DataTables\Base;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Base\DmsArPricesegment;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\BaseDataTable as DataTable;
 
 class DmsArPricesegmentDataTable extends DataTable
 {

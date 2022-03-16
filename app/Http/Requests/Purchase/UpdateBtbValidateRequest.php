@@ -27,10 +27,10 @@ class UpdateBtbValidateRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {        
+    {
         return [
             'dms_inv_carrier_id' => 'required',
-            'doc_id' => 'required'
+            'doc_id' => 'required',
         ];
     }
 

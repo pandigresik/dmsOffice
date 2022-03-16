@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Sales;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Sales\Discounts;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateDiscountsRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateDiscountsRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'discounts-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -29,17 +27,20 @@ class CreateDiscountsRequest extends FormRequest
     public function rules()
     {
         $jenis = $this->get('jenis');
-        
-        switch($jenis){
+
+        switch ($jenis) {
             case 'kontrak':
                 $rules = Discounts::$rulesKontrak;
+
                 break;
             case 'combine':
                 $rules = Discounts::$rulesCombine;
+
                 break;
             default:
                 $rules = Discounts::$rules;
         }
+
         return $rules;
     }
 
@@ -49,10 +50,12 @@ class CreateDiscountsRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new Discounts)->fillable;
-        $keys = array_merge(['period','discount_members', 'discount_details'], $keys);
+     */
+    public function all($keys = null)
+    {
+        $keys = (new Discounts())->fillable;
+        $keys = array_merge(['period', 'discount_members', 'discount_details'], $keys);
+
         return parent::all($keys);
     }
 }

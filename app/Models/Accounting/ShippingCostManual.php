@@ -6,8 +6,8 @@ use App\Models\Base\DmsSmBranch;
 use App\Models\BaseEntity as Model;
 use App\Models\Inventory\DmsInvCarrier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -152,8 +152,6 @@ class ShippingCostManual extends Model
 
     /**
      * Get the ekspedisi that owns the ShippingCostManual.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function ekspedisi(): BelongsTo
     {

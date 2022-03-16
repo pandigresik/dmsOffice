@@ -49,7 +49,7 @@ class Location extends Model
     const REFERENCE_TYPE = [
         'origin' => 'supplier',
         'destination' => 'warehouse',
-        'common' => ''
+        'common' => '',
     ];
     public $table = 'location';
 
@@ -59,7 +59,7 @@ class Location extends Model
         'city',
         'type',
         'reference_id',
-        'reference_type'  
+        'reference_type',
     ];
 
     /**
@@ -71,7 +71,7 @@ class Location extends Model
         'name' => 'required|string|max:80',
         'district' => 'required|string|max:50',
         'city' => 'required|string|max:50',
-        'type' => 'required|string',        
+        'type' => 'required|string',
     ];
 
     protected $dates = ['deleted_at'];

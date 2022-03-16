@@ -2,9 +2,9 @@
 
 namespace App\DataTables\Base;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Base\Role;
 use Yajra\DataTables\EloquentDataTable;
-use App\DataTables\BaseDataTable as DataTable;
 
 class RoleDataTable extends DataTable
 {

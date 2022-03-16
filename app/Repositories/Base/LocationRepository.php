@@ -48,18 +48,16 @@ class LocationRepository extends BaseRepository
      * @return Model
      */
     public function create($input)
-    {   
+    {
         $input['reference_type'] = Location::REFERENCE_TYPE[$input['type']];
-        $model = parent::create($input);        
 
-        return $model;
+        return parent::create($input);
     }
 
     public function update($input, $id)
-    {           
+    {
         $input['reference_type'] = Location::REFERENCE_TYPE[$input['type']];
-        $model = parent::update($input, $id);        
 
-        return $model;
+        return parent::update($input, $id);
     }
 }

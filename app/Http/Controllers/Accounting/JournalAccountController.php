@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Accounting;
 
 use App\DataTables\Accounting\JournalAccountDataTable;
-use App\Http\Requests\Accounting;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateJournalAccountRequest;
 use App\Http\Requests\Accounting\UpdateJournalAccountRequest;
 use App\Repositories\Accounting\JournalAccountRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class JournalAccountController extends AppBaseController
 {
-    /** @var  JournalAccountRepository */
+    /** @var JournalAccountRepository */
     protected $repository;
 
     public function __construct()
@@ -25,7 +23,6 @@ class JournalAccountController extends AppBaseController
     /**
      * Display a listing of the JournalAccount.
      *
-     * @param JournalAccountDataTable $journalAccountDataTable
      * @return Response
      */
     public function index(JournalAccountDataTable $journalAccountDataTable)
@@ -46,8 +43,6 @@ class JournalAccountController extends AppBaseController
     /**
      * Store a newly created JournalAccount in storage.
      *
-     * @param CreateJournalAccountRequest $request
-     *
      * @return Response
      */
     public function store(CreateJournalAccountRequest $request)
@@ -64,7 +59,7 @@ class JournalAccountController extends AppBaseController
     /**
      * Display the specified JournalAccount.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +79,7 @@ class JournalAccountController extends AppBaseController
     /**
      * Show the form for editing the specified JournalAccount.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +99,7 @@ class JournalAccountController extends AppBaseController
     /**
      * Update the specified JournalAccount in storage.
      *
-     * @param  int              $id
-     * @param UpdateJournalAccountRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +123,7 @@ class JournalAccountController extends AppBaseController
     /**
      * Remove the specified JournalAccount from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +145,15 @@ class JournalAccountController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model JournalAccount from storage.         
+     * Provide options item based on relationship model JournalAccount from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

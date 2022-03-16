@@ -14,13 +14,12 @@ use App\Repositories\BaseRepository;
  */
 class ProfitLossRepository extends BaseRepository
 {
-    private $groupCode = 'LR';
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        
     ];
+    private $groupCode = 'LR';
 
     /**
      * Return searchable fields.
@@ -40,45 +39,59 @@ class ProfitLossRepository extends BaseRepository
         return JournalAccount::class;
     }
 
-    public function list($startDate, $endDate, $branchId)
+    public function list($startDate, $endDate, $branchId, $priceChoice)
     {
-        $listAccount = $this->listAccount();
+        $excludeAccount = collect(['HPPP', 'HPPPT'])->reject(function($value, $key) use ($priceChoice){
+
+            return $value == $priceChoice;
+        })->toArray();
+        
+        $listAccount = $this->listAccount($excludeAccount);
+        \Log::error($listAccount);
         $claimTiv = JournalAccount::with(['account'])->selectRaw('branch_id, \'919901\' as account_id, abs(sum(balance)) as balance')
             ->disableModelCaching()
-            ->whereBetween('date',[$startDate, $endDate])
-            ->whereIn('branch_id',$branchId)            
-            ->whereIn('account_id', ['411011','411111'])
-            ->groupBy('account_id')
-            ->groupBy('branch_id');
-        
+            ->whereBetween('date', [$startDate, $endDate])
+            ->whereIn('branch_id', $branchId)
+            ->whereIn('account_id', ['411011', '411111'])
+            // ->groupBy('account_id')
+            ->groupBy('branch_id')
+        ;
+
         $data = JournalAccount::with(['account'])
             //->selectRaw('branch_id, account_id, sum(case when type=\'JM\' then (-1 * balance) else balance end) as balance')
             ->selectRaw('branch_id, account_id, sum(balance) as balance')
-            ->disableModelCaching()                 
-            ->whereBetween('date',[$startDate, $endDate])
-            ->whereIn('branch_id',$branchId)            
+            ->disableModelCaching()
+            ->whereBetween('date', [$startDate, $endDate])
+            ->whereIn('branch_id', $branchId)
             ->whereIn('account_id', $this->profitLossAccountCode($listAccount))
+            ->whereNotIn('account_id', $excludeAccount)
             ->groupBy('account_id')
-            ->groupBy('branch_id')            
+            ->groupBy('branch_id')
             ->union($claimTiv)
             ->get()
-            ->groupBy('branch_id');
+            ->groupBy('branch_id')
+        ;
+
         return [
             'data' => $data,
-            'branchMaster' => DmsSmBranch::whereIn('szId',$branchId)->get()->keyBy('szId'),
-            'listAccount' => $listAccount
+            'branchMaster' => DmsSmBranch::whereIn('szId', $branchId)->get()->keyBy('szId'),
+            'listAccount' => $listAccount,
         ];
     }
 
-    private function listAccount(){    
-        return ReportSettingAccount::with(['details' => function($q){
-            $q->select(['report_setting_account_detail.*','account.code','account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
+    private function listAccount($excludeAccount)
+    {
+        return ReportSettingAccount::with(['details' => function ($q) use($excludeAccount) {
+            $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])
+                ->join('account', 'account.id', '=', 'report_setting_account_detail.account_id')
+                ->whereNotIn('report_setting_account_detail.account_id', $excludeAccount);
         }])->orderBy('code')->whereGroupType($this->groupCode)->get();
     }
 
-    private function profitLossAccountCode($listAccount){
+    private function profitLossAccountCode($listAccount)
+    {
         $result = [];
-        $listAccount->map(function($item) use (&$result){
+        $listAccount->map(function ($item) use (&$result) {
             $result = array_merge($result, $item->details->pluck('code')->toArray());
         });
 

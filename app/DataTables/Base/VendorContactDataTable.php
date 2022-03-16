@@ -2,10 +2,10 @@
 
 namespace App\DataTables\Base;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Base\VendorContact;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\BaseDataTable as DataTable;
 
 class VendorContactDataTable extends DataTable
 {

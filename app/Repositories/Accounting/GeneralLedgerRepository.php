@@ -40,8 +40,8 @@ class GeneralLedgerRepository extends BaseRepository
     }
 
     public function list($startDate, $endDate)
-    {        
-        $listAccount = $this->listAccount();        
+    {
+        $listAccount = $this->listAccount();
         $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(debit) as debit, sum(credit) as credit')
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
@@ -53,10 +53,10 @@ class GeneralLedgerRepository extends BaseRepository
 
         return [
             'data' => $data,
-            'saldo' => $this->getSaldo($startDate, $listAccount),     
+            'saldo' => $this->getSaldo($startDate, $listAccount),
             'listAccount' => $listAccount,
         ];
-    }    
+    }
 
     private function listAccount()
     {
@@ -66,15 +66,16 @@ class GeneralLedgerRepository extends BaseRepository
     }
 
     private function getSaldo($startDate, $listAccount)
-    {        
+    {
         return AccountBalance::whereBalanceDate($startDate)
-                ->whereIn('code', $this->accountCode($listAccount))
-                ->get()->keyBy('code');
+            ->whereIn('code', $this->accountCode($listAccount))
+            ->get()->keyBy('code');
     }
 
-    private function accountCode($listAccount){
+    private function accountCode($listAccount)
+    {
         $result = [];
-        $listAccount->map(function($item) use (&$result){
+        $listAccount->map(function ($item) use (&$result) {
             $result = array_merge($result, $item->details->pluck('code')->toArray());
         });
 

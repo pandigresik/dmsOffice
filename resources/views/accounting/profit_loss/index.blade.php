@@ -30,9 +30,15 @@
                                         {!! Form::select('branch_id', $branchItems, null, ['class' => 'form-control select2', 'multiple' => 'multiple', 'required' => 'required']) !!}
                                     </div>                                                                        
                                 </div>
+                                <div class="form-group row">
+                                    {!! Form::label('branch_id', 'Harga HPP:', ['class' => 'col-md-3 col-form-label']) !!}
+                                    <div class="col-md-9">
+                                        {!! Form::select('price_choice', $priceItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
+                                    </div>                                                                        
+                                </div>
                                 <div class="form-group row">                                    
                                     <div class="col-md-6 offset-3">
-                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listprofitloss', 'data-url' => route('accounting.profitLoss.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
+                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listprofitloss', 'data-url' => route('accounting.profitLoss.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id],select[name=price_choice]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
                                         {!! Form::button(__('crud.download'), ['class' => 'btn btn-primary', 'type' => 'button', 'onclick' => 'downloadXls(this)']) !!}
                                     </div>
                                 </div>
@@ -58,7 +64,7 @@
     function downloadXls(elm) {
         const _form = $(elm).closest('form')
         const _url = _form.attr('action')        
-        const _json = {'download_xls' : 1, 'period_range': _form.find('input[name=period_range]').val(), 'branch_id' : _form.find('select[name=branch_id]').val()}
+        const _json = {'download_xls' : 1, 'period_range': _form.find('input[name=period_range]').val(), 'branch_id' : _form.find('select[name=branch_id]').val(), 'price_choice' : _form.find('select[name=price_choice]').val()}
 
         $.redirect(
             _url, 

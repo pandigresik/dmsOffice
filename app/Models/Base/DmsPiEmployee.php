@@ -3,7 +3,6 @@
 namespace App\Models\Base;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -114,18 +113,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class DmsPiEmployee extends Model
-{    
-
+{
     use HasFactory;
 
-    public $table = 'dms_pi_employee';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
+    public $table = 'dms_pi_employee';
+
     public $primaryKey = 'iInternalId';
-    protected $dates = ['deleted_at'];
-    
+
     public $fillable = [
         'iId',
         'szId',
@@ -144,8 +141,35 @@ class DmsPiEmployee extends Model
         'dtmStop',
         'szIdCard',
         'szSupervisorId',
-        'szPassword'
+        'szPassword',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'iId' => 'required|string|max:50',
+        'szId' => 'required|string|max:50',
+        'szName' => 'required|string|max:50',
+        'szDescription' => 'required|string|max:200',
+        'szDivisionId' => 'required|string|max:50',
+        'szDepartmentId' => 'required|string|max:50',
+        'szUserCreatedId' => 'required|string|max:20',
+        'szUserUpdatedId' => 'required|string|max:20',
+        'dtmCreated' => 'required',
+        'dtmLastUpdated' => 'required',
+        'szBranchId' => 'required|string|max:50',
+        'szGender' => 'required|string|max:50',
+        'dtmBirth' => 'required',
+        'dtmJoin' => 'required',
+        'dtmStop' => 'required',
+        'szIdCard' => 'required|string|max:50',
+        'szSupervisorId' => 'required|string|max:50',
+        'szPassword' => 'required|string|max:50',
+    ];
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -171,34 +195,6 @@ class DmsPiEmployee extends Model
         'dtmStop' => 'datetime',
         'szIdCard' => 'string',
         'szSupervisorId' => 'string',
-        'szPassword' => 'string'
+        'szPassword' => 'string',
     ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'iId' => 'required|string|max:50',
-        'szId' => 'required|string|max:50',
-        'szName' => 'required|string|max:50',
-        'szDescription' => 'required|string|max:200',
-        'szDivisionId' => 'required|string|max:50',
-        'szDepartmentId' => 'required|string|max:50',
-        'szUserCreatedId' => 'required|string|max:20',
-        'szUserUpdatedId' => 'required|string|max:20',
-        'dtmCreated' => 'required',
-        'dtmLastUpdated' => 'required',
-        'szBranchId' => 'required|string|max:50',
-        'szGender' => 'required|string|max:50',
-        'dtmBirth' => 'required',
-        'dtmJoin' => 'required',
-        'dtmStop' => 'required',
-        'szIdCard' => 'required|string|max:50',
-        'szSupervisorId' => 'required|string|max:50',
-        'szPassword' => 'required|string|max:50'
-    ];
-
-    
 }

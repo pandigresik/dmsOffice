@@ -17,16 +17,17 @@ class BalanceExport implements FromView
     protected $collection;
     private $startDate;
     private $endDate;
-    
-    public function __construct(Array $collection)
+
+    public function __construct(array $collection)
     {
         $this->collection = $collection;
     }
 
     public function view(): View
-    {        
+    {
         $currentMonth = \Carbon\Carbon::createFromFormat('Y-m-d', $this->getStartDate())->format('M');
         $previousMonth = \Carbon\Carbon::createFromFormat('Y-m-d', $this->getStartDate())->subDay()->format('M');
+
         return view('accounting.balance.list', [
             'data' => $this->collection['data'],
             'saldo' => $this->collection['saldo'],

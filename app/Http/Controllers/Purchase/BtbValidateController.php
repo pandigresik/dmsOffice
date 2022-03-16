@@ -6,7 +6,6 @@ use App\DataTables\Purchase\BtbValidateDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateBtbValidateRequest;
 use App\Http\Requests\Purchase\UpdateBtbValidateRequest;
-use App\Models\Inventory\DmsInvCarrier;
 use App\Models\Purchase\BtbValidate;
 use App\Models\Purchase\ListBtbValidate;
 use App\Repositories\Base\DmsSmBranchRepository;
@@ -46,7 +45,7 @@ class BtbValidateController extends AppBaseController
         if ($request->ajax()) {
             // $period = explode(' - ', $request->get('ref'));
             $period = explode(' - ', $request->get('period_range'));
-            $branchId = $request->get('branch_id');            
+            $branchId = $request->get('branch_id');
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate, $branchId);
@@ -109,16 +108,10 @@ class BtbValidateController extends AppBaseController
 
             return redirect(route('purchase.btbValidates.index'));
         }
-        // $btbDataOptions = $this->getOptionItems();
-        // $btbValidateArray = $btbValidate->toArray();
-        // $btbValidateArray['no_btb'] = $btbValidate->doc_id;
-        // $btbValidateArray['sj_pabrik'] = $btbValidate->ref_doc;
-        // $btbValidateArray['decqty'] = $btbValidate->getRawOriginal('qty');
-        // $btbDataOptions['btbDataOptions'][$btbValidate->reference_id] = $btbValidateArray;
-        // $btbDataOptions['btbItems'][$btbValidate->reference_id] = implode(' | ', ['BTB::'.$btbValidate->doc_id, 'CO::'.$btbValidate->co_reference, 'Product::'.$btbValidate->product_name]);
+        
         $carrier = new DmsInvCarrierRepository(app());
         $btbDataOptions = [
-            'carrierItems' => $carrier->pluck([], null, null, 'szId', 'szName')
+            'carrierItems' => $carrier->pluck([], null, null, 'szId', 'szName'),
         ];
 
         return view('purchase.btb_validates.edit_ekspedisi')->with('btbValidate', $btbValidate)->with($btbDataOptions);

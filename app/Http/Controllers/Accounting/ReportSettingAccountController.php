@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\Accounting;
 
 use App\DataTables\Accounting\ReportSettingAccountDataTable;
-use App\Http\Requests\Accounting;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateReportSettingAccountRequest;
 use App\Http\Requests\Accounting\UpdateReportSettingAccountRequest;
-use App\Repositories\Accounting\ReportSettingAccountRepository;
-
-use Flash;
-use App\Http\Controllers\AppBaseController;
 use App\Models\Accounting\ReportSettingAccount;
 use App\Repositories\Accounting\AccountRepository;
+use App\Repositories\Accounting\ReportSettingAccountRepository;
+use Flash;
 use Response;
 
 class ReportSettingAccountController extends AppBaseController
 {
-    /** @var  ReportSettingAccountRepository */
+    /** @var ReportSettingAccountRepository */
     protected $repository;
 
     public function __construct()
@@ -27,7 +25,6 @@ class ReportSettingAccountController extends AppBaseController
     /**
      * Display a listing of the ReportSettingAccount.
      *
-     * @param ReportSettingAccountDataTable $reportSettingAccountDataTable
      * @return Response
      */
     public function index(ReportSettingAccountDataTable $reportSettingAccountDataTable)
@@ -43,16 +40,16 @@ class ReportSettingAccountController extends AppBaseController
     public function create()
     {
         $accounts = $this->listAccount();
+
         return view('accounting.report_setting_accounts.create')
-                ->with('accounts',$accounts->keyBy('id'))
-                ->with('accountItems', $accounts->pluck('full_identity','id'))
-                ->with($this->getOptionItems());
+            ->with('accounts', $accounts->keyBy('id'))
+            ->with('accountItems', $accounts->pluck('full_identity', 'id'))
+            ->with($this->getOptionItems())
+        ;
     }
 
     /**
      * Store a newly created ReportSettingAccount in storage.
-     *
-     * @param CreateReportSettingAccountRequest $request
      *
      * @return Response
      */
@@ -67,11 +64,10 @@ class ReportSettingAccountController extends AppBaseController
         return redirect(route('accounting.reportSettingAccounts.index'));
     }
 
-    
     /**
      * Show the form for editing the specified ReportSettingAccount.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -85,18 +81,19 @@ class ReportSettingAccountController extends AppBaseController
             return redirect(route('accounting.reportSettingAccounts.index'));
         }
         $accounts = $this->listAccount();
+
         return view('accounting.report_setting_accounts.edit')
-                ->with('reportSettingAccount', $reportSettingAccount)
-                ->with('accounts',$accounts->keyBy('id'))
-                ->with('accountItems', $accounts->pluck('full_identity','id'))
-                ->with($this->getOptionItems());
+            ->with('reportSettingAccount', $reportSettingAccount)
+            ->with('accounts', $accounts->keyBy('id'))
+            ->with('accountItems', $accounts->pluck('full_identity', 'id'))
+            ->with($this->getOptionItems())
+        ;
     }
 
     /**
      * Update the specified ReportSettingAccount in storage.
      *
-     * @param  int              $id
-     * @param UpdateReportSettingAccountRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -120,7 +117,7 @@ class ReportSettingAccountController extends AppBaseController
     /**
      * Remove the specified ReportSettingAccount from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -142,22 +139,22 @@ class ReportSettingAccountController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model ReportSettingAccount from storage.         
+     * Provide options item based on relationship model ReportSettingAccount from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
             'groupTypeItems' => ReportSettingAccount::GROUP_TYPE,
-            ''
+            '',
         ];
     }
 
     private function listAccount()
-    {        
+    {
         $account = new AccountRepository(app());
 
         // return $account->allQuery()->orderBy('code')->get()->mapToGroups(function ($message) {

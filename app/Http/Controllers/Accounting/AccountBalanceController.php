@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Accounting;
 use App\DataTables\Accounting\AccountBalanceDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Accounting\CreateAccountBalanceRequest;
-use App\Http\Requests\Accounting\UpdateAccountBalanceRequest;
 use App\Repositories\Accounting\AccountBalanceRepository;
 use Flash;
 use Response;
@@ -74,8 +73,8 @@ class AccountBalanceController extends AppBaseController
         }
 
         return view('accounting.account_balances.show')->with('accountBalance', $accountBalance);
-    }    
-    
+    }
+
     /**
      * Provide options item based on relationship model AccountBalance from storage.
      *

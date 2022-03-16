@@ -18,7 +18,7 @@ class ProfitLossExport implements FromView
     private $startDate;
     private $endDate;
 
-    public function __construct(Array $collection)
+    public function __construct(array $collection)
     {
         $this->collection = $collection;
     }

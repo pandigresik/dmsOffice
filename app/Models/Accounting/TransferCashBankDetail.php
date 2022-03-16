@@ -50,28 +50,40 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * )
  */
 class TransferCashBankDetail extends Model
-{    
-
+{
     use HasFactory;
 
-    public $table = 'transfer_cash_bank_detail';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    const CREATED_BY = NULL;
-    const UPDATED_BY = NULL;
+    const CREATED_BY = null;
+    const UPDATED_BY = null;
 
-
-    protected $dates = ['deleted_at'];    
+    public $table = 'transfer_cash_bank_detail';
 
     public $fillable = [
         'transfer_cash_bank_id',
-        'no_reference',        
+        'no_reference',
         'account',
         'description',
         'amount',
-        'pic'
+        'pic',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'transfer_cash_bank_id' => 'required',
+        'no_reference' => 'required|string|max:30',
+        'account' => 'required|string|max:15',
+        'description' => 'required|string|max:50',
+        'amount' => 'required|integer',
+        'pic' => 'nullable|string|max:25',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -85,26 +97,12 @@ class TransferCashBankDetail extends Model
         'account' => 'string',
         'description' => 'string',
         'amount' => 'integer',
-        'pic' => 'string'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'transfer_cash_bank_id' => 'required',
-        'no_reference' => 'required|string|max:30',
-        'account' => 'required|string|max:15',
-        'description' => 'required|string|max:50',
-        'amount' => 'required|integer',
-        'pic' => 'nullable|string|max:25'
+        'pic' => 'string',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function transferCashBank()
     {
         return $this->belongsTo(\App\Models\Accounting\TransferCashBank::class, 'transfer_cash_bank_id');

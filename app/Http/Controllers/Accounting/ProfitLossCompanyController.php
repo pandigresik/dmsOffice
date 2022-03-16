@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Accounting;
 
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Accounting\ProfitLossCompanyRepository;
-use App\Repositories\Base\DmsSmBranchRepository;
 use Illuminate\Http\Request;
 use Response;
 
@@ -22,7 +21,7 @@ class ProfitLossCompanyController extends AppBaseController
     {
         if ($request->ajax()) {
             $period = explode(' - ', $request->get('ref'));
-            
+
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $datas = $this->getRepositoryObj()->list($startDate, $endDate);
@@ -36,7 +35,7 @@ class ProfitLossCompanyController extends AppBaseController
         $downloadXls = $request->get('download_xls');
         if ($downloadXls) {
             $period = explode(' - ', $request->get('ref'));
-            
+
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $datas = $this->getRepositoryObj()->list($startDate, $endDate);
@@ -57,7 +56,6 @@ class ProfitLossCompanyController extends AppBaseController
     private function getOptionItems()
     {
         return [
-            
         ];
     }
 

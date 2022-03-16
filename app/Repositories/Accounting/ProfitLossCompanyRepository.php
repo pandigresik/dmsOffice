@@ -40,7 +40,7 @@ class ProfitLossCompanyRepository extends BaseRepository
 
     public function list($startDate, $endDate)
     {
-        $listAccount = $this->listAccount();        
+        $listAccount = $this->listAccount();
         $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(balance) as balance')
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
@@ -94,12 +94,11 @@ class ProfitLossCompanyRepository extends BaseRepository
     }
 
     private function totalHppPabrik($startDate, $endDate)
-    {    
+    {
         return JournalAccount::whereBetween('date', [$startDate, $endDate])
             ->disableModelCaching()
             ->where('account_id', 'HPPPT')
             ->sum('balance')
         ;
-        
     }
 }

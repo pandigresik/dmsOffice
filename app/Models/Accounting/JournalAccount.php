@@ -4,9 +4,9 @@ namespace App\Models\Accounting;
 
 use App\Models\Base\Setting;
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -64,12 +64,10 @@ class JournalAccount extends Model
 
     use HasFactory;
 
-    public $table = 'journal_account';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-    protected $dates = ['deleted_at'];    
+    public $table = 'journal_account';
     public $fillable = [
         'account_id',
         'branch_id',
@@ -80,8 +78,25 @@ class JournalAccount extends Model
         'balance',
         'reference',
         'type',
-        'state'
+        'state',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'account_id' => 'required|string|max:15',
+        'branch_id' => 'required|string|max:50',
+        'name' => 'required|string|max:100',
+        'debit' => 'required|numeric',
+        'credit' => 'required|numeric',
+        'balance' => 'required|numeric',
+        'state' => 'nullable|string|max:15',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -96,35 +111,19 @@ class JournalAccount extends Model
         'debit' => 'decimal:2',
         'credit' => 'decimal:2',
         'balance' => 'decimal:2',
-        'state' => 'string'
+        'state' => 'string',
     ];
 
     /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'account_id' => 'required|string|max:15',
-        'branch_id' => 'required|string|max:50',
-        'name' => 'required|string|max:100',
-        'debit' => 'required|numeric',
-        'credit' => 'required|numeric',
-        'balance' => 'required|numeric',
-        'state' => 'nullable|string|max:15'
-    ];
-
-    /**
-     * Get the account that owns the JournalAccount
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the account that owns the JournalAccount.
      */
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'account_id', 'code');
     }
 
-    public function jurnalBiaya($input){
+    public function jurnalBiaya($input)
+    {
         $settingCompany = Setting::pluck('value', 'code');
         $coaCashback = $settingCompany['coa_cashback']; // 829220
         $coaBiayaPromosi = $settingCompany['coa_biaya_promosi']; // 829207
@@ -143,16 +142,24 @@ class JournalAccount extends Model
             and dtmDoc between '{$startDate}' and '{$endDate}'
             union all 
             -- account cashback
-            SELECT '{$coaCashback}', account.name, decCredit, decDebit, (-1 * decAmount), dtmDoc, szBranchId, szDocId, '{$type}' 
+            SELECT '{$coaCashback}', account.name, decCredit, decDebit, (-1 * decAmount), dtmDoc, szBranchId, szDocId, '{$type}'
             FROM dms_cas_cashbalance 
             join account on account.code = dms_cas_cashbalance.szAccountId
             where szBranchId = '{$branchId}' and szAccountId = '{$coaBiayaPromosi}'
+            and dtmDoc between '{$startDate}' and '{$endDate}'
+            union all
+            -- account kas ke kas dan jaminan pelanggan untuk GL
+            SELECT account.code, account.name, decCredit, decDebit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}'
+            FROM dms_cas_cashbalance 
+            join account on account.code = dms_cas_cashbalance.szAccountId
+            where szBranchId = '{$branchId}' and szAccountId in ('110902','311100')
             and dtmDoc between '{$startDate}' and '{$endDate}'
         SQL;
         $this->fromQuery($sql);
     }
 
-    public function jurnalNeraca($input){
+    public function jurnalNeraca($input)
+    {
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
@@ -170,14 +177,15 @@ class JournalAccount extends Model
         $this->fromQuery($sql);
     }
 
-    public function jurnalPenjualanTunai($input){        
-        $settingCompany = Setting::pluck('value', 'code');  
-        $kodeGalon = "'".implode("','",explode(',',$settingCompany["kode_galon"]))."'";
+    public function jurnalPenjualanTunai($input)
+    {
+        $settingCompany = Setting::pluck('value', 'code');
+        $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
         $coaPenjualanTunai = $settingCompany['coa_penjualan_tunai'];
-        $coaGalonTunai  = $settingCompany["coa_galon_tunai"];
-        $coaPotDistTunai = $settingCompany["coa_pot_dist_tunai"];
-        $coaPotIntTunai = $settingCompany["coa_pot_int_tunai"];        
-        $coaPotTivTunai = $settingCompany["coa_pot_tiv_tunai"];
+        $coaGalonTunai = $settingCompany['coa_galon_tunai'];
+        $coaPotDistTunai = $settingCompany['coa_pot_dist_tunai'];
+        $coaPotIntTunai = $settingCompany['coa_pot_int_tunai'];
+        $coaPotTivTunai = $settingCompany['coa_pot_tiv_tunai'];
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
@@ -187,8 +195,8 @@ class JournalAccount extends Model
             select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (
             -- penjualan produk
             select case 
-                    when di.szProductId in ({$kodeGalon}) then $coaGalonTunai                         
-                    else $coaPenjualanTunai
+                    when di.szProductId in ({$kodeGalon}) then {$coaGalonTunai}                         
+                    else {$coaPenjualanTunai}
                 end as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, (abs(dip.decPrice) * di.decQty) as debit, 0 as credit, (dip.decPrice * di.decQty) as amount , do.szDocId 
             from dms_sd_docdo do
@@ -240,15 +248,16 @@ class JournalAccount extends Model
         $this->fromQuery($sql);
     }
 
-    public function jurnalPenjualanKredit($input){        
-        $settingCompany = Setting::pluck('value', 'code');                
-        $kodeGalon = "'".implode("','",explode(',',$settingCompany["kode_galon"]))."'";        
-        $coaPenjualanKredit = $settingCompany["coa_penjualan_kredit"];
-        $coaGalonKredit = $settingCompany["coa_galon_kredit"];
-        $coaPotDistKredit = $settingCompany["coa_pot_dist_kredit"];
-        $coaPotIntKredit = $settingCompany["coa_pot_int_kredit"];
-        $coaPotTivKredit = $settingCompany["coa_pot_tiv_kredit"];
-        
+    public function jurnalPenjualanKredit($input)
+    {
+        $settingCompany = Setting::pluck('value', 'code');
+        $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+        $coaPenjualanKredit = $settingCompany['coa_penjualan_kredit'];
+        $coaGalonKredit = $settingCompany['coa_galon_kredit'];
+        $coaPotDistKredit = $settingCompany['coa_pot_dist_kredit'];
+        $coaPotIntKredit = $settingCompany['coa_pot_int_kredit'];
+        $coaPotTivKredit = $settingCompany['coa_pot_tiv_kredit'];
+
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
@@ -258,8 +267,8 @@ class JournalAccount extends Model
             select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (
             -- penjualan produk
             select case 
-                    when di.szProductId in ({$kodeGalon}) then $coaGalonKredit
-                    else $coaPenjualanKredit
+                    when di.szProductId in ({$kodeGalon}) then {$coaGalonKredit}
+                    else {$coaPenjualanKredit}
                 end as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, (abs(dip.decPrice) * di.decQty) as debit, 0 as credit, (dip.decPrice * di.decQty) as amount , do.szDocId 
             from dms_sd_docdo do
@@ -311,15 +320,16 @@ class JournalAccount extends Model
         $this->fromQuery($sql);
     }
 
-    public function jurnalPPNKeluaran($input){
-        $settingCompany = Setting::pluck('value', 'code');                        
-        $coaGalonKredit = $settingCompany["coa_galon_kredit"];
-        $coaGalonTunai = $settingCompany["coa_galon_tunai"];   
-        // $coaPenjualanKredit = $settingCompany["coa_penjualan_kredit"];  
-        // $coaPenjualanTunai = $settingCompany['coa_penjualan_tunai'];   
-        $coaPpnKeluaran = $settingCompany["coa_ppn_keluaran"];   // 213001
+    public function jurnalPPNKeluaran($input)
+    {
+        $settingCompany = Setting::pluck('value', 'code');
+        $coaGalonKredit = $settingCompany['coa_galon_kredit'];
+        $coaGalonTunai = $settingCompany['coa_galon_tunai'];
+        // $coaPenjualanKredit = $settingCompany["coa_penjualan_kredit"];
+        // $coaPenjualanTunai = $settingCompany['coa_penjualan_tunai'];
+        $coaPpnKeluaran = $settingCompany['coa_ppn_keluaran'];   // 213001
         $besarPPN = $settingCompany['ppn_prosentase'];
-        $pembagiPPN = $settingCompany["ppn_pembagi"];
+        $pembagiPPN = $settingCompany['ppn_pembagi'];
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
@@ -339,14 +349,14 @@ class JournalAccount extends Model
             and account_id not in ('{$coaGalonKredit}','{$coaGalonTunai}','{$coaPpnKeluaran}')
         SQL;
         $this->fromQuery($sql);
-
     }
 
-    public function jurnalPembelian($input){        
-        $settingCompany = Setting::pluck('value', 'code');        
-        $marginDpp = $settingCompany["margin_dpp"];
-        $kodeGalon = "'".implode("','",explode(',',$settingCompany["kode_galon"]))."'";        
-        $pembagiPPN = $settingCompany["ppn_pembagi"];
+    public function jurnalPembelian($input)
+    {
+        $settingCompany = Setting::pluck('value', 'code');
+        $marginDpp = $settingCompany['margin_dpp'];
+        $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+        $pembagiPPN = $settingCompany['ppn_pembagi'];
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
@@ -399,5 +409,4 @@ class JournalAccount extends Model
         SQL;
         $this->fromQuery($sql);
     }
-
 }

@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Sales;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Sales\BkbDiscounts;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateBkbDiscountsRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -17,9 +14,9 @@ class CreateBkbDiscountsRequest extends FormRequest
      */
     public function authorize()
     {
-
         return true;
         $permissionName = 'bkb_discounts-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -30,7 +27,6 @@ class CreateBkbDiscountsRequest extends FormRequest
      */
     public function rules()
     {
-
         return []; //BkbDiscounts::$rules;s;
     }
 
@@ -40,10 +36,12 @@ class CreateBkbDiscountsRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new BkbDiscounts)->fillable;
-        $keys = array_merge($keys, ['szDocId','start_date','end_date','branch_id']);
+     */
+    public function all($keys = null)
+    {
+        $keys = (new BkbDiscounts())->fillable;
+        $keys = array_merge($keys, ['szDocId', 'start_date', 'end_date', 'branch_id']);
+
         return parent::all($keys);
     }
 }

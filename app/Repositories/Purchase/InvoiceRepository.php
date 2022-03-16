@@ -57,16 +57,16 @@ class InvoiceRepository extends BaseRepository
     public function create($input)
     {
         $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN['supplier'];
-        if(isset($input['ekspedisi_id'])){
+        if (isset($input['ekspedisi_id'])) {
             $input['partner_type'] = 'ekspedisi';
             $input['partner_id'] = $input['ekspedisi_id'];
             unset($input['ekspedisi_id']);
             $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN['ekspedisi'];
-        }else{
+        } else {
             $input['partner_type'] = 'supplier';
         }
         $model = $this->model->newInstance($input);
-        $invoiceLine = $input['invoice_line'];        
+        $invoiceLine = $input['invoice_line'];
         $model->number = $model->getNextNumber();
         $model->type = 'in';
         $model->state = Invoice::DEFAULT_STATE;
@@ -115,7 +115,7 @@ class InvoiceRepository extends BaseRepository
      * @return null|bool|mixed
      */
     public function delete($id)
-    {        
+    {
         $query = $this->model->newQuery();
 
         $model = $query->findOrFail($id);
@@ -131,7 +131,7 @@ class InvoiceRepository extends BaseRepository
     {
         return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount_total) amount')->submit()->first();
     }
-    
+
     public function billValidate()
     {
         return $this->model->disableModelCaching()->selectRaw('count(*) as qty, sum(amount_total) amount')->validate()->first();

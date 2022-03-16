@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Accounting;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Accounting\TransferCashBank;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateTransferCashBankRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateTransferCashBankRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'transfer_cash_bank-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,10 +35,12 @@ class CreateTransferCashBankRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new TransferCashBank)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new TransferCashBank())->fillable;
         $keys = array_merge(['transfer_cash_bank_detail'], $keys);
+
         return parent::all($keys);
     }
 }

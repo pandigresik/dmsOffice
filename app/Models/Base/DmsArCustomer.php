@@ -6,6 +6,7 @@ use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+
 /**
  * @SWG\Definition(
  *      definition="DmsArCustomer",
@@ -153,9 +154,7 @@ class DmsArCustomer extends Model
     }
 
     /**
-     * Get the address associated with the DmsArCustomer
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * Get the address associated with the DmsArCustomer.
      */
     public function address(): HasOne
     {

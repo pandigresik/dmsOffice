@@ -156,10 +156,11 @@ class ProductPriceController extends AppBaseController
     private function getOptionItems()
     {
         $dmsInvProduct = new DmsInvProductRepository(app());
-        $productPriceItem = ProductPrice::select(['dms_inv_product_id','price','dpp_price','branch_price','start_date'])->get()->keyBy('dms_inv_product_id')->toArray();
+        $productPriceItem = ProductPrice::select(['dms_inv_product_id', 'price', 'dpp_price', 'branch_price', 'start_date'])->get()->keyBy('dms_inv_product_id')->toArray();
+
         return [
             'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->disableModelCaching()->whereHas('productCategoriesProduct')->get()->pluck('szName', 'iInternalId')->toArray(),
-            'productPriceItem' => $productPriceItem
+            'productPriceItem' => $productPriceItem,
         ];
     }
 }

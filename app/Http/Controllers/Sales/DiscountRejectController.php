@@ -32,11 +32,12 @@ class DiscountRejectController extends AppBaseController
         }
 
         $downloadXls = $request->get('download_xls');
-        if($downloadXls){
-            $period = explode(' - ', $request->get('period_range'));            
+        if ($downloadXls) {
+            $period = explode(' - ', $request->get('period_range'));
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $sales = $request->get('sales');
+
             return $this->exportExcel($startDate, $endDate, $sales);
         }
 
@@ -60,7 +61,8 @@ class DiscountRejectController extends AppBaseController
     {
         $modelEksport = '\\App\Exports\\Template\\Sales\\RejectDiscountsExport';
         $fileName = 'reject_discount_'.$startDate.'_'.$endDate;
-        $collection = $this->getRepositoryObj()->listSalesReject($startDate, $endDate, $sales);        
+        $collection = $this->getRepositoryObj()->listSalesReject($startDate, $endDate, $sales);
+
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }
 }

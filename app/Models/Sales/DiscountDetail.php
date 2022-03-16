@@ -4,10 +4,9 @@ namespace App\Models\Sales;
 
 use App\Models\BaseEntity as Model;
 use App\Models\Inventory\DmsInvProduct;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -79,15 +78,10 @@ class DiscountDetail extends Model
 
     use HasFactory;
 
-    public $table = 'discount_details';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-    
+    public $table = 'discount_details';
 
     public $fillable = [
         'discounts_id',
@@ -99,8 +93,27 @@ class DiscountDetail extends Model
         'max_bundling_qty',
         'principle_amount',
         'distributor_amount',
-        'package'
+        'package',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'discounts_id' => 'required',
+        'main_dms_inv_product_id' => 'required|string|max:10',
+        'min_main_qty' => 'required|integer',
+        'max_main_qty' => 'required|integer',
+        'bundling_dms_inv_product_id' => 'nullable|string|max:10',
+        'min_bundling_qty' => 'nullable|integer',
+        'max_bundling_qty' => 'nullable|integer',
+        'principle_amount' => 'required|integer',
+        'distributor_amount' => 'nullable|integer',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -117,30 +130,11 @@ class DiscountDetail extends Model
         'min_bundling_qty' => 'integer',
         'max_bundling_qty' => 'integer',
         'principle_amount' => 'integer',
-        'distributor_amount' => 'integer'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'discounts_id' => 'required',
-        'main_dms_inv_product_id' => 'required|string|max:10',
-        'min_main_qty' => 'required|integer',
-        'max_main_qty' => 'required|integer',
-        'bundling_dms_inv_product_id' => 'nullable|string|max:10',
-        'min_bundling_qty' => 'nullable|integer',
-        'max_bundling_qty' => 'nullable|integer',
-        'principle_amount' => 'required|integer',
-        'distributor_amount' => 'nullable|integer'
+        'distributor_amount' => 'integer',
     ];
 
     /**
      * Get the Discount that owns the DiscountMember.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function Discount(): BelongsTo
     {
@@ -148,7 +142,7 @@ class DiscountDetail extends Model
     }
 
     /**
-     * Get the user associated with the DiscountDetail
+     * Get the user associated with the DiscountDetail.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */

@@ -2,13 +2,13 @@
 
 namespace App\Models\Sales;
 
-use App\Models\Base\DmsSmBranch;
 use App\Models\Base\DmsArCustomer;
 use App\Models\Base\DmsPiEmployee;
+use App\Models\Base\DmsSmBranch;
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @SWG\Definition(
@@ -229,10 +229,7 @@ class DmsSdDocdo extends Model
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
-    protected $primaryKey = 'iId';
     public $table = 'dms_sd_docdo';
-    private $countedDiscount = 0;
     public $fillable = [
         'iId',
         'szDocId',
@@ -322,6 +319,8 @@ class DmsSdDocdo extends Model
         'szManualNo' => 'required|string|max:50',
     ];
 
+    protected $primaryKey = 'iId';
+
     protected $dates = ['deleted_at'];
 
     /**
@@ -371,6 +370,7 @@ class DmsSdDocdo extends Model
         'szMobileId' => 'string',
         'szManualNo' => 'string',
     ];
+    private $countedDiscount = 0;
 
     /**
      * Get all of the items for the DmsSdDocdo.
@@ -407,18 +407,20 @@ class DmsSdDocdo extends Model
     }
 
     /**
-     * Get the value of countedDiscount
-     */ 
+     * Get the value of countedDiscount.
+     */
     public function getCountedDiscount()
     {
         return $this->countedDiscount;
     }
 
     /**
-     * Set the value of countedDiscount
+     * Set the value of countedDiscount.
      *
-     * @return  self
-     */ 
+     * @param mixed $countedDiscount
+     *
+     * @return self
+     */
     public function setCountedDiscount($countedDiscount)
     {
         $this->countedDiscount = $countedDiscount;

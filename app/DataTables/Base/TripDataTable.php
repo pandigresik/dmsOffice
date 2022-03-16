@@ -2,12 +2,12 @@
 
 namespace App\DataTables\Base;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Base\Trip;
 use App\Repositories\Base\LocationRepository;
 use App\Repositories\Inventory\ProductCategoriesRepository;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\BaseDataTable as DataTable;
 
 class TripDataTable extends DataTable
 {

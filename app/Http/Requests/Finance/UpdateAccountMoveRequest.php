@@ -2,14 +2,12 @@
 
 namespace App\Http\Requests\Finance;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Finance\AccountMove;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateAccountMoveRequest extends FormRequest
 {
-    private $excludeKeys = []; 
+    private $excludeKeys = [];
 
     /**
      * Determine if the user is authorized to make this request.
@@ -19,6 +17,7 @@ class UpdateAccountMoveRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'account_move-update';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -30,9 +29,8 @@ class UpdateAccountMoveRequest extends FormRequest
     public function rules()
     {
         $rules = AccountMove::$rules;
-        
-        $rules = $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
-        return $rules;
+
+        return $this->excludeKeys ? array_diff_key($rules, array_combine($this->excludeKeys, $this->excludeKeys)) : $rules;
     }
 
     /**
@@ -41,11 +39,13 @@ class UpdateAccountMoveRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new AccountMove)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new AccountMove())->fillable;
         $keys = $this->excludeKeys ? array_diff($keys, $this->excludeKeys) : $keys;
         $keys = array_merge(['account_move_line'], $keys);
+
         return parent::all($keys);
     }
 }

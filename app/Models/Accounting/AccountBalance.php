@@ -3,9 +3,9 @@
 namespace App\Models\Accounting;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -42,21 +42,27 @@ class AccountBalance extends Model
 
     use HasFactory;
 
-    public $table = 'account_balance';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-    
+    public $table = 'account_balance';
 
     public $fillable = [
         'code',
         'amount',
-        'balance_date'
+        'balance_date',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'balance_date' => 'required',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -67,22 +73,11 @@ class AccountBalance extends Model
         'id' => 'integer',
         'code' => 'string',
         'amount' => 'decimal:2',
-        'balance_date' => 'date'
+        'balance_date' => 'date',
     ];
 
     /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [        
-        'balance_date' => 'required'
-    ];
-
-    /**
-     * Get the account that owns the AccountBalance
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the account that owns the AccountBalance.
      */
     public function account(): BelongsTo
     {
@@ -94,11 +89,12 @@ class AccountBalance extends Model
     //     return localNumberFormat($value);
     // }
 
-    public function copyBalance($balanceDate){
+    public function copyBalance($balanceDate)
+    {
         $lastDayPreviousMonth = \Carbon\Carbon::createFromFormat('Y-m-d', $balanceDate)->subDay()->format('Y-m-d');
-        $firstDayPreviousMonth = substr($lastDayPreviousMonth, 0, 8).'01';        
+        $firstDayPreviousMonth = substr($lastDayPreviousMonth, 0, 8).'01';
         $cashFlow = new CashFlowAccount();
-        $cashFlowBalance = str_replace(',','.', $cashFlow->calcStartingBalance($balanceDate));        
+        $cashFlowBalance = str_replace(',', '.', $cashFlow->calcStartingBalance($balanceDate));
         $sql = <<<SQL
             insert into {$this->getTable()} (code, amount, balance_date) 
             SELECT ac.code
@@ -112,25 +108,26 @@ class AccountBalance extends Model
         $this->fromQuery($sql);
     }
 
+    public function getBalanceDateAttribute($value)
+    {
+        return localFormatDate($value);
+    }
+
     private function listAccount()
     {
         return ReportSettingAccount::with(['details' => function ($q) {
             $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
         }])->orderBy('code')->whereGroupType('NRC')->get();
-    }    
+    }
 
-    private function balanceAccountCode(){
+    private function balanceAccountCode()
+    {
         $result = [];
         $listAccount = $this->listAccount();
-        $listAccount->map(function($item) use (&$result){
+        $listAccount->map(function ($item) use (&$result) {
             $result = array_merge($result, $item->details->pluck('code')->toArray());
         });
 
         return $result;
-    }
-    
-    public function getBalanceDateAttribute($value){
-
-        return localFormatDate($value);
     }
 }

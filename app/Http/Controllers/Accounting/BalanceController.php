@@ -61,7 +61,7 @@ class BalanceController extends AppBaseController
     private function exportExcel($endDateObj)
     {
         $endDate = $endDateObj->format('Y-m-d');
-        $startDate = substr($endDate, 0, 8).'01';        
+        $startDate = substr($endDate, 0, 8).'01';
         $collection = $this->getRepositoryObj()->list($startDate, $endDate);
         $modelEksport = '\\App\Exports\\Template\\Accounting\\BalanceExport';
         $fileName = 'neraca_'.$endDate;

@@ -34,11 +34,11 @@ class CalculateDiscount implements ShouldQueue
         $this->setEndDate($endDate);
         $this->setBranches($branches);
         $this->userId = $userId;
-        $this->defaultDate = \Carbon\Carbon::now()->subDays($this->beforeDays)->format('Y-m-d');        
+        $this->defaultDate = \Carbon\Carbon::now()->subDays($this->beforeDays)->format('Y-m-d');
     }
 
-    public function timeout(){
-
+    public function timeout()
+    {
         return 599;
     }
 
@@ -49,9 +49,9 @@ class CalculateDiscount implements ShouldQueue
     {
         $startDate = $this->getStartDate() ?? $this->defaultDate;
         $endDate = $this->getEndDate() ?? $this->defaultDate;
-        $branches = $this->getBranches();       
+        $branches = $this->getBranches();
         Auth::loginUsingId($this->userId);
-        $repository->processDiscountSave($startDate, $endDate, $branches);        
+        $repository->processDiscountSave($startDate, $endDate, $branches);
     }
 
     /**

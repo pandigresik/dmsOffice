@@ -3,8 +3,8 @@
 namespace App\Models\Accounting;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -36,20 +36,27 @@ class ReportSettingAccountDetail extends Model
 
     use HasFactory;
 
-    public $table = 'report_setting_account_detail';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-    
+    public $table = 'report_setting_account_detail';
 
     public $fillable = [
         'report_setting_account_id',
-        'account_id'
+        'account_id',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'report_setting_account_id' => 'required',
+        'account_id' => 'required',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -59,22 +66,12 @@ class ReportSettingAccountDetail extends Model
     protected $casts = [
         'id' => 'integer',
         'report_setting_account_id' => 'integer',
-        'account_id' => 'integer'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'report_setting_account_id' => 'required',
-        'account_id' => 'required'
+        'account_id' => 'integer',
     ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function account()
     {
         return $this->belongsTo(\App\Models\Accounting\Account::class, 'account_id');
@@ -82,7 +79,7 @@ class ReportSettingAccountDetail extends Model
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
+     */
     public function reportSettingAccount()
     {
         return $this->belongsTo(\App\Models\Accounting\ReportSettingAccount::class, 'report_setting_account_id');

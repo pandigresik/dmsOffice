@@ -168,7 +168,6 @@ class DmsSdDocdoItem extends Model
 
     public function getBkbDateAttribute($value)
     {
-
         return $this->bkbDate;
     }
 
@@ -285,6 +284,118 @@ class DmsSdDocdoItem extends Model
         return $this;
     }
 
+    /**
+     * Get the value of hasDiscount.
+     */
+    public function getHasDiscount()
+    {
+        return $this->hasDiscount;
+    }
+
+    /**
+     * Set the value of hasDiscount.
+     *
+     * @param mixed $hasDiscount
+     *
+     * @return self
+     */
+    public function setHasDiscount($hasDiscount)
+    {
+        $this->hasDiscount = $hasDiscount;
+
+        return $this;
+    }
+
+    public function getSelisihPrincipleAttribute($value)
+    {
+        return $this->selisihPrinciple;
+    }
+
+    public function getHasSelisihPrincipleAttribute($value)
+    {
+        return abs($this->selisihPrinciple) > 0 ? 1 : 0;
+    }
+
+    /**
+     * Get the value of selisihPrinciple.
+     */
+    public function getSelisihPrinciple()
+    {
+        return $this->selisihPrinciple;
+    }
+
+    /**
+     * Set the value of selisihPrinciple.
+     *
+     * @param mixed $selisihPrinciple
+     *
+     * @return self
+     */
+    public function addSelisihPrinciple($selisihPrinciple)
+    {
+        $this->selisihPrinciple += $selisihPrinciple;
+
+        return $this;
+    }
+
+    /**
+     * Set the value of selisihPrinciple.
+     *
+     * @param mixed $selisihPrinciple
+     *
+     * @return self
+     */
+    public function setSelisihPrinciple($selisihPrinciple)
+    {
+        $this->selisihPrinciple = $selisihPrinciple;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of additionalInfo.
+     */
+    public function getAdditionalInfo()
+    {
+        return $this->additionalInfo;
+    }
+
+    /**
+     * Set the value of additionalInfo.
+     *
+     * @param mixed $additionalInfo
+     *
+     * @return self
+     */
+    public function setAdditionalInfo($additionalInfo)
+    {
+        $this->additionalInfo = $additionalInfo;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of skipCountComboPromo.
+     */
+    public function getSkipCountComboPromo()
+    {
+        return $this->skipCountComboPromo;
+    }
+
+    /**
+     * Set the value of skipCountComboPromo.
+     *
+     * @param mixed $skipCountComboPromo
+     *
+     * @return self
+     */
+    public function setSkipCountComboPromo($skipCountComboPromo)
+    {
+        $this->skipCountComboPromo = $skipCountComboPromo;
+
+        return $this;
+    }
+
     private function hitungDiscounts()
     {
         /** get all discounts active */
@@ -298,15 +409,15 @@ class DmsSdDocdoItem extends Model
             $this->getDetailDiscounts($da);
         }
 
-        if(!empty($this->discounts['principle'])){
+        if (!empty($this->discounts['principle'])) {
             $this->setHasDiscount(1);
         }
 
-        if(!empty($this->discounts['distributor'])){
+        if (!empty($this->discounts['distributor'])) {
             $this->setHasDiscount(1);
         }
 
-        if(!empty($this->discounts['internal'])){
+        if (!empty($this->discounts['internal'])) {
             $this->setHasDiscount(1);
         }
     }
@@ -327,10 +438,10 @@ class DmsSdDocdoItem extends Model
 
                 break;
             case 'combo':
-                /** untuk combo hanya dihitung satu kali aja */
-                if(!$this->getSkipCountComboPromo()){
+                // untuk combo hanya dihitung satu kali aja
+                if (!$this->getSkipCountComboPromo()) {
                     $this->discountCombo($discount);
-                }                
+                }
 
                 break;
             case 'extension':
@@ -364,9 +475,9 @@ class DmsSdDocdoItem extends Model
                 if ('principle' == $discount->type) {
                     $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $productDiscount->principle_amount * $this->attributes['decQty']];
                     $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $productDiscount->distributor_amount * $this->attributes['decQty']];
-                }else{
+                } else {
                     $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $productDiscount->principle_amount * $this->attributes['decQty']];
-                }                                
+                }
             }
         }
     }
@@ -386,10 +497,10 @@ class DmsSdDocdoItem extends Model
                         if ('principle' == $discount->type) {
                             $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $d->principle_amount * $qtyQuotaNota];
                             $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $d->distributor_amount * $qtyQuotaNota];
-                        }else{
+                        } else {
                             $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $d->principle_amount * $qtyQuotaNota];
                         }
-                        
+
                         break;
                     }
                 }
@@ -424,10 +535,9 @@ class DmsSdDocdoItem extends Model
                         if ('principle' == $discount->type) {
                             $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
                             $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $selectedPackage->getRawOriginal('package')];
-                        }else{
+                        } else {
                             $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
                         }
-                        
                     }
                 }
             }
@@ -443,10 +553,10 @@ class DmsSdDocdoItem extends Model
             $productDiscount = in_array($this->szProductId, $listMainProduct) ? true : false;
 
             if ($productDiscount) {
-                $qtyQuotaNota = $this->attributes['decQty'] > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $this->attributes['decQty'];                
+                $qtyQuotaNota = $this->attributes['decQty'] > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $this->attributes['decQty'];
                 $selectedPackage = [];
                 foreach ($discount->details as $d) {
-                    if ($qtyQuotaNota >= $d->getRawOriginal('min_main_qty') ) {
+                    if ($qtyQuotaNota >= $d->getRawOriginal('min_main_qty')) {
                         $selectedPackage = $d;
                     }
                 }
@@ -454,10 +564,9 @@ class DmsSdDocdoItem extends Model
                     if ('principle' == $discount->type) {
                         $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
                         $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $selectedPackage->getRawOriginal('package')];
-                    }else{
+                    } else {
                         $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $selectedPackage->getRawOriginal('package')];
                     }
-                    
                 }
             }
         }
@@ -495,7 +604,7 @@ class DmsSdDocdoItem extends Model
                     if ('principle' == $discount->type) {
                         $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
                         $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $totalNota];
-                    }else{
+                    } else {
                         $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
                     }
                 }
@@ -513,11 +622,11 @@ class DmsSdDocdoItem extends Model
             $listMainProduct = explode(',', $discount->main_dms_inv_product_id);
             $productDiscount = in_array($this->szProductId, $listMainProduct) ? true : false;
 
-            if ($productDiscount) {                
+            if ($productDiscount) {
                 /** get other product in this nota */
-                //$bundlingProduct = DmsSdDocdoItem::where(['szProductId' => $discount->bundling_dms_inv_product_id, 'szDocId' => $this->szDocId])->first();                
+                //$bundlingProduct = DmsSdDocdoItem::where(['szProductId' => $discount->bundling_dms_inv_product_id, 'szDocId' => $this->szDocId])->first();
                 $totalNota = $this->getOtherItem()->whereIn('szProductId', $listMainProduct)->sum('decQty');
-                
+
                 if ($totalNota > $discount->getRawOriginal('max_quota')) {
                     $totalNota = $discount->getRawOriginal('max_quota');
                 }
@@ -527,13 +636,13 @@ class DmsSdDocdoItem extends Model
                     if ($totalNota >= $d->getRawOriginal('min_main_qty')) {
                         $selectedPackage = $d;
                     }
-                }                
-                
+                }
+
                 if (!empty($selectedPackage)) {
                     if ('principle' == $discount->type) {
                         $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
                         $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $totalNota];
-                    }else{
+                    } else {
                         $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
                     }
                 }
@@ -543,111 +652,8 @@ class DmsSdDocdoItem extends Model
         }
     }
 
-    private function convertToBox($value, $discount){
-
+    private function convertToBox($value, $discount)
+    {
         return floor($value / $discount->attributes['conversion_main_dms_inv_product_id']);
-    }    
-
-    /**
-     * Get the value of hasDiscount
-     */ 
-    public function getHasDiscount()
-    {
-        return $this->hasDiscount;
-    }
-
-    /**
-     * Set the value of hasDiscount
-     *
-     * @return  self
-     */ 
-    public function setHasDiscount($hasDiscount)
-    {
-        $this->hasDiscount = $hasDiscount;
-
-        return $this;
-    }
-
-
-    public function getSelisihPrincipleAttribute($value)
-    {
-        return $this->selisihPrinciple;
-    }
-
-    public function getHasSelisihPrincipleAttribute($value)
-    {
-        return abs($this->selisihPrinciple) > 0 ? 1 : 0;
-    }
-
-    /**
-     * Get the value of selisihPrinciple
-     */ 
-    public function getSelisihPrinciple()
-    {
-        return $this->selisihPrinciple;
-    }
-
-    /**
-     * Set the value of selisihPrinciple
-     *
-     * @return  self
-     */ 
-    public function addSelisihPrinciple($selisihPrinciple)
-    {
-        $this->selisihPrinciple += $selisihPrinciple;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of selisihPrinciple
-     *
-     * @return  self
-     */ 
-    public function setSelisihPrinciple($selisihPrinciple)
-    {
-        $this->selisihPrinciple = $selisihPrinciple;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of additionalInfo
-     */ 
-    public function getAdditionalInfo()
-    {
-        return $this->additionalInfo;
-    }
-
-    /**
-     * Set the value of additionalInfo
-     *
-     * @return  self
-     */ 
-    public function setAdditionalInfo($additionalInfo)
-    {
-        $this->additionalInfo = $additionalInfo;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of skipCountComboPromo
-     */ 
-    public function getSkipCountComboPromo()
-    {
-        return $this->skipCountComboPromo;
-    }
-
-    /**
-     * Set the value of skipCountComboPromo
-     *
-     * @return  self
-     */ 
-    public function setSkipCountComboPromo($skipCountComboPromo)
-    {
-        $this->skipCountComboPromo = $skipCountComboPromo;
-
-        return $this;
     }
 }

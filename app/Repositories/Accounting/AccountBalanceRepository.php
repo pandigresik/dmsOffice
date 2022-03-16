@@ -6,11 +6,10 @@ use App\Models\Accounting\AccountBalance;
 use App\Repositories\BaseRepository;
 
 /**
- * Class AccountBalanceRepository
- * @package App\Repositories\Accounting
+ * Class AccountBalanceRepository.
+ *
  * @version January 21, 2022, 8:19 am WIB
-*/
-
+ */
 class AccountBalanceRepository extends BaseRepository
 {
     /**
@@ -19,11 +18,11 @@ class AccountBalanceRepository extends BaseRepository
     protected $fieldSearchable = [
         'code',
         'amount',
-        'balance_date'
+        'balance_date',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -33,8 +32,8 @@ class AccountBalanceRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return AccountBalance::class;
@@ -44,7 +43,7 @@ class AccountBalanceRepository extends BaseRepository
     {
         $this->model->getConnection()->beginTransaction();
 
-        try {            
+        try {
             $startDate = $input['balance_date'];
             $this->removePreviousData($startDate);
             $this->model->copyBalance($startDate);
@@ -61,7 +60,7 @@ class AccountBalanceRepository extends BaseRepository
     }
 
     private function removePreviousData($startDate)
-    {        
+    {
         $this->model->whereBalanceDate($startDate)->forceDelete();
     }
 }

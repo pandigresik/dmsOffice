@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Accounting;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Accounting\ReportSettingAccount;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateReportSettingAccountRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateReportSettingAccountRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'report_setting_account-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,10 +35,12 @@ class CreateReportSettingAccountRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new ReportSettingAccount)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new ReportSettingAccount())->fillable;
         $keys = array_merge(['details'], $keys);
+
         return parent::all($keys);
     }
 }

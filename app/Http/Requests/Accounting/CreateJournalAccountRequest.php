@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Accounting;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Accounting\JournalAccount;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateJournalAccountRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateJournalAccountRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'journal_account-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -37,9 +35,11 @@ class CreateJournalAccountRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new JournalAccount)->fillable;
+     */
+    public function all($keys = null)
+    {
+        $keys = (new JournalAccount())->fillable;
+
         return parent::all($keys);
     }
 }

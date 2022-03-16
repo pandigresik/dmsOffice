@@ -6,11 +6,10 @@ use App\Models\Accounting\JournalAccount;
 use App\Repositories\BaseRepository;
 
 /**
- * Class JournalAccountRepository
- * @package App\Repositories\Accounting
+ * Class JournalAccountRepository.
+ *
  * @version January 12, 2022, 2:55 pm WIB
-*/
-
+ */
 class JournalAccountRepository extends BaseRepository
 {
     /**
@@ -23,11 +22,11 @@ class JournalAccountRepository extends BaseRepository
         'debit',
         'credit',
         'balance',
-        'state'
+        'state',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -37,8 +36,8 @@ class JournalAccountRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
-     **/
+     * Configure the Model.
+     */
     public function model()
     {
         return JournalAccount::class;

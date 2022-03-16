@@ -3,8 +3,8 @@
 namespace App\Models\Accounting;
 
 use App\Models\BaseEntity as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -39,21 +39,29 @@ class Account extends Model
 
     use HasFactory;
 
-    public $table = 'account';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];
-
-    
+    public $table = 'account';
 
     public $fillable = [
         'name',
         'code',
-        'description'
+        'description',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'name' => 'required|string|max:50',
+        'code' => 'required|string|max:10',
+        'description' => 'nullable|string|max:100',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -64,23 +72,11 @@ class Account extends Model
         'id' => 'integer',
         'name' => 'string',
         'code' => 'string',
-        'description' => 'string'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'name' => 'required|string|max:50',
-        'code' => 'required|string|max:10',
-        'description' => 'nullable|string|max:100'
+        'description' => 'string',
     ];
 
     public function getFullIdentityAttribute($value)
     {
         return $this->attributes['name'].' ( '.$this->attributes['code'].' )';
     }
-    
 }

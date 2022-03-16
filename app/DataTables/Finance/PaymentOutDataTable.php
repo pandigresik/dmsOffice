@@ -2,10 +2,10 @@
 
 namespace App\DataTables\Finance;
 
+use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Finance\PaymentOut;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\BaseDataTable as DataTable;
 
 class PaymentOutDataTable extends DataTable
 {

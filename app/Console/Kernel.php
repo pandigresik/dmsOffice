@@ -22,7 +22,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $user = \App\Models\Base\User::where('entity_id', 1)->first();
-        $schedule->job(new CalculateDiscount($user->id),'mysql_sejati','database_sejati')->user($user);
+        $schedule->job(new CalculateDiscount($user->id), 'mysql_sejati', 'database_sejati')->user($user);
     }
 
     /**

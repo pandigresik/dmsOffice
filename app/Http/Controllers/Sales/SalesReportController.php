@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Sales;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
 use App\DataTables\Sales\SalesReportDataTable;
+use App\Http\Controllers\AppBaseController;
 use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Sales\SalesReportRepository;
+use Illuminate\Http\Request;
 
 class SalesReportController extends AppBaseController
 {
@@ -32,23 +32,25 @@ class SalesReportController extends AppBaseController
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $datas = $this->getRepositoryObj()->listRekap($startDate, $endDate, $branchId, $cash);
+
             return view('sales.sales_report.list_rekap')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate]);
         }
 
         $downloadXls = $request->get('download_xls');
-        if($downloadXls){
+        if ($downloadXls) {
             $period = explode(' - ', $request->get('period_range'));
             $cash = $request->get('cash');
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $branchId = $request->get('branch_id');
+
             return $this->exportExcel($startDate, $endDate, $branchId, $cash);
         }
 
         return view('sales.sales_report.rekap')->with($this->getOptionItems());
     }
 
-    private function exportExcel($startDate, $endDate , $branchId, $cash)
+    private function exportExcel($startDate, $endDate, $branchId, $cash)
     {
         $modelEksport = '\\App\Exports\\Template\\Sales\\RekapSalesExport';
         $fileName = 'rekap_sales_'.$startDate.'_'.$endDate;
@@ -66,7 +68,7 @@ class SalesReportController extends AppBaseController
      */
     private function getOptionItems()
     {
-        $branch = new DmsSmBranchRepository (app());
+        $branch = new DmsSmBranchRepository(app());
 
         return [
             'branchItems' => $branch->pluck([], null, null, 'szId', 'szName'),
