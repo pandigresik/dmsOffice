@@ -84,7 +84,8 @@ class ProfitLossRepository extends BaseRepository
         return ReportSettingAccount::with(['details' => function ($q) use($excludeAccount) {
             $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])
                 ->join('account', 'account.id', '=', 'report_setting_account_detail.account_id')
-                ->whereNotIn('report_setting_account_detail.account_id', $excludeAccount);
+                ->whereNotIn('report_setting_account_detail.account_id', $excludeAccount)
+                ->disableModelCaching();
         }])->orderBy('code')->whereGroupType($this->groupCode)->get();
     }
 
