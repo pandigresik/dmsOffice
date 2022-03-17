@@ -47,7 +47,7 @@ class ProfitLossRepository extends BaseRepository
         })->toArray();
         
         $listAccount = $this->listAccount($excludeAccount);
-        \Log::error($listAccount);
+        
         $claimTiv = JournalAccount::with(['account'])->selectRaw('branch_id, \'919901\' as account_id, abs(sum(balance)) as balance')
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
@@ -76,6 +76,7 @@ class ProfitLossRepository extends BaseRepository
             'data' => $data,
             'branchMaster' => DmsSmBranch::whereIn('szId', $branchId)->get()->keyBy('szId'),
             'listAccount' => $listAccount,
+            'excludeAccount' => $excludeAccount
         ];
     }
 
@@ -84,8 +85,7 @@ class ProfitLossRepository extends BaseRepository
         return ReportSettingAccount::with(['details' => function ($q) use($excludeAccount) {
             $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])
                 ->join('account', 'account.id', '=', 'report_setting_account_detail.account_id')
-                ->whereNotIn('report_setting_account_detail.account_id', $excludeAccount)
-                ->disableModelCaching();
+                ->whereNotIn('report_setting_account_detail.account_id', $excludeAccount);
         }])->orderBy('code')->whereGroupType($this->groupCode)->get();
     }
 

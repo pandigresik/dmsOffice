@@ -78,6 +78,7 @@
             @foreach ($group->details as $account)
                 @php
                     $totalBaris = 0;
+                    if(in_array($account->code, $excludeAccount)) continue;                    
                 @endphp
                 <tr>
                     <td>{{ $account->code }}</td>
