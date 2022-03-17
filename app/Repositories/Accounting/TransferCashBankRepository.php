@@ -102,4 +102,19 @@ class TransferCashBankRepository extends BaseRepository
             }
         }
     }
+
+    public function list($startDate, $endDate)
+    {        
+        $data = $this->model->with(['transferCashBankDetails'])            
+            ->whereBetween('transaction_date', [$startDate, $endDate])            
+            ->orderBy('transaction_date')
+            ->get()
+            ->groupBy('transaction_date')  
+            ;
+
+        return [
+            'data' => $data            
+        ];
+    }
+
 }
