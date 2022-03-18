@@ -34,10 +34,7 @@ class TripEkspedisiController extends AppBaseController
     public function index(Request $request)
     {
         $trips = $this->getRepositoryObj()->with(['trip', 'lastPrice'])
-            ->allQuery()->where(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->get()->map(function ($q) {
-                if(!isset($q->trip)){
-                    return;
-                }
+            ->allQuery()->where(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->get()->map(function ($q) {                
                 $q->trip->price = $q->lastPrice->getRawOriginal('price');
                 $q->trip->price_log_id = $q->lastPrice->id;
                 $q->trip->origin_additional_price = $q->lastPrice->getRawOriginal('origin_additional_price');

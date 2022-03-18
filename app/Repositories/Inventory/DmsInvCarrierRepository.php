@@ -75,7 +75,7 @@ class DmsInvCarrierRepository extends BaseRepository
 
                             break;
                         case 'delete':
-                            ContactEkspedisi ::whereId($key)->delete();
+                            ContactEkspedisi ::whereId($key)->forceDelete();
 
                             break;
                     }
@@ -95,7 +95,7 @@ class DmsInvCarrierRepository extends BaseRepository
 
                             break;
                         case 'delete':
-                            LocationEkspedisi::whereId($key)->delete();
+                            LocationEkspedisi::whereId($key)->forceDelete();
 
                             break;
                     }
@@ -111,7 +111,7 @@ class DmsInvCarrierRepository extends BaseRepository
 
                             break;
                         case 'delete':
-                            VehicleEkspedisi::where(['dms_inv_vehicle_id' => $key, 'dms_inv_carrier_id' => $id])->delete();
+                            VehicleEkspedisi::where(['dms_inv_vehicle_id' => $key, 'dms_inv_carrier_id' => $id])->forceDelete();
 
                             break;
                     }
@@ -132,8 +132,8 @@ class DmsInvCarrierRepository extends BaseRepository
                             break;
                         case 'delete':
                             $tripEkspedisi = TripEkspedisi::where(['trip_id' => $key, 'dms_inv_carrier_id' => $id])->first();
-                            $tripEkspedisi->price()->delete();
-                            $tripEkspedisi->delete();
+                            $tripEkspedisi->price()->forceDelete();
+                            $tripEkspedisi->forceDelete();
 
                             break;
                     }
