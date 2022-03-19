@@ -52,7 +52,7 @@ class DmsInvCarrierRepository extends BaseRepository
 
     public function update($input, $id)
     {
-        DB::beginTransaction();
+        $this->model->getConnection()->beginTransaction();
 
         try {
             $contactEkspedisis = $input['contactEkspedisis'] ?? [];
@@ -139,11 +139,11 @@ class DmsInvCarrierRepository extends BaseRepository
                     }
                 }
             }
-            DB::commit();
+            $this->model->getConnection()->commit();
 
             return $model;
         } catch (\Exception $e) {
-            DB::rollBack();
+            $this->model->getConnection()->rollBack();
             \Log::error($e);
 
             return $e;
