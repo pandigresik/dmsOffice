@@ -29,6 +29,7 @@ class ProfitLossExport implements FromView
             'data' => $this->collection['data'],
             'branchMaster' => $this->collection['branchMaster'],
             'listAccount' => $this->collection['listAccount'],
+            'excludeAccount' => $this->collection['excludeAccount'],
             'startDate' => $this->getStartDate(),
             'endDate' => $this->getEndDate(),
         ]);

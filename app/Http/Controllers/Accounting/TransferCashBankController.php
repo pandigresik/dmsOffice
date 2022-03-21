@@ -100,7 +100,7 @@ class TransferCashBankController extends AppBaseController
             return redirect(route('accounting.transferCashBanks.index'));
         }
 
-        return view('accounting.transfer_cash_banks.edit')->with('transferCashBank', $transferCashBank)->with($this->getOptionItems());
+        return view('accounting.transfer_cash_banks.edit')->with(['transferCashBank' => $transferCashBank, 'type' => $transferCashBank->type])->with($this->getOptionItems());
     }
 
     /**

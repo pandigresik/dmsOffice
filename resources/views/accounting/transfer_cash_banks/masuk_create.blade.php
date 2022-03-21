@@ -10,8 +10,7 @@
                                    @include('accounting.transfer_cash_banks.fields', ['type' => 'KM'])
                                    <div class="table-responsive">
                                     @include('accounting.transfer_cash_banks.table_masuk_line')                                    
-                                    </div>
-                                   
+                                    </div>                                   
                             </div>
                             <div class="card-footer">
                                 <!-- Submit Field -->

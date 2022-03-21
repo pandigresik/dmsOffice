@@ -32,6 +32,19 @@
         $(function(){
             $('#table-account-line tbody').trigger('change')
         })
+
+        function addRowSelect2(_elm){
+            const _tr = $(_elm).closest('tr')
+            _tr.find('select.select2').select2('destroy')
+            main.addRow($(_elm), reinitSelect2 )
+        }
+        function reinitSelect2(_newTr){
+            _newTr.find('.is-valid').removeClass('is-valid')
+            main.initSelect(_newTr.closest('tbody'))
+            _newTr.find('select,input').prop('required',1)
+            main.initInputmask(_newTr)
+        }
+        
         function updateSummaryBalance(_elm){
             const _form = $(_elm).closest('form')
             const _table = $(_elm).closest('table')

@@ -9,7 +9,7 @@
         </tr>
     </thead>
     <tbody onchange="updateSummaryBalance(this)">
-        @if(isset($lines))
+        @if(isset($lines))            
             @foreach ($lines as $index => $item)
                 @include('accounting.transfer_cash_banks.item_masuk_line', ['item' => $item, 'lastIndex' => count($lines) == $index + 1 ? 1 : 0])    
             @endforeach
@@ -25,12 +25,23 @@
     </tfoot>
 </table>
 
-
 @push('scripts')
     <script type="text/javascript">
         $(function(){
             $('#table-account-line tbody').trigger('change')
         })
+        function addRowSelect2(_elm){
+            const _tr = $(_elm).closest('tr')
+            _tr.find('select.select2').select2('destroy')
+            main.addRow($(_elm), reinitSelect2 )
+        }
+        function reinitSelect2(_newTr){
+            _newTr.find('.is-valid').removeClass('is-valid')
+            main.initSelect(_newTr.closest('tbody'))
+            _newTr.find('select,input').prop('required',1)
+            main.initInputmask(_newTr)
+        }
+
         function updateSummaryBalance(_elm){
             const _form = $(_elm).closest('form')
             const _table = $(_elm).closest('table')

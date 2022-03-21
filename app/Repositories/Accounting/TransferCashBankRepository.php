@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Accounting;
 
+use App\Models\Accounting\AccountBalance;
 use App\Models\Accounting\TransferCashBank;
 use App\Repositories\BaseRepository;
 
@@ -104,16 +105,19 @@ class TransferCashBankRepository extends BaseRepository
     }
 
     public function list($startDate, $endDate)
-    {        
+    {
+        $firstDate = substr($startDate, 0, 8).'01';
+        $saldo = AccountBalance::select('code','amount')->whereBalanceDate($firstDate)->whereIn('code', ['kas_besar', 'kas_kecil', 'giro'])->get()->pluck('amount', 'code');
         $data = $this->model->with(['transferCashBankDetails'])            
             ->whereBetween('transaction_date', [$startDate, $endDate])            
             ->orderBy('transaction_date')
             ->get()
             ->groupBy('transaction_date')  
             ;
-
+        
         return [
-            'data' => $data            
+            'data' => $data,
+            'saldo' => ['kas_kecil' => $saldo['kas_kecil'] ?? 0, 'kas_besar' => $saldo['kas_besar'] ?? 0, 'giro' => $saldo['giro'] ?? 0]
         ];
     }
 

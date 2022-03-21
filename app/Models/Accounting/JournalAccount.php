@@ -363,7 +363,7 @@ class JournalAccount extends Model
 
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, description, reference, type, created_at)             
-            select x.coa, account.name, debit / {$pembagiPPN}, credit / {$pembagiPPN}, amount / {$pembagiPPN}, dtmDoc, szBranchId, szProductId, szDocId, '{$type}',now() from (
+            select x.coa, account.name, debit , credit , amount , dtmDoc, szBranchId, szProductId, szDocId, '{$type}',now() from (
             select case 
                     when di.szProductId in ({$kodeGalon}) then 'HPPGKP'
                     else 'HPPP'
@@ -371,12 +371,12 @@ class JournalAccount extends Model
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 
                 case 
                     when di.szProductId in ({$kodeGalon}) then abs(di.decQty * dip.decPrice)
-                    else abs(di.decQty * coalesce((select ppl.branch_price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1) - {$marginDpp},0))
+                    else abs(di.decQty * coalesce((select ppl.branch_price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1) - {$marginDpp},0)) / {$pembagiPPN}
                 end as debit,
                 0 as credit, 
                 case 
                     when di.szProductId in ({$kodeGalon}) then di.decQty * dip.decPrice
-                    else di.decQty * coalesce((select ppl.branch_price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1) - {$marginDpp},0)
+                    else di.decQty * coalesce((select ppl.branch_price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1) - {$marginDpp},0) / {$pembagiPPN}
                 end as amount,        
                 do.szDocId 
             from dms_sd_docdo do
@@ -392,15 +392,18 @@ class JournalAccount extends Model
             and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-03')            
             -- menghitung hpp pabrik untuk PT
             union all            
-            select y.coa, 'HPP PABRIK', debit / {$pembagiPPN}, credit / {$pembagiPPN}, amount / {$pembagiPPN}, dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (
-            select 'HPPPT' as coa
+            select y.coa, 'HPP PABRIK', debit , credit , amount , dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (            
+            select case 
+                    when di.szProductId in ({$kodeGalon}) then 'HPPGKP'
+                    else 'HPPPT'
+                end as coa
                 ,do.dtmDoc, do.bCash, do.szBranchId, di.szProductId
-                , di.decQty * coalesce((select ppl.price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as debit
+                , di.decQty * coalesce((select ppl.dpp_price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as debit
                 , 0 as credit
-                , di.decQty * coalesce((select ppl.price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as amount
+                , di.decQty * coalesce((select ppl.dpp_price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1), 0) as amount
                 , do.szDocId 
             from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId  and di.szOrderItemTypeId not in ('PRODSUPP')
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId  and di.szOrderItemTypeId not in ('PRODSUPP') and di.szProductId not in ({$kodeGalon})
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber and dip.decPrice > 0
             where do.szDocStatus = 'Applied' 
                 and do.szBranchId = '{$branchId}'

@@ -1,9 +1,5 @@
 @php
-    $saldoAkhir = $saldoAwal = [
-        'kas_kecil' => 0,
-        'kas_besar' => 0,
-        'giro' => 0,
-    ];
+    $saldoAkhir = $saldoAwal = $saldo;
     
     $totalTerima = [
         'kas_kecil' => 0,
@@ -35,9 +31,9 @@
         </thead>
         <tbody>
             <tr style="font-weight:bold">
-                <td colspan="4">Saldo Awal</td>
-                <td class="text-right">{{ localNumberFormat($saldoAwal['kas_kecil'],0) }}</td>
+                <td colspan="4">Saldo Awal</td>                
                 <td class="text-right">{{ localNumberFormat($saldoAwal['kas_besar'],0) }}</td>
+                <td class="text-right">{{ localNumberFormat($saldoAwal['kas_kecil'],0) }}</td>
                 <td class="text-right">{{ localNumberFormat($saldoAwal['giro'],0) }}</td>
             </tr>
             @forelse ($data as $tgl => $perTgl)

@@ -21,8 +21,20 @@
                               <strong>Edit @lang('models/transferCashBanks.singular')</strong>
                           </div>
                           <div class="card-body">                              
-
-                              @include('accounting.transfer_cash_banks.fields')
+                            @if ($type == 'KM')
+                                @include('accounting.transfer_cash_banks.fields', ['type' => 'KM'])
+                                <div class="table-responsive">
+                                    @include('accounting.transfer_cash_banks.table_masuk_line', ['lines' => $transferCashBank->transferCashBankDetails])
+                                </div>                                   
+                            @else
+                                @include('accounting.transfer_cash_banks.fields', ['type' => 'KK'])
+                                   <div class="table-responsive">
+                                    @include('accounting.transfer_cash_banks.table_keluar_line', ['lines' => $transferCashBank->transferCashBankDetails])
+                                  </div>
+                            @endif
+                              
+                                   
+                            
 
                               
                             </div>
