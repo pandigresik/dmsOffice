@@ -4,6 +4,7 @@ namespace App\Repositories\Accounting;
 
 use App\Models\Accounting\AccountBalance;
 use App\Models\Accounting\TransferCashBank;
+use App\Models\Accounting\TransferCashBankDetail;
 use App\Repositories\BaseRepository;
 
 /**
@@ -105,9 +106,8 @@ class TransferCashBankRepository extends BaseRepository
     }
 
     public function list($startDate, $endDate)
-    {
-        $firstDate = substr($startDate, 0, 8).'01';
-        $saldo = AccountBalance::select('code','amount')->whereBalanceDate($firstDate)->whereIn('code', ['kas_besar', 'kas_kecil', 'giro'])->get()->pluck('amount', 'code');
+    {        
+        $saldo = $this->getSaldoUntil($startDate);
         $data = $this->model->with(['transferCashBankDetails'])            
             ->whereBetween('transaction_date', [$startDate, $endDate])            
             ->orderBy('transaction_date')
@@ -117,8 +117,27 @@ class TransferCashBankRepository extends BaseRepository
         
         return [
             'data' => $data,
-            'saldo' => ['kas_kecil' => $saldo['kas_kecil'] ?? 0, 'kas_besar' => $saldo['kas_besar'] ?? 0, 'giro' => $saldo['giro'] ?? 0]
+            'saldo' => $saldo
         ];
+    }
+
+    private function getSaldoUntil($startDate){
+        $firstDate = substr($startDate, 0, 8).'01';
+        $saldo = AccountBalance::select('code','amount')->whereBalanceDate($firstDate)->whereIn('code', ['kas_besar', 'kas_kecil', 'giro'])->get()->pluck('amount', 'code');
+        $result = ['kas_kecil' => $saldo['kas_kecil'] ?? 0, 'kas_besar' => $saldo['kas_besar'] ?? 0, 'giro' => $saldo['giro'] ?? 0];
+        $data = TransferCashBank::selectRaw('type_account, sum(case when type = \'KM\' then transfer_cash_bank_detail.amount else -transfer_cash_bank_detail.amount end) as amount')
+            ->where('transaction_date','>=', $firstDate)
+            ->where('transaction_date','<', $startDate)
+            ->join('transfer_cash_bank_detail', function($join){
+                $join->on('transfer_cash_bank.id', '=', 'transfer_cash_bank_detail.transfer_cash_bank_id');
+            })            
+            ->groupBy('type_account')
+            ->get()
+            ->keyBy('type_account')->each(function ($item, $key) use (&$result){
+                $result[$key] += $item->amount;
+            });            
+        
+        return $result;
     }
 
 }

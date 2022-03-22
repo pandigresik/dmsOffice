@@ -90,6 +90,11 @@ class TransferCashBank extends Model
         return $this->hasMany(\App\Models\Accounting\TransferCashBankDetail::class, 'transfer_cash_bank_id');
     }
 
+    public function sumDetails()
+    {
+        return $this->transferCashBankDetails()->groupBy('type_account')->sum('amount');
+    }
+
     public function getNextNumber($type)
     {
         $monthCode = chr(65 + intval(date('m')));
