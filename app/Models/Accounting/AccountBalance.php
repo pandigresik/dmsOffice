@@ -104,6 +104,12 @@ class AccountBalance extends Model
             where ac.has_balance = 1
             union all
             Select 'SAAK' as code , '{$cashFlowBalance}' as amount, '{$balanceDate}' as balance_date
+            union all 
+            SELECT ac.code
+                , coalesce((select amount from account_balance where account_balance.code = ac.code and balance_date = '{$firstDayPreviousMonth}'),0) + (select coalesce(sum(case when type = 'KM' then transfer_cash_bank_detail.amount else -transfer_cash_bank_detail.amount end),0) from transfer_cash_bank join transfer_cash_bank_detail on transfer_cash_bank_detail.transfer_cash_bank_id = transfer_cash_bank.id where transfer_cash_bank.type_account = ac.code and transfer_cash_bank.transaction_date between '{$firstDayPreviousMonth}' and '{$lastDayPreviousMonth}')
+                , '{$balanceDate}' as balance_date
+            FROM account ac
+            where ac.code in ('kas_kecil','kas_besar','giro')            
         SQL;
         $this->fromQuery($sql);
     }
