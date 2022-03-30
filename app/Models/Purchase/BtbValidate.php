@@ -2,6 +2,7 @@
 
 namespace App\Models\Purchase;
 
+use App\Models\Base\DmsSmBranch;
 use App\Models\BaseEntity as Model;
 use App\Models\Inventory\DmsInvCarrier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -190,6 +191,11 @@ class BtbValidate extends Model
     public function ekspedisi(): BelongsTo
     {
         return $this->belongsTo(DmsInvCarrier::class, 'dms_inv_carrier_id', 'szId');
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(DmsSmBranch ::class, 'branch_id', 'szId');
     }
 
     public function updateEkspedisi($id, $input)

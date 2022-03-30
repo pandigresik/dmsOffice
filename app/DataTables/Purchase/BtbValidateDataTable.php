@@ -16,6 +16,7 @@ class BtbValidateDataTable extends DataTable
     private $columnFilterOperator = [
         'btb_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
         'dmsInvCarrierId' => \App\DataTables\FilterClass\MatchKeyword::class,
+        'branch_id' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
 
     private $mapColumnSearch = [
@@ -51,7 +52,7 @@ class BtbValidateDataTable extends DataTable
      */
     public function query(BtbValidate $model)
     {
-        return $model->with(['ekspedisi'])->whereInvoiced(0)->newQuery();
+        return $model->with(['ekspedisi', 'branch'])->whereInvoiced(0)->newQuery();
     }
 
     /**
@@ -113,7 +114,7 @@ class BtbValidateDataTable extends DataTable
         $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(DmsSmBranch::pluck('szName', 'szId')->toArray()));
 
         return [
-            'branch_id' => new Column(['title' => __('models/btbValidates.fields.branch_id'), 'data' => 'branch_id', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem]),
+            'branch_id' => new Column(['title' => __('models/btbValidates.fields.branch_id'),'name' => 'branch_id', 'data' => 'branch.szName', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem]),
             'doc_id' => new Column(['title' => __('models/btbValidates.fields.doc_id'), 'data' => 'doc_id', 'searchable' => true, 'elmsearch' => 'text']),
             'co_reference' => new Column(['title' => __('models/btbValidates.fields.co_reference'), 'data' => 'co_reference', 'searchable' => true, 'elmsearch' => 'text']),
             'product_name' => new Column(['title' => __('models/btbValidates.fields.product_name'), 'data' => 'product_name', 'searchable' => true, 'elmsearch' => 'text']),
