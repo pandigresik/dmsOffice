@@ -12,7 +12,7 @@ return array (
     'carrier_id' => 'Ekspedisi',
     'date' => 'Tanggal BTB',
     'do_references' => 'No. BTB',
-    'sj_references' => 'No. Sj',
+    'sj_references' => 'No. Surat Jalan',
     'amount' => 'Tarif',
     'driver' => 'Sopir',
     'vehicle_number' => 'Nopol',

@@ -126,8 +126,7 @@
 <div class="product-detail" id="product-detail">
     <table class="table table-bordered text-center">
         <thead>
-            <tr>
-                <th>id</th>
+            <tr>                
                 <th>Nama</th>
                 <th>Quantity Item</th>
                 <th></th>
@@ -135,16 +134,14 @@
         </thead>
         <tbody>
             @foreach ($details as $item)            
-                <tr>
-                    <td><input type="hidden" name="details[{{ $item->product_id }}][product_id]" value="{{ $item->product_id }}">{{ $item->product_id }}</td>
-                    <td>{{ $item->product->szName }}</td>
+                <tr>                    
+                    <td><input type="hidden" name="details[{{ $item->product_id }}][product_id]" value="{{ $item->product_id }}">{{ $item->product_id }}, {{ $item->product->szName }}</td>
                     <td>{!! Form::number('details[{{ $item->product_id }}][quantity]', intval($item->quantity), ['class' => 'form-control inputmask', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer'))] ) !!}</td>
                     <td><button type="button" class="btn btn-primary" onclick="removeItemList(this)"><i class="fa fa-minus"></i></td>                
                 </tr>
             @endforeach
         </tbody>
-        <tfoot>
-            <td></td>
+        <tfoot>            
             <td>
                 {!! Form::select('', [], null, array_merge(['class' => 'form-control select2', 'data-placeholder' =>
                 'Pilih
@@ -194,9 +191,8 @@
 
         // }
         const _item = `
-            <tr>
-                <td><input type="hidden" name="details[${_product}][product_id]" value="${_product}">${_product}</td>
-                <td>${_productName}</td>
+            <tr>                
+                <td><input type="hidden" name="details[${_product}][product_id]" value="${_product}">${_product}, ${_productName}</td>
                 <td><input type="text" class="form-control inputmask" data-unmask=1 data-optionmask='${_optionMaskInteger}' value="${_quantity}" name="details[${_product}][quantity]"></td>
                 <td><button type="button" class="btn btn-primary" onclick="removeItemList(this)"><i class="fa fa-minus"></i></td>
             </tr>
