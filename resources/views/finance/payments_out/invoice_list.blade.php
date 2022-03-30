@@ -11,7 +11,7 @@
     <tbody>
         @foreach($invoiceLines->groupBy('product_name') as $product_name => $products)            
             <tr class="bg-info">
-                <td colspan="4">{{ $product_name }}</td>
+                <td colspan="4">{!! $product_name !!}</td>
             </tr>
             @foreach ($products as $data)
                 <tr>
