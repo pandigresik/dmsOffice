@@ -35,7 +35,7 @@
     function addListDoc(elm){
             const _form = $(elm).closest('form')
             const _invoiceLines = _form.find('.invoice-lines')
-            const _branchId = _form.find('select[name=branch_id]').val()
+            const _branchId = _form.find('select.branch_id').val()
             let _invoiceLinesTable = _invoiceLines.find('table')
             let _docId = []
             let _json = $(elm).data('json')

@@ -82,7 +82,10 @@ class ShippingCostManual extends Model
         'date',
         'do_references',
         'sj_references',
+        'co_references',
         'amount',
+        'driver',
+        'vehicle_number'
     ];
 
     /**

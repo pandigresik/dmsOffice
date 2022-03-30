@@ -22,6 +22,7 @@ return array (
     'price' => 'Harga',
     'shipping_cost' => 'Ongkos Angkut',
     'dmsInvCarrierId' => 'Ekspedisi',
-    'dms_inv_carrier_id' => 'Ekspedisi'
+    'dms_inv_carrier_id' => 'Ekspedisi',
+    'description' => 'Keterangan'
   ),
 );

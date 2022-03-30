@@ -43,13 +43,17 @@ class InvoiceLineController extends AppBaseController
         // $invoiceId = $request->get('invoice_id');
         $type = $request->get('type');
         $partnerId = $request->get('partner_id');
-        // $branchId = $request->get('branchId');
+        $branchId = $request->get('branchId');
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
         $endDate = $request->get('endDate');
         $listdoc = $request->get('listdoc') ?? [];
-
-        $btbValidated = Invoice::SUPPLIER == $type ? BtbValidate::whereBetween('btb_date', [$startDate, $endDate])->canInvoicedSupplier($listdoc)->disableModelCaching()->get()->groupBy('product_name') : BtbValidate::whereBetween('btb_date', [$startDate, $endDate])->canInvoicedEkspedisi($partnerId, $listdoc)->get()->groupBy('doc_id');
+        
+        $btbObj = BtbValidate::whereBetween('btb_date', [$startDate, $endDate]);
+        if(!empty($branchId)){
+            $btbObj->whereIn('branch_id', $branchId);
+        }
+        $btbValidated = Invoice::SUPPLIER == $type ? $btbObj->canInvoicedSupplier($listdoc)->disableModelCaching()->get()->groupBy('product_name') : $btbObj->canInvoicedEkspedisi($partnerId, $listdoc)->get()->groupBy('doc_id');
 
         return view('purchase.invoice_lines.create')->with(['datas' => $btbValidated, 'type' => $type]);
     }

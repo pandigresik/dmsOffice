@@ -93,7 +93,8 @@ class BtbValidate extends Model
         'invoiced_expedition',
         'dms_inv_carrier_id',
         'price',
-        'shipping_cost'
+        'shipping_cost',
+        'description'
     ];
 
     /**
@@ -206,6 +207,7 @@ class BtbValidate extends Model
         foreach ($listBtb as $model) {
             $model->shipping_cost = $ongkir;
             $model->dms_inv_carrier_id = $input['dms_inv_carrier_id'];
+            $model->description = $input['description'];
             $model->save();
         }
 

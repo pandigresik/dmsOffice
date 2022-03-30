@@ -37,6 +37,7 @@ return [
         'dmsInvProduct_placeholder' => 'Pilih produk',
         'location_type_placeholder' => 'Pilih tipe lokasi',
         'location_placeholder' => 'Pilih lokasi',
+        'branch_placeholder' => 'Pilih Depo',
         'btbitems_placeholder' => 'Pilih BTB'
     ]
 ];

@@ -46,6 +46,15 @@
 </div>
 </div>
 
+<!-- Branch Field -->
+<div class="form-group row">
+    {!! Form::label('branch_id', __('models/invoices.fields.branch_id').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-6"> 
+    {!! Form::select('supplier_branch_id', $branchItem, null, ['class' => 'form-control select2 branch_id', 'multiple' => 'multiple', 'data-placeholder' => 'Pilih Depo']) !!}    
+</div>
+</div>
+
+
 <div class="form-group row">    
     <div class="col-md-6 col-offset-md-3 mb-2"> 
         <button type='button' class='btn btn-primary btn-add-items' data-url='{{ route('purchase.invoiceLines.create') }}' onclick='addListDoc(this);main.setButtonCaller(this);main.popupModal(this,"get")'>Add Item</button>

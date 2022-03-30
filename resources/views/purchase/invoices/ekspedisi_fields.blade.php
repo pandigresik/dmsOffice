@@ -46,6 +46,14 @@
 </div>
 </div>
 
+<!-- Branch Field -->
+<div class="form-group row">
+    {!! Form::label('branch_id', __('models/invoices.fields.branch_id').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-6"> 
+    {!! Form::select('ekspedisi_branch_id',$branchItem, null, ['class' => 'form-control select2 branch_id', 'multiple' => 'multiple', 'data-placeholder' => 'Pilih Depo']) !!}
+</div>
+</div>
+
 <!-- Date Due Field -->
 <div class="form-group row">    
     <div class="col-md-6 col-offset-md-3 mb-2"> 

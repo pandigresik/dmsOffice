@@ -60,7 +60,7 @@
                 return
             }
 
-            _th.html(window.elementGenerator.inputSearch(element,{'localOption' : localOption}))            
+            _th.html(window.elementGenerator.inputSearch(element,{'localOption' : localOption, 'multiple' : 'multiple'}))            
         })
         main.initFormatInput($(newTr));
         $(newTr).appendTo($('#dataTableBuilder thead'));

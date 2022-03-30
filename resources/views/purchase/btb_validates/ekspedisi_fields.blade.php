@@ -30,6 +30,14 @@
 </div>
 </div>
 
+<!-- Ref Doc Field -->
+<div class="form-group row">
+    {!! Form::label('description', __('models/btbValidates.fields.description').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-6"> 
+    {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 3]) !!}
+</div>
+</div>
+
 
 @push('scripts')
 <script type="text/javascript">

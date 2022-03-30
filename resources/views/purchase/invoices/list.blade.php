@@ -10,10 +10,10 @@
                 <th>Total</th>          
             </tr>
         </thead>
-        <tbody>
+        <tbody>            
             @forelse($invoice->invoiceLines->groupBy('product_name') as $product_name => $products)
                 <tr>
-                    <td colspan="6" class="bg-info">{{ $product_name }}</td>
+                    <td colspan="6" class="bg-info">{!! $product_name !!}</td>
                 </tr>
                 @foreach ($products as $data)
                     <tr>                
