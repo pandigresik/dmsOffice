@@ -10,9 +10,12 @@ return array (
     'origin_branch_id' => 'Depo Asal',
     'destination_branch_id' => 'Depo Tujuan',
     'carrier_id' => 'Ekspedisi',
-    'date' => 'Tanggal',
-    'do_references' => 'No. Do',
+    'date' => 'Tanggal BTB',
+    'do_references' => 'No. BTB',
     'sj_references' => 'No. Sj',
-    'amount' => 'Jumlah',
+    'amount' => 'Tarif',
+    'driver' => 'Sopir',
+    'vehicle_number' => 'Nopol',
+    'co_references' => 'No. CO'
   ),
 );

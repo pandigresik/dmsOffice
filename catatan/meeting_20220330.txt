@@ -1,0 +1,12 @@
+purchases/btbvalidate
+    - nambah kolom depo untuk searching
+    - hapus kolom uom_id, tipe
+    - ubah ongkos angkut bisa menambahkan keterangan
+    - nambah kolom keterangan
+    - nambah searching di kolom ekspedisi
+ongkos angkut manual
+    - label jumlah diganti tarif
+    - label no.do diganti no. btb
+    - label tanggal menjadi tanggal btb
+    - nambah informasi sopir, nopol, no co
+    - detail label jumlah ganti quantity item

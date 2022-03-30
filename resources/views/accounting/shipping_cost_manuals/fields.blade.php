@@ -31,6 +31,15 @@
             </div>
         </div>
 
+        <!-- Do References Field -->
+        <div class="form-group row">
+            {!! Form::label('co_references', __('models/shippingCostManuals.fields.co_references').':', ['class' =>
+            'col-md-3 col-form-label']) !!}
+            <div class="col-md-9">
+                {!! Form::text('co_references', null, ['class' => 'form-control','maxlength' => 20,
+                'required' => 'required']) !!}
+            </div>
+        </div>
 
         <!-- Do References Field -->
         <div class="form-group row">
@@ -90,6 +99,27 @@
                 'required' => 'required']) !!}
             </div>
         </div>
+
+        <!-- Driver Field -->
+        <div class="form-group row">
+            {!! Form::label('driver', __('models/shippingCostManuals.fields.driver').':', ['class' =>
+            'col-md-3 col-form-label']) !!}
+            <div class="col-md-9">
+                {!! Form::text('driver', null, ['class' => 'form-control','maxlength' => 20,'maxlength' => 20,
+                'required' => 'required']) !!}
+            </div>
+        </div>
+
+        <!-- Driver Field -->
+        <div class="form-group row">
+            {!! Form::label('vehicle_number', __('models/shippingCostManuals.fields.vehicle_number').':', ['class' =>
+            'col-md-3 col-form-label']) !!}
+            <div class="col-md-9">
+                {!! Form::text('vehicle_number', null, ['class' => 'form-control','maxlength' => 20,'maxlength' => 20,
+                'required' => 'required']) !!}
+            </div>
+        </div>
+
     </div>
 </div>
 <hr>
@@ -99,7 +129,7 @@
             <tr>
                 <th>id</th>
                 <th>Nama</th>
-                <th>Jumlah</th>
+                <th>Quantity Item</th>
                 <th></th>
             </tr>
         </thead>
