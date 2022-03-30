@@ -14,8 +14,7 @@
                      <div class="card">
                          <div class="card-header">
                              <i class="fa fa-align-justify"></i>
-                             @lang('models/invoices.plural')
-                             <a class="pull-right" href="{{ route('purchase.invoices.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                             @lang('models/invoices.plural')                             
                          </div>
                          <div class="card-body">
                              @include('purchase.invoices.table')

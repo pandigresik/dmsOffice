@@ -3,6 +3,7 @@
 namespace App\DataTables\Purchase;
 
 use App\DataTables\BaseDataTable as DataTable;
+use App\Models\Base\DmsSmBranch;
 use App\Models\Purchase\BtbValidate;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
@@ -14,7 +15,7 @@ class BtbValidateDataTable extends DataTable
      */
     private $columnFilterOperator = [
         'btb_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
-        //'dmsInvCarrierId' => \App\DataTables\FilterClass\MatchKeyword::class
+        'dmsInvCarrierId' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
 
     private $mapColumnSearch = [
@@ -109,15 +110,18 @@ class BtbValidateDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(DmsSmBranch::pluck('szName', 'szId')->toArray()));
+
         return [
+            'branch_id' => new Column(['title' => __('models/btbValidates.fields.branch_id'), 'data' => 'branch_id', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem]),
             'doc_id' => new Column(['title' => __('models/btbValidates.fields.doc_id'), 'data' => 'doc_id', 'searchable' => true, 'elmsearch' => 'text']),
             'co_reference' => new Column(['title' => __('models/btbValidates.fields.co_reference'), 'data' => 'co_reference', 'searchable' => true, 'elmsearch' => 'text']),
             'product_name' => new Column(['title' => __('models/btbValidates.fields.product_name'), 'data' => 'product_name', 'searchable' => true, 'elmsearch' => 'text']),
-            'uom_id' => new Column(['title' => __('models/btbValidates.fields.uom_id'), 'data' => 'uom_id', 'searchable' => false, 'elmsearch' => 'text']),
+            // 'uom_id' => new Column(['title' => __('models/btbValidates.fields.uom_id'), 'data' => 'uom_id', 'searchable' => false, 'elmsearch' => 'text']),
             'ref_doc' => new Column(['title' => __('models/btbValidates.fields.ref_doc'), 'data' => 'ref_doc', 'searchable' => true, 'elmsearch' => 'text']),
-            'btb_type' => new Column(['title' => __('models/btbValidates.fields.btb_type'), 'data' => 'btb_type', 'searchable' => true, 'elmsearch' => 'text']),
+            // 'btb_type' => new Column(['title' => __('models/btbValidates.fields.btb_type'), 'data' => 'btb_type', 'searchable' => true, 'elmsearch' => 'text']),
             'btb_date' => new Column(['title' => __('models/btbValidates.fields.btb_date'), 'data' => 'btb_date', 'searchable' => true, 'elmsearch' => 'daterange']),
-            'dmsInvCarrierId' => new Column(['title' => __('models/btbValidates.fields.dmsInvCarrierId'), 'name' => 'dmsInvCarrierId', 'data' => 'ekspedisi.szName', 'defaultContent' => '', 'orderable' => false, 'searchable' => false, 'elmsearch' => 'text', 'class' => 'ow']),
+            'dmsInvCarrierId' => new Column(['title' => __('models/btbValidates.fields.dmsInvCarrierId'), 'name' => 'dmsInvCarrierId', 'data' => 'ekspedisi.szName', 'defaultContent' => '', 'orderable' => false, 'searchable' => true, 'elmsearch' => 'text', 'class' => 'ow']),
             'qty' => new Column(['title' => __('models/btbValidates.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
             'price' => new Column(['title' => __('models/btbValidates.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text']),
             'shipping_cost' => new Column(['title' => __('models/btbValidates.fields.shipping_cost'), 'data' => 'shipping_cost', 'searchable' => false, 'elmsearch' => 'text']),

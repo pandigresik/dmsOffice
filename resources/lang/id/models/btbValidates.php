@@ -7,6 +7,7 @@ return array (
   array (
     'id' => 'Id',
     'doc_id' => 'No. BTB',
+    'branch_id' => 'Depo',
     'product_id' => 'Product Id',
     'uom_id' => 'Uom Id',
     'ref_doc' => 'SJ Pabrik',
