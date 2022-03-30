@@ -27,7 +27,7 @@ class GeneralLedgerController extends AppBaseController
 
             return view('accounting.general_ledger.list')
                 ->with($datas)
-                ->with(['endDate' => $endDate])
+                ->with(['endDate' => $endDate, 'startDate' => $startDate])
             ;
         }
 
@@ -39,6 +39,29 @@ class GeneralLedgerController extends AppBaseController
         }
 
         return view('accounting.general_ledger.index')->with($this->getOptionItems());
+    }
+
+    /**
+     * Display detail the specified GeneralLedger
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function show($id)
+    {
+        $endDate = request('endDate');
+        $startDate = request('startDate');
+        $name = request('name');
+        $generalLedger = $this->getRepositoryObj()->detail($startDate, $endDate, $id);
+        
+        if (empty($generalLedger)) {
+            Flash::error(__('models/generalLedger.singular').' '.__('messages.not_found'));
+
+            return redirect(route('accounting.general_ledger.index'));
+        }
+
+        return view('accounting.general_ledger.show')->with(['generalLedger' => $generalLedger, 'startDate' => $startDate ,'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
     }
 
     /**

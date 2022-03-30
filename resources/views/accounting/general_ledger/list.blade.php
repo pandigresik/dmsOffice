@@ -39,7 +39,7 @@
                     <td>{{ $no + 1 }}</td>
                     <td>{{ $account->code }}</td>
                     <td>99999999</td>
-                    <td>{{ ucwords($account->name) }}</td>                    
+                    <td><a href="#" data-json='{{ json_encode(["name" => $account->name,"startDate" => $startDate, "endDate" => $endDate]) }}' data-url="{{route('accounting.generalLedger.show', $account->code) }}" onclick="main.popupModal(this,'get');return false">{{ ucwords($account->name) }}</a></td>
                     <td class="text-right">{{ localNumberAccountingFormat($saldoAwal) }}</td>
                     <td class="text-right">{{ localNumberAccountingFormat($debit) }}</td>
                     <td class="text-right">{{ localNumberAccountingFormat($credit) }}</td>

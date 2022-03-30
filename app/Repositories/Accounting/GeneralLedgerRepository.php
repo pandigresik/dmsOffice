@@ -58,6 +58,22 @@ class GeneralLedgerRepository extends BaseRepository
         ];
     }
 
+    public function detail($startDate, $endDate,$accountCode)
+    {        
+        $data = JournalAccount::with(['account'])->select(['account_id', 'debit', 'credit', 'date', 'name', 'reference'])
+            ->disableModelCaching()
+            ->whereBetween('date', [$startDate, $endDate])
+            ->where('account_id', $accountCode)
+            ->orderBy('date')         
+            ->get()            
+        ;
+
+        return [
+            'data' => $data,
+            'saldo' => $this->getSaldoAccount($startDate, $accountCode)            
+        ];
+    }
+
     private function listAccount()
     {
         return ReportSettingAccount::with(['details' => function ($q) {
@@ -70,6 +86,13 @@ class GeneralLedgerRepository extends BaseRepository
         return AccountBalance::whereBalanceDate($startDate)
             ->whereIn('code', $this->accountCode($listAccount))
             ->get()->keyBy('code');
+    }
+
+    private function getSaldoAccount($startDate, $accountCode)
+    {
+        return AccountBalance::whereBalanceDate($startDate)
+            ->where('code', $accountCode)
+            ->first();
     }
 
     private function accountCode($listAccount)
