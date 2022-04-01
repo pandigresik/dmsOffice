@@ -39,18 +39,18 @@ class GeneralLedgerRepository extends BaseRepository
         return JournalAccount::class;
     }
 
-    public function list($startDate, $endDate)
+    public function list($startDate, $endDate, $branch)
     {
         $listAccount = $this->listAccount();
-        $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(debit) as debit, sum(credit) as credit')
+        $query = JournalAccount::with(['account'])->selectRaw('account_id, sum(debit) as debit, sum(credit) as credit')
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
             ->whereIn('account_id', $this->accountCode($listAccount))
-            ->groupBy('account_id')
-            ->get()
-            ->keyBy('account_id')
-        ;
-
+            ->groupBy('account_id');
+        if(!empty($branch)){
+            $query->where(['branch_id' => $branch]);
+        }
+        $data = $query->get()->keyBy('account_id');
         return [
             'data' => $data,
             'saldo' => $this->getSaldo($startDate, $listAccount),
@@ -58,16 +58,18 @@ class GeneralLedgerRepository extends BaseRepository
         ];
     }
 
-    public function detail($startDate, $endDate,$accountCode)
+    public function detail($startDate, $endDate,$accountCode, $branch)
     {        
-        $data = JournalAccount::with(['account'])->select(['account_id', 'debit', 'credit', 'date', 'name', 'reference'])
+        $query = JournalAccount::with(['account'])->select(['account_id', 'debit', 'credit', 'date', 'name', 'reference'])
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
             ->where('account_id', $accountCode)
-            ->orderBy('date')         
-            ->get()            
-        ;
-
+            ->orderBy('date');         
+                     
+        if(!empty($branch)){
+            $query->where(['branch_id' => $branch]);
+        }
+        $data = $query->get();
         return [
             'data' => $data,
             'saldo' => $this->getSaldoAccount($startDate, $accountCode)            

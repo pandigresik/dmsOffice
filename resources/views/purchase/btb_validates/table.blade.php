@@ -27,7 +27,7 @@
                         _tr.find('th').not(_th).each(function(i, elm){
                             let _searchValue = []                            
                             $(elm).find('input, select').each(function(j, _input){
-                                let _searchValueTmp = _input.value
+                                let _searchValueTmp = $(_input).val()
                                 console.log(_searchValueTmp)
                                 const _className = _input.className
                                 if(_.includes(_className,'datetime')){

@@ -23,10 +23,16 @@
                                     <div class="col-md-9"> 
                                         {!! Form::text('period_range', null, ['class' => 'form-control datetime', 'data-optiondate' => json_encode( ['singleDatePicker' => true, 'locale' => ['format' => config('local.date_format_javascript') ]]),'id'=>'period_range']) !!}
                                     </div>                                    
+                                </div>
+                                <div class="form-group row">
+                                    {!! Form::label('branch_id', __('models/generalLedger.fields.branch_id').':', ['class' => 'col-md-3 col-form-label']) !!}
+                                    <div class="col-md-9"> 
+                                        {!! Form::select('branch_id', $branchItem, null, ['class' => 'form-control select2']) !!}
+                                    </div>                                    
                                 </div>                                
                                 <div class="form-group row">                                    
                                     <div class="col-md-6 offset-3">
-                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listgeneralledger', 'data-url' => route('accounting.generalLedger.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
+                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listgeneralledger', 'data-url' => route('accounting.generalLedger.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
                                         {!! Form::button(__('crud.download'), ['class' => 'btn btn-primary', 'type' => 'button', 'onclick' => 'downloadXls(this)']) !!}
                                     </div>
                                 </div>
@@ -52,7 +58,7 @@
     function downloadXls(elm) {
         const _form = $(elm).closest('form')
         const _url = _form.attr('action')
-        const _json = {'download_xls' : 1, 'period_range': _form.find('input[name=period_range]').val()}
+        const _json = {'download_xls' : 1, 'period_range': _form.find('input[name=period_range]', 'branch_id': _form.find('select[name=branch_id]')).val()}
 
         $.redirect(
             _url, 

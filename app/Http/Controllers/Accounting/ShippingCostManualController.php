@@ -50,7 +50,7 @@ class ShippingCostManualController extends AppBaseController
     public function store(CreateShippingCostManualRequest $request)
     {
         $input = $request->all();
-
+        $input['invoiced_expedition'] = 0;
         $shippingCostManual = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/shippingCostManuals.singular')]));

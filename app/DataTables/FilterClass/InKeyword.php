@@ -13,6 +13,7 @@ class InKeyword
 
     public function __invoke($builder, $keyword)
     {
+        $keyword = is_array($keyword) ? $keyword : explode(',', $keyword);
         $builder->whereIn($this->column, $keyword);
     }
 }

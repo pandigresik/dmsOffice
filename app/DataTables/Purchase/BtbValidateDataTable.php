@@ -16,8 +16,8 @@ class BtbValidateDataTable extends DataTable
      */
     private $columnFilterOperator = [
         'btb_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
-        'dms_inv_carrier_id' => \App\DataTables\FilterClass\MatchKeyword::class,
-        'branch_id' => \App\DataTables\FilterClass\MatchKeyword::class,
+        'dms_inv_carrier_id' => \App\DataTables\FilterClass\InKeyword::class,
+        'branch_id' => \App\DataTables\FilterClass\InKeyword::class,
     ];
 
     private $mapColumnSearch = [

@@ -83,6 +83,7 @@ class ShippingCostManual extends Model
         'do_references',
         'sj_references',
         'co_references',
+        'invoiced_expedition',
         'amount',
         'driver',
         'vehicle_number'
@@ -122,6 +123,20 @@ class ShippingCostManual extends Model
         'sj_references' => 'string',
         'amount' => 'decimal:2',
     ];
+    
+    public function scopeCanInvoicedExpedition($query)
+    {
+        return $query->whereInvoicedExpedition(0);
+    }
+
+    public function scopeCanInvoicedEkspedisi($query, $ekspedisiId, $listDoc = [])
+    {
+        if (empty($listDoc)) {
+            return $query->canInvoicedExpedition()->whereCarrierId($ekspedisiId);
+        }
+
+        return $query->canInvoicedExpedition()->whereCarrierId($ekspedisiId)->whereNotIn('number', $listDoc);
+    }
 
     public function getNextNumber()
     {

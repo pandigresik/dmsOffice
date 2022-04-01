@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Accounting;
 
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\Accounting\GeneralLedgerRepository;
+use App\Repositories\Base\DmsSmBranchRepository;
 use Illuminate\Http\Request;
 use Response;
 
@@ -20,22 +21,24 @@ class GeneralLedgerController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $endDateObj = createLocalFormatDate($request->get('ref'));
+            // $endDateObj = createLocalFormatDate($request->get('ref'));
+            $endDateObj = createLocalFormatDate($request->get('period_range'));
             $endDate = $endDateObj->format('Y-m-d');
             $startDate = substr($endDate, 0, 8).'01';
-            $datas = $this->getRepositoryObj()->list($startDate, $endDate);
+            $branch = $request->get('branch_id');
+            $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branch);
 
             return view('accounting.general_ledger.list')
                 ->with($datas)
-                ->with(['endDate' => $endDate, 'startDate' => $startDate])
+                ->with(['endDate' => $endDate, 'startDate' => $startDate, 'branch' => $branch])
             ;
         }
 
         $downloadXls = $request->get('download_xls');
         if ($downloadXls) {
             $endDateObj = createLocalFormatDate($request->get('period_range'));
-
-            return $this->exportExcel($endDateObj);
+            $branch = $request->get('branch_id');
+            return $this->exportExcel($endDateObj, $branch);
         }
 
         return view('accounting.general_ledger.index')->with($this->getOptionItems());
@@ -53,7 +56,8 @@ class GeneralLedgerController extends AppBaseController
         $endDate = request('endDate');
         $startDate = request('startDate');
         $name = request('name');
-        $generalLedger = $this->getRepositoryObj()->detail($startDate, $endDate, $id);
+        $branch = request('branch_id');
+        $generalLedger = $this->getRepositoryObj()->detail($startDate, $endDate, $id, $branch);
         
         if (empty($generalLedger)) {
             Flash::error(__('models/generalLedger.singular').' '.__('messages.not_found'));
@@ -73,15 +77,17 @@ class GeneralLedgerController extends AppBaseController
      */
     private function getOptionItems()
     {
+        $branch = new DmsSmBranchRepository(app());
         return [
+            'branchItem' => ['' => 'Pilih depo'] + $branch->all()->pluck('szName', 'szId')->toArray(),
         ];
     }
 
-    private function exportExcel($endDateObj)
+    private function exportExcel($endDateObj, $branch)
     {
         $endDate = $endDateObj->format('Y-m-d');
         $startDate = substr($endDate, 0, 8).'01';
-        $collection = $this->getRepositoryObj()->list($startDate, $endDate);
+        $collection = $this->getRepositoryObj()->list($startDate, $endDate, $branch);
         $modelEksport = '\\App\Exports\\Template\\Accounting\\GeneralLedgerExport';
         $fileName = 'gl_'.$endDate;
 

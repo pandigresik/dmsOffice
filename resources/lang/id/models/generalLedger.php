@@ -6,6 +6,7 @@ return array (
   'fields' => 
   array (
     'id' => 'Id',    
-    'period_range' => 'Sampai Dengan Tanggal'
+    'period_range' => 'Sampai Dengan Tanggal',
+    'branch_id' => 'Depo'
   ),
 );

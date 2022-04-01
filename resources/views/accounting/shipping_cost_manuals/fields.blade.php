@@ -136,7 +136,7 @@
             @foreach ($details as $item)            
                 <tr>                    
                     <td><input type="hidden" name="details[{{ $item->product_id }}][product_id]" value="{{ $item->product_id }}">{{ $item->product_id }}, {{ $item->product->szName }}</td>
-                    <td>{!! Form::number('details[{{ $item->product_id }}][quantity]', intval($item->quantity), ['class' => 'form-control inputmask', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer'))] ) !!}</td>
+                    <td>{!! Form::number('details['.$item->product_id.'][quantity]', intval($item->quantity), ['class' => 'form-control inputmask', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer'))] ) !!}</td>
                     <td><button type="button" class="btn btn-primary" onclick="removeItemList(this)"><i class="fa fa-minus"></i></td>                
                 </tr>
             @endforeach
