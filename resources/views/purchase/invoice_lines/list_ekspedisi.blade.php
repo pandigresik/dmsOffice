@@ -61,7 +61,7 @@
                 $data->uom_id  = 'BOTOL';
                 $data->co_reference = $data->co_references;
                 $data->product_name = '<div>'.$product->join('</div><div>').'</div>';
-                $data->doc_id = $data->do_references;
+                $data->doc_id = $data->number; // pakai number agar unique
                 $data->syncOriginal();                                
             @endphp
             <tr>                

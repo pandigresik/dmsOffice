@@ -56,6 +56,7 @@ class InvoiceRepository extends BaseRepository
      */
     public function create($input)
     {
+
         $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN['supplier'];
         if (isset($input['ekspedisi_id'])) {
             $input['partner_type'] = 'ekspedisi';
@@ -81,7 +82,9 @@ class InvoiceRepository extends BaseRepository
         $this->setInvoiceLines($invoiceLine, $model);
 
         $model->btb()->update([$btbInvoicedColumn => 1]);
-
+        if($input['partner_type'] == 'ekspedisi'){
+            $model->shippingCost()->update([$btbInvoicedColumn => 1]);
+        }
         return $model;
     }
 
@@ -121,6 +124,9 @@ class InvoiceRepository extends BaseRepository
         $model = $query->findOrFail($id);
         $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN[$model->getRawOriginal('partner_type')];
         $model->btb()->update([$btbInvoicedColumn => 0]);
+        if($model->getRawOriginal('partner_type') == 'ekspedisi'){
+            $model->shippingCost()->update([$btbInvoicedColumn => 0]);
+        }
         $model->invoiceLines()->forceDelete();
         $model->invoiceUsers()->forceDelete();
 

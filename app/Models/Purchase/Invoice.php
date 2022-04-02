@@ -176,6 +176,14 @@ class Invoice extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function shippingCost()
+    {
+        return $this->hasManyThrough( \App\Models\Accounting\ShippingCostManual::class, \App\Models\Purchase\InvoiceLine::class, 'invoice_id', 'number', 'id', 'doc_id');
+    }
+
+    /**
      * Get the partner that owns the Invoice.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
