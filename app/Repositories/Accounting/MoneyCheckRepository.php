@@ -46,6 +46,7 @@ class MoneyCheckRepository extends BaseRepository
             ->whereIn('account_id', $this->accountCode())
             ->groupBy('account_id')
             ->groupBy('date')
+            ->orderBy('date')
         ;
         if (!empty($branch)) {
             $query->where(['branch_id' => $branch]);
