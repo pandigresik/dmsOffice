@@ -18,7 +18,9 @@
                              <a class="pull-right" href="{{ route('purchase.btbValidates.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
                          </div>
                          <div class="card-body">
+                            <div class="table-responsive">
                              @include('purchase.btb_validates.table')
+                            </div>
                               <div class="pull-right mr-3">
                                      
                               </div>

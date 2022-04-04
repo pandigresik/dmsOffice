@@ -116,7 +116,7 @@ class BtbValidateDataTable extends DataTable
         $carrierItem = array_merge([['text' => 'Pilih Ekspedisi', 'value' => '']], convertArrayPairValueWithKey(DmsInvCarrier::pluck('szName', 'szId')->toArray()));
 
         return [
-            'branch_id' => new Column(['title' => __('models/btbValidates.fields.branch_id'),'name' => 'branch_id', 'data' => 'branch.szName', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem, 'multiple' => 'multiple']),
+            'branch_id' => new Column(['title' => __('models/btbValidates.fields.branch_id'),'name' => 'branch_id', 'data' => 'branch.szName', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem, 'multiple' => 'multiple', 'width' => '200px']),
             'doc_id' => new Column(['title' => __('models/btbValidates.fields.doc_id'), 'data' => 'doc_id', 'searchable' => true, 'elmsearch' => 'text']),
             'co_reference' => new Column(['title' => __('models/btbValidates.fields.co_reference'), 'data' => 'co_reference', 'searchable' => true, 'elmsearch' => 'text']),
             'product_name' => new Column(['title' => __('models/btbValidates.fields.product_name'), 'data' => 'product_name', 'searchable' => true, 'elmsearch' => 'text']),
@@ -124,7 +124,7 @@ class BtbValidateDataTable extends DataTable
             'ref_doc' => new Column(['title' => __('models/btbValidates.fields.ref_doc'), 'data' => 'ref_doc', 'searchable' => true, 'elmsearch' => 'text']),
             // 'btb_type' => new Column(['title' => __('models/btbValidates.fields.btb_type'), 'data' => 'btb_type', 'searchable' => true, 'elmsearch' => 'text']),
             'btb_date' => new Column(['title' => __('models/btbValidates.fields.btb_date'), 'data' => 'btb_date', 'searchable' => true, 'elmsearch' => 'daterange']),
-            'dms_inv_carrier_id' => new Column(['title' => __('models/btbValidates.fields.dmsInvCarrierId'), 'name' => 'dms_inv_carrier_id', 'data' => 'ekspedisi.szName', 'defaultContent' => '', 'orderable' => false, 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $carrierItem, 'multiple' => 'multiple' , 'class' => 'ow']),
+            'dms_inv_carrier_id' => new Column(['title' => __('models/btbValidates.fields.dmsInvCarrierId'), 'name' => 'dms_inv_carrier_id', 'data' => 'ekspedisi.szName', 'defaultContent' => '', 'orderable' => false, 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $carrierItem, 'multiple' => 'multiple' , 'class' => 'ow', 'width' => '230px']),
             'qty' => new Column(['title' => __('models/btbValidates.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
             'price' => new Column(['title' => __('models/btbValidates.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text']),
             'shipping_cost' => new Column(['title' => __('models/btbValidates.fields.shipping_cost'), 'data' => 'shipping_cost', 'searchable' => false, 'elmsearch' => 'text']),

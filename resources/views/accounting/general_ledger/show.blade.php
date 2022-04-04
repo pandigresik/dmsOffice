@@ -13,7 +13,7 @@ $saldoAkhir = $saldoAwal;
             <th>Tanggal</th>
             <th>No. Voucher</th>
             <th>Account</th>
-            <th>Keterangan</th>
+            <th>Keterangan Transaksi</th>
             <th>Debit</th>
             <th>Credit</th>
             <th>Saldo Akhir</th>
