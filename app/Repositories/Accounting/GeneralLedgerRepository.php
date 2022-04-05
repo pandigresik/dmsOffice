@@ -3,6 +3,7 @@
 namespace App\Repositories\Accounting;
 
 use App\Models\Accounting\AccountBalance;
+use App\Models\Accounting\DmsCasCashbalance;
 use App\Models\Accounting\JournalAccount;
 use App\Models\Accounting\ReportSettingAccount;
 use App\Repositories\BaseRepository;
@@ -59,15 +60,16 @@ class GeneralLedgerRepository extends BaseRepository
     }
 
     public function detail($startDate, $endDate,$accountCode, $branch)
-    {        
-        $query = JournalAccount::with(['account'])->select(['account_id', 'debit', 'credit', 'date', 'name', 'reference'])
-            ->disableModelCaching()
-            ->whereBetween('date', [$startDate, $endDate])
-            ->where('account_id', $accountCode)
-            ->orderBy('date');         
+    {           
+        $query = DmsCasCashbalance::select(['szAccountId as account_id', 'decDebit as debit', 'decCredit as credit', 'decAmount as balance','szDocId as reference', 'szDescription as description', 'szVoucherNo as voucher'])             
+        // $query = JournalAccount::with(['account'])->select(['account_id', 'debit', 'credit', 'date', 'name', 'reference','dms_cas_cashbalance.szDescription as description','dms_cas_cashbalance.szVoucherNo as voucher'])        
+            ->disableModelCaching()            
+            ->whereBetween('dtmDoc', [$startDate, $endDate])
+            ->where('szAccountId', $accountCode)
+            ->orderBy('dtmDoc');         
                      
         if(!empty($branch)){
-            $query->where(['branch_id' => $branch]);
+            $query->where(['szBranchId' => $branch]);
         }
         $data = $query->get();
         return [

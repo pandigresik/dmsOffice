@@ -4,7 +4,6 @@ namespace App\Models\Accounting;
 
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @SWG\Definition(
@@ -117,8 +116,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class DmsCasCashbalance extends Model
 {
-    use SoftDeletes;
-
     use HasFactory;
 
     const CREATED_AT = 'created_at';

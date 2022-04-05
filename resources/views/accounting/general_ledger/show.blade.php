@@ -1,7 +1,7 @@
 @php
 $saldo = $generalLedger['saldo'];
 $data = $generalLedger['data'];
-$saldoAwal = $saldo->getRawOriginal('amount') ?? 0;
+$saldoAwal = $saldo ? ($saldo->getRawOriginal('amount') ?? 0) : 0;
 $saldoAkhir = $saldoAwal;
 @endphp
 <div class="text-center">
@@ -13,7 +13,7 @@ $saldoAkhir = $saldoAwal;
             <th>Tanggal</th>
             <th>No. Voucher</th>
             <th>Account</th>
-            <th>Keterangan Transaksi</th>
+            <th>Keterangan</th>
             <th>Debit</th>
             <th>Credit</th>
             <th>Saldo Akhir</th>
@@ -40,7 +40,7 @@ $saldoAkhir = $saldoAwal;
             <td>{{ localFormatDate( $account->date ) }}</td>
             <td>{{ $account->reference }}</td>
             <td>{{ $account->account_id }}</td>
-            <td>{{ $account->name }}</td>
+            <td>{{ $account->description }}</td>
             <td class="text-right">{{ localNumberAccountingFormat($debit) }}</td>
             <td class="text-right">{{ localNumberAccountingFormat($credit) }}</td>
             <td class="text-right">{{ localNumberAccountingFormat($saldoAkhir) }}</td>
