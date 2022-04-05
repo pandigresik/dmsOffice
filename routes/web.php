@@ -80,6 +80,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('locationEkspedisis', App\Http\Controllers\Inventory\LocationEkspedisiController::class, ['as' => 'inventory']);
         Route::resource('tripEkspedisis', App\Http\Controllers\Inventory\TripEkspedisiController::class, ['as' => 'inventory']);
 
+        Route::resource('productStocks', App\Http\Controllers\Inventory\ProductStockController::class, ["as" => 'inventory']);
+
         // master discount
         Route::resource('masterDiscounts', App\Http\Controllers\Inventory\MasterDiscountController::class, ['as' => 'inventory']);
     });
