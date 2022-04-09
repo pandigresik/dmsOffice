@@ -59,11 +59,11 @@ class ProfitLossController extends AppBaseController
     private function getOptionItems()
     {
         $branch = new DmsSmBranchRepository(app());
-        
+
         return [
             'branchItems' => $branch->pluck([], null, null, 'szId', 'szName'),
             'typeItems' => ['detail' => 'Detail', 'rekap' => 'Rekap'],
-            'priceItems' => ['HPPP' => 'Harga Depo', 'HPPPT' => 'Harga pabrik']
+            'priceItems' => ['HPPP' => 'Harga Depo', 'HPPPT' => 'Harga pabrik'],
         ];
     }
 

@@ -46,7 +46,7 @@ class ProductStockDataTable extends DataTable
      */
     public function query(ProductStock $model)
     {
-        return $model->newQuery();
+        return $model->with(['product'])->newQuery();
     }
 
     /**
@@ -116,6 +116,7 @@ class ProductStockDataTable extends DataTable
     {
         return [
             'product_id' => new Column(['title' => __('models/productStocks.fields.product_id'), 'data' => 'product_id', 'searchable' => true, 'elmsearch' => 'text']),
+            'product_name' => new Column(['title' => __('models/productStocks.fields.product_name'),'name' => 'product_name', 'data' => 'product.szName', 'searchable' => false, 'elmsearch' => 'text']),
             'first_stock' => new Column(['title' => __('models/productStocks.fields.first_stock'), 'data' => 'first_stock', 'searchable' => true, 'elmsearch' => 'text']),
             'supplier_in' => new Column(['title' => __('models/productStocks.fields.supplier_in'), 'data' => 'supplier_in', 'searchable' => true, 'elmsearch' => 'text']),
             'mutation_in' => new Column(['title' => __('models/productStocks.fields.mutation_in'), 'data' => 'mutation_in', 'searchable' => true, 'elmsearch' => 'text']),

@@ -41,6 +41,7 @@
             @endphp
             <td class="text-right">{{ localNumberFormat($totalBank, 0) }}</td>
             <td class="text-right">{{ localNumberAccountingFormat($selisih, 0) }}</td>
+            <td></td>
         </tr>
         @endforeach
     </tbody>

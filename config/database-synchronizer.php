@@ -34,6 +34,8 @@ return [
         
         // ['name' => 'dms_inv_docstockinsupplierotm', 'filter' => 'dtmLastUpdated', 'key' => 'szId', 'references' => []],
         // ['name' => 'dms_inv_docstockinsupplierotmitem', 'filter' => 'dtmLastUpdated', 'key' => 'szId', 'references' => ['table' => 'dms_inv_docstockinsupplierotm', 'column' => 'szDocId']],
+        ['name' => 'dms_inv_docstockmorph', 'filter' => 'dtmLastUpdated', 'key' => 'szDocId', 'references' => []],
+        ['name' => 'dms_inv_docstockmorphitem', 'filter' => 'dtmLastUpdated', 'key' => ['szDocId','intItemNumber'], 'references' => ['table' => 'dms_inv_docstockmorph', 'column' => 'szDocId']],
         ['name' => 'dms_inv_docstockoutbranch', 'filter' => 'dtmLastUpdated', 'key' => 'szDocId', 'references' => []],
         ['name' => 'dms_inv_docstockoutbranchitem', 'filter' => 'dtmLastUpdated', 'key' => ['szDocId','intItemNumber'], 'references' => ['table' => 'dms_inv_docstockoutbranch', 'column' => 'szDocId']],
         ['name' => 'dms_inv_docstockoutdistribution', 'filter' => 'dtmLastUpdated', 'key' => 'szDocId', 'references' => []],

@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\DataTables\Inventory\ProductStockDataTable;
-use App\Http\Requests\Inventory;
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateProductStockRequest;
 use App\Http\Requests\Inventory\UpdateProductStockRequest;
 use App\Repositories\Inventory\ProductStockRepository;
-
 use Flash;
-use App\Http\Controllers\AppBaseController;
 use Response;
 
 class ProductStockController extends AppBaseController
 {
-    /** @var  ProductStockRepository */
+    /** @var ProductStockRepository */
     protected $repository;
 
     public function __construct()
@@ -25,7 +23,6 @@ class ProductStockController extends AppBaseController
     /**
      * Display a listing of the ProductStock.
      *
-     * @param ProductStockDataTable $productStockDataTable
      * @return Response
      */
     public function index(ProductStockDataTable $productStockDataTable)
@@ -46,25 +43,25 @@ class ProductStockController extends AppBaseController
     /**
      * Store a newly created ProductStock in storage.
      *
-     * @param CreateProductStockRequest $request
-     *
      * @return Response
      */
     public function store(CreateProductStockRequest $request)
     {
-        $input = $request->all();
+        $input = $request->all();        
 
-        $productStock = $this->getRepositoryObj()->create($input);
+        $input['period'] = $input['ref'];
+        $productStock = $this->getRepositoryObj()->generate($input);
 
-        Flash::success(__('messages.saved', ['model' => __('models/productStocks.singular')]));
+        // Flash::success(__('messages.saved', ['model' => __('models/productStocks.singular')]));
 
-        return redirect(route('inventory.productStocks.index'));
+        // return redirect(route('inventory.productStocks.index'));
+        return view('inventory.product_stocks.list')->with('collection', $productStock);
     }
 
     /**
      * Display the specified ProductStock.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -84,7 +81,7 @@ class ProductStockController extends AppBaseController
     /**
      * Show the form for editing the specified ProductStock.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -104,8 +101,7 @@ class ProductStockController extends AppBaseController
     /**
      * Update the specified ProductStock in storage.
      *
-     * @param  int              $id
-     * @param UpdateProductStockRequest $request
+     * @param int $id
      *
      * @return Response
      */
@@ -129,7 +125,7 @@ class ProductStockController extends AppBaseController
     /**
      * Remove the specified ProductStock from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -151,16 +147,15 @@ class ProductStockController extends AppBaseController
     }
 
     /**
-     * Provide options item based on relationship model ProductStock from storage.         
+     * Provide options item based on relationship model ProductStock from storage.
      *
      * @throws \Exception
      *
      * @return Response
      */
-    private function getOptionItems(){        
-        
+    private function getOptionItems()
+    {
         return [
-                        
         ];
     }
 }

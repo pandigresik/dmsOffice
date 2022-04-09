@@ -4,6 +4,7 @@ namespace App\Models\Inventory;
 
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @SWG\Definition(
@@ -96,9 +97,7 @@ class ProductStock extends Model
     const UPDATED_AT = 'updated_at';
 
 
-    protected $dates = ['deleted_at'];
-
-    public $connection = "mysql_sejati";
+    protected $dates = ['deleted_at'];    
 
     public $fillable = [
         'product_id',
@@ -156,5 +155,37 @@ class ProductStock extends Model
         'additional_info' => 'nullable|string'
     ];
 
-    
+    /**
+     * Get the product that owns the ProductStock
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(DmsInvProduct::class, 'product_id', 'szId');
+    }
+
+    public function isEmptyTransaction(){
+        $result = true;
+        if($this->MI > 0){
+            $result = false;
+        }
+        if($this->DI > 0){
+            $result = false;
+        }
+        if($this->SI > 0){
+            $result = false;
+        }
+        if($this->MO > 0){
+            $result = false;
+        }
+        if($this->DO > 0){
+            $result = false;
+        }
+        if($this->SO > 0){
+            $result = false;
+        }
+
+        return $result;
+    }
 }

@@ -40,7 +40,7 @@ class InvoiceLineController extends AppBaseController
      * @return Response
      */
     public function create(Request $request)
-    {        
+    {
         $type = $request->get('type');
         $partnerId = $request->get('partner_id');
         $branchId = $request->get('branchId');
@@ -48,27 +48,26 @@ class InvoiceLineController extends AppBaseController
         $endDate = $request->get('endDate');
         $endDate = $request->get('endDate');
         $listdoc = $request->get('listdoc') ?? [];
-        
+
         $btbObj = BtbValidate::whereBetween('btb_date', [$startDate, $endDate]);
-        if(!empty($branchId)){
+        if (!empty($branchId)) {
             $btbObj->whereIn('branch_id', $branchId);
         }
         $shippingCostManual = null;
-        if(Invoice::SUPPLIER == $type){
+        if (Invoice::SUPPLIER == $type) {
             $btbValidated = $btbObj->canInvoicedSupplier($listdoc)->disableModelCaching()->get()->groupBy('product_name');
-        }else{
-            $queryShippingCostManual = ShippingCostManual::whereBetween('date', [$startDate, $endDate])->with(['details' => function($q){
-                    $q->with(['product']);
-                }])->canInvoicedEkspedisi($partnerId, $listdoc);
-            if(!empty($branchId)){
+        } else {
+            $queryShippingCostManual = ShippingCostManual::whereBetween('date', [$startDate, $endDate])->with(['details' => function ($q) {
+                $q->with(['product']);
+            }])->canInvoicedEkspedisi($partnerId, $listdoc);
+            if (!empty($branchId)) {
                 $queryShippingCostManual->whereIn('destination_branch_id', $branchId);
             }
             $shippingCostManual = $queryShippingCostManual->get();
             $btbValidated = $btbObj->canInvoicedEkspedisi($partnerId, $listdoc)->get()->groupBy('doc_id');
         }
-        
 
-        return view('purchase.invoice_lines.create')->with(['datas' => $btbValidated, 'shippingCostManual' => $shippingCostManual,'type' => $type]);
+        return view('purchase.invoice_lines.create')->with(['datas' => $btbValidated, 'shippingCostManual' => $shippingCostManual, 'type' => $type]);
     }
 
     /**

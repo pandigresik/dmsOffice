@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Inventory;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Inventory\ProductStock;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateProductStockRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,6 +15,7 @@ class CreateProductStockRequest extends FormRequest
     public function authorize()
     {
         $permissionName = 'product_stock-create';
+
         return \Auth::user()->can($permissionName);
     }
 
@@ -28,7 +26,9 @@ class CreateProductStockRequest extends FormRequest
      */
     public function rules()
     {
-        return ProductStock::$rules;
+
+        return [];
+        // return ['ref' => 'required']; //ProductStock::$rules;
     }
 
     /**
@@ -37,9 +37,11 @@ class CreateProductStockRequest extends FormRequest
      * @param null|array|mixed $keys
      *
      * @return array
-    */
-    public function all($keys = null){
-        $keys = (new ProductStock)->fillable;
-        return parent::all($keys);
-    }
+     */
+    // public function all($keys = null)
+    // {
+    //     $keys = (new ProductStock())->fillable;
+
+    //     return parent::all($keys);
+    // }
 }

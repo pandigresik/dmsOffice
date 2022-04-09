@@ -38,6 +38,7 @@ class GeneralLedgerController extends AppBaseController
         if ($downloadXls) {
             $endDateObj = createLocalFormatDate($request->get('period_range'));
             $branch = $request->get('branch_id');
+
             return $this->exportExcel($endDateObj, $branch);
         }
 
@@ -45,7 +46,7 @@ class GeneralLedgerController extends AppBaseController
     }
 
     /**
-     * Display detail the specified GeneralLedger
+     * Display detail the specified GeneralLedger.
      *
      * @param int $id
      *
@@ -58,14 +59,14 @@ class GeneralLedgerController extends AppBaseController
         $name = request('name');
         $branch = request('branch_id');
         $generalLedger = $this->getRepositoryObj()->detail($startDate, $endDate, $id, $branch);
-        
+
         if (empty($generalLedger)) {
             Flash::error(__('models/generalLedger.singular').' '.__('messages.not_found'));
 
             return redirect(route('accounting.general_ledger.index'));
         }
 
-        return view('accounting.general_ledger.show')->with(['generalLedger' => $generalLedger, 'startDate' => $startDate ,'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
+        return view('accounting.general_ledger.show')->with(['generalLedger' => $generalLedger, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
     }
 
     /**
@@ -78,6 +79,7 @@ class GeneralLedgerController extends AppBaseController
     private function getOptionItems()
     {
         $branch = new DmsSmBranchRepository(app());
+
         return [
             'branchItem' => ['' => 'Pilih depo'] + $branch->all()->pluck('szName', 'szId')->toArray(),
         ];

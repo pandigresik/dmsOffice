@@ -108,7 +108,7 @@ class BtbValidateController extends AppBaseController
 
             return redirect(route('purchase.btbValidates.index'));
         }
-        
+
         $carrier = new DmsInvCarrierRepository(app());
         $btbDataOptions = [
             'carrierItems' => $carrier->pluck([], null, null, 'szId', 'szName'),
