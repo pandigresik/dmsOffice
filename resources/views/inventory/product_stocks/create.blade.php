@@ -21,21 +21,26 @@
                         <strong>Create @lang('models/productStocks.singular')</strong>
                     </div>
                     <div class="card-body">
-
+                        
                         <!-- Period Field -->
                         <div class="form-group row">
                             {!! Form::label('period', __('models/productStocks.fields.period').':', ['class' =>
                             'col-md-3 col-form-label']) !!}
                             <div class="col-md-9">
                                 <div class="input-group">
+                                    <div class="col-md-4 ml-2">
                                     {!! Form::text('period', null, ['class' => 'form-control inputmask','maxlength' =>
                                     7, 'required' => 'required', 'placeholder' => 'YYYY-MM', 'data-optionmask' =>
                                     json_encode(config('local.textmask.period_month'))]) !!}
+                                    </div>
+                                    <div class="col-md-6 ml-2">
+                                    {!! Form::select('branch_id', $branchItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
+                                    </div>
                                     <div class="input-addon-append ml-2">
                                         {!! Form::button(__('crud.process'), ['class' => 'btn btn-success',
                                         'data-target' => '#listproductmutation', 'data-url' =>
                                         route('inventory.productStocks.store'), 'data-json' => '{}', 'data-ref' =>
-                                        'input[name=period]' ,'onclick' => 'main.loadDetailPage(this,\'post\')', 'type'
+                                        'input[name=period],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'post\')', 'type'
                                         => 'button']) !!}
                                     </div>
                                 </div>

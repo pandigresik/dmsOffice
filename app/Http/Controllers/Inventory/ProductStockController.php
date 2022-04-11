@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Inventory;
 
-use App\DataTables\Inventory\ProductStockDataTable;
-use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\Inventory\CreateProductStockRequest;
-use App\Http\Requests\Inventory\UpdateProductStockRequest;
-use App\Repositories\Inventory\ProductStockRepository;
 use Flash;
 use Response;
+use App\Models\Inventory\ProductPrice;
+use App\Http\Controllers\AppBaseController;
+use App\Repositories\Base\DmsSmBranchRepository;
+use App\DataTables\Inventory\ProductStockDataTable;
+use App\Repositories\Inventory\ProductStockRepository;
+use App\Http\Requests\Inventory\CreateProductStockRequest;
+use App\Http\Requests\Inventory\UpdateProductStockRequest;
 
 class ProductStockController extends AppBaseController
 {
@@ -47,15 +49,16 @@ class ProductStockController extends AppBaseController
      */
     public function store(CreateProductStockRequest $request)
     {
-        $input = $request->all();        
+        $input = $request->all();
 
-        $input['period'] = $input['ref'];
+        // $input['period'] = $input['ref'];
         $productStock = $this->getRepositoryObj()->generate($input);
 
         // Flash::success(__('messages.saved', ['model' => __('models/productStocks.singular')]));
 
-        // return redirect(route('inventory.productStocks.index'));
-        return view('inventory.product_stocks.list')->with('collection', $productStock);
+        $price = ProductPrice::select(['dpp_price', 'product_id'])->get()->pluck('dpp_price', 'product_id');
+
+        return view('inventory.product_stocks.list')->with(['collection' => $productStock, 'price' => $price]);
     }
 
     /**
@@ -155,7 +158,10 @@ class ProductStockController extends AppBaseController
      */
     private function getOptionItems()
     {
+        $branch = new DmsSmBranchRepository(app());
+
         return [
+            'branchItems' => ['' => 'Pilih depo'] + $branch->pluck([], null, null, 'szId', 'szName'),
         ];
     }
 }

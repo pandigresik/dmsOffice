@@ -11,6 +11,8 @@
         <th>DO</th>
         <th>SO</th>
         <th>Stock Akhir</th>
+        <th>Harga</th>
+        <th>Pengurang</th>
     </tr>
 </thead>
 <tbody>
@@ -21,6 +23,7 @@
         @php
             $saldoAwal = 0;
             $saldoAkhir = $saldoAwal + ($item->MI + $item->DI + $item->SI) - ($item->MO + $item->DO + $item->SO);
+            $currentPrice = $price[$item->szId] ?? 0;
         @endphp
         <tr>            
             <td>{{ $item->szId}}</td>
@@ -33,6 +36,8 @@
             <td class="text-right">{{ localNumberFormat($item->DO, 0) }}</td>
             <td class="text-right">{{ localNumberFormat($item->SO, 0) }}</td>
             <td class="text-right">{{ localNumberFormat($saldoAkhir, 0) }}</td>
+            <td class="text-right">{{ $currentPrice }}</td>
+            <td></td>
         </tr>
     @endforeach
 </tbody>

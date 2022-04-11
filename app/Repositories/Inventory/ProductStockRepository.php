@@ -50,7 +50,8 @@ class ProductStockRepository extends BaseRepository
     }
 
     public function generate($data){
-        $period = $data;
+        $period = $data['period'];
+        $branch = $data['branch_id'];
         // $monthObject
 $sql = <<<SQL
         select  dip.szId,
@@ -68,7 +69,7 @@ $sql = <<<SQL
                 'MI' as jenis
         from dms_inv_docstockinbranch did 
         join dms_inv_docstockinbranchitem didi on didi.szDocId = did.szDocId and didi.szProductId not in ('74560G','74559G')  
-        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '555'
+        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '{$branch}'
         GROUP  by did.szBranchId ,didi.szProductId 
         union all
         select 	did.szBranchId, 
@@ -77,7 +78,7 @@ $sql = <<<SQL
                 'MO' as jenis
         from dms_inv_docstockoutbranch did 
         join dms_inv_docstockoutbranchitem didi on didi.szDocId = did.szDocId and didi.szProductId not in ('74560G','74559G')  
-        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '555'
+        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '{$branch}'
         GROUP  by did.szBranchId ,didi.szProductId 
         union all
         select 	did.szBranchId, 
@@ -86,7 +87,7 @@ $sql = <<<SQL
                 'DI' as jenis
         from dms_inv_docstockindistribution did 
         join dms_inv_docstockindistributionitem didi on didi.szDocId = did.szDocId and didi.szProductId not in ('74560G','74559G')  
-        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '555'
+        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '{$branch}'
         GROUP  by did.szBranchId ,didi.szProductId 
         union all
         select 	did.szBranchId, 
@@ -95,7 +96,7 @@ $sql = <<<SQL
                 'DO' as jenis
         from dms_inv_docstockoutdistribution did 
         join dms_inv_docstockoutdistributionitem didi on didi.szDocId = did.szDocId and didi.szProductId not in ('74560G','74559G')  
-        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '555'
+        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '{$branch}'
         GROUP  by did.szBranchId ,didi.szProductId 
         union all
         select 	did.szBranchId, 
@@ -104,7 +105,7 @@ $sql = <<<SQL
                 'SO' as jenis
         from dms_sd_docdo did 
         join dms_sd_docdoitem didi on didi.szDocId = did.szDocId and didi.szProductId not in ('74560G','74559G')  
-        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '555' and did.szDocStatus = 'Applied' 
+        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '{$branch}' and did.szDocStatus = 'Applied' 
         GROUP  by did.szBranchId ,didi.szProductId 
         union all
         select 	did.szBranchId, 
@@ -113,7 +114,7 @@ $sql = <<<SQL
                 'SI' as jenis
         from dms_inv_docstockinsupplier did 
         join dms_inv_docstockinsupplieritem didi on didi.szDocId = did.szDocId and didi.szProductId not in ('74560G','74559G')  
-        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '555' and did.szDocStatus = 'Applied' 
+        where did.dtmDoc BETWEEN '2021-11-01' and '2021-11-30' and did.szBranchId = '{$branch}' and did.szDocStatus = 'Applied' 
         GROUP  by did.szBranchId ,didi.szProductId 
         )x 
         right join dms_inv_product dip on dip.szId = x.szProductId
