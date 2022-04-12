@@ -12,7 +12,9 @@
         <th>SO</th>
         <th>Stock Akhir</th>
         <th>Harga</th>
+        <th>Total</th>
         <th>Pengurang</th>
+        <th>HPP</th>
     </tr>
 </thead>
 <tbody>
@@ -36,8 +38,10 @@
             <td class="text-right">{{ localNumberFormat($item->DO, 0) }}</td>
             <td class="text-right">{{ localNumberFormat($item->SO, 0) }}</td>
             <td class="text-right">{{ localNumberFormat($saldoAkhir, 0) }}</td>
-            <td class="text-right">{{ $currentPrice }}</td>
+            <td class="text-right">{{ $currentPrice }}</td>            
             <td></td>
+            <td></td>
+            <td></td>            
         </tr>
     @endforeach
 </tbody>
