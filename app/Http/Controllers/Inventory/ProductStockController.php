@@ -11,6 +11,9 @@ use App\DataTables\Inventory\ProductStockDataTable;
 use App\Repositories\Inventory\ProductStockRepository;
 use App\Http\Requests\Inventory\CreateProductStockRequest;
 use App\Http\Requests\Inventory\UpdateProductStockRequest;
+use App\Models\Inventory\ProductPriceLog;
+use App\Models\Inventory\ProductStock;
+use Carbon\Carbon;
 
 class ProductStockController extends AppBaseController
 {
@@ -55,10 +58,13 @@ class ProductStockController extends AppBaseController
         $productStock = $this->getRepositoryObj()->generate($input);
 
         // Flash::success(__('messages.saved', ['model' => __('models/productStocks.singular')]));
-
-        $price = ProductPrice::select(['dpp_price', 'product_id'])->get()->pluck('dpp_price', 'product_id');
-
-        return view('inventory.product_stocks.list')->with(['collection' => $productStock, 'price' => $price]);
+        $period = Carbon::createFromFormat('Y-m', $input['period'])->subMonth();        
+        // $period = explode('__', $period);
+        $startDate = $input['period'].'-01';
+        $endDate = Carbon::createFromFormat('Y-m-d', $startDate)->endOfMonth()->format('Y-m-d');
+        $price = ProductPriceLog::select(['dpp_price as ori_price', 'product_id'])->where('start_date','<=', $endDate)->whereRaw("(end_date is null or end_date >= '$endDate')")->orderBy('start_date', 'desc')->get()->pluck('ori_price', 'product_id');
+        $saldoAwal = ProductStock::select(['last_stock', 'product_id'])->wherePeriod($period->format('Y-m'))->get()->pluck('last_stock', 'product_id');
+        return view('inventory.product_stocks.list')->with(['collection' => $productStock, 'price' => $price, 'saldoBulanLalu' => $saldoAwal]);
     }
 
     /**

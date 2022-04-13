@@ -53,12 +53,31 @@ class ProductStockRepository extends BaseRepository
 
     public function generate($data){
         $period = $data['period'];
-        $period = explode('__', $period);
-        $startDate = $period[0].'-01';
+        // $period = explode('__', $period);
+        $startDate = $period.'-01';
         $endDate = Carbon::createFromFormat('Y-m-d', $startDate)->endOfMonth()->format('Y-m-d');
         $branch = $data['branch_id'];
         $settingCompany = Setting::pluck('value', 'code');        
         $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+
+$sql = <<<SQL
+select dis.szProductId, dip.szName,
+	sum(case when dis.szTrnId = 'DMSDocStockInBranch' then dis.decQtyOnHand else 0 end) as 'MI',
+        sum(case when dis.szTrnId = 'DMSDocStockOutBranch' then dis.decQtyOnHand else 0 end) as 'MO',
+        sum(case when dis.szTrnId = 'DMSDocStockInDistribution' then dis.decQtyOnHand else 0 end) as 'DI',
+        sum(case when dis.szTrnId = 'DMSDocStockOutDistribution' then dis.decQtyOnHand else 0 end) as 'DO',
+        sum(case when dis.szTrnId = 'DMSDocStockInSupplier' then dis.decQtyOnHand else 0 end) as 'SI',
+        sum(case when dis.szTrnId = 'DMSDocStockOutSupplier' then dis.decQtyOnHand else 0 end) as 'SO',
+        sum(case when dis.szTrnId = 'DMSDocDo' then dis.decQtyOnHand else 0 end) as 'DOCDO',
+        sum(case when dis.szTrnId = 'DMSDocStockMorph' then dis.decQtyOnHand else 0 end) as 'MORP',
+        sum(case when dis.szTrnId = 'DMSDocStockTrfBetweenWarehouse' then dis.decQtyOnHand else 0 end) as 'TR'
+from dms_inv_stockhistory dis
+join dms_inv_product dip on dip.szId = dis.szProductId  and dip.dtmEndDate >= '{$startDate}'
+where dis.dtmTransaction BETWEEN '{$startDate}' and '{$endDate}' and dis.szReportedAsId = '{$branch}' and dis.szProductId not in ({$kodeGalon})
+group by dis.szProductId, dip.szName
+SQL;
+
+/*
 $sql = <<<SQL
         select  dip.szId,
                 x.szBranchId,                
@@ -127,6 +146,7 @@ $sql = <<<SQL
         where dip.dtmEndDate > now()
         GROUP  by x.szBranchId ,dip.szId 
 SQL;
+*/
         return $this->model->fromQuery($sql);
     }
 }

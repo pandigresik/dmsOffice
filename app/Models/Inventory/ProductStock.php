@@ -186,6 +186,18 @@ class ProductStock extends Model
             $result = false;
         }
 
+        if($this->MORP > 0){
+            $result = false;
+        }
+
+        if($this->DOCDO > 0){
+            $result = false;
+        }
+
+        if($this->TR > 0){
+            $result = false;
+        }
+
         return $result;
     }
 }
