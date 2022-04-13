@@ -14,7 +14,7 @@ class CreateDmsInvStockhistoryTable extends Migration
     public function up()
     {
         Schema::create('dms_inv_stockhistory', function (Blueprint $table) {
-            $table->unsignedInteger('iInternalId');
+            $table->unsignedInteger('iInternalId')->autoIncrement();
             $table->char('iId', 50)->default('ewid(');
             $table->string('szProductId', 50)->index('IX_DMS_INV_StockHistory');
             $table->string('szLocationType', 50)->index('IX_DMS_INV_StockHistory_1');
@@ -30,7 +30,7 @@ class CreateDmsInvStockhistoryTable extends Migration
             $table->string('szUserUpdatedId', 20);
             $table->dateTime('dtmCreated')->default('2000-01-01 00:00:00');
             $table->dateTime('dtmLastUpdated')->default('2000-01-01 00:00:00');
-            $table->primary(['iInternalId', 'iId']);
+            $table->primary(['iInternalId']);
             $table->index(['szProductId', 'szLocationType', 'szLocationId', 'szStockTypeId', 'szReportedAsId', 'dtmTransaction', 'szTrnId'], 'IX_DMS_INV_StockHistory_8');
         });
     }
