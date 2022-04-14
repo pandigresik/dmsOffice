@@ -73,7 +73,7 @@ select dis.szProductId, dip.szName,
         sum(case when dis.szTrnId = 'DMSDocStockTrfBetweenWarehouse' then dis.decQtyOnHand else 0 end) as 'TR'
 from dms_inv_stockhistory dis
 join dms_inv_product dip on dip.szId = dis.szProductId  and dip.dtmEndDate >= '{$startDate}'
-where dis.dtmTransaction BETWEEN '{$startDate}' and '{$endDate}' and dis.szReportedAsId = '{$branch}' and dis.szProductId not in ({$kodeGalon})
+where dis.szLocationType = 'WAREHOUSE' and dis.dtmTransaction BETWEEN '{$startDate}' and '{$endDate}' and dis.szReportedAsId = '{$branch}' and dis.szProductId not in ({$kodeGalon})
 group by dis.szProductId, dip.szName
 SQL;
 
