@@ -29,10 +29,10 @@ class MoneyCheckExport implements FromView
     {
         return view('accounting.money_check.list', [
             'data' => $this->collection['data'],
-            'startDate' => $this->getStartDate(),            
+            'startDate' => $this->getStartDate(),
             'endDate' => $this->getEndDate(),
             'branch' => $this->getBranch(),
-            'header' => $this->getHeaderSheet()
+            'header' => $this->getHeaderSheet(),
         ]);
     }
 
@@ -81,18 +81,20 @@ class MoneyCheckExport implements FromView
     }
 
     /**
-     * Get the value of headerSheet
-     */ 
+     * Get the value of headerSheet.
+     */
     public function getHeaderSheet()
     {
         return $this->headerSheet;
     }
 
     /**
-     * Set the value of headerSheet
+     * Set the value of headerSheet.
      *
-     * @return  self
-     */ 
+     * @param mixed $headerSheet
+     *
+     * @return self
+     */
     public function setHeaderSheet($headerSheet)
     {
         $this->headerSheet = $headerSheet;
@@ -101,18 +103,20 @@ class MoneyCheckExport implements FromView
     }
 
     /**
-     * Get the value of branch
-     */ 
+     * Get the value of branch.
+     */
     public function getBranch()
     {
         return $this->branch;
     }
 
     /**
-     * Set the value of branch
+     * Set the value of branch.
      *
-     * @return  self
-     */ 
+     * @param mixed $branch
+     *
+     * @return self
+     */
     public function setBranch($branch)
     {
         $this->branch = $branch;

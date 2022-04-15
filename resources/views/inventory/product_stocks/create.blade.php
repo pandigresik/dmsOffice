@@ -37,7 +37,7 @@
                                     {!! Form::select('branch_id', $branchItems, null, ['class' => 'form-control select2', 'required' => 'required']) !!}
                                     </div>
                                     <div class="input-addon-append ml-2">
-                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success',
+                                        {!! Form::button(__('crud.show'), ['class' => 'btn btn-success',
                                         'data-target' => '#listproductmutation', 'data-url' =>
                                         route('inventory.productStocks.store'), 'data-json' => '{}', 'data-ref' =>
                                         'input[name=period],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'post\')', 'type'

@@ -94,7 +94,7 @@ class BtbValidate extends Model
         'dms_inv_carrier_id',
         'price',
         'shipping_cost',
-        'description'
+        'description',
     ];
 
     /**

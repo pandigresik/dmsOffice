@@ -86,7 +86,7 @@ class ShippingCostManual extends Model
         'invoiced_expedition',
         'amount',
         'driver',
-        'vehicle_number'
+        'vehicle_number',
     ];
 
     /**
@@ -123,7 +123,7 @@ class ShippingCostManual extends Model
         'sj_references' => 'string',
         'amount' => 'decimal:2',
     ];
-    
+
     public function scopeCanInvoicedExpedition($query)
     {
         return $query->whereInvoicedExpedition(0);

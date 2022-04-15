@@ -91,10 +91,10 @@ class SalesReportDataTable extends DataTable
             ->join(
                 'dms_sd_docdoitemprice',
                 function ($q) {
-                $q->on('dms_sd_docdoitemprice.szDocId', '=', 'dms_sd_docdoitem.szDocId')
-                    ->on('dms_sd_docdoitemprice.intItemNumber', '=', 'dms_sd_docdoitem.intItemNumber')
+                    $q->on('dms_sd_docdoitemprice.szDocId', '=', 'dms_sd_docdoitem.szDocId')
+                        ->on('dms_sd_docdoitemprice.intItemNumber', '=', 'dms_sd_docdoitem.intItemNumber')
                 ;
-            }
+                }
             )
             ->newQuery()
         ;

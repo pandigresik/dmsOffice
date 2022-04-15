@@ -50,21 +50,22 @@ class TripRepository extends BaseRepository
     public function delete($id)
     {
         $this->model->getConnection()->beginTransaction();
+
         try {
             $query = $this->model->newQuery();
 
             $model = $query->findOrFail($id);
-            $model->tripEkspedisis->each(function($item){
+            $model->tripEkspedisis->each(function ($item) {
                 $item->price()->forceDelete();
             });
             $model->tripEkspedisis()->forceDelete();
             $model->forceDelete();
             $this->model->getConnection()->commit();
-            return $model; 
+
+            return $model;
         } catch (\Throwable $th) {
             \Log::error($th->getMessage());
             $this->model->getConnection()->rollBack();
         }
-        
     }
 }

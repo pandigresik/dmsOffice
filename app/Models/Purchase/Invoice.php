@@ -180,7 +180,7 @@ class Invoice extends Model
      */
     public function shippingCost()
     {
-        return $this->hasManyThrough( \App\Models\Accounting\ShippingCostManual::class, \App\Models\Purchase\InvoiceLine::class, 'invoice_id', 'number', 'id', 'doc_id');
+        return $this->hasManyThrough(\App\Models\Accounting\ShippingCostManual::class, \App\Models\Purchase\InvoiceLine::class, 'invoice_id', 'number', 'id', 'doc_id');
     }
 
     /**

@@ -18,6 +18,7 @@ return [
     'edit' => 'Edit',
     'sync' => 'Sinkron',
     'process' => 'Proses',
+    'show' => 'Tampilkan',
     'download' => 'Download',
     'detail' => 'Detail',
     'add_new' => 'Baru',

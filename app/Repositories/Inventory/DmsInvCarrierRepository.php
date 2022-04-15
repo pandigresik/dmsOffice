@@ -9,7 +9,6 @@ use App\Models\Inventory\TripEkspedisi;
 use App\Models\Inventory\TripEkspedisiPrice;
 use App\Models\Inventory\VehicleEkspedisi;
 use App\Repositories\BaseRepository;
-use Illuminate\Support\Facades\DB;
 
 /**
  * Class DmsInvCarrierRepository.

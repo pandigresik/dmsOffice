@@ -26,12 +26,11 @@ class CreateProductStockRequest extends FormRequest
      */
     public function rules()
     {
-
         return [];
         // return ['ref' => 'required']; //ProductStock::$rules;
     }
 
-    /**
+    /*
      * Get all of the input based value from property fillable  in model and files for the request.
      *
      * @param null|array|mixed $keys

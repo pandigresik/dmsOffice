@@ -108,8 +108,8 @@ class TransferCashBank extends Model
         return implode('', $newId);
     }
 
-    public function getTransactionDateAttribute($value){
-
+    public function getTransactionDateAttribute($value)
+    {
         return localFormatDate($value);
     }
 }

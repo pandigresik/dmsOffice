@@ -47,11 +47,13 @@ class GeneralLedgerRepository extends BaseRepository
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
             ->whereIn('account_id', $this->accountCode($listAccount))
-            ->groupBy('account_id');
-        if(!empty($branch)){
+            ->groupBy('account_id')
+        ;
+        if (!empty($branch)) {
             $query->where(['branch_id' => $branch]);
         }
         $data = $query->get()->keyBy('account_id');
+
         return [
             'data' => $data,
             'saldo' => $this->getSaldo($startDate, $listAccount),
@@ -59,22 +61,24 @@ class GeneralLedgerRepository extends BaseRepository
         ];
     }
 
-    public function detail($startDate, $endDate,$accountCode, $branch)
-    {           
-        $query = DmsCasCashbalance::select(['szAccountId as account_id', 'decDebit as debit', 'decCredit as credit', 'decAmount as balance','szDocId as reference', 'szDescription as description', 'szVoucherNo as voucher'])             
-        // $query = JournalAccount::with(['account'])->select(['account_id', 'debit', 'credit', 'date', 'name', 'reference','dms_cas_cashbalance.szDescription as description','dms_cas_cashbalance.szVoucherNo as voucher'])        
-            ->disableModelCaching()            
+    public function detail($startDate, $endDate, $accountCode, $branch)
+    {
+        $query = DmsCasCashbalance::select(['szAccountId as account_id', 'decDebit as debit', 'decCredit as credit', 'decAmount as balance', 'szDocId as reference', 'szDescription as description', 'szVoucherNo as voucher'])
+        // $query = JournalAccount::with(['account'])->select(['account_id', 'debit', 'credit', 'date', 'name', 'reference','dms_cas_cashbalance.szDescription as description','dms_cas_cashbalance.szVoucherNo as voucher'])
+            ->disableModelCaching()
             ->whereBetween('dtmDoc', [$startDate, $endDate])
             ->where('szAccountId', $accountCode)
-            ->orderBy('dtmDoc');         
-                     
-        if(!empty($branch)){
+            ->orderBy('dtmDoc')
+        ;
+
+        if (!empty($branch)) {
             $query->where(['szBranchId' => $branch]);
         }
         $data = $query->get();
+
         return [
             'data' => $data,
-            'saldo' => $this->getSaldoAccount($startDate, $accountCode)            
+            'saldo' => $this->getSaldoAccount($startDate, $accountCode),
         ];
     }
 
@@ -96,7 +100,8 @@ class GeneralLedgerRepository extends BaseRepository
     {
         return AccountBalance::whereBalanceDate($startDate)
             ->where('code', $accountCode)
-            ->first();
+            ->first()
+        ;
     }
 
     private function accountCode($listAccount)

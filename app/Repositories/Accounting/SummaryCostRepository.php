@@ -17,7 +17,6 @@ class SummaryCostRepository extends BaseRepository
      */
     protected $fieldSearchable = [];
 
-
     /**
      * Return searchable fields.
      *
@@ -37,16 +36,16 @@ class SummaryCostRepository extends BaseRepository
     }
 
     public function list($startDate, $endDate)
-    {        
-        $data = $this->model->with(['transferCashBankDetails'])            
+    {
+        $data = $this->model->with(['transferCashBankDetails'])
             ->whereBetween('transaction_date', [$startDate, $endDate])
             ->whereType('KK')
             ->orderBy('transaction_date')
-            ->get()            
+            ->get()
         ;
 
         return [
-            'data' => $data            
+            'data' => $data,
         ];
     }
 }

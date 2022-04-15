@@ -14,12 +14,11 @@
         <th>MO</th>
         <th>DO</th>
         <th>SO</th>
-        <th>Morphing</th>
-        <th>Jual</th>
+        <th>Morphing</th>        
         <th>Transfer</th>
         <th>Stock Akhir</th>
         <th>Harga</th>
-        <th>Total</th>
+        <th>Total <br>(MO + DO + SO)</th>
         <th>Pengurang</th>
         <th>HPP</th>
     </tr>
@@ -29,15 +28,15 @@
         @if ($item->isEmptyTransaction())
             @continue
         @endif
-        @php
-            $saldoAwal = $saldoBulanLalu[$item->szProductId] ?? 0;
-            $saldoAkhir = $saldoAwal + $item->MI + $item->DI + $item->SI + $item->MO + $item->DO + $item->SO + $item->MORPH + $item->DOCDO + $item->TR;
-            $currentPrice = $price[$item->szProductId] ?? 0;
-            $pengurang = 0;
-            $jual = $item->DOCDO * $currentPrice;
-            $hpp = $jual - $pengurang;
+        @php            
+            $saldoAwal = $item->firstStock;            
+            $saldoAkhir = $saldoAwal + $item->MI + $item->DI + $item->SI + $item->MO + $item->DO + $item->SO + $item->MORPH + $item->TR;
+            $currentPrice = $item->price;
+            $pengurang = $item->pengurang;
+            $amountOut = ($item->DO + $item->MO + $item->SO) * $currentPrice;
+            $hpp = $amountOut - $pengurang;
             $hppTotal += $hpp;
-            $jualTotal += $jual;
+            $jualTotal += $amountOut;
         @endphp
         <tr>                        
             <td>{{ $item->szName }} - ( {{ $item->szProductId}} )</td>            
@@ -48,20 +47,19 @@
             <td class="text-right">{{ localNumberFormat($item->MO, 0) }}</td>
             <td class="text-right">{{ localNumberFormat($item->DO, 0) }}</td>
             <td class="text-right">{{ localNumberFormat($item->SO, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($item->MORP, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($item->DOCDO, 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($item->MORP, 0) }}</td>            
             <td class="text-right">{{ localNumberFormat($item->TR, 0) }}</td>
             <td class="text-right">{{ localNumberFormat($saldoAkhir, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($currentPrice, 2) }}</td>            
-            <td class="text-right">{{ localNumberFormat($jual, 2) }}</td>
-            <td class="text-right">{{ localNumberFormat($pengurang, 2) }}</td>
-            <td class="text-right">{{ localNumberFormat($hpp, 2) }}</td>
+            <td class="text-right">{{ localNumberFormat($currentPrice, 0) }}</td>            
+            <td class="text-right">{{ localNumberFormat($amountOut, 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($pengurang, 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($hpp, 0) }}</td>
         </tr>
     @endforeach
 </tbody>
 <tfoot>
     <tr>
-        <th colspan="13"></th>
+        <th colspan="12"></th>
         <th class="text-right">{{ localNumberFormat($jualTotal, 2) }}</th>
         <th class="text-right">{{ localNumberFormat($pengurangTotal, 2) }}</th>
         <th class="text-right">{{ localNumberFormat($hppTotal, 2) }}</th>

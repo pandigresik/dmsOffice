@@ -41,13 +41,12 @@ class ProfitLossRepository extends BaseRepository
 
     public function list($startDate, $endDate, $branchId, $priceChoice)
     {
-        $excludeAccount = collect(['HPPP', 'HPPPT'])->reject(function($value, $key) use ($priceChoice){
-
+        $excludeAccount = collect(['HPPP', 'HPPPT'])->reject(function ($value, $key) use ($priceChoice) {
             return $value == $priceChoice;
         })->toArray();
-        
+
         $listAccount = $this->listAccount($excludeAccount);
-        
+
         $claimTiv = JournalAccount::with(['account'])->selectRaw('branch_id, \'919901\' as account_id, abs(sum(balance)) as balance')
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
@@ -76,16 +75,17 @@ class ProfitLossRepository extends BaseRepository
             'data' => $data,
             'branchMaster' => DmsSmBranch::whereIn('szId', $branchId)->get()->keyBy('szId'),
             'listAccount' => $listAccount,
-            'excludeAccount' => $excludeAccount
+            'excludeAccount' => $excludeAccount,
         ];
     }
 
     private function listAccount($excludeAccount)
     {
-        return ReportSettingAccount::with(['details' => function ($q) use($excludeAccount) {
+        return ReportSettingAccount::with(['details' => function ($q) use ($excludeAccount) {
             $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])
                 ->join('account', 'account.id', '=', 'report_setting_account_detail.account_id')
-                ->whereNotIn('report_setting_account_detail.account_id', $excludeAccount);
+                ->whereNotIn('report_setting_account_detail.account_id', $excludeAccount)
+            ;
         }])->orderBy('code')->whereGroupType($this->groupCode)->get();
     }
 

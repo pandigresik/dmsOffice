@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Accounting;
 
-use App\Models\Accounting\AccountBalance;
 use App\Models\Accounting\JournalAccount;
 use App\Repositories\BaseRepository;
 
@@ -39,7 +38,7 @@ class MoneyCheckRepository extends BaseRepository
     }
 
     public function list($startDate, $endDate, $branch)
-    {        
+    {
         $query = JournalAccount::with(['account'])->selectRaw('date, account_id, sum(abs(balance)) balance')
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
@@ -54,11 +53,10 @@ class MoneyCheckRepository extends BaseRepository
         $data = $query->get()->groupBy('date');
 
         return [
-            'data' => $data            
+            'data' => $data,
         ];
     }
 
-    
     private function accountCode()
     {
         return ['130121',

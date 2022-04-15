@@ -30,7 +30,7 @@ class SummaryCostExport implements FromView
             'startDate' => $this->getStartDate(),
             'endDate' => $this->getEndDate(),
         ]);
-    }    
+    }
 
     /**
      * Get the value of endDate.

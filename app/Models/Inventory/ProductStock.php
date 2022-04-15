@@ -91,13 +91,10 @@ class ProductStock extends Model
 {
     use HasFactory;
 
-    public $table = 'product_stock';
-    
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
-    protected $dates = ['deleted_at'];    
+    public $table = 'product_stock';
 
     public $fillable = [
         'product_id',
@@ -109,10 +106,35 @@ class ProductStock extends Model
         'mutation_out',
         'distribution_out',
         'morphing',
+        'transfer',
         'last_stock',
         'period',
-        'additional_info'
+        'price',
+        'additional_info',
     ];
+
+    /**
+     * Validation rules.
+     *
+     * @var array
+     */
+    public static $rules = [
+        'product_id' => 'required|string|max:50',
+        'first_stock' => 'required|integer',
+        'supplier_in' => 'required|integer',
+        'mutation_in' => 'required|integer',
+        'distribution_in' => 'required|integer',
+        'supplier_out' => 'required|integer',
+        'mutation_out' => 'required|integer',
+        'distribution_out' => 'required|integer',
+        'morphing' => 'required|integer',
+        'price' => 'required',
+        'last_stock' => 'required|integer',
+        'period' => 'required|string|max:7',
+        'additional_info' => 'nullable|string',
+    ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that should be casted to native types.
@@ -132,69 +154,48 @@ class ProductStock extends Model
         'morphing' => 'integer',
         'last_stock' => 'integer',
         'period' => 'string',
-        'additional_info' => 'string'
+        'additional_info' => 'string',
     ];
 
     /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [
-        'product_id' => 'required|string|max:50',
-        'first_stock' => 'required|integer',
-        'supplier_in' => 'required|integer',
-        'mutation_in' => 'required|integer',
-        'distribution_in' => 'required|integer',
-        'supplier_out' => 'required|integer',
-        'mutation_out' => 'required|integer',
-        'distribution_out' => 'required|integer',
-        'morphing' => 'required|integer',
-        'last_stock' => 'required|integer',
-        'period' => 'required|string|max:7',
-        'additional_info' => 'nullable|string'
-    ];
-
-    /**
-     * Get the product that owns the ProductStock
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * Get the product that owns the ProductStock.
      */
     public function product(): BelongsTo
     {
         return $this->belongsTo(DmsInvProduct::class, 'product_id', 'szId');
     }
 
-    public function isEmptyTransaction(){
+    public function isEmptyTransaction()
+    {
         $result = true;
-        if($this->MI > 0){
+        if ($this->MI > 0) {
             $result = false;
         }
-        if($this->DI > 0){
+        if ($this->DI > 0) {
             $result = false;
         }
-        if($this->SI > 0){
+        if ($this->SI > 0) {
             $result = false;
         }
-        if($this->MO > 0){
+        if ($this->MO > 0) {
             $result = false;
         }
-        if($this->DO > 0){
+        if ($this->DO > 0) {
             $result = false;
         }
-        if($this->SO > 0){
-            $result = false;
-        }
-
-        if($this->MORP > 0){
+        if ($this->SO > 0) {
             $result = false;
         }
 
-        if($this->DOCDO > 0){
+        if ($this->MORP > 0) {
             $result = false;
         }
 
-        if($this->TR > 0){
+        if ($this->DOCDO > 0) {
+            $result = false;
+        }
+
+        if ($this->TR > 0) {
             $result = false;
         }
 
