@@ -98,6 +98,7 @@ class ProductStock extends Model
 
     public $fillable = [
         'product_id',
+        'branch_id',
         'first_stock',
         'supplier_in',
         'mutation_in',
@@ -107,6 +108,8 @@ class ProductStock extends Model
         'distribution_out',
         'morphing',
         'transfer',
+        'substractor',
+        'cogs',
         'last_stock',
         'period',
         'price',
@@ -132,6 +135,7 @@ class ProductStock extends Model
         'last_stock' => 'required|integer',
         'period' => 'required|string|max:7',
         'additional_info' => 'nullable|string',
+        ''
     ];
 
     protected $dates = ['deleted_at'];
@@ -168,34 +172,34 @@ class ProductStock extends Model
     public function isEmptyTransaction()
     {
         $result = true;
-        if ($this->MI > 0) {
+        if ($this->mutaion_in > 0) {
             $result = false;
         }
-        if ($this->DI > 0) {
+        if ($this->distribution_in > 0) {
             $result = false;
         }
-        if ($this->SI > 0) {
+        if ($this->supplier_in > 0) {
             $result = false;
         }
-        if ($this->MO > 0) {
+        if ($this->mutation_out > 0) {
             $result = false;
         }
-        if ($this->DO > 0) {
+        if ($this->distribution_out > 0) {
             $result = false;
         }
-        if ($this->SO > 0) {
-            $result = false;
-        }
-
-        if ($this->MORP > 0) {
+        if ($this->supplier_out > 0) {
             $result = false;
         }
 
-        if ($this->DOCDO > 0) {
+        if ($this->morphing > 0) {
             $result = false;
         }
 
-        if ($this->TR > 0) {
+        // if ($this->DOCDO > 0) {
+        //     $result = false;
+        // }
+
+        if ($this->transfer > 0) {
             $result = false;
         }
 

@@ -39,8 +39,10 @@
                                     <div class="input-addon-append ml-2">
                                         {!! Form::button(__('crud.show'), ['class' => 'btn btn-success',
                                         'data-target' => '#listproductmutation', 'data-url' =>
-                                        route('inventory.productStocks.store'), 'data-json' => '{}', 'data-ref' =>
-                                        'input[name=period],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'post\')', 'type'
+                                        route('inventory.productStocks.show', 1), 'data-json' => '{}', 'data-ref' =>
+                                        'input[name=period],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'get\', function(){
+                                            main.initInputmask($(\'#listproductmutation\'))
+                                        })', 'type'
                                         => 'button']) !!}
                                     </div>
                                 </div>
@@ -66,3 +68,29 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')    
+    <script>
+    function updateCogs(elm){
+        const _val = $(elm).inputmask('unmaskedvalue')        
+        const _tr = $(elm).closest('tr')
+        const _tdCogs = _tr.find('td.cogs')
+        const _tdFirst = JSON.parse(_tr.find('td:eq(0)').find('input:hidden').val())
+        _tdCogs.text(Inputmask.format((parseInt(_tdFirst.cogs) - _val),{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
+        updateTotalPengurang(elm)
+    }
+
+    function updateTotalPengurang(elm){
+        const _table = $(elm).closest()
+        const _tfoot = _table.find('tfoot')
+        const _tbody = _table.find('tbody')
+        let _total = 0, _originalcogs = parseInt(_tfoot.find('td.originalcogs').text().replace('.',''))
+        _tbody.find('td.pengurang>input').each(function(){
+            _total += parseInt($(this).inputmask('unmaskedvalue'))
+        })
+        console.log(_total)
+        _tfoot.find('th.pengurang').text(Inputmask.format( _total,{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
+        // _tfoot.find('th.cogs').text(Inputmask.format( _originalcogs - _total,{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
+    }
+    </script>    
+@endpush

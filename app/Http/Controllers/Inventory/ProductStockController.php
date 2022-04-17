@@ -50,17 +50,11 @@ class ProductStockController extends AppBaseController
      * @return Response
      */
     public function store(CreateProductStockRequest $request)
-    {
+    {        
         $input = $request->all();        
-        $productStock = $this->getRepositoryObj()->generate($input);
-        
-        $period = Carbon::createFromFormat('Y-m', $input['period'])->subMonth();        
-        $startDate = $input['period'].'-01';
-        $endDate = Carbon::createFromFormat('Y-m-d', $startDate)->endOfMonth()->format('Y-m-d');
-        // $price = ProductPriceLog::select(['dpp_price as ori_price', 'product_id'])->where('start_date', '<=', $endDate)->whereRaw("(end_date is null or end_date >= '{$endDate}')")->orderBy('start_date', 'desc')->get()->pluck('ori_price', 'product_id');
-        // $saldoAwal = ProductStock::select(['last_stock', 'product_id'])->wherePeriod($period->format('Y-m'))->get()->pluck('last_stock', 'product_id');
+        $productStock = $this->getRepositoryObj()->create($input);
 
-        return view('inventory.product_stocks.list')->with(['collection' => $productStock]);
+        return redirect(route('inventory.productStocks.index'));
     }
 
     /**
@@ -70,17 +64,16 @@ class ProductStockController extends AppBaseController
      *
      * @return Response
      */
-    public function show($id)
+    public function show(CreateProductStockRequest $request, $id)
     {
-        $productStock = $this->getRepositoryObj()->find($id);
+        $input = $request->all();        
+        $productStock = $this->getRepositoryObj()->generate($input);
+        
+        $period = Carbon::createFromFormat('Y-m', $input['period'])->subMonth();        
+        $startDate = $input['period'].'-01';
+        $endDate = Carbon::createFromFormat('Y-m-d', $startDate)->endOfMonth()->format('Y-m-d');        
 
-        if (empty($productStock)) {
-            Flash::error(__('models/productStocks.singular').' '.__('messages.not_found'));
-
-            return redirect(route('inventory.productStocks.index'));
-        }
-
-        return view('inventory.product_stocks.show')->with('productStock', $productStock);
+        return view('inventory.product_stocks.list')->with(['collection' => $productStock]);
     }
 
     /**

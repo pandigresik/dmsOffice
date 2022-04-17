@@ -36,7 +36,7 @@ class ProductStockDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));
             }
         }
-
+        $dataTable->escapeColumns([]);
         return $dataTable->addColumn('action', 'inventory.product_stocks.datatables_actions');
     }
 
