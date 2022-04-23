@@ -1,0 +1,14 @@
+sudo apt update
+sudo apt -y install gnupg2 wget
+wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
+
+sudo dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
+
+sudo apt update
+sudo apt install percona-toolkit
+
+
+for i in `cat db1-db2.sync`; do pt-table-sync D=db1,t=$i D=db2,t=$i --execute --verbose; done
+
+ mysql --skip-column-names -se "SHOW TABLES IN db2" > db1-db2.sync
+for i in `cat db1-db2.sync`; do pt-table-sync h=localhost,D=dmsoffice_sejati,t=$i,u=ahmad,p=2hm2dafandi D=dmsoffice_replicate,t=$i --execute --verbose; done

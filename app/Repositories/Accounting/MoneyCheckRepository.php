@@ -39,7 +39,7 @@ class MoneyCheckRepository extends BaseRepository
 
     public function list($startDate, $endDate, $branch)
     {
-        $query = JournalAccount::with(['account'])->selectRaw('date, account_id, sum(abs(balance)) balance')
+        $query = JournalAccount::with(['account'])->selectRaw('date, account_id, sum(credit) credit, sum(debit) debit')
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
             ->whereIn('account_id', $this->accountCode())
@@ -58,25 +58,38 @@ class MoneyCheckRepository extends BaseRepository
     }
 
     private function accountCode()
-    {
-        return ['130121',
-            '130120',
-            '311100',
-            '919900',
-            '130501',
-            '811003',
-            '811005',
-            '811006',
-            '824007',
-            '829207',
-            '824001',
-            '811004',
-            '824005',
-            '824004',
-            '824003',
-
+    {        
+            
+            
+                                                                        
+        return [
             '110201',
             '110210',
+            '211102',            
+            '130120',
+            '130121',            
+            '130131',            
+            '130501',
+            '311100',
+            '311110',                        
+            '811003',
+            '811004',
+            '811005',
+            '811006',                        
+            '821004',
+            '824001',
+            '824042',
+            '824003',
+            '824004',
+            '824005',            
+            '824007',
+            '824019',
+            '824021',
+            '824037',
+            '824042',
+            '825012',            
+            '829207',                                                                                                
+            '919900',                    
         ];
     }
 }

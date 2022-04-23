@@ -23,7 +23,13 @@
             <td>{{ localFormatDate($tgl) }}</td>
             @foreach ($header as $key => $item)
                 @php
-                    $totalItem = $groupTgl->whereIn('account_id', $item)->sum('balance');
+                    
+                    if($key == 'BIAYA OPRSL'){
+                        $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit') + $groupTgl->whereIn('account_id', $item)->sum('debit');
+                    }else{
+                        $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit') - $groupTgl->whereIn('account_id', $item)->sum('debit');
+                    }
+                    
                     $totalHeader[$key] += $totalItem;
                     
                     if($key == 'JML YG HARUS DISETOR'){                        
