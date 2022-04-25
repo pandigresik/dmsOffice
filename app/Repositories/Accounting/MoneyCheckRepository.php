@@ -79,6 +79,7 @@ class MoneyCheckRepository extends BaseRepository
             '811006',                        
             '821004',
             '824001',
+            '824002',
             '824042',
             '824003',
             '824004',
