@@ -12,6 +12,9 @@
                 @endphp
                 <th>{{ $key }}</th>
             @endforeach
+            @foreach ($listBank as $bank)
+                <th>{{ $bank }}</th>
+            @endforeach
             <th>TOTAL SET BANK</th>
             <th>SELISIH</th>
             <th>KETERANGAN</th>
@@ -23,12 +26,19 @@
             <td>{{ localFormatDate($tgl) }}</td>
             @foreach ($header as $key => $item)
                 @php
-                    
-                    if($key == 'BIAYA OPRSL'){
-                        $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit') + $groupTgl->whereIn('account_id', $item)->sum('debit');
-                    }else{
-                        $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit') - $groupTgl->whereIn('account_id', $item)->sum('debit');
-                    }
+                    switch ($key) {
+                        case 'BIAYA OPRSL':
+                            $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit') + $groupTgl->whereIn('account_id', $item)->sum('debit');
+                            break;
+                        case 'BANK DIREKSI':
+                            $totalItem = $groupTgl->whereIn('account_id', $item)->sum('debit');
+                            break;
+                        // case 'SETORAN  LIVIA/SEJATI55':
+                        //     $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit');
+                        //     break;
+                        default:
+                            $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit') - $groupTgl->whereIn('account_id', $item)->sum('debit');
+                    }                    
                     
                     $totalHeader[$key] += $totalItem;
                     
@@ -45,7 +55,16 @@
                 $totalBank = $totalBaris['BANK DIREKSI'] + $totalBaris['SETORAN  LIVIA/SEJATI55'];
                 $selisih = $totalBaris['JML YG HARUS DISETOR'] - $totalBank;
             @endphp
-            <td class="text-right">{{ localNumberFormat($totalBank, 0) }}</td>
+            @foreach ($listBank as $codeBank => $bank)
+                <td class="bank_manual">
+                    <div class="input-group">
+                        {!! Form::text('amount', null, ['class' => 'inputmask', 'size' => 15,'data-account_id' => $codeBank, 'data-transaction_date' => $tgl,  'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer')), 'onchange' =>"updateTotalSetoran(this)"] ) !!}
+                        <span class="input-group-text mt-2"><i class="fa fa-save"></i></span>
+                    </div>
+                    
+                </td>
+            @endforeach
+            <td class="text-right total">{{ localNumberFormat(0, 0) }}</td>
             <td class="text-right">{{ localNumberAccountingFormat($selisih, 0) }}</td>
             <td></td>
         </tr>

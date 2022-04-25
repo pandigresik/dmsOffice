@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Accounting;
 
 use App\Http\Controllers\AppBaseController;
+use App\Models\Accounting\BankDeposit;
 use App\Repositories\Accounting\MoneyCheckRepository;
 use App\Repositories\Base\DmsSmBranchRepository;
 use Illuminate\Http\Request;
@@ -47,6 +48,12 @@ class MoneyCheckController extends AppBaseController
         'SETORAN  LIVIA/SEJATI55' => ['110210'],
     ];
 
+    private $listBank = [
+        'bank_1' => 'Bank 1',
+        'bank_2' => 'Bank 2',
+        'bank_3' => 'Bank 3',
+    ];
+
     public function __construct()
     {
         $this->repository = MoneyCheckRepository::class;
@@ -64,7 +71,7 @@ class MoneyCheckController extends AppBaseController
 
             return view('accounting.money_check.list')
                 ->with($datas)
-                ->with(['endDate' => $endDate, 'startDate' => $startDate, 'branch' => $branch, 'header' => $this->headerSheet])
+                ->with(['endDate' => $endDate, 'startDate' => $startDate, 'listBank' => $this->listBank ,'branch' => $branch, 'header' => $this->headerSheet])
             ;
         }
 
@@ -128,6 +135,23 @@ class MoneyCheckController extends AppBaseController
         $modelEksport = '\\App\Exports\\Template\\Accounting\\MoneyCheckExport';
         $fileName = 'money_check_'.$branch.'_'.$endDate;
 
-        return (new $modelEksport($collection))->setBranch($branch)->setHeaderSheet($this->headerSheet)->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
+        return (new $modelEksport($collection))->setBranch($branch)->setListBank($this->listBank)->setHeaderSheet($this->headerSheet)->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
+    }
+
+    public function update($id, Request $request)
+    {
+        $account_id = $request->get('account_id');
+        $transaction_date = $request->get('date');
+        $amount = $request->get('amount');
+
+        try {
+            $bankDeposit = BankDeposit::firstOrCreate(['account_id' => $account_id, 'transaction_date' => $transaction_date]);                
+            $bankDeposit->amount = $amount;
+            $bankDeposit->save();
+
+            $this->sendSuccess('Setoran bank sudah diupdate');
+        } catch (\Throwable $th) {
+            $this->sendError($th->getMessage());
+        }
     }
 }

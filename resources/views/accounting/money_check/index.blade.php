@@ -32,7 +32,7 @@
                                 </div>                                
                                 <div class="form-group row">                                    
                                     <div class="col-md-6 offset-3">
-                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listmoneycheck', 'data-url' => route('accounting.moneyCheck.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
+                                        {!! Form::button(__('crud.process'), ['class' => 'btn btn-success', 'data-target' => '#listmoneycheck', 'data-url' => route('accounting.moneyCheck.index'), 'data-json' => '{}', 'data-ref' => 'input[name=period_range],select[name=branch_id]' ,'onclick' => 'main.loadDetailPage(this,\'get\', function(){ main.initInputmask($(\'#listmoneycheck\')) })', 'type' => 'button']) !!}
                                         {!! Form::button(__('crud.download'), ['class' => 'btn btn-primary', 'type' => 'button', 'onclick' => 'downloadXls(this)']) !!}
                                     </div>
                                 </div>
@@ -67,6 +67,25 @@
             '_blank'
         )    
 
-    }    
+    }
+    function updateTotalSetoran(elm){
+        const _tr = $(elm).closest('tr')
+        let _total = 0, _unmaskedvalue = 0
+        _tr.find('td.bank_manual>input').each(function(){
+            _unmaskedvalue = parseInt($(this).inputmask('unmaskedvalue')) || 0
+            _total += _unmaskedvalue            
+        })
+        
+        _tr.find('td.total').text(Inputmask.format(_total,{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
+        // saveBankDeposit(elm)
+    }
+
+    function saveBankDeposit(elm){
+        const _url = '{{ route('accounting.moneyCheck.update', 1) }}'
+        const _unmaskedvalue = parseInt($(elm).inputmask('unmaskedvalue')) || 0
+        $.post(_url, {account_id: $(elm).data('account_id'), transaction_date: $(elm).data('transaction_date'), amount: _unmaskedvalue },function(){
+            
+        }, 'json')
+    }
 </script>
 @endpush

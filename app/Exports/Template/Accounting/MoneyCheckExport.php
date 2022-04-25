@@ -19,6 +19,7 @@ class MoneyCheckExport implements FromView
     private $endDate;
     private $branch;
     private $headerSheet;
+    private $listBank;
 
     public function __construct(array $collection)
     {
@@ -33,6 +34,7 @@ class MoneyCheckExport implements FromView
             'endDate' => $this->getEndDate(),
             'branch' => $this->getBranch(),
             'header' => $this->getHeaderSheet(),
+            'listBank' => $this->getListBank()
         ]);
     }
 
@@ -120,6 +122,26 @@ class MoneyCheckExport implements FromView
     public function setBranch($branch)
     {
         $this->branch = $branch;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of listBank
+     */ 
+    public function getListBank()
+    {
+        return $this->listBank;
+    }
+
+    /**
+     * Set the value of listBank
+     *
+     * @return  self
+     */ 
+    public function setListBank($listBank)
+    {
+        $this->listBank = $listBank;
 
         return $this;
     }
