@@ -18,8 +18,9 @@ class MoneyCheckController extends AppBaseController
         'EMBALASI' => ['311100'],
         'TITIPAN TUNAI' => ['311110'],
         'PENDAPATAN LAIN2' => ['919900'],
-        'BIAYA OPRSL' => [            
-            '130131',            
+        'BIAYA OPRSL' => [ 
+            '130130',
+            '130131',
             '130501',
             '211102',
             '311100',
