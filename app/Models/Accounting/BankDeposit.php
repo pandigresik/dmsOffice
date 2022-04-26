@@ -58,6 +58,7 @@ class BankDeposit extends Model
         'account_id',
         'transaction_date',
         'amount',
+        'branch_id',
         'description'
     ];
 

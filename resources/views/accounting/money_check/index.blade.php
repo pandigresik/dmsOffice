@@ -71,21 +71,33 @@
     function updateTotalSetoran(elm){
         const _tr = $(elm).closest('tr')
         let _total = 0, _unmaskedvalue = 0
-        _tr.find('td.bank_manual>input').each(function(){
+        _tr.find('td.bank_manual input').each(function(){
             _unmaskedvalue = parseInt($(this).inputmask('unmaskedvalue')) || 0
             _total += _unmaskedvalue            
         })
         
         _tr.find('td.total').text(Inputmask.format(_total,{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
-        // saveBankDeposit(elm)
+        saveBankDeposit(elm)
     }
 
     function saveBankDeposit(elm){
         const _url = '{{ route('accounting.moneyCheck.update', 1) }}'
         const _unmaskedvalue = parseInt($(elm).inputmask('unmaskedvalue')) || 0
-        $.post(_url, {account_id: $(elm).data('account_id'), transaction_date: $(elm).data('transaction_date'), amount: _unmaskedvalue },function(){
-            
-        }, 'json')
+        const _data = {account_id: $(elm).data('account_id'), transaction_date: $(elm).data('transaction_date'), branch_id: $(elm).data('branch_id') , amount: _unmaskedvalue }
+        $.ajax({
+            url: _url,
+            data: _data,
+            dataType: 'json',
+            type: 'PUT',
+            beforeSend: function() {
+                $(elm).next('div.input-group-append').find('i').removeClass('fa-save')
+                $(elm).next('div.input-group-append').find('i').addClass('fa-spin fa-spinner')                
+            },
+            success: function(data) {
+                $(elm).next('div.input-group-append').find('i').removeClass('fa-spin fa-spinner')
+                $(elm).next('div.input-group-append').find('i').addClass('fa-save')
+            }
+        })        
     }
 </script>
 @endpush

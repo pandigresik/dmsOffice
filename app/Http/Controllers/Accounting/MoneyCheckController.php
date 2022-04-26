@@ -68,7 +68,7 @@ class MoneyCheckController extends AppBaseController
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $branch = $request->get('branch_id');
             $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branch);
-
+            
             return view('accounting.money_check.list')
                 ->with($datas)
                 ->with(['endDate' => $endDate, 'startDate' => $startDate, 'listBank' => $this->listBank ,'branch' => $branch, 'header' => $this->headerSheet])
@@ -141,17 +141,18 @@ class MoneyCheckController extends AppBaseController
     public function update($id, Request $request)
     {
         $account_id = $request->get('account_id');
-        $transaction_date = $request->get('date');
+        $transaction_date = $request->get('transaction_date');
         $amount = $request->get('amount');
+        $branchId = $request->get('branch_id');
 
         try {
-            $bankDeposit = BankDeposit::firstOrCreate(['account_id' => $account_id, 'transaction_date' => $transaction_date]);                
+            $bankDeposit = BankDeposit::firstOrNew(['account_id' => $account_id, 'branch_id' => $branchId, 'transaction_date' => $transaction_date]);                
             $bankDeposit->amount = $amount;
             $bankDeposit->save();
 
-            $this->sendSuccess('Setoran bank sudah diupdate');
+            return $this->sendSuccess('Setoran bank sudah diupdate');
         } catch (\Throwable $th) {
-            $this->sendError($th->getMessage());
+            return $this->sendError($th->getMessage());
         }
     }
 }

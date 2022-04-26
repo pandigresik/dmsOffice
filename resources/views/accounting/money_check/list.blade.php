@@ -1,6 +1,6 @@
 @php
     $totalHeader = [];
-    $totalBaris = [];
+    $totalBaris = [];    
 @endphp
 <table class="table table-bordered">
     <thead class="text-center">
@@ -22,6 +22,15 @@
     </thead>
     <tbody>                        
         @foreach($data as $tgl => $groupTgl)
+        @php
+            $totalDepositBank = 0;            
+            $depositTgl = $bankDeposit[$tgl] ?? [];  
+            $accountDeposit = [];
+            if($depositTgl){
+                $accountDeposit = $depositTgl->keyBy('account_id');                        
+                $totalDepositBank = $depositTgl->sum('amount');
+            }                              
+        @endphp
         <tr>
             <td>{{ localFormatDate($tgl) }}</td>
             @foreach ($header as $key => $item)
@@ -56,15 +65,23 @@
                 $selisih = $totalBaris['JML YG HARUS DISETOR'] - $totalBank;
             @endphp
             @foreach ($listBank as $codeBank => $bank)
-                <td class="bank_manual">
+                @php                
+                    $amountDeposit = 0;
+                    if(isset($accountDeposit[$codeBank])){
+                        $amountDeposit = $accountDeposit[$codeBank]->amount;
+                    }
+                @endphp
+                <td class="bank_manual" style="min-width:150px">
                     <div class="input-group">
-                        {!! Form::text('amount', null, ['class' => 'inputmask', 'size' => 15,'data-account_id' => $codeBank, 'data-transaction_date' => $tgl,  'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer')), 'onchange' =>"updateTotalSetoran(this)"] ) !!}
-                        <span class="input-group-text mt-2"><i class="fa fa-save"></i></span>
+                        {!! Form::text('amount', localNumberFormat($amountDeposit, 0), ['class' => 'inputmask form-control', 'size' => 13,'data-account_id' => $codeBank, 'data-transaction_date' => $tgl, 'data-branch_id' => $branch,  'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer')), 'onchange' =>"updateTotalSetoran(this)"] ) !!}
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-save"></i></span>
+                        </div>                        
                     </div>
                     
                 </td>
             @endforeach
-            <td class="text-right total">{{ localNumberFormat(0, 0) }}</td>
+            <td class="text-right total">{{ localNumberFormat($totalDepositBank, 0) }}</td>
             <td class="text-right">{{ localNumberAccountingFormat($selisih, 0) }}</td>
             <td></td>
         </tr>
