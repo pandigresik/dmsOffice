@@ -18,7 +18,7 @@ $jualTotal = 0;
             <th>Transfer</th>
             <th>Stock Akhir</th>
             <th>Harga</th>
-            <th>Total <br>(MO + DO + SO)</th>
+            <th>Total <br>(DO - DI)</th>
             <th>Info</th>
             <th style="width:40px">Pengurang</th>
             <th>HPP</th>
@@ -34,7 +34,8 @@ $jualTotal = 0;
         $saldoAkhir = ($saldoAwal + $item->mutation_in + $item->distribution_in + $item->supplier_in ) - ( $item->mutation_out + $item->distribution_out + $item->supplier_out );
         $currentPrice = $item->price;
         $pengurang = $item->substractor ?? 0;
-        $amountOut = ($item->distribution_out + $item->mutation_out + $item->supplier_out) * $currentPrice;
+        // $amountOut = ($item->distribution_out + $item->mutation_out + $item->supplier_out) * $currentPrice;
+        $amountOut = ($item->distribution_out - $item->distribution_in) * $currentPrice;
         $hpp = $amountOut - $pengurang;
         $hppTotal += $hpp;
         $jualTotal += $amountOut;

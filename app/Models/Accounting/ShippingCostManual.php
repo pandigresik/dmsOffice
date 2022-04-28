@@ -87,6 +87,7 @@ class ShippingCostManual extends Model
         'amount',
         'driver',
         'vehicle_number',
+        'customer_name'
     ];
 
     /**

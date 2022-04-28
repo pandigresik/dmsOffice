@@ -39,9 +39,9 @@
                         case 'BIAYA OPRSL':
                             $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit') + $groupTgl->whereIn('account_id', $item)->sum('debit');
                             break;
-                        case 'BANK DIREKSI':
-                            $totalItem = $groupTgl->whereIn('account_id', $item)->sum('debit');
-                            break;
+                        // case 'BANK DIREKSI':
+                        //     $totalItem = $groupTgl->whereIn('account_id', $item)->sum('debit');
+                        //     break;
                         // case 'SETORAN  LIVIA/SEJATI55':
                         //     $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit');
                         //     break;
@@ -58,11 +58,11 @@
                     $totalBaris[$key] = $totalItem;
 
                 @endphp                
-                <td class="text-right">{{ localNumberFormat($totalItem, 0) }}</td>
+                <td class="text-right {{ $key == 'JML YG HARUS DISETOR' ? 'total_setoran': ''}}" data-item='{{ $totalItem }}'>{{ localNumberFormat($totalItem, 0) }}</td>
             @endforeach
             @php
-                $totalBank = $totalBaris['BANK DIREKSI'] + $totalBaris['SETORAN  LIVIA/SEJATI55'];
-                $selisih = $totalBaris['JML YG HARUS DISETOR'] - $totalBank;
+                // $totalBank = $totalBaris['BANK DIREKSI'] + $totalBaris['SETORAN  LIVIA/SEJATI55'];                
+                $selisih = $totalBaris['JML YG HARUS DISETOR'] - $totalDepositBank;
             @endphp
             @foreach ($listBank as $codeBank => $bank)
                 @php                
@@ -82,7 +82,7 @@
                 </td>
             @endforeach
             <td class="text-right total">{{ localNumberFormat($totalDepositBank, 0) }}</td>
-            <td class="text-right">{{ localNumberAccountingFormat($selisih, 0) }}</td>
+            <td class="text-right selisih">{{ localNumberAccountingFormat($selisih, 0) }}</td>
             <td></td>
         </tr>
         @endforeach
@@ -93,6 +93,7 @@
             @foreach ($header as $key => $item)                
                 <th class="text-right">{{ localNumberFormat($totalHeader[$key], 0) }}</th>
             @endforeach
+            <th colspan="6"></th>
         </tr>
     </tfoot>
 </table>

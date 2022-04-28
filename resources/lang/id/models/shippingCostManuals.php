@@ -16,6 +16,7 @@ return array (
     'amount' => 'Tarif',
     'driver' => 'Sopir',
     'vehicle_number' => 'Nopol',
-    'co_references' => 'No. CO'
+    'co_references' => 'No. CO',
+    'customer_name' => 'Pelanggan'
   ),
 );

@@ -73,12 +73,7 @@
                 ,'data-optiondate' => json_encode( ['locale' => ['format' => config('local.date_format_javascript')
                 ]]),'id'=>'date']) !!}
             </div>
-        </div>
-
-        <!-- Date Field -->
-        <div class="form-group row">
-            &nbsp;
-        </div>
+        </div>        
 
         <!-- Destination Branch Id Field -->
         <div class="form-group row">
@@ -87,6 +82,15 @@
             <div class="col-md-9">
                 {!! Form::select('destination_branch_id', $destinationBranchItems, null, ['class' => 'form-control
                 select2', 'required' => 'required']) !!}
+            </div>
+        </div>
+
+        <!-- Customer Name Field -->
+        <div class="form-group row">
+            {!! Form::label('customer_name', __('models/shippingCostManuals.fields.customer_name').':',
+            ['class' => 'col-md-3 col-form-label']) !!}
+            <div class="col-md-9">
+                {!! Form::text('customer_name', null, ['class' => 'form-control', 'required' => 'required']) !!}
             </div>
         </div>
 

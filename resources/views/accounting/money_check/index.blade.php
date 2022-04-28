@@ -70,13 +70,15 @@
     }
     function updateTotalSetoran(elm){
         const _tr = $(elm).closest('tr')
-        let _total = 0, _unmaskedvalue = 0
+        const _totalSetoran = _tr.find('td.total_setoran').data('item')
+        let _total = 0, _unmaskedvalue = 0, _selisih
         _tr.find('td.bank_manual input').each(function(){
             _unmaskedvalue = parseInt($(this).inputmask('unmaskedvalue')) || 0
             _total += _unmaskedvalue            
         })
-        
+        _selisih = _totalSetoran - _total
         _tr.find('td.total').text(Inputmask.format(_total,{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
+        _tr.find('td.selisih').text(Inputmask.format(_selisih,{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
         saveBankDeposit(elm)
     }
 

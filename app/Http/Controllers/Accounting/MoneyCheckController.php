@@ -44,8 +44,8 @@ class MoneyCheckController extends AppBaseController
             '829207',            
         ],
         'JML YG HARUS DISETOR' => [],
-        'BANK DIREKSI' => ['110201'],
-        'SETORAN  LIVIA/SEJATI55' => ['110210'],
+        // 'BANK DIREKSI' => ['110201'],
+        // 'SETORAN  LIVIA/SEJATI55' => ['110210'],
     ];
 
     private $listBank = [
