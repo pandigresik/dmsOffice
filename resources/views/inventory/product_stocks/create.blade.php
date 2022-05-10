@@ -74,23 +74,23 @@
     function updateCogs(elm){
         const _val = $(elm).inputmask('unmaskedvalue')        
         const _tr = $(elm).closest('tr')
+        const _table = _tr.closest('table')
         const _tdCogs = _tr.find('td.cogs')
         const _tdFirst = JSON.parse(_tr.find('td:eq(0)').find('input:hidden').val())
         _tdCogs.text(Inputmask.format((parseInt(_tdFirst.cogs) - _val),{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
-        updateTotalPengurang(elm)
+        updateTotalPengurang(_table)
     }
 
-    function updateTotalPengurang(elm){
-        const _table = $(elm).closest()
+    function updateTotalPengurang(_table){        
         const _tfoot = _table.find('tfoot')
         const _tbody = _table.find('tbody')
-        let _total = 0, _originalcogs = parseInt(_tfoot.find('td.originalcogs').text().replace('.',''))
-        _tbody.find('td.pengurang>input').each(function(){
-            _total += parseInt($(this).inputmask('unmaskedvalue'))
+        let _total = 0, _originalcogs = parseFloat(_tfoot.find('th.originalcogs').text().replace(/\./g,'').replace(/,/g,'.'))
+        _tbody.find('td.pengurang>input').each(function(){            
+            _total += parseFloat($(this).inputmask('unmaskedvalue'))            
         })
-        console.log(_total)
+        const _newCogs = _originalcogs - _total        
         _tfoot.find('th.pengurang').text(Inputmask.format( _total,{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
-        // _tfoot.find('th.cogs').text(Inputmask.format( _originalcogs - _total,{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
+        _tfoot.find('th.cogs').text(Inputmask.format( _newCogs,{alias:'numeric', 'digit': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
     }
     </script>    
 @endpush
