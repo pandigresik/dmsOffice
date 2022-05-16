@@ -14,6 +14,8 @@
     </div>
 @endsection
 @push('scripts')
+<script src="/vendor/js-xlsx/shim.js"></script>
+<script src="/vendor/js-xlsx/xlsx.full.min.js"></script>
 <script type="text/javascript">
     function updateAmount(elm){
         const _form = $(elm).closest('form')        
@@ -53,6 +55,61 @@
             }
             $(elm).data('json', _json)
         }
+
+    function updateListBkb(elm){
+        let file = elm.files[0];
+        const _tableContainer = $(elm).closest('#bkb-itemlist').find('.bkb-lines')
+        let reader = new FileReader();        
+        _tableContainer.html('please  wait, processing data .....')
+        reader.onload = function (e) {
+                var data = e.target.result
+                var _error = 0, _message = []
+                var workbook = XLSX.read(data, {
+                    type: 'binary'
+                });
+                var dataJson = xls_to_json(workbook)
+                let _tmp, _option = [], _table = [
+                    `<table class="table table-bordered">`,
+                    `<thead>
+                        <tr>
+                            <th>szDocId</th><th>szProductId</th><th>szProductName</th><th>szBranchId</th><th>branchName</th><th>decQty</th><th>decPrice</th><th>decDiscPrinciple</th><th>decDiscDistributor</th><th>decDiscInternal</th><th></th>
+                        </tr>
+                    </thead>`,
+                    `<tbody>`
+                ]                
+                for (const _sn in dataJson) {
+                    const _x = dataJson[_sn];
+                    for (let _baris in _x) {                        
+                        _tmp = _x[_baris]
+                        _table.push(`
+                            <tr>
+                                <td>${_tmp['szDocId']}</td><td>${_tmp['szProductId']}</td><td>${_tmp['szProductName']}</td><td>${_tmp['szBranchId']}</td><td>${_tmp['branchName']}</td><td>${_tmp['decQty']}</td><td>${_tmp['decPrice']}</td><td>${_tmp['decDiscPrinciple']}</td><td>${_tmp['decDiscDistributor']}</td><td>${_tmp['decDiscInternal']}</td><td><i class="fa fa-trash" onclick="$(this).closest('tr').remove()"></i></td>
+                            </tr>
+                        `)
+                    }
+                }
+                _table.push('</tbody>');    
+                _table.push('</table>');
+                _tableContainer.html(_table.join(''))
+                if (_error) {
+                    main.alertDialog('Warning', _message.join('\n'))
+                }
+            };
+
+            reader.readAsBinaryString(file)
+    }
+
+    function xls_to_json(workbook) {
+        var result = {};
+        workbook.SheetNames.forEach(function (sheetName) {
+            var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+            if (roa.length > 0) {
+                result[sheetName] = roa;
+            }
+        });
+        return result;
+    }
+
     $(function(){        
         $('select[name=partner_id]').change(function(){        
             const _form = $(this).closest('form')

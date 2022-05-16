@@ -5,7 +5,7 @@ namespace App\Http\Requests\Accounting;
 use App\Models\Accounting\Account;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateAccountRequest extends FormRequest
+class UpdateDmsFinAccountRequest extends FormRequest
 {
     private $excludeKeys = [];
 

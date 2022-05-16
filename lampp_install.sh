@@ -140,7 +140,7 @@ installLetsEncryptCertbot
 installPHP
 installMySQL
 secureMySQL
-# installPHPMyAdmin
+installPHPMyAdmin
 enableMods
 setPermissions
 restartApache
