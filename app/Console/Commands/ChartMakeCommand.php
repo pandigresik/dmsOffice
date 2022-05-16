@@ -23,6 +23,21 @@ class ChartMakeCommand extends GeneratorCommand
 
     protected $selectedChart;
 
+    protected function askChartType()
+    {
+        $option = $this->choice(
+            'Select a chart type',
+            array_keys($this->chartTypes),
+        );
+        $this->selectedChart = $this->chartTypes[$option];
+    }
+
+    public function handle(): ?bool
+    {
+        $this->askChartType();
+        return parent::handle();
+    }
+
     /**
      * The console command name.
      *
@@ -44,24 +59,10 @@ class ChartMakeCommand extends GeneratorCommand
      */
     protected $type = 'Chart class';
 
-    public function handle(): ?bool
-    {
-        $this->askChartType();
-
-        return parent::handle();
-    }
-
-    protected function askChartType()
-    {
-        $option = $this->choice(
-            'Select a chart type',
-            array_keys($this->chartTypes),
-        );
-        $this->selectedChart = $this->chartTypes[$option];
-    }
-
     /**
      * Get the stub file for the generator.
+     *
+     * @return string
      */
     protected function getStub(): string
     {
@@ -81,8 +82,9 @@ class ChartMakeCommand extends GeneratorCommand
     /**
      * Replace the class name for the given stub.
      *
-     * @param string $stub
-     * @param string $name
+     * @param  string  $stub
+     * @param  string  $name
+     * @return string
      */
     protected function replaceClass($stub, $name): string
     {
@@ -96,15 +98,18 @@ class ChartMakeCommand extends GeneratorCommand
     /**
      * Get the default namespace for the class.
      *
-     * @param string $rootNamespace
+     * @param  string  $rootNamespace
+     * @return string
      */
     protected function getDefaultNamespace($rootNamespace): string
     {
-        return $rootNamespace.'\Charts';
+        return $rootNamespace . '\Charts';
     }
 
     /**
      * Get the console command arguments.
+     *
+     * @return array
      */
     protected function getArguments(): array
     {
@@ -115,6 +120,8 @@ class ChartMakeCommand extends GeneratorCommand
 
     /**
      * Get the console command options.
+     *
+     * @return array
      */
     protected function getOptions(): array
     {

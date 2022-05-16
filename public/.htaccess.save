@@ -28,7 +28,7 @@
   ExpiresByType image/jpg "access plus 1 month"
   ExpiresByType image/svg+xml "access 1 month"
   ExpiresByType image/gif "access plus 1 month"
-  ExpiresByType image/jpeg "access plus 1 month"
+ q ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType text/javascript "access plus 1 month"
@@ -67,5 +67,5 @@
   BrowserMatch ^Mozilla/4 gzip-only-text/html
   BrowserMatch ^Mozilla/4\.0[678] no-gzip
   BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
-  # Header append Vary User-Agent
+  Header append Vary User-Agent
 </ifmodule>
