@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0b4ae98d4117646de75aadd4937a6c8",
+    "content-hash": "d5850c45df03ed83b69c2533c1a0da7b",
     "packages": [
         {
             "name": "acaronlex/laravel-calendar",
@@ -180,81 +180,6 @@
                 "source": "https://github.com/InfyOmLabs/swaggervel/tree/master"
             },
             "time": "2020-10-07T05:28:59+00:00"
-        },
-        {
-            "name": "arielmejiadev/larapex-charts",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pandigresik/larapex-charts.git",
-                "reference": "480d8f7df6ddb2d0086cf4f16ad638a0e2218992"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pandigresik/larapex-charts/zipball/480d8f7df6ddb2d0086cf4f16ad638a0e2218992",
-                "reference": "480d8f7df6ddb2d0086cf4f16ad638a0e2218992",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "illuminate/support": "^8.0",
-                "php": "^7.4|^8.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^6.0",
-                "phpunit/phpunit": "^9.0"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "ArielMejiaDev\\LarapexCharts\\LarapexChartsServiceProvider"
-                    ],
-                    "aliases": {
-                        "LarapexChart": "ArielMejiaDev\\LarapexCharts\\Facades\\LarapexChart"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "ArielMejiaDev\\LarapexCharts\\": "src"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "ArielMejiaDev\\LarapexCharts\\Tests\\": "tests"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "vendor/bin/phpunit"
-                ],
-                "test-coverage": [
-                    "vendor/bin/phpunit --coverage-html coverage"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "ArielMejiaDev",
-                    "email": "arielmejiadev@gmail.com"
-                }
-            ],
-            "description": "Package to provide easy api to build apex charts on Laravel",
-            "homepage": "https://larapex-charts.netlify.app/",
-            "keywords": [
-                "apexcharts",
-                "arielmejiadev",
-                "charts",
-                "larapex"
-            ],
-            "support": {
-                "source": "https://github.com/pandigresik/larapex-charts/tree/master"
-            },
-            "time": "2021-08-03T02:15:27+00:00"
         },
         {
             "name": "arrilot/laravel-widgets",
@@ -12395,7 +12320,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "appointer/swaggervel": 20,
-        "arielmejiadev/larapex-charts": 20,
         "infyomlabs/coreui-templates": 20,
         "infyomlabs/generator-builder": 20,
         "infyomlabs/laravel-generator": 20,

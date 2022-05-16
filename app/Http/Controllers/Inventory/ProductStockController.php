@@ -6,7 +6,6 @@ use App\DataTables\Inventory\ProductStockDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateProductStockRequest;
 use App\Http\Requests\Inventory\UpdateProductStockRequest;
-use App\Models\Inventory\ProductPriceLog;
 use App\Models\Inventory\ProductStock;
 use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Inventory\ProductStockRepository;
@@ -50,8 +49,8 @@ class ProductStockController extends AppBaseController
      * @return Response
      */
     public function store(CreateProductStockRequest $request)
-    {        
-        $input = $request->all();        
+    {
+        $input = $request->all();
         $productStock = $this->getRepositoryObj()->create($input);
 
         return redirect(route('inventory.productStocks.index'));
@@ -66,12 +65,12 @@ class ProductStockController extends AppBaseController
      */
     public function show(CreateProductStockRequest $request, $id)
     {
-        $input = $request->all();        
+        $input = $request->all();
         $productStock = $this->getRepositoryObj()->generate($input);
-        
-        $period = Carbon::createFromFormat('Y-m', $input['period'])->subMonth();        
+
+        $period = Carbon::createFromFormat('Y-m', $input['period'])->subMonth();
         $startDate = $input['period'].'-01';
-        $endDate = Carbon::createFromFormat('Y-m-d', $startDate)->endOfMonth()->format('Y-m-d');        
+        $endDate = Carbon::createFromFormat('Y-m-d', $startDate)->endOfMonth()->format('Y-m-d');
 
         return view('inventory.product_stocks.list')->with(['collection' => $productStock]);
     }
