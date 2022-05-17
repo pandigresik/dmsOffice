@@ -6,6 +6,7 @@ use App\DataTables\Purchase\InvoiceDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateInvoiceRequest;
 use App\Http\Requests\Purchase\UpdateInvoiceRequest;
+use App\Models\Purchase\InvoiceBkb;
 use App\Repositories\Base\DmsApSupplierRepository;
 use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Inventory\DmsInvCarrierRepository;
@@ -173,5 +174,13 @@ class InvoiceController extends AppBaseController
             'ekspedisiItem' => ['' => __('crud.option.ekspedisi_placeholder')] + $ekspedisi->all()->pluck('szName', 'szId')->toArray(),
             'branchItem' => $branch->all()->pluck('szName', 'szId')->toArray(),
         ];
+    }
+
+    public function downloadBkb(int $invoiceId)
+    {                        
+        $modelEksport = '\\App\Exports\\Template\\Purchase\\InvoiceBkbExport';
+        $fileName = 'invoice_bkb_'.$invoiceId;
+
+        return (new $modelEksport($invoiceId))->download($fileName.'.xls');
     }
 }
