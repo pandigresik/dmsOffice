@@ -42,7 +42,9 @@ class InvoiceDataTable extends DataTable
         }
         $dataTable->editColumn('partner.szName', function ($q) {
             return !empty($q->partner->szName) ? $q->partner->szName : $q->ekspedisi->szName;
-        });
+        })->editColumn('bkb', function ($q) {
+            return '<a target="_blank" href="'.route('downloadInvoiceBkb',[$q->id]).'"><i class="fa fa-download"></i></a>';
+        })->escapeColumns([]);
 
         return $dataTable; //->addColumn('action', 'purchase.invoices.datatables_actions');
     }
@@ -81,16 +83,6 @@ class InvoiceDataTable extends DataTable
                 'className' => 'btn btn-default btn-sm no-corner',
                 'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
             ],
-            // [
-            //    'extend' => 'import',
-            //    'className' => 'btn btn-default btn-sm no-corner',
-            //    'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-            // ],
-            // [
-            //    'extend' => 'print',
-            //    'className' => 'btn btn-default btn-sm no-corner',
-            //    'text' => '<i class="fa fa-print"></i> ' .__('auth.app.print').''
-            // ],
             [
                 'extend' => 'reset',
                 'className' => 'btn btn-default btn-sm no-corner',
@@ -138,6 +130,7 @@ class InvoiceDataTable extends DataTable
             'number' => new Column(['title' => __('models/invoices.fields.number'), 'data' => 'number', 'searchable' => true, 'elmsearch' => 'text']),
             // 'type' => new Column(['title' => __('models/invoices.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
             'reference' => new Column(['title' => __('models/invoices.fields.reference'), 'data' => 'reference', 'searchable' => true, 'elmsearch' => 'text']),
+            'bkb' => new Column(['title' => 'BKB', 'data' => 'bkb', 'defaultContent' => '-', 'searchable' => false, 'elmsearch' => 'text']),
             'qty' => new Column(['title' => __('models/invoices.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
             'amount' => new Column(['title' => __('models/invoices.fields.amount'), 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'text']),
             'amount_discount' => new Column(['title' => __('models/invoices.fields.amount_discount'), 'data' => 'amount_discount', 'searchable' => false, 'elmsearch' => 'text']),

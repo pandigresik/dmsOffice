@@ -39,7 +39,7 @@ class CreateInvoiceRequest extends FormRequest
     public function all($keys = null)
     {
         $keys = (new Invoice())->fillable;
-        $keys = array_merge(['invoice_line', 'ekspedisi_id'], $keys);
+        $keys = array_merge(['invoice_line', 'ekspedisi_id', 'invoice_bkb'], $keys);
 
         return parent::all($keys);
     }

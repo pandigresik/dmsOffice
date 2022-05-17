@@ -162,6 +162,14 @@ class Invoice extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function invoiceBkb()
+    {
+        return $this->hasMany(\App\Models\Purchase\InvoiceBkb::class, 'invoice_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function debitCreditNote()
     {
         return $this->hasMany(\App\Models\Finance\DebitCreditNote::class, 'invoice_id');

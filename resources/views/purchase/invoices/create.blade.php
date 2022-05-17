@@ -83,7 +83,7 @@
                         _tmp = _x[_baris]
                         _table.push(`
                             <tr>
-                                <td>${_tmp['szDocId']}</td><td>${_tmp['szProductId']}</td><td>${_tmp['szProductName']}</td><td>${_tmp['szBranchId']}</td><td>${_tmp['branchName']}</td><td>${_tmp['decQty']}</td><td>${_tmp['decPrice']}</td><td>${_tmp['decDiscPrinciple']}</td><td>${_tmp['decDiscDistributor']}</td><td>${_tmp['decDiscInternal']}</td><td><i class="fa fa-trash" onclick="$(this).closest('tr').remove()"></i></td>
+                                <td><input type="hidden" name="invoice_bkb[]" value='${JSON.stringify(_tmp)}'>${_tmp['szDocId']}</td><td>${_tmp['szProductId']}</td><td>${_tmp['szProductName']}</td><td>${_tmp['szBranchId']}</td><td>${_tmp['branchName']}</td><td>${_tmp['decQty']}</td><td>${_tmp['decPrice']}</td><td>${_tmp['decDiscPrinciple']}</td><td>${_tmp['decDiscDistributor']}</td><td>${_tmp['decDiscInternal']}</td><td><i class="btn text-danger fa fa-trash" onclick="$(this).closest('tr').remove()"></i></td>
                             </tr>
                         `)
                     }

@@ -67,6 +67,7 @@ class InvoiceRepository extends BaseRepository
         }
         $model = $this->model->newInstance($input);
         $invoiceLine = $input['invoice_line'];
+        $invoiceBkb = $input['invoice_bkb'] ?? [];
         $model->number = $model->getNextNumber();
         $model->type = 'in';
         $model->state = Invoice::DEFAULT_STATE;
@@ -79,7 +80,7 @@ class InvoiceRepository extends BaseRepository
             'state' => $model->getRawOriginal('state'),
         ]);
         $this->setInvoiceLines($invoiceLine, $model);
-
+        $this->setInvoiceBkb($invoiceBkb, $model);
         $model->btb()->update([$btbInvoicedColumn => 1]);
         if ('ekspedisi' == $input['partner_type']) {
             $model->shippingCost()->update([$btbInvoicedColumn => 1]);
@@ -91,8 +92,10 @@ class InvoiceRepository extends BaseRepository
     public function update($input, $id)
     {
         $invoiceLine = $input['invoice_line'];
+        $invoiceBkb = $input['invoice_bkb'] ?? [];
         $model = parent::update($input, $id);
         $this->setInvoiceLines($invoiceLine, $model);
+        $this->setInvoiceBkb($invoiceBkb, $model);
         $model->invoiceUsers()->create([
             'state' => $model->getRawOriginal('state'),
         ]);
@@ -128,6 +131,7 @@ class InvoiceRepository extends BaseRepository
             $model->shippingCost()->update([$btbInvoicedColumn => 0]);
         }
         $model->invoiceLines()->forceDelete();
+        $model->invoiceBkb()->forceDelete();
         $model->invoiceUsers()->forceDelete();
 
         return $model->forceDelete();
@@ -164,6 +168,17 @@ class InvoiceRepository extends BaseRepository
             $model->invoiceLines()->forceDelete();
             foreach ($invoiceLine as $line) {
                 $model->invoiceLines()->create(json_decode($line, 1));
+            }
+        }
+    }
+
+    private function setInvoiceBkb($invoiceBkb, $model)
+    {
+        if (!empty($invoiceBkb)) {
+            $model->invoiceBkb()->forceDelete();
+            foreach ($invoiceBkb as $bkb) {
+                $line = json_decode($bkb, 1);
+                $model->invoiceBkb()->create(['references' => $line['szDocId'], 'additional_info' => $line]);
             }
         }
     }
