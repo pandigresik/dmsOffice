@@ -2,9 +2,11 @@
 
 namespace App\Repositories\Inventory;
 
+use App\Models\Accounting\JournalAccount;
 use App\Models\Base\Setting;
 use App\Models\Inventory\DmsInvProduct;
 use App\Models\Inventory\ProductStock;
+use App\Models\Inventory\ProductStockAdjustment;
 use App\Repositories\BaseRepository;
 use Carbon\Carbon;
 
@@ -190,8 +192,8 @@ SQL;
             $period = $input['period'];
             $branchId = $input['branch_id'];
             $history = $input['history'];
-            $pengurang = $input['pengurang'];
-            $this->removePreviousData($period);
+            $pengurang = $input['pengurang'];            
+            $this->removePreviousData($period, $branchId);
             $products = DmsInvProduct::where('dtmEndDate', '>=', $period.'-01')->get();
             $defaultProductStock = [        
                 'first_stock' => 0,
@@ -208,17 +210,38 @@ SQL;
                 'last_stock' => 0,                
                 'price' => 0           
             ];
-            $productSave = [];
+            $totalCogs = 0;
             foreach($products as $product){
                 $defaulfData = isset($history[$product->szId]) ? array_merge($defaultProductStock, json_decode($history[$product->szId], 1)) :  $defaultProductStock;
                 $item = new ProductStock($defaulfData);
+                if($item->last_stock < 0){
+                  $item->last_stock = 0;
+                }
                 $item->product_id = $product->szId;
                 $item->substractor = $pengurang[$product->szId] ?? 0;                
                 $item->cogs = $item->cogs - $item->substractor;
+                if($item->cogs < 0){
+                  $item->cogs = 0;
+                }
                 $item->period = $period;
                 $item->branch_id = $branchId;
-                $item->save();
+                $item->save();                
+                $totalCogs += $item->cogs;
             }
+            $lastDay = \Carbon\Carbon::createFromFormat('Y-m', $period)->endOfMonth();
+            // save to journal account
+            JournalAccount::create([
+                'account_id' => 'HPPPT', 
+                'name' => 'HARGA PABRIK', 
+                'debit' => $totalCogs, 
+                'credit' => 0,  
+                'balance' => $totalCogs,
+                'date' => $lastDay, 
+                'branch_id' => $branchId, 
+                'description' => 'HPP Pabrik product stock', 
+                'reference' => 'HPPP-'.$period, 
+                'type' => 'JPS'
+            ]);            
             $this->model->getConnection()->commit();
             $this->model->flushCache();
         } catch (\Exception $e) {
@@ -231,8 +254,10 @@ SQL;
         return $this->model;
     }
 
-    private function removePreviousData($period)
+    private function removePreviousData($period, $branchId)
     {
-        $this->model->wherePeriod($period)->forceDelete();
+        $this->model->wherePeriod($period)->whereBranchId($branchId)->forceDelete();
+        JournalAccount::where(['branch_id' => $branchId, 'type' =>'JPS'])->forceDelete();
     }
+        
 }
