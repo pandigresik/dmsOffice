@@ -56,6 +56,12 @@
             $(elm).data('json', _json)
         }
 
+    function removeLine(elm){
+        const _invoiceLine = $(elm).closest('div.invoice-lines')
+        $(elm).closest('tr').remove()
+        _invoiceLine.trigger('change')
+    }
+
     function updateListBkb(elm){
         let file = elm.files[0];
         const _tableContainer = $(elm).closest('#bkb-itemlist').find('.bkb-lines')

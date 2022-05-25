@@ -75,7 +75,7 @@
                         <td>${_btbItemJson.uom_id }</td>
                         <td class="text-right">${_btbItemJson.qty }</td>
                         <td class="text-right">${_btbItemJson.price }</td>
-                        <td><i class="btn text-danger fa fa-trash" onclick="$(this).closest('tr').remove()"></i></td>
+                        <td><i class="btn text-danger fa fa-trash" onclick="removeLine(this)"></i></td>
                     </tr>`).appendTo(_tbody)
                 })          
                 _invoiceLines.trigger('change')
