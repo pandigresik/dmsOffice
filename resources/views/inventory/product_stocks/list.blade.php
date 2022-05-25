@@ -63,10 +63,11 @@ $jualTotal = 0;
             <td class="text-right">{{ localNumberFormat($currentPrice, 0) }}</td>
             <td class="text-right">{{ localNumberFormat($amountOut, 0) }}</td>
             <td style="width:40px">{!! $item->additional_info !!}</td>
-            <td class="text-right pengurang"><input type="text" onchange="updateCogs(this)" name="pengurang[{{ $item->product_id }}]"
-                    class="form-control inputmask" data-unmask="1"
+            <td style="min-width:110px;padding:16px 4px" class="text-right pengurang">
+            <input type="text" onchange="updateCogs(this)" name="pengurang[{{ $item->product_id }}]"
+                    class="form-control form-control-sm inputmask" data-unmask="1"
                     data-optionmask="{{ json_encode(config('local.number.integer')) }}"
-                    value="{{ localNumberFormat($pengurang, 0) }}" /></td>
+                    value="{{ localNumberFormat($pengurang, 0) }}" style="padding-left:2px" /></td>
             <td class="text-right cogs">{{ localNumberFormat($hpp, 0) }}</td>
         </tr>
         @endforeach
