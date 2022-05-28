@@ -281,7 +281,9 @@ class Main {
   }
 
   initInputmask(_target) {
-    _target.find('.inputmask').each(function() {
+    const _ada = _target.find('.inputmask')
+    if(!_ada.length) return
+    _ada.each(function() {
       const _option = $(this).data('optionmask') || {}
       const _type = $(this).attr('type')
       const _allowedElement = ['text', 'url', 'search', 'tel', 'password']
@@ -296,7 +298,9 @@ class Main {
   }
 
   initDatetime(_target) {
-    _target.find('.datetime').each(function() {
+    const _ada = _target.find('.datetime')
+    if(!_ada.length) return
+    _ada.each(function() {
       const _optionDate = $(this).data('optiondate') || {}
       const _defaultOption = {
         locale: {
@@ -334,7 +338,9 @@ class Main {
   }
 
   initEditor(_target) {
-    _target.find('.editor').each(function() {
+    const _ada = _target.find('.editor')
+    if(!_ada.length) return
+    _ada.each(function() {
       const _optionEditor = $(this).data('optioneditor') || {}
       // @ts-ignore
       $(this).ckeditor(_optionEditor)
@@ -342,8 +348,10 @@ class Main {
   }
 
   initSelect(_target) {
+    const _ada = _target.find('.select2')
+    if(!_ada.length) return
     const _ini = this
-    _target.find('.select2').each(function() {
+    _ada.each(function() {
       const _optionSelect = $(this).data('optionselect') || {}
       const _firstOption = $(this).find('option').eq(0)
       let _placeholder = $(this).data('placeholder') || 'Choose option'
@@ -451,7 +459,9 @@ class Main {
   }
 
   initCalendar(_target) {
-    _target.find('.calendar').each(function() {
+    const _ada = _target.find('.calendar')
+    if(!_ada.length) return
+    _ada.each(function() {
       const _elm = document.getElementById($(this).attr('id'))
       const _eventSourcesUrl = $(this).data('eventurl')
       const _defaultOption = {

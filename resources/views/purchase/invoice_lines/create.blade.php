@@ -22,7 +22,7 @@
                                 <!-- Submit Field -->
                                 <div class="form-group col-sm-12">
                                     {!! Form::submit(__('crud.save'), ['class' => 'btn btn-primary', 'onclick' => 'generateListItem(this)']) !!}
-                                    <button type="button" onclick="$('button.bootbox-close-button').click()" class="btn btn-default">@lang('crud.cancel')</button>
+                                    <button type="button" onclick="bootbox.hideAll()" class="btn btn-default">@lang('crud.cancel')</button>
                                 </div>
                             </div>
                         </div>
