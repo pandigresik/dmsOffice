@@ -54,7 +54,7 @@
             }
             $(elm).data('json', _json)
         }
-    function showListBtb(elm){
+    function showListBtb(elm){        
         const _formGroup = $(elm).closest('.form-group')
         const _bkbItemDiv = _formGroup.find('#bkb-itemlist')
         const _listBkb = _bkbItemDiv.find('input[name="invoice_bkb[]"]')
@@ -64,12 +64,13 @@
         }
         let _json = $(elm).data('json')
         let _listBtb = []
-        for(let i in _listBkb){
-            _listBtb.push($(_listBkb[i]).data('btb'))
-        }
+        _listBkb.each(function(item, obj){            
+            _listBtb.push(obj.getAttribute('data-btb'))
+        })
+                            
         _json.listbtb = _listBtb
         $(elm).data('json', _json)
-
+        
         addListDoc(elm)
         main.setButtonCaller(elm)
         main.popupModal(elm,"get")
