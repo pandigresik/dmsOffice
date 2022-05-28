@@ -71,26 +71,15 @@
 <div class="form-group">
     <div class="nav-tabs-boxed">
         <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item" data-href="#btb-itemlist"><a class="nav-link active" data-toggle="tab"
-                    href="#btb-itemlist" role="tab" aria-controls="btb-itemlist" aria-selected="true">List BTB</a>
-            </li>
-            <li class="nav-item" data-href="#bkb-itemlist"><a class="nav-link" data-toggle="tab" href="#bkb-itemlist"
+            <li class="nav-item" data-href="#bkb-itemlist"><a class="nav-link active" data-toggle="tab" href="#bkb-itemlist"
                     role="tab" aria-controls="bkb-itemlist" aria-selected="false">List BKB</a>
             </li>
+            <li class="nav-item" data-href="#btb-itemlist"><a class="nav-link" data-toggle="tab"
+                    href="#btb-itemlist" role="tab" aria-controls="btb-itemlist" aria-selected="true">List BTB</a>
+            </li>            
         </ul>
         <div class="tab-content">
-            <div class="tab-pane active" id="btb-itemlist" role="tabpanel">
-                <div class="col-md-6 col-offset-md-3 mb-2">
-                    <button type='button' class='btn btn-primary btn-add-items'
-                        data-url='{{ route('purchase.invoiceLines.create') }}'
-                        onclick='addListDoc(this);main.setButtonCaller(this);main.popupModal(this,"get")'>Add
-                        BTB</button>
-                </div>
-                <div class="col-md-12 table-responsive invoice-lines" onchange="updateAmount(this)">
-
-                </div>
-            </div>
-            <div class="tab-pane" id="bkb-itemlist" role="tabpanel">
+            <div class="tab-pane active" id="bkb-itemlist" role="tabpanel">
                 <div class="row">
                     <div class="col-md-3">        
                         <input class="form-control-file" onchange="updateListBkb(this)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="" type="file">
@@ -104,6 +93,17 @@
                 </div>
                 
             </div>
+            <div class="tab-pane" id="btb-itemlist" role="tabpanel">
+                <div class="col-md-6 col-offset-md-3 mb-2">
+                    <button type='button' class='btn btn-primary btn-add-items'
+                        data-url='{{ route('purchase.invoiceLines.create') }}'
+                        onclick='showListBtb(this)'>Add
+                        BTB</button>
+                </div>
+                <div class="col-md-12 table-responsive invoice-lines" onchange="updateAmount(this)">
+
+                </div>
+            </div>            
 
         </div>
     </div>

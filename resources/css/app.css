@@ -2,6 +2,10 @@ div.modal-body > button.bootbox-close-button.close{
     z-index: 99999;
 }
 
+.modal-header{
+  display: block;
+}
+
 .ow {
   overflow-wrap: break-word;
   word-wrap: break-word;

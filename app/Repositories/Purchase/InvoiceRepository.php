@@ -178,7 +178,7 @@ class InvoiceRepository extends BaseRepository
             $model->invoiceBkb()->forceDelete();
             foreach ($invoiceBkb as $bkb) {
                 $line = json_decode($bkb, 1);
-                $model->invoiceBkb()->create(['references' => $line['szDocId'], 'additional_info' => $line]);
+                $model->invoiceBkb()->create(['references' => $line['bkb'], 'additional_info' => $line]);
             }
         }
     }
