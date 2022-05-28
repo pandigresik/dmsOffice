@@ -48,10 +48,14 @@ class InvoiceLineController extends AppBaseController
         $endDate = $request->get('endDate');
         $endDate = $request->get('endDate');
         $listdoc = $request->get('listdoc') ?? [];
+        $listbtb = $request->get('listbtb') ?? [];
 
         $btbObj = BtbValidate::whereBetween('btb_date', [$startDate, $endDate]);
         if (!empty($branchId)) {
             $btbObj->whereIn('branch_id', $branchId);
+        }
+        if (!empty($listbtb)) {
+            $btbObj->whereIn('doc_id', $listbtb);
         }
         $shippingCostManual = null;
         if (Invoice::SUPPLIER == $type) {

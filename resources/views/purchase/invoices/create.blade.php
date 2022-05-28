@@ -49,13 +49,31 @@
             if(_invoiceLinesTable.length){
                 _invoiceLinesTable.find('tbody>tr>td>input[name^=invoice_line]').each(function(){
                     _docId.push($(this).data('docid'))
-                })
-                                
+                })                                
                 _json.listdoc = _docId                                
             }
             $(elm).data('json', _json)
         }
+    function showListBtb(elm){
+        const _formGroup = $(elm).closest('.form-group')
+        const _bkbItemDiv = _formGroup.find('#bkb-itemlist')
+        const _listBkb = _bkbItemDiv.find('input[name="invoice_bkb[]"]')
+        if(!_listBkb.length) {
+            main.alertDialog('Warning', 'Silakan upload dahulu daftar bkb')
+            return
+        }
+        let _json = $(elm).data('json')
+        let _listBtb = []
+        for(let i in _listBkb){
+            _listBtb.push($(_listBkb[i]).data('btb'))
+        }
+        _json.listbtb = _listBtb
+        $(elm).data('json', _json)
 
+        addListDoc(elm)
+        main.setButtonCaller(elm)
+        main.popupModal(elm,"get")
+    }
     function removeLine(elm){
         const _invoiceLine = $(elm).closest('div.invoice-lines')
         $(elm).closest('tr').remove()
@@ -78,7 +96,7 @@
                     `<table class="table table-bordered">`,
                     `<thead>
                         <tr>
-                            <th>szDocId</th><th>szProductId</th><th>szProductName</th><th>szBranchId</th><th>branchName</th><th>decQty</th><th>decPrice</th><th>decDiscPrinciple</th><th>decDiscDistributor</th><th>decDiscInternal</th><th></th>
+                            <th>btb</th><th>bkb</th><th>description</th>
                         </tr>
                     </thead>`,
                     `<tbody>`
@@ -89,7 +107,7 @@
                         _tmp = _x[_baris]
                         _table.push(`
                             <tr>
-                                <td><input type="hidden" name="invoice_bkb[]" value='${JSON.stringify(_tmp)}'>${_tmp['szDocId']}</td><td>${_tmp['szProductId']}</td><td>${_tmp['szProductName']}</td><td>${_tmp['szBranchId']}</td><td>${_tmp['branchName']}</td><td>${_tmp['decQty']}</td><td>${_tmp['decPrice']}</td><td>${_tmp['decDiscPrinciple']}</td><td>${_tmp['decDiscDistributor']}</td><td>${_tmp['decDiscInternal']}</td><td><i class="btn text-danger fa fa-trash" onclick="$(this).closest('tr').remove()"></i></td>
+                                <td><input type="hidden" data-btb='${_tmp['btb']}' name="invoice_bkb[]" value='${JSON.stringify(_tmp)}'>${_tmp['btb']}</td><td>${_tmp['bkb']}</td><td>${_tmp['description']}</td><td><i class="btn text-danger fa fa-trash" onclick="$(this).closest('tr').remove()"></i></td>
                             </tr>
                         `)
                     }
