@@ -108,7 +108,7 @@
                         _tmp = _x[_baris]
                         _table.push(`
                             <tr>
-                                <td><input type="hidden" data-btb='${_tmp['btb']}' name="invoice_bkb[]" value='${JSON.stringify(_tmp)}'>${_tmp['btb']}</td><td>${_tmp['bkb']}</td><td>${_tmp['description']}</td><td><i class="btn text-danger fa fa-trash" onclick="$(this).closest('tr').remove()"></i></td>
+                                <td><input type="hidden" data-btb='${_tmp['btb']}' name="invoice_bkb[]" value='${JSON.stringify(_tmp)}'>${_tmp['btb']}</td><td>${_tmp['bkb']}</td><td>${_tmp['description']}</td>
                             </tr>
                         `)
                     }
