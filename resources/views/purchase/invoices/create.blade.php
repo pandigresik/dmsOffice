@@ -17,6 +17,7 @@
 <script src="/vendor/js-xlsx/shim.js"></script>
 <script src="/vendor/js-xlsx/xlsx.full.min.js"></script>
 <script type="text/javascript">
+    let _totalBkb = 0
     function updateAmount(elm){
         const _form = $(elm).closest('form')        
         const _table = $(elm).find('table')
@@ -29,6 +30,7 @@
                     _amount += parseInt(_item.price * _item.qty)
                 })
             }
+            _amount += _totalBkb
             _form.find('.amount').val(_amount)
             _form.find('.amount').trigger('change')
         }
@@ -86,6 +88,7 @@
         const _tableContainer = $(elm).closest('#bkb-itemlist').find('.bkb-lines')
         let reader = new FileReader();        
         _tableContainer.html('please  wait, processing data .....')
+        _totalBkb = 0
         reader.onload = function (e) {
                 var data = e.target.result
                 var _error = 0, _message = []
@@ -97,21 +100,31 @@
                     `<table class="table table-bordered">`,
                     `<thead>
                         <tr>
-                            <th>btb</th><th>bkb</th><th>description</th>
+                            <th>Btb</th><th>Bkb</th><th>Tgl Invoice</th><th>Tgl Jatuh tempo</th><th>No. Invoice/Voucher</th><th>Material description</th><th>Qty</th><th>Harga</th><th>Nilai</th>
                         </tr>
                     </thead>`,
                     `<tbody>`
                 ]                
-                for (const _sn in dataJson) {
+                for (const _sn in dataJson) {                    
                     const _x = dataJson[_sn];
+                    
                     for (let _baris in _x) {                        
                         _tmp = _x[_baris]
                         _table.push(`
                             <tr>
-                                <td><input type="hidden" data-btb='${_tmp['btb']}' name="invoice_bkb[]" value='${JSON.stringify(_tmp)}'>${_tmp['btb']}</td><td>${_tmp['bkb']}</td><td>${_tmp['description']}</td>
+                                <td><input type="hidden" data-btb='${_tmp['btb']}' name="invoice_bkb[]" value='${JSON.stringify(_tmp)}'>${_tmp['btb']}</td>
+                                <td>${_tmp['bkb'] ?? ''}</td>                                				  	  	  
+                                <td>${_tmp['Tgl Invoice'] ?? ''}</td>
+                                <td>${_tmp['Tgl Jatuh tempo'] ?? ''}</td>
+                                <td>${_tmp['No. Invoice/Voucher'] ?? ''}</td>
+                                <td>${_tmp['Material description'] ?? ''}</td>
+                                <td>${_tmp['qty'] ?? ''}</td>
+                                <td>${_tmp['Harga'] ?? ''}</td>
+                                <td>${_tmp['Nilai'] ?? ''}</td>
                             </tr>
                         `)
-                    }
+                        _totalBkb += parseInt(_tmp['Nilai'] ?? 0)
+                    }                    
                 }
                 _table.push('</tbody>');    
                 _table.push('</table>');
