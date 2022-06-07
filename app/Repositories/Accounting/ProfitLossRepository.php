@@ -40,7 +40,7 @@ class ProfitLossRepository extends BaseRepository
     }
 
     public function list($startDate, $endDate, $branchId, $priceChoice)
-    {
+    {        
         $excludeAccount = collect(['HPPP', 'HPPPT'])->reject(function ($value, $key) use ($priceChoice) {
             return $value == $priceChoice;
         })->toArray();

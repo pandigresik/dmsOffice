@@ -28,7 +28,11 @@
                                     {!! Form::label('branch_id', 'Depo:', ['class' => 'col-md-3 col-form-label']) !!}                                   
                                     <div class="col-md-9">
                                         {!! Form::select('branch_id', $branchItems, null, ['class' => 'form-control select2', 'multiple' => 'multiple', 'required' => 'required']) !!}
-                                    </div>                                                                        
+                                        <label class="checkbox-inline">                                            
+                                            {!! Form::checkbox('', '1', null,['onchange' => 'selectAllOption(this,\'#branch_id\')']) !!}
+                                            pilih semua
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="form-group row">
                                     {!! Form::label('branch_id', 'Harga HPP:', ['class' => 'col-md-3 col-form-label']) !!}
@@ -61,6 +65,16 @@
 
 @push('scripts')
 <script type="text/javascript">        
+    function selectAllOption(elm, ref){        
+        if($(elm).is(':checked')){
+            $(`${ref} > option`).prop("selected", "selected");
+            $(ref).trigger("change");
+        }else{
+            let _formgroup = $(ref).closest('.form-group');
+            _formgroup.find('button.select2-selection__clear').click();
+            $(ref).trigger("change");
+        }
+    }
     function downloadXls(elm) {
         const _form = $(elm).closest('form')
         const _url = _form.attr('action')        

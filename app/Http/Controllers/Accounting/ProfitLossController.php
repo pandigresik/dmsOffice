@@ -22,7 +22,7 @@ class ProfitLossController extends AppBaseController
     {
         if ($request->ajax()) {
             $period = explode(' - ', $request->get('period_range'));
-            $branchId = $request->get('branch_id');
+            $branchId = $request->get('branch_id') ?? [];
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $priceChoice = $request->get('price_choice');
@@ -37,7 +37,7 @@ class ProfitLossController extends AppBaseController
         $downloadXls = $request->get('download_xls');
         if ($downloadXls) {
             $period = explode(' - ', $request->get('period_range'));
-            $branchId = $request->get('branch_id');
+            $branchId = $request->get('branch_id') ?? [];
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $priceChoice = $request->get('price_choice');
