@@ -71,14 +71,13 @@
                         $amountDeposit = $accountDeposit[$codeBank]->amount;
                     }
                 @endphp
-                <td class="bank_manual" style="min-width:150px">
+                <td class="bank_manual" style="min-width:250px">
                     <div class="input-group">
                         {!! Form::text('amount', localNumberFormat($amountDeposit, 0), ['class' => 'inputmask form-control', 'size' => 13,'data-account_id' => $codeBank, 'data-transaction_date' => $tgl, 'data-branch_id' => $branch,  'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer')), 'onchange' =>"updateTotalSetoran(this)"] ) !!}
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fa fa-save"></i></span>
                         </div>                        
-                    </div>
-                    
+                    </div>                    
                 </td>
             @endforeach
             <td class="text-right total">{{ localNumberFormat($totalDepositBank, 0) }}</td>
