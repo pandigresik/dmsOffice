@@ -43,10 +43,10 @@
                 if (_option.radixPoint === ',') {
                     _unmaskedvalue = _unmaskedvalue.replace(',', '.')
                 }
-                _debit += parseInt(_unmaskedvalue)
+                _debit += parseFloat(_unmaskedvalue)
             })
 
-            _table.find('tfoot th.debit input').val(_debit)
+            _table.find('tfoot th.debit input').val(Inputmask.format( _debit,{alias:'numeric', 'digit': 2, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
             _table.find('tfoot th.debit input').trigger('change')
 
             $(_elm).find('input[name="account_move_line[credit][]"]').each(function(){
@@ -55,10 +55,10 @@
                 if (_option.radixPoint === ',') {
                     _unmaskedvalue = _unmaskedvalue.replace(',', '.')
                 }
-                _credit += parseInt(_unmaskedvalue)
+                _credit += parseFloat(_unmaskedvalue)
             })
-
-            _table.find('tfoot th.credit input').val(_credit)
+            
+            _table.find('tfoot th.credit input').val(Inputmask.format( _credit,{alias:'numeric', 'digit': 2, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
             _table.find('tfoot th.credit input').trigger('change')
 
             _form.find('input:submit').fadeOut()
