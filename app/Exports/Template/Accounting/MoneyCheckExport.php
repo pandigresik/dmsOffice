@@ -34,7 +34,8 @@ class MoneyCheckExport implements FromView
             'endDate' => $this->getEndDate(),
             'branch' => $this->getBranch(),
             'header' => $this->getHeaderSheet(),
-            'listBank' => $this->getListBank()
+            'listBank' => $this->getListBank(),
+            'excel' => 1
         ]);
     }
 
