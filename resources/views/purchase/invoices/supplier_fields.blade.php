@@ -83,7 +83,7 @@
                 <div class="row">
                     <div class="col-md-3">        
                         <input class="form-control-file" onchange="updateListBkb(this)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="" type="file">
-                        <a href="/vendor/js-xlsx/template-listbkb.xlsx">Template BKB</a>
+                        <a href="/vendor/js-xlsx/template-listbkb-new.xlsx">Template BKB</a>
                     </div>                    
                 </div>
                 <div class="row">
