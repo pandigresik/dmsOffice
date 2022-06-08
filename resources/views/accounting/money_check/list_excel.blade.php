@@ -58,7 +58,7 @@
                     $totalBaris[$key] = $totalItem;
 
                 @endphp                
-                <td class="text-right {{ $key == 'JML YG HARUS DISETOR' ? 'total_setoran': ''}}" data-item='{{ $totalItem }}'>{{ localNumberFormat($totalItem, 0) }}</td>
+                <td class="text-right {{ $key == 'JML YG HARUS DISETOR' ? 'total_setoran': ''}}" data-item='{{ $totalItem }}'>{{ $totalItem }}</td>
             @endforeach
             @php
                 // $totalBank = $totalBaris['BANK DIREKSI'] + $totalBaris['SETORAN  LIVIA/SEJATI55'];                
@@ -72,21 +72,11 @@
                     }
                 @endphp
                 <td class="bank_manual" style="min-width:250px">
-                    @if (isset($excel))
-                        {{ $amountDeposit }}
-                    @else
-                    <div class="input-group">
-                        {!! Form::text('amount', localNumberFormat($amountDeposit, 0), ['class' => 'inputmask form-control', 'size' => 13,'data-account_id' => $codeBank, 'data-transaction_date' => $tgl, 'data-branch_id' => $branch,  'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer')), 'onchange' =>"updateTotalSetoran(this)"] ) !!}
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fa fa-save"></i></span>
-                        </div>                        
-                    </div>                        
-                    @endif
-                    
+                    {{ $amountDeposit }}                    
                 </td>
             @endforeach
-            <td class="text-right total">{{ localNumberFormat($totalDepositBank, 0) }}</td>
-            <td class="text-right selisih">{{ localNumberAccountingFormat($selisih, 0) }}</td>
+            <td class="text-right total">{{ $totalDepositBank }}</td>
+            <td class="text-right selisih">{{ $selisih }}</td>
             <td></td>
         </tr>
         @endforeach
@@ -95,7 +85,7 @@
         <tr>
             <th></th>
             @foreach ($header as $key => $item)                
-                <th class="text-right">{{ localNumberFormat($totalHeader[$key], 0) }}</th>
+                <th class="text-right">{{ $totalHeader[$key] }}</th>
             @endforeach
             <th colspan="6"></th>
         </tr>
