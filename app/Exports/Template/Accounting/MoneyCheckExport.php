@@ -30,12 +30,13 @@ class MoneyCheckExport implements FromView
     {
         return view('accounting.money_check.list', [
             'data' => $this->collection['data'],
+            'bankDeposit' => $this->collection['bankDeposit'],
             'startDate' => $this->getStartDate(),
             'endDate' => $this->getEndDate(),
             'branch' => $this->getBranch(),
             'header' => $this->getHeaderSheet(),
             'listBank' => $this->getListBank(),
-            'excel' => 1
+            'excel' => 1            
         ]);
     }
 
