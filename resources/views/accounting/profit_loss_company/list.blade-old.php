@@ -1,6 +1,6 @@
 @php
     $headerGroup = [        
-        'LRC-02' => 'Pendapatan (Beban) lain-lain'        
+        'LRC-02' => 'Pendapatan (Beban) lain-lain'
     ];
     $totalGroup = [
         'LRC-01' => 0,
