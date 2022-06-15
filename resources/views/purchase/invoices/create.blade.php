@@ -95,35 +95,37 @@
                 var workbook = XLSX.read(data, {
                     type: 'binary'
                 });
-                var dataJson = xls_to_json(workbook)
+                var dataJson = xls_to_json(workbook)          
                 let _tmp, _option = [], _table = [
                     `<table class="table table-bordered">`,
                     `<thead>
                         <tr>
-                            <th>Btb</th><th>Bkb</th><th>Tgl Invoice</th><th>Tgl Jatuh tempo</th><th>No. Invoice/Voucher</th><th>Material description</th><th>Qty</th><th>Harga</th><th>Nilai</th>
+                            <th>DEPO INPUT BTB</th><th>ket</th><th>ID. DOKUMEN</th><th>TGL ID DOKUMEN</th><th>Produk</th><th>QTY</th><th>HARGA</th><th>TOTAL</th><th>PERIODE</th><th>BILLING DOKUMEN</th>
                         </tr>
                     </thead>`,
                     `<tbody>`
                 ]                
                 for (const _sn in dataJson) {                    
                     const _x = dataJson[_sn];
-                    
+                    let _btbVal
                     for (let _baris in _x) {                        
                         _tmp = _x[_baris]
+                        _btbVal = _tmp['ket'] == 'BTB' ? _tmp['ID. DOKUMEN'] : null
                         _table.push(`
                             <tr>
-                                <td><input type="hidden" data-btb='${_tmp['btb']}' name="invoice_bkb[]" value='${JSON.stringify(_tmp)}'>${_tmp['btb']}</td>
-                                <td>${_tmp['bkb'] ?? ''}</td>                                				  	  	  
-                                <td>${_tmp['Tgl Invoice'] ?? ''}</td>
-                                <td>${_tmp['Tgl Jatuh tempo'] ?? ''}</td>
-                                <td>${_tmp['No. Invoice/Voucher'] ?? ''}</td>
-                                <td>${_tmp['Material description'] ?? ''}</td>
-                                <td>${_tmp['qty'] ?? ''}</td>
-                                <td>${_tmp['Harga'] ?? ''}</td>
-                                <td>${_tmp['Nilai'] ?? ''}</td>
+                                <td><input type="hidden" data-btb='${_btbVal}' name="invoice_bkb[]" value='${JSON.stringify(_tmp)}'>${_tmp['DEPO INPUT BTB']}</td>
+                                <td>${_tmp['ket'] ?? ''}</td>                                				  	  	  
+                                <td>${_tmp['ID. DOKUMEN'] ?? ''}</td>
+                                <td>${_tmp['TGL ID DOKUMEN'] ?? ''}</td>
+                                <td>${_tmp['Produk'] ?? ''}</td>                                
+                                <td>${_tmp['QTY'] ?? ''}</td>
+                                <td>${_tmp['HARGA'] ?? ''}</td>
+                                <td>${_tmp['TOTAL'] ?? ''}</td>
+                                <td>${_tmp['PERIODE'] ?? ''}</td>
+                                <td>${_tmp['BILLING DOKUMEN'] ?? ''}</td>
                             </tr>
                         `)
-                        _totalBkb += parseInt(_tmp['Nilai'] ?? 0)
+                        _totalBkb += _tmp['ket'] == 'BKB' ? parseInt(_tmp['TOTAL'] ?? 0) : 0
                     }                    
                 }
                 _table.push('</tbody>');    
@@ -144,7 +146,7 @@
             if (roa.length > 0) {
                 result[sheetName] = roa;
             }
-        });
+        });        
         return result;
     }
 

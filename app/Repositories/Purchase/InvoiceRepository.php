@@ -175,10 +175,12 @@ class InvoiceRepository extends BaseRepository
     private function setInvoiceBkb($invoiceBkb, $model)
     {
         if (!empty($invoiceBkb)) {
-            $model->invoiceBkb()->forceDelete();
+            $model->invoiceBkb()->forceDelete();            
             foreach ($invoiceBkb as $bkb) {
                 $line = json_decode($bkb, 1);
-                $model->invoiceBkb()->create(['references' => $line['bkb'], 'additional_info' => $line]);
+                if(isset($line['ID. DOKUMEN'])){
+                    $model->invoiceBkb()->create(['references' => $line['ID. DOKUMEN'], 'additional_info' => $line]);
+                }                
             }
         }
     }
