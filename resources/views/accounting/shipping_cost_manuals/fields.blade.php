@@ -136,7 +136,7 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="border-bottom:5px solid green">
             @foreach ($details as $item)            
                 <tr>                    
                     <td><input type="hidden" name="details[{{ $item->product_id }}][product_id]" value="{{ $item->product_id }}">{{ $item->product_id }}, {{ $item->product->szName }}</td>
@@ -145,7 +145,7 @@
                 </tr>
             @endforeach
         </tbody>
-        <tfoot>            
+        <tfoot style="background-color:#c2f9c2">            
             <td>
                 {!! Form::select('', [], null, array_merge(['class' => 'form-control select2', 'data-placeholder' =>
                 'Pilih
@@ -175,6 +175,7 @@
     function addItemList(elm) {        
         const _table = $(elm).closest('table')
         const _dropdown = $(elm).closest('tr').find('select')
+        const _row = $(elm).closest('tr')
         const _optionMaskInteger = JSON.stringify({
             "alias": "numeric",
             "digits": 0,
@@ -202,6 +203,8 @@
             </tr>
         `
         $(_item).appendTo(_table.find('tbody'))
+        _row.find('input').val('')
+        _row.find('select').val(null).trigger("change")
         main.initInputmask(_table.find('tbody>tr:last'))
     }
 
