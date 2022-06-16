@@ -127,7 +127,7 @@ class ShippingCostManual extends Model
 
     public function scopeCanInvoicedExpedition($query)
     {
-        return $query->whereInvoicedExpedition(0);
+        return $query->whereNull('invoiced_expedition');
     }
 
     public function scopeCanInvoicedEkspedisi($query, $ekspedisiId, $listDoc = [])
