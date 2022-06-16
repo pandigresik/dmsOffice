@@ -72,7 +72,7 @@
                 <td>{{ $data->co_reference }}</td>
                 <td>{{ $data->doc_id }}</td>
                 <td>{!! $data->product_name !!}</td>
-                <td>{{ $data->uom_id }}</td>                
+                <td>{!! $data->uom_id !!}</td>                
                 <td>{{ $data->price }}</td>                                
                 <td>
                     <label class="form-check-label">
