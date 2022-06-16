@@ -53,12 +53,15 @@
             @php                
                 $product = $data->details->map(function ($item){
                     return $item->product->szName.' ('.$item->quantity.')';
+                });
+                $uomProduct = $data->details->map(function ($item){
+                    return $item->product->szUomId;
                 });                
                 $data->price = $data->getRawOriginal('amount');
                 $data->qty = 1;
                 $data->product_id = $data->details->first()->product->szId;
                 $data->reference_id = $data->number;
-                $data->uom_id  = 'BOTOL';
+                $data->uom_id  = '<div>'.$uomProduct->join('</div><div>').'</div>';
                 $data->co_reference = $data->co_references;
                 $data->product_name = '<div>'.$product->join('</div><div>').'</div>';
                 $data->doc_id = $data->do_references; // pakai number agar unique
