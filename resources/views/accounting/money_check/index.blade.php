@@ -101,5 +101,24 @@
             }
         })        
     }
+
+    function updateDescription(elm){
+        const _url = '{{ route('accounting.moneyCheck.update', 1) }}'     
+        const _data = {description: $(elm).val(), transaction_date: $(elm).data('transaction_date'), branch_id: $(elm).data('branch_id') }
+        $.ajax({
+            url: _url,
+            data: _data,
+            dataType: 'json',
+            type: 'PUT',
+            beforeSend: function() {
+                $(elm).next('div.input-group-append').find('i').removeClass('fa-save')
+                $(elm).next('div.input-group-append').find('i').addClass('fa-spin fa-spinner')                
+            },
+            success: function(data) {
+                $(elm).next('div.input-group-append').find('i').removeClass('fa-spin fa-spinner')
+                $(elm).next('div.input-group-append').find('i').addClass('fa-save')
+            }
+        })        
+    }
 </script>
 @endpush

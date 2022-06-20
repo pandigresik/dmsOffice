@@ -26,6 +26,7 @@
             $totalDepositBank = 0;            
             $depositTgl = $bankDeposit[$tgl] ?? [];  
             $accountDeposit = [];
+            $descriptionTgl = $descriptionMoneyCheck[$tgl]->description ?? '';
             if($depositTgl){
                 $accountDeposit = $depositTgl->keyBy('account_id');                        
                 $totalDepositBank = $depositTgl->sum('amount');
@@ -77,7 +78,7 @@
             @endforeach
             <td class="text-right total">{{ $totalDepositBank }}</td>
             <td class="text-right selisih">{{ $selisih }}</td>
-            <td></td>
+            <td>{{ $descriptionTgl }}</td>
         </tr>
         @endforeach
     </tbody>

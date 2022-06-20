@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Accounting;
 
 use App\Http\Controllers\AppBaseController;
 use App\Models\Accounting\BankDeposit;
+use App\Models\Accounting\MoneyCheckDescription;
 use App\Repositories\Accounting\MoneyCheckRepository;
 use App\Repositories\Base\DmsSmBranchRepository;
 use Illuminate\Http\Request;
@@ -144,15 +145,22 @@ class MoneyCheckController extends AppBaseController
         $transaction_date = $request->get('transaction_date');
         $amount = $request->get('amount');
         $branchId = $request->get('branch_id');
+        $description = $request->get('description');
 
         try {
-            $bankDeposit = BankDeposit::firstOrNew(['account_id' => $account_id, 'branch_id' => $branchId, 'transaction_date' => $transaction_date]);                
-            $bankDeposit->amount = $amount;
-            $bankDeposit->save();
+            if(empty($account_id)){
+                $moneyCheck = MoneyCheckDescription::firstOrNew(['branch_id' => $branchId, 'transaction_date' => $transaction_date]); 
+                $moneyCheck->description = $description;
+                $moneyCheck->save();
+            }else{
+                $bankDeposit = BankDeposit::firstOrNew(['account_id' => $account_id, 'branch_id' => $branchId, 'transaction_date' => $transaction_date]);                
+                $bankDeposit->amount = $amount;
+                $bankDeposit->save();
+            }            
 
             return $this->sendSuccess('Setoran bank sudah diupdate');
         } catch (\Throwable $th) {
             return $this->sendError($th->getMessage());
         }
-    }
+    }    
 }
