@@ -4,6 +4,7 @@ namespace App\Repositories\Accounting;
 
 use App\Models\Accounting\BankDeposit;
 use App\Models\Accounting\JournalAccount;
+use App\Models\Accounting\MoneyCheckDescription;
 use App\Repositories\BaseRepository;
 
 /**
@@ -53,13 +54,15 @@ class MoneyCheckRepository extends BaseRepository
         }
         $data = $query->get()->groupBy('date');
         $bankDeposit = BankDeposit::whereBranchId($branch)->whereBetween('transaction_date', [$startDate, $endDate])->get()->groupBy(function($item){
-
             return $item->transaction_date->format('Y-m-d');
         });
-        
+        $descriptionMoneyCheck = MoneyCheckDescription::whereBranchId($branch)->whereBetween('transaction_date', [$startDate, $endDate])->get()->keyBy(function($item){
+            return $item->transaction_date->format('Y-m-d');
+        });
         return [
             'data' => $data,
-            'bankDeposit' => $bankDeposit
+            'bankDeposit' => $bankDeposit,
+            'descriptionMoneyCheck' => $descriptionMoneyCheck
         ];
     }
 

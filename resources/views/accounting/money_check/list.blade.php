@@ -26,11 +26,10 @@
             $totalDepositBank = 0;            
             $depositTgl = $bankDeposit[$tgl] ?? [];  
             $accountDeposit = [];
-            $descriptionTgl = '';
+            $descriptionTgl = $descriptionMoneyCheck[$tgl]->description ?? '';
             if($depositTgl){
                 $accountDeposit = $depositTgl->keyBy('account_id');                        
-                $totalDepositBank = $depositTgl->sum('amount');
-                $descriptionTgl = $depositTgl->first()->description;                
+                $totalDepositBank = $depositTgl->sum('amount');                
             }                              
         @endphp
         <tr>
@@ -86,7 +85,7 @@
             <td class="text-right selisih">{{ localNumberAccountingFormat($selisih, 0) }}</td>
             <td  style="min-width:200px">
                 <div class="input-group">
-                    {!! Form::textarea('description', $descriptionTgl,['class' => 'form-control', 'rows' => 3]) !!}
+                    {!! Form::textarea('description', $descriptionTgl,['class' => 'form-control', 'rows' => 3, 'data-transaction_date' => $tgl, 'data-branch_id' => $branch, 'onchange' => 'updateDescription(this)']) !!}
                     <div class="input-group-append">
                         <span class="input-group-text"><i class="fa fa-save"></i></span>
                     </div>
