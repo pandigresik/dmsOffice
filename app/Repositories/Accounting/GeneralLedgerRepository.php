@@ -63,7 +63,8 @@ class GeneralLedgerRepository extends BaseRepository
 
     public function detail($startDate, $endDate, $accountCode, $branch)
     {
-        $query = DmsCasCashbalance::select(['szAccountId as account_id', 'decDebit as debit', 'decCredit as credit', 'decAmount as balance', 'szDocId as reference', 'szDescription as description', 'szVoucherNo as voucher'])
+        $query = DmsCasCashbalance::select(['szAccountId as account_id', 'decDebit as debit', 'decCredit as credit', 'decAmount as balance', 'szDocId as reference', 'szVoucherNo as voucher'])            
+            ->selectRaw('(select GROUP_CONCAT(szDescription) from dms_cas_cashbalance dcc where dcc.szDocId = dms_cas_cashbalance.szDocId and LENGTH(dcc.szDescription) > 0  group by dcc.szDocId) as description')
         // $query = JournalAccount::with(['account'])->select(['account_id', 'debit', 'credit', 'date', 'name', 'reference','dms_cas_cashbalance.szDescription as description','dms_cas_cashbalance.szVoucherNo as voucher'])
             ->disableModelCaching()
             ->whereBetween('dtmDoc', [$startDate, $endDate])
