@@ -31,7 +31,7 @@ class BalanceController extends AppBaseController
 
             return view('accounting.balance.list')
                 ->with($datas)
-                ->with(['endDate' => $endDate, 'currentMonth' => $currentMonth, 'previousMonth' => $previousMonth])
+                ->with(['startDate' => $startDate,'endDate' => $endDate, 'currentMonth' => $currentMonth, 'previousMonth' => $previousMonth])
             ;
         }
 
@@ -43,6 +43,29 @@ class BalanceController extends AppBaseController
         }
 
         return view('accounting.balance.index')->with($this->getOptionItems());
+    }
+
+    /**
+     * Display detail the specified GeneralLedger.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function show($id)
+    {
+        $endDate = request('endDate');
+        $startDate = request('startDate');
+        $name = request('name');        
+        $balance = $this->getRepositoryObj()->detail($startDate, $endDate, $id);
+        
+        if (empty($balance)) {
+            Flash::error(__('models/balance.singular').' '.__('messages.not_found'));
+
+            return redirect(route('accounting.balance.index'));
+        }
+
+        return view('accounting.balance.show')->with(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
     }
 
     /**

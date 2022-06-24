@@ -3,6 +3,7 @@
 namespace App\Repositories\Accounting;
 
 use App\Models\Accounting\AccountBalance;
+use App\Models\Accounting\DmsCasCashbalance;
 use App\Models\Accounting\JournalAccount;
 use App\Models\Accounting\ReportSettingAccount;
 use App\Repositories\BaseRepository;
@@ -58,6 +59,28 @@ class BalanceRepository extends BaseRepository
         ];
     }
 
+    public function detail($startDate, $endDate, $accountCode)
+    {
+        $query = DmsCasCashbalance::select(['szAccountId as account_id', 'decDebit as debit', 'decCredit as credit', 'decAmount as balance', 'szDocId as reference', 'szVoucherNo as voucher', 'dtmDoc as date'])
+            ->selectRaw('(select GROUP_CONCAT(szDescription) from dms_cas_cashbalance dcc where dcc.szDocId = dms_cas_cashbalance.szDocId and LENGTH(dcc.szDescription) > 0  group by dcc.szDocId) as description')
+        // $query = JournalAccount::with(['account'])->select(['account_id', 'debit', 'credit', 'date', 'name', 'reference','dms_cas_cashbalance.szDescription as description','dms_cas_cashbalance.szVoucherNo as voucher'])
+            ->disableModelCaching()
+            ->whereBetween('dtmDoc', [$startDate, $endDate])
+            ->where('szAccountId', $accountCode)
+            ->orderBy('dtmDoc')
+        ;
+
+        // if (!empty($branch)) {
+        //     $query->where(['szBranchId' => $branch]);
+        // }
+        $data = $query->get();
+
+        return [
+            'data' => $data,
+            'saldo' => $this->getSaldoAccount($startDate, $accountCode),
+        ];
+    }
+
     private function listAccount()
     {
         return ReportSettingAccount::with(['details' => function ($q) {
@@ -70,6 +93,14 @@ class BalanceRepository extends BaseRepository
         return AccountBalance::whereBalanceDate($startDate)
             ->whereIn('code', $this->balanceAccountCode($listAccount))
             ->get()->keyBy('code');
+    }
+
+    private function getSaldoAccount($startDate, $accountCode)
+    {
+        return AccountBalance::whereBalanceDate($startDate)
+            ->where('code', $accountCode)
+            ->first()
+        ;
     }
 
     private function balanceAccountCode($listAccount)

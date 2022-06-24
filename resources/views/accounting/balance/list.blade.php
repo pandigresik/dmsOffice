@@ -38,7 +38,7 @@
                 @endphp                                
                 <tr>
                     <td>{{ $account->code }}</td>
-                    <td>{{ ucwords($account->name) }}</td>
+                    <td><a href="#" data-json='{{ json_encode(["name" => $account->name, "startDate" => $startDate, "endDate" => $endDate]) }}' data-url="{{route('accounting.balance.show', $account->code) }}" onclick="main.popupModal(this,'get');return false">{{ ucwords($account->name) }}</a></td>
                     <td class="text-right">{{ localNumberAccountingFormat($amount) }}</td>
                     <td class="text-right">{{ localNumberAccountingFormat($saldoAwal) }}</td>
                     <td class="text-right">{{ localNumberFormat($prosenSelisih) }}%</td>
