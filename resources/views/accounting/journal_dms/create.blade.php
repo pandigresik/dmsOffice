@@ -11,8 +11,3 @@
         <x-tabs :data="$dataTabs"/>          
     </div>
 @endsection
-@push('scripts')
-<script type="text/javascript">
-    
-</script>
-@endpush
