@@ -8,6 +8,7 @@ return array (
     'id' => 'Id',
     'branch_id' => 'Depo',
     'type' => 'type',
-    'period_range' => 'Periode'
+    'period_range' => 'Periode',
+    'file' => 'File'
   ),
 );
