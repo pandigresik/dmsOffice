@@ -27,7 +27,12 @@ class JournalDmsController extends AppBaseController
      */
     public function create()
     {
-        return view('accounting.journal_dms.create')->with($this->getOptionItems());
+        $optionItems = $this->getOptionItems();
+        $dataTabs = [
+            'dms' => ['text' => 'DMS', 'json' => [], 'url' => '', 'defaultContent' => view('accounting.journal_dms.dms_create')->with($optionItems), 'class' => 'active'],
+            'excel' => ['text' => 'Excel', 'json' => [], 'url' => '', 'defaultContent' => view('accounting.journal_dms.excel_create')->with($optionItems), 'class' => ''],
+        ];
+        return view('accounting.journal_dms.create')->with('dataTabs', $dataTabs);
     }
 
     /**
