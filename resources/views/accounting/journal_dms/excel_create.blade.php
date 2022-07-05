@@ -38,10 +38,13 @@
                     </div>
                     <div class="form-group row" id="journal-itemlist">
                         {!! Form::label('branch_id', __('models/journalDms.fields.file').':', ['class' => 'col-md-3 col-form-label']) !!}
-                        <div class="col-md-3">        
+                        <div class="col-md-9">        
                             <input class="form-control-file" onchange="showListJournal(this)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="" type="file">
-                            <a href="/vendor/js-xlsx/template-journal-excel.xlsx">Template Excel</a>
-                        </div>                        
+                            <a class="badge badge-primary" href="/vendor/js-xlsx/template-biaya-keamanan.xlsx">Template Keamanan dan Kebersihan</a>
+                            <a class="badge badge-primary" href="/vendor/js-xlsx/template-biaya-gaji.xlsx">Template Gaji dan Tunjangan</a>
+                            <a class="badge badge-primary" href="/vendor/js-xlsx/template-biaya-insentif.xlsx">Template Insentif</a>
+                            <a class="badge badge-primary" href="/vendor/js-xlsx/template-biaya-afiliasi.xlsx">Template Afiliasi</a>
+                        </div>
                         <div class="row container" style="margin-top:30px">                            
                             <div class="col-md-12 table-responsive journal-lines">
 
@@ -75,34 +78,48 @@
                 var data = e.target.result
                 var _error = 0, _message = []
                 var workbook = XLSX.read(data, {
-                    type: 'binary'
+                    type: 'binary',
+                    cellText:false, 
+                    cellDates:true
                 });
-                var dataJson = xls_to_json(workbook)          
+                var dataJson = xls_to_json(workbook)                    
                 let _tmp, _option = [], _table = [
-                    `<table class="table table-bordered">`,
-                    `<thead>
-                        <tr>
-                            <th>No.</th><th>AKUN DEBET (L/R)</th><th>AKUN KREDIT (NRC)</th><th>KODE DEPO</th><th>REFERENSI</th><th>DESKRIPSI</th><th>TANGGAL</th><th>JUMLAH</th>
-                        </tr>
-                    </thead>`,
+                    `<table class="table table-bordered">`,                    
                     `<tbody>`
                 ]                
                 for (const _sn in dataJson) {                    
-                    const _x = dataJson[_sn];
-                    let _btbVal
-                    for (let _baris in _x) {                        
+                    const _x = dataJson[_sn]
+                    let _trHtml = [], _header = false, _hiddenField = null
+                    for (let _baris in _x) {                                                                
                         _tmp = _x[_baris]
-                        _tmp['JUMLAH'] = parseInt($.trim(_tmp['JUMLAH']).replaceAll(',',''))
+                        /** insert header */
+                        if(!_header){
+                            _trHtml = []
+                            for(let _v in _tmp){
+                                _trHtml.push(`<th>${_v}</th>`)
+                            }
+                            _table.push(`
+                                <tr>
+                                ${_trHtml.join('')}
+                                </tr>
+                            `)
+                            _header = true
+                        }
+                        _trHtml = []
+                        // _tmp['JUMLAH'] = parseInt($.trim(_tmp['JUMLAH']).replaceAll(',',''))
+
+                        for(let _v in _tmp){
+                            if(!_hiddenField){
+                                _trHtml.push(`<td><input type="hidden" name="journal_line[]" value='${JSON.stringify(_tmp)}'>${_tmp[_v]}</td>`)
+                                _hiddenField = 1
+                            }else{
+                                _trHtml.push(`<td>${_tmp[_v]}</td>`)
+                            }                            
+                        }
+                        _hiddenField = null
                         _table.push(`
                             <tr>
-                                <td>${_tmp['NO'] ?? ''}</td>
-                                <td><input type="hidden" name="journal_line[]" value='${JSON.stringify(_tmp)}'>${_tmp['AKUN DEBET (L/R)']}</td>
-                                <td>${_tmp['AKUN KREDIT (NRC)'] ?? ''}</td> 
-                                <td>${_tmp['KODE DEPO'] ?? ''}</td>
-                                <td>${_tmp['REFERENSI'] ?? ''}</td>
-                                <td>${_tmp['DESKRIPSI'] ?? ''}</td>                                
-                                <td>${_tmp['TANGGAL'] ?? ''}</td>
-                                <td class="text-right">${Inputmask.format(_tmp['JUMLAH'] ?? 0,{alias:'numeric', 'digits': 0, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','})}</td>                                
+                              ${_trHtml.join('')}
                             </tr>
                         `)                        
                     }                    
@@ -121,7 +138,8 @@
     function xls_to_json(workbook) {
         var result = {};
         workbook.SheetNames.forEach(function (sheetName) {
-            var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {raw: false});
+            // var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {raw: false});
+            var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
             if (roa.length > 0) {
                 result[sheetName] = roa;
             }
