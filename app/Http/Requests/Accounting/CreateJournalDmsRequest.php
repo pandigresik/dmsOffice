@@ -27,7 +27,7 @@ class CreateJournalDmsRequest extends FormRequest
     public function rules()
     {
         return [
-            'branch_id' => 'required|string|max:50',
+            // 'branch_id' => 'required|string|max:50',
             'type' => 'required|string',
         ];
     }
@@ -42,7 +42,7 @@ class CreateJournalDmsRequest extends FormRequest
     public function all($keys = null)
     {
         $keys = (new JournalAccount())->fillable;
-        $keys = array_merge(['period_range'], $keys);
+        $keys = array_merge(['period_range', 'journal_line','branch_id_excel'], $keys);
 
         return parent::all($keys);
     }

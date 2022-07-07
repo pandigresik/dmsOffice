@@ -3,6 +3,7 @@
 namespace App\Repositories\Accounting;
 
 use App\Models\Accounting\JournalAccount;
+use App\Models\Accounting\JournalAccountDetail;
 use App\Repositories\BaseRepository;
 
 /**
@@ -38,6 +39,7 @@ class JournalDmsRepository extends BaseRepository
 
     public function create($input)
     {
+        $input['branch_id'] = $input['branch_id'] ?? $input['branch_id_excel'];
         $this->model->getConnection()->beginTransaction();
 
         try {
@@ -67,6 +69,13 @@ class JournalDmsRepository extends BaseRepository
                     $this->model->jurnalNeraca($input);
 
                 break;
+                case 'XLS_SCR':
+                case 'XLS_SLR':
+                case 'XLS_INS':
+                case 'XLS_AFL':
+                    $this->uploadExcelJournal($input);
+                
+                break;
                 default:
             }
             $this->model->getConnection()->commit();
@@ -87,5 +96,59 @@ class JournalDmsRepository extends BaseRepository
         $branchId = $input['branch_id'];
         $type = $input['type'];
         JournalAccount::whereBetween('date', [$startDate, $endDate])->where(['branch_id' => $branchId, 'type' => $type])->forceDelete();
+    }
+
+    private function uploadExcelJournal($input){
+        $type = $input['type'];
+        $branch_id = $input['branch_id'];
+        list($startDate, $endDate) = explode('__', $input['period_range']);
+        $journalLine = $input['journal_line'];
+        foreach($journalLine as $line){
+            $item = json_decode($line, 1);            
+            if (!isset($item['No Akun Debet (L/R)'])) {
+                continue;
+            }
+            $deskripsi = $item['Nama Karyawan'] ?? ($item['Nama'] ?? $item['Deskripsi']) ;
+            $journalDebet = JournalAccount::create([
+                'account_id' => $item['No Akun Debet (L/R)'],
+                'branch_id' => $branch_id,
+                'date' => $item['Tgl'] ?? $endDate,
+                'name' => substr($deskripsi,0, 100),
+                'debit' => $item['UPLOAD'],
+                'credit' => 0,
+                'balance' => $item['UPLOAD'],
+                'reference' => null,
+                'type' => $type,
+                'state' => 'posted',
+            ]);
+            $journalDebet->detail()->create(
+                [
+                'account_id' => $item['No Akun Debet (L/R)'],
+                'branch_id' => $branch_id,
+                'date' => $item['Tgl'] ?? $endDate,
+                'additional_info' => $item
+                ]
+            );
+            $journalCredit = JournalAccount::create([
+                'account_id' => $item['No Akun Kredit (NRC)'],
+                'branch_id' => $branch_id,
+                'date' => $item['Tgl'] ?? $endDate,
+                'name' => substr($deskripsi,0, 100),
+                'debit' => 0,
+                'credit' => $item['UPLOAD'],
+                'balance' => -1 * $item['UPLOAD'],
+                'reference' => null,
+                'type' => $type,
+                'state' => 'posted',
+            ]);
+            $journalCredit->detail()->create(
+                [
+                'account_id' => $item['No Akun Kredit (NRC)'],
+                'branch_id' => $branch_id,
+                'date' => $item['Tgl'] ?? $endDate,
+                'additional_info' => $item
+                ]
+            );
+        }
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Base\Setting;
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -120,6 +121,16 @@ class JournalAccount extends Model
     public function account(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'account_id', 'code');
+    }
+
+    /**
+     * Get the detail associated with the JournalAccount
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function detail(): HasOne
+    {
+        return $this->hasOne(JournalAccountDetail::class, 'journal_account_id');
     }
 
     public function jurnalBiaya($input)
