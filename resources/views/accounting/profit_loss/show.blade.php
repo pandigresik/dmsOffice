@@ -1,11 +1,11 @@
 @php
-    $header = [];
-    $numberFormat = ['Gaji','Man fee','Gaji SPV','PPN','PPH 23','UPLOAD'];
+    $header = [];    
+    $numberFormat = ['THP','JAMSOSTEK','KSP	KLAIM','Toko 55','Gaji','Man fee','Gaji SPV','PPN','PPH 23','UPLOAD'];
 @endphp
 <div class="table-responsive">
     <table class="table table-bordered">        
         <tbody>            
-            @forelse($balance['data'] as $index => $account)
+            @forelse($profitloss['data'] as $index => $account)
                 @if (!$index)
                     @php
                         $header = array_diff(array_keys($account['additional_info']), ['No']);

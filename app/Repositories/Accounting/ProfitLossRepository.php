@@ -3,6 +3,7 @@
 namespace App\Repositories\Accounting;
 
 use App\Models\Accounting\JournalAccount;
+use App\Models\Accounting\JournalAccountDetail;
 use App\Models\Accounting\ReportSettingAccount;
 use App\Models\Base\DmsSmBranch;
 use App\Repositories\BaseRepository;
@@ -76,6 +77,26 @@ class ProfitLossRepository extends BaseRepository
             'branchMaster' => DmsSmBranch::whereIn('szId', $branchId)->get()->keyBy('szId'),
             'listAccount' => $listAccount,
             'excludeAccount' => $excludeAccount,
+        ];
+    }
+
+    public function detail($startDate, $endDate, $accountCode, $branch)
+    {
+        $query = JournalAccountDetail::select(['account_id', 'date', 'additional_info'])        
+            ->disableModelCaching()
+            ->whereBetween('date', [$startDate, $endDate])
+            ->where('account_id', $accountCode)
+            ->orderBy('date')
+        ;
+
+        if (!empty($branch)) {
+            $query->whereIn('branch_id', $branch);
+        }
+        $data = $query->get();
+
+        return [
+            'data' => $data,
+            //'saldo' => $this->getSaldoAccount($startDate, $accountCode),
         ];
     }
 

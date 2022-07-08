@@ -81,8 +81,8 @@
                     if(in_array($account->code, $excludeAccount)) continue;                    
                 @endphp
                 <tr>
-                    <td>{{ $account->code }}</td>
-                    <td>{{ ucwords($account->name) }}</td>
+                    <td>{{ $account->code }}</td>                    
+                    <td><a href="#" data-json='{{ json_encode(["name" => $account->name, "branch" => $branch,"startDate" => $startDate, "endDate" => $endDate]) }}' data-url="{{route('accounting.balance.show', $account->code) }}" onclick="main.popupModal(this,'get');return false">{{ ucwords($account->name) }}</a></td>
                     @foreach ($branchMaster as $item)
                         @php                            
                             $pembagi = $totalPenjualan[$item->szId];
