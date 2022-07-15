@@ -73,9 +73,9 @@ class BalanceRepository extends BaseRepository
         //     $query->where(['szBranchId' => $branch]);
         // }
         $data = $query->get();
-
         return [
-            'data' => $data,
+            'data' => $data,            
+            'manual' => $this->getManualJournal($startDate, $endDate, $accountCode) 
             // 'saldo' => $this->getSaldoAccount($startDate, $accountCode),
         ];
     }
@@ -110,5 +110,17 @@ class BalanceRepository extends BaseRepository
         });
 
         return $result;
+    }
+
+    private function getManualJournal($startDate, $endDate, $accountCode){
+        $query = JournalAccount::select(['account_id', 'date', 'branch_id', 'name', 'reference', 'debit', 'credit', 'balance'])        
+            ->disableModelCaching()
+            ->whereBetween('date', [$startDate, $endDate])
+            ->where('account_id', $accountCode)
+            ->where('type', 'JM')
+            ->orderBy('date')
+        ;
+
+        return $query->get();
     }
 }

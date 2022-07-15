@@ -96,6 +96,7 @@ class ProfitLossRepository extends BaseRepository
 
         return [
             'data' => $data,
+            'manual' => $this->getManualJournal($startDate, $endDate, $accountCode, $branch)
             //'saldo' => $this->getSaldoAccount($startDate, $accountCode),
         ];
     }
@@ -118,5 +119,17 @@ class ProfitLossRepository extends BaseRepository
         });
 
         return $result;
+    }
+
+    private function getManualJournal($startDate, $endDate, $accountCode, $branch){
+        $query = JournalAccount::select(['account_id', 'date', 'branch_id', 'name', 'reference', 'debit', 'credit', 'balance'])        
+            ->disableModelCaching()
+            ->whereBetween('date', [$startDate, $endDate])
+            ->where('account_id', $accountCode)
+            ->where('type', 'JM')
+            ->orderBy('date')
+        ;
+
+        return $query->get();
     }
 }
