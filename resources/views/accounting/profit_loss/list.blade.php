@@ -82,7 +82,10 @@
                 @endphp
                 <tr>
                     <td>{{ $account->code }}</td>                    
-                    <td><a href="#" data-json='{{ json_encode(["name" => $account->name, "branch" => $branch,"startDate" => $startDate, "endDate" => $endDate]) }}' data-url="{{route('accounting.balance.show', $account->code) }}" onclick="main.popupModal(this,'get');return false">{{ ucwords($account->name) }}</a></td>
+                    <td>
+                        <a href="#" data-json='{{ json_encode(["name" => $account->name, "branch" => $branch,"startDate" => $startDate, "endDate" => $endDate]) }}' data-url="{{route('accounting.balance.show', $account->code) }}" onclick="main.popupModal(this,'get');return false">{{ ucwords($account->name) }}</a>
+                        <button class="btn"><i class="fa fa-download"></i></button>
+                    </td>
                     @foreach ($branchMaster as $item)
                         @php                            
                             $pembagi = $totalPenjualan[$item->szId];
