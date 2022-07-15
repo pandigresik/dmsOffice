@@ -112,7 +112,7 @@ class JournalDmsRepository extends BaseRepository
             $journalDebet = JournalAccount::create([
                 'account_id' => $item['No Akun Debet (L/R)'],
                 'branch_id' => $branch_id,
-                'date' => $item['Tgl'] ?? $endDate,
+                'date' => $item['Tgl'] ? \Carbon\Carbon::parse($item['Tgl']) : $endDate,
                 'name' => substr($deskripsi,0, 100),
                 'debit' => $item['UPLOAD'],
                 'credit' => 0,
@@ -125,14 +125,14 @@ class JournalDmsRepository extends BaseRepository
                 [
                 'account_id' => $item['No Akun Debet (L/R)'],
                 'branch_id' => $branch_id,
-                'date' => $item['Tgl'] ?? $endDate,
+                'date' => $item['Tgl'] ? \Carbon\Carbon::parse($item['Tgl']) : $endDate,
                 'additional_info' => $item
                 ]
             );
             $journalCredit = JournalAccount::create([
                 'account_id' => $item['No Akun Kredit (NRC)'],
                 'branch_id' => $branch_id,
-                'date' => $item['Tgl'] ?? $endDate,
+                'date' => $item['Tgl'] ? \Carbon\Carbon::parse($item['Tgl']) : $endDate,
                 'name' => substr($deskripsi,0, 100),
                 'debit' => 0,
                 'credit' => $item['UPLOAD'],
@@ -145,7 +145,7 @@ class JournalDmsRepository extends BaseRepository
                 [
                 'account_id' => $item['No Akun Kredit (NRC)'],
                 'branch_id' => $branch_id,
-                'date' => $item['Tgl'] ?? $endDate,
+                'date' => $item['Tgl'] ? \Carbon\Carbon::parse($item['Tgl']) : $endDate,
                 'additional_info' => $item
                 ]
             );

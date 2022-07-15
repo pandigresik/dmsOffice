@@ -1,0 +1,7 @@
+fix bug untuk jurnal dms dengan upload excel type afiliasi
+    Invalid datetime format: 1292 Incorrect date value: '2021-11-10T16:59:48.000Z' for column 'date' at row 1 (
+    SQL: insert into `journal_account` (`account_id`, `branch_id`, `date`, `name`, `debit`, `credit`, `balance`, `reference`, `type`, `state`, `created_by`, `updated_at`, `created_at`) 
+    values (824011, 555, 2021-11-10T16:59:48.000Z, Triplek 9 mm / MC Wood, 1029200, 0, 1029200, ?, XLS_AFL, posted, 2, 2022-07-15 14:41:18, 2022-07-15 14:41:18))
+
+Tambah icon download untuk detail neraca, general ledger dan laba rugi (profit & loss)
+Menambahkan jurnal manual ke detail neraca, general dan laba rugi
