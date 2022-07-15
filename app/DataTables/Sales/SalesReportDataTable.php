@@ -167,7 +167,7 @@ class SalesReportDataTable extends DataTable
     protected function getColumns()
     {
         $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(DmsSmBranch::pluck('szName', 'szId')->toArray()));
-        $castItems = array_merge([['text' => 'Pilih Status', 'value' => '']], convertArrayPairValueWithKey(['1' => 'Tunai', '0' => 'Tidak Tunai']));
+        $castItems = array_merge([['text' => 'Pilih Status', 'value' => '']], convertArrayPairValueWithKey(['1' => 'Tunai', '0' => 'Non Tunai']));
         $statusItems = array_merge([['text' => 'Pilih Status', 'value' => '']], convertArrayPairValueWithKey(['Applied' => 'Applied', 'Draft' => 'Draft']));
 
         return [
