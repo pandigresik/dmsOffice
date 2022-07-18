@@ -58,12 +58,11 @@ class GeneralLedgerController extends AppBaseController
         $startDate = request('startDate');
         $name = request('name');
         $branch = request('branch_id');
+        $downloadXls = request('download_xls');
         $generalLedger = $this->getRepositoryObj()->detail($startDate, $endDate, $id, $branch);
 
-        if (empty($generalLedger)) {
-            Flash::error(__('models/generalLedger.singular').' '.__('messages.not_found'));
-
-            return redirect(route('accounting.general_ledger.index'));
+        if ($downloadXls) {
+            return $this->exportExcelDetail(['generalLedger' => $generalLedger, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
         }
 
         return view('accounting.general_ledger.show')->with(['generalLedger' => $generalLedger, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
@@ -94,5 +93,22 @@ class GeneralLedgerController extends AppBaseController
         $fileName = 'gl_'.$endDate;
 
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
+    }
+
+    private function exportExcelDetail($data)
+    {
+        $endDate = $data['endDate'];
+        $startDate = $data['startDate'];
+        $collection = $data['generalLedger'];
+        $name = $data['name'];
+        $accountCode = $data['accountCode'];
+
+        $modelEksport = '\\App\Exports\\Template\\Accounting\\GeneralLedgerDetailExport';
+        $fileName = 'gl_detail_'.$accountCode.'_'.$endDate;
+
+        return (new $modelEksport($collection))
+            ->setAccountCode($accountCode)
+            ->setName($name)
+            ->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }
 }

@@ -56,13 +56,12 @@ class BalanceController extends AppBaseController
     {
         $endDate = request('endDate');
         $startDate = request('startDate');
-        $name = request('name');        
+        $name = request('name');  
+        $downloadXls = request('download_xls');      
         $balance = $this->getRepositoryObj()->detail($startDate, $endDate, $id);
         
-        if (empty($balance)) {
-            Flash::error(__('models/balance.singular').' '.__('messages.not_found'));
-
-            return redirect(route('accounting.balance.index'));
+        if ($downloadXls) {
+            return $this->exportExcelDetail(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
         }
 
         return view('accounting.balance.show')->with(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
@@ -90,5 +89,22 @@ class BalanceController extends AppBaseController
         $fileName = 'neraca_'.$endDate;
 
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
+    }
+
+    private function exportExcelDetail($data)
+    {
+        $endDate = $data['endDate'];
+        $startDate = $data['startDate'];
+        $collection = $data['balance'];
+        $name = $data['name'];
+        $accountCode = $data['accountCode'];
+
+        $modelEksport = '\\App\Exports\\Template\\Accounting\\BalanceDetailExport';
+        $fileName = 'detail_'.$accountCode.'_'.$endDate;
+
+        return (new $modelEksport($collection))
+            ->setAccountCode($accountCode)
+            ->setName($name)
+            ->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }
 }
