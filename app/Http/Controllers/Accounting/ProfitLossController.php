@@ -48,31 +48,7 @@ class ProfitLossController extends AppBaseController
 
         return view('accounting.profit_loss.index')->with($this->getOptionItems());
     }
-
-
-    /**
-     * Display detail the specified GeneralLedger.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function show($id)
-    {
-        $endDate = request('endDate');
-        $startDate = request('startDate');
-        $name = request('name');
-        $branch = request('branch_id');
-        $profitLoss = $this->getRepositoryObj()->detail($startDate, $endDate, $id, $branch);
-
-        if (empty($generalLedger)) {
-            Flash::error(__('models/generalLedger.singular').' '.__('messages.not_found'));
-
-            return redirect(route('accounting.profit_loss.index'));
-        }
-
-        return view('accounting.profit_loss.show')->with(['profitloss' => $profitLoss, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
-    }
+    
 
     /**
      * Provide options item based on relationship model ProfitLoss from storage.
@@ -98,5 +74,5 @@ class ProfitLossController extends AppBaseController
         $fileName = 'profit_loss_depo'.$startDate.'_'.$endDate;
 
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
-    }
+    }    
 }
