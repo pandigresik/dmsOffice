@@ -103,6 +103,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('transferCashBanks', App\Http\Controllers\Accounting\TransferCashBankController::class, ["as" => 'accounting']);
         Route::resource('summaryCost', App\Http\Controllers\Accounting\SummaryCostController::class, ['as' => 'accounting'])->only(['index']);
         Route::resource('reportTransferCash', App\Http\Controllers\Accounting\ReportTransferCashController::class, ['as' => 'accounting'])->only(['index']);
+        Route::resource('reportPayable', App\Http\Controllers\Accounting\ReportPayableController::class, ['as' => 'accounting'])->only(['index']);
     });
 
     Route::group(['prefix' => 'sales'], function () {
