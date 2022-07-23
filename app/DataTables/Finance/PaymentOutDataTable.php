@@ -3,6 +3,7 @@
 namespace App\DataTables\Finance;
 
 use App\DataTables\BaseDataTable as DataTable;
+use App\Models\Finance\Payment;
 use App\Models\Finance\PaymentOut;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
@@ -13,7 +14,7 @@ class PaymentOutDataTable extends DataTable
      * example mapping filter column to search by keyword, default use %keyword%.
      */
     private $columnFilterOperator = [
-        //'name' => \App\DataTables\FilterClass\MatchKeyword::class,
+        'state' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
 
     private $mapColumnSearch = [
@@ -49,7 +50,14 @@ class PaymentOutDataTable extends DataTable
      */
     public function query(PaymentOut $model)
     {
-        return $model->whereType(PaymentOut::TYPE)->readyToPay()->newQuery();
+        /** 3 adalah index column state */
+        $searchState = $this->request()->columnKeyword(3);
+        if(empty($searchState)){
+            return $model->whereType(PaymentOut::TYPE)->readyToPay()->newQuery();
+        }else{
+            return $model->whereType(PaymentOut::TYPE)->newQuery();
+        }
+        
     }
 
     /**
@@ -119,11 +127,12 @@ class PaymentOutDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $stateItem = convertArrayPairValueWithKey([Payment::READY_PAY => Payment::READY_PAY, Payment::PAY => Payment::PAY]);
         return [
             'number' => new Column(['title' => __('models/payments.fields.number'), 'data' => 'number', 'searchable' => true, 'elmsearch' => 'text']),
             'type' => new Column(['title' => __('models/payments.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
             'reference' => new Column(['title' => __('models/payments.fields.reference'), 'data' => 'reference', 'searchable' => true, 'elmsearch' => 'text']),
-            'state' => new Column(['title' => __('models/payments.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text']),
+            'state' => new Column(['title' => __('models/payments.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem]),
             'estimate_date' => new Column(['title' => __('models/payments.fields.estimate_date'), 'data' => 'estimate_date', 'searchable' => true, 'elmsearch' => 'text']),
             'pay_date' => new Column(['title' => __('models/payments.fields.pay_date'), 'data' => 'pay_date', 'searchable' => true, 'elmsearch' => 'text']),
             'amount' => new Column(['title' => __('models/payments.fields.amount'), 'data' => 'amount', 'searchable' => true, 'elmsearch' => 'text']),

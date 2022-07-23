@@ -2,6 +2,7 @@
 
 namespace App\Models\Purchase;
 
+use App\Models\Base\DmsApSupplier;
 use App\Models\Base\DmsSmBranch;
 use App\Models\BaseEntity as Model;
 use App\Models\Inventory\DmsInvCarrier;
@@ -192,6 +193,11 @@ class BtbValidate extends Model
     public function ekspedisi(): BelongsTo
     {
         return $this->belongsTo(DmsInvCarrier::class, 'dms_inv_carrier_id', 'szId');
+    }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(DmsApSupplier::class, 'partner_id', 'szId');
     }
 
     public function branch(): BelongsTo
