@@ -58,7 +58,7 @@
     function downloadXls(elm) {
         const _form = $(elm).closest('form')
         const _url = _form.attr('action')
-        const _json = {'download_xls' : 1, 'v': moment.now(), 'period_range': _form.find('input[name=period_range]').val(), 'type': _form.find('input[name=type]').val()}
+        const _json = {'download_xls' : 1, 'period_range': _form.find('input[name=period_range]').val(), 'type': _form.find('select[name=type]').val()}
 
         $.redirect(
             _url, 

@@ -36,7 +36,7 @@ class ReportPayableController extends AppBaseController
         }
 
         if ($downloadXls) {
-            return $this->exportExcel($startDate, $endDate, $datas);
+            return $this->exportExcel($startDate, $endDate, $datas, $type);
         }
 
         return view('accounting.report_payable.index')->with($this->getOptionItems());
@@ -56,11 +56,11 @@ class ReportPayableController extends AppBaseController
         ];
     }
 
-    private function exportExcel($startDate, $endDate, $collection)
+    private function exportExcel($startDate, $endDate, $collection, $type)
     {
-        $modelEksport = '\\App\Exports\\Template\\Accounting\\ReportTransferCashExport';
-        $fileName = 'mutasi_harian_'.$startDate.'_'.$endDate;
+        $modelEksport = '\\App\Exports\\Template\\Accounting\\ReportPayableExport';
+        $fileName = 'laporan_hutang_'.$startDate.'_'.$endDate;
 
-        return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
+        return (new $modelEksport($collection))->setType($type)->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }
 }
