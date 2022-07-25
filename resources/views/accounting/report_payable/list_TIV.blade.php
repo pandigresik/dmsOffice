@@ -4,8 +4,8 @@
 <div class="table-responsive">
     <div class="text-center">
         <h3>Laporan Hutang</h3>
-    </div>
-    <caption>Periode {{ localFormatDate($startDate) }} sd {{ localFormatDate($endDate) }}</caption>
+        <h4>Periode {{ localFormatDate($startDate) }} sd {{ localFormatDate($endDate) }}</h4>
+    </div>    
     <table class="table table-bordered">
         <thead>
             <tr>
