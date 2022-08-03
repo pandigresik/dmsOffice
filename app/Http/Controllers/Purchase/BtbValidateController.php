@@ -174,14 +174,14 @@ class BtbValidateController extends AppBaseController
      */
     private function getOptionItems()
     {
-        $btbItems = ListBtbValidate::all();
-        $btbDataOptions = $btbItems->keyBy('reference_id')->toArray();
+        // $btbItems = (new ListBtbValidate)->canValidate();
+        // $btbDataOptions = $btbItems->keyBy('reference_id')->toArray();
         $branch = new DmsSmBranchRepository(app());
 
         return [
             'branchItems' => ['' => 'Semua'] + $branch->pluck([], null, null, 'szId', 'szName'),
-            'btbItems' => ['' => __('crud.option.btbitems_placeholder')] + $btbItems->pluck('full_identity', 'reference_id')->toArray(),
-            'btbDataOptions' => $btbDataOptions,
+            //'btbItems' => ['' => __('crud.option.btbitems_placeholder')] + $btbItems->pluck('full_identity', 'reference_id')->toArray(),
+            //'btbDataOptions' => $btbDataOptions,
         ];
     }
 }
