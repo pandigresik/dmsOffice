@@ -1,0 +1,4 @@
+ALTER TABLE deliverydms.btb_validate 
+DEFAULT CHARSET=utf8;
+ALTER TABLE trip_ekspedisi  CONVERT TO CHARACTER SET utf8
+ALTER TABLE location  CONVERT TO CHARACTER SET utf8
