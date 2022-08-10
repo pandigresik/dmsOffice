@@ -27,16 +27,17 @@
                 $btbNumberPrev = '';
             @endphp            
             @forelse($datas as $data)
+
+            @if ($data->price <= 0)
+                @continue;
+            @endif
             @php
                 $skip = 0;
                 if($btbNumberPrev == $data->no_btb){
                     $skip = 1;
                 }
                 $btbNumberPrev = $data->no_btb;
-            @endphp
-            @if ($data->price <= 0)
-                @continue;
-            @endif
+            @endphp            
 
             <tr>
                 <td>{{ $data->jenis }}</td>
