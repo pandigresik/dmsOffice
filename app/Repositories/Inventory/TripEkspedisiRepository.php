@@ -37,4 +37,8 @@ class TripEkspedisiRepository extends BaseRepository
     {
         return TripEkspedisi::class;
     }
+
+    public function cleaning($idEkspedisi){
+        $this->model->where(['dms_inv_carrier_id' => $idEkspedisi])->doesnthave('price')->forceDelete();        
+    }
 }
