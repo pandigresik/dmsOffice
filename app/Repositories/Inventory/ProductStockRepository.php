@@ -78,7 +78,7 @@ select z.*,z.szProductId as product_id, (z.diff_price * z.qty_in_change) as peng
 						and szLocationType = 'WAREHOUSE'
 						and szReportedAsId = '{$branch}'
 						and szTrnId in ('DMSDocStockInBranch','DMSDocStockInDistribution','DMSDocStockInSupplier') 
-						and dtmTransaction between '{$startDate}' and (select max(start_date) from product_price_log where product_id COLLATE utf8mb4_unicode_ci = x.szProductId and start_date <= '{$endDate}') )
+						and dtmTransaction between '{$startDate}' and (select max(start_date) from product_price_log where product_id = x.szProductId and start_date <= '{$endDate}') )
                                 ,0)			 
 			else 0 
 		end qty_in_change
@@ -100,14 +100,14 @@ group by dis.szProductId, dip.szName
 )x left join (
         -- stock akhir bulan kemarin sebagai stock awal
 	select ps.product_id, ps.price, ps.last_stock from product_stock ps where period = '{$previousPeriod}'
-)y on x.szProductId = y.product_id COLLATE utf8mb4_unicode_ci 
+)y on x.szProductId = y.product_id 
 left join (
 	select ppl.product_id, ppl.dpp_price as price
 	from product_price_log ppl 
 	join ( 
 	select max(id) as id from product_price_log ppl where ppl.start_date <= '{$endDate}' and ( end_date is null or end_date >= '{$endDate}' ) group by product_id
 	) last_id on last_id.id = ppl.id
-) current_price on current_price.product_id = x.szProductId COLLATE utf8mb4_unicode_ci
+) current_price on current_price.product_id = x.szProductId 
 )z
 SQL;
 
