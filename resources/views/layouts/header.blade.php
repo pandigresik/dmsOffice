@@ -52,8 +52,14 @@
             <div class="dropdown-header bg-light py-2"><strong>Settings</strong></div><a class="dropdown-item"
                     href="#">
                     <i class="cil-user"></i>
-                    Profile</a><a class="dropdown-item" href="#">
+                    Profile</a>
+                    <a class="dropdown-item" href="{{ route('password.change') }}">
+                    <i class="cil-lock-locked"></i>
+                    Change Password</a>                    
+                    
+
                 <!--
+                    <a class="dropdown-item" href="#">
                     <i class="cil-settings"></i>                    
                     Settings</a>
                     

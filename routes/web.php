@@ -20,6 +20,8 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tes', [App\Http\Controllers\HomeController::class, 'tes']);
+Route::get('password.change', [\App\Http\Controllers\Auth\ChangePasswordController::class, 'showResetForm'])->name('password.change');
+Route::post('password.change', [\App\Http\Controllers\Auth\ChangePasswordController::class, 'reset'])->name('password.change');
 
 //Route::group(['middleware' => ['auth','role:administrator']],function (){
 Route::group(['middleware' => ['auth']], function () {

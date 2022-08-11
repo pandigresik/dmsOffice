@@ -53,7 +53,7 @@
                     $totalHeader[$key] += $totalItem;
                     
                     if($key == 'JML YG HARUS DISETOR'){                        
-                        $totalItem = $totalBaris['PENJUALAN'] + $totalBaris['PELUNASAN PIUTANG'] + $totalBaris['EMBALASI'] + $totalBaris['TITIPAN TUNAI'] + $totalBaris['PENDAPATAN LAIN2'] - $totalBaris['BIAYA OPRSL'];                        
+                        $totalItem = $totalBaris['PENJUALAN'] + $totalBaris['PELUNASAN PIUTANG'] + $totalBaris['EMBALASI'] + $totalBaris['TITIPAN TUNAI'] + $totalBaris['PENDAPATAN LAIN2'] - $totalBaris['BIAYA OPRSL'];
                     }
                     
                     $totalBaris[$key] = $totalItem;
