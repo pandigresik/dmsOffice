@@ -33,6 +33,8 @@ class TripEkspedisiController extends AppBaseController
      */
     public function index(Request $request)
     {
+        // bersihkan dulu data yang salah, ada trip_ekspedisi namun tidak ada price
+        $this->getRepositoryObj()->cleaning($request->get('dms_inv_carrier_id'));
         $trips = $this->getRepositoryObj()->with(['trip', 'lastPrice'])
             ->allQuery()->where(['dms_inv_carrier_id' => $request->get('dms_inv_carrier_id')])->get()->map(function ($q) {
                 $q->trip->price = $q->lastPrice->getRawOriginal('price');
