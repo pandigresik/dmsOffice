@@ -39,23 +39,16 @@
                     switch ($key) {
                         case 'BIAYA OPRSL':
                             $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit') + $groupTgl->whereIn('account_id', $item)->sum('debit');
-                            break;
-                        // case 'BANK DIREKSI':
-                        //     $totalItem = $groupTgl->whereIn('account_id', $item)->sum('debit');
-                        //     break;
-                        // case 'SETORAN  LIVIA/SEJATI55':
-                        //     $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit');
-                        //     break;
+                            $totalItem -= $totalBaris['EMBALASI'] ?? 0;
+                            break;                        
                         default:
                             $totalItem = $groupTgl->whereIn('account_id', $item)->sum('credit') - $groupTgl->whereIn('account_id', $item)->sum('debit');
                     }                    
                     
-                    $totalHeader[$key] += $totalItem;
-                    
                     if($key == 'JML YG HARUS DISETOR'){                        
-                        $totalItem = $totalBaris['PENJUALAN'] + $totalBaris['PELUNASAN PIUTANG'] + $totalBaris['EMBALASI'] + $totalBaris['TITIPAN TUNAI'] + $totalBaris['PENDAPATAN LAIN2'] - $totalBaris['BIAYA OPRSL'];                        
+                        $totalItem = $totalBaris['PENJUALAN'] + $totalBaris['PELUNASAN PIUTANG'] + $totalBaris['TITIPAN TUNAI'] + $totalBaris['PENDAPATAN LAIN2'] - ( $totalBaris['BIAYA OPRSL'] + $totalBaris['EMBALASI'] );
                     }
-                    
+                    $totalHeader[$key] += $totalItem;                    
                     $totalBaris[$key] = $totalItem;
 
                 @endphp                
