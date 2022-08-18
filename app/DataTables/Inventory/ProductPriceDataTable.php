@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Column;
 
 class ProductPriceDataTable extends DataTable
 {
+    protected $fastExcel = false;
     /**
      * example mapping filter column to search by keyword, default use %keyword%.
      */
@@ -73,11 +74,11 @@ class ProductPriceDataTable extends DataTable
                 'className' => 'btn btn-default btn-sm no-corner',
                 'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
             ],
-            [
-                'extend' => 'import',
-                'className' => 'btn btn-default btn-sm no-corner',
-                'text' => '<i class="fa fa-upload"></i> '.__('auth.app.import').'',
-            ],
+            // [
+            //     'extend' => 'import',
+            //     'className' => 'btn btn-default btn-sm no-corner',
+            //     'text' => '<i class="fa fa-upload"></i> '.__('auth.app.import').'',
+            // ],
             [
                 'extend' => 'print',
                 'className' => 'btn btn-default btn-sm no-corner',
