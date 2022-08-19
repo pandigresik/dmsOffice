@@ -43,7 +43,7 @@ class ProfitLossController extends AppBaseController
             $priceChoice = $request->get('price_choice');
             $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId, $priceChoice);
 
-            return $this->exportExcel($startDate, $endDate, $datas);
+            return $this->exportExcel($startDate, $endDate, $datas, $branchId);
         }
 
         return view('accounting.profit_loss.index')->with($this->getOptionItems());
@@ -68,11 +68,11 @@ class ProfitLossController extends AppBaseController
         ];
     }
 
-    private function exportExcel($startDate, $endDate, $collection)
+    private function exportExcel($startDate, $endDate, $collection, $branchId)
     {
         $modelEksport = '\\App\Exports\\Template\\Accounting\\ProfitLossExport';
         $fileName = 'profit_loss_depo'.$startDate.'_'.$endDate;
 
-        return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
+        return (new $modelEksport($collection))->setBranch($branchId)->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }    
 }
