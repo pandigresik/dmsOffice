@@ -165,7 +165,7 @@ class AccountMoveController extends AppBaseController
         $branch = new DmsSmBranchRepository(app());
 
         return [
-            'branchItems' => $branch->pluck([], null, null, 'szId', 'szName'),
+            'branchItems' => ['PT' => 'PT'] + $branch->pluck([], null, null, 'szId', 'szName'),
             'accountItems' => ['' => __('crud.option.ekspedisi_placeholder')] + $accountData->pluck('code', 'code')->toArray(),
             'accountOptionItems' => $accountOptionItems,
         ];
