@@ -17,6 +17,7 @@ class ProfitLossExport implements FromView
     protected $collection;
     private $startDate;
     private $endDate;
+    private $branch;
 
     public function __construct(array $collection)
     {
@@ -32,6 +33,7 @@ class ProfitLossExport implements FromView
             'excludeAccount' => $this->collection['excludeAccount'],
             'startDate' => $this->getStartDate(),
             'endDate' => $this->getEndDate(),
+            'branch' => $this->getBranch()
         ]);
     }
 
@@ -75,6 +77,26 @@ class ProfitLossExport implements FromView
     public function setStartDate($startDate)
     {
         $this->startDate = $startDate;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of branch
+     */ 
+    public function getBranch()
+    {
+        return $this->branch;
+    }
+
+    /**
+     * Set the value of branch
+     *
+     * @return  self
+     */ 
+    public function setBranch($branch)
+    {
+        $this->branch = $branch;
 
         return $this;
     }
