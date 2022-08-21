@@ -25,7 +25,7 @@
                 <td>{{ $item->depo->szName ?? '-' }}</td>                
                 <td>{{ localFormatDate($item->bkbDate) }}</td>
                 <td>{{ $item->bkb->szCustomerId }}</td>
-                <td>{{ $item->bkb->customer->szHierarchyId ?? '-'  }}</td>
+                <td>{{ $item->bkb->customer->szHierarchyFull ?? '-'  }}</td>
                 <td>{{ $item->bkb->customer->szName ?? '-'  }}</td>
                 <td>{{ $item->bkb->customer->address->fullAddress ?? '-'  }}</td>
                 <td>{{ $item->szDocId  }}</td>

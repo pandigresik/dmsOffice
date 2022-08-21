@@ -136,7 +136,7 @@ class DmsArCustomer extends Model
         'dtmLastUpdated' => 'datetime',
         'szMCOId' => 'string',
     ];
-
+    
     /**
      * Get all of the contactCustomers for the DmsArCustomer.
      */
