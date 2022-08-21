@@ -5,7 +5,8 @@
                 <th rowspan="2">No</th>                
                 <th rowspan="2">Tanggal</th>
                 <th rowspan="2">ID Pelanggan</th>
-                <th rowspan="2">Nama</th>
+                <th rowspan="2">Segment</th>
+                <th rowspan="2">Nama</th>                
                 <th rowspan="2">Alamat</th>
                 <th rowspan="2">No. DO</th>
                 <th rowspan="2">Sales</th>
@@ -28,7 +29,8 @@
                     <td>{{ ++$number }}</td>                    
                     <td>{{ localFormatDate($data->bkb->dtmDoc) }}</td>
                     <td>{{ $data->bkb->szCustomerId }}</td>
-                    <td>{{ $data->bkb->customer->szName ?? '-' }}</td>
+                    <td>{{ $data->bkb->customer->szHierarchyFull ?? '-' }}</td>
+                    <td>{{ $data->bkb->customer->szName ?? '-' }}</td>                    
                     <td>{{ $data->bkb->customer->address->fullAddress ?? '-' }}</td>
                     <td>{{ $data->szDocId }}</td>
                     <td>{{ $data->bkb->sales->szName ?? '-' }}</td>                                                        
