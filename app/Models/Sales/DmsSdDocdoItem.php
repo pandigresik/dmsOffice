@@ -444,6 +444,13 @@ class DmsSdDocdoItem extends Model
                 }
 
                 break;
+            case 'combomix':
+                // untuk combo hanya dihitung satu kali aja
+                if (!$this->getSkipCountComboPromo()) {
+                    $this->discountMix($discount);
+                }
+
+                break;
             case 'extension':
                 $this->discountExtension($discount);
 
@@ -491,7 +498,8 @@ class DmsSdDocdoItem extends Model
             $productDiscount = in_array($this->szProductId, $listMainProduct) ? true : false;
 
             if ($productDiscount) {
-                $qtyQuotaNota = $this->attributes['decQty'] > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $this->attributes['decQty'];
+                $qtyQuotaNota = $this->convertToBox($this->attributes['decQty'], $discount);
+                $qtyQuotaNota = $qtyQuotaNota > $discount->getRawOriginal('max_quota') ? $discount->getRawOriginal('max_quota') : $qtyQuotaNota;
                 foreach ($discount->details as $d) {
                     if ($qtyQuotaNota >= $d->getRawOriginal('min_main_qty') && $qtyQuotaNota <= $d->getRawOriginal('max_main_qty')) {
                         if ('principle' == $discount->type) {
@@ -614,6 +622,51 @@ class DmsSdDocdoItem extends Model
         }
     }
 
+    /** produk yang di mix, maka keduanya harus dibeli dalam satu nota */
+    private function discountMix($discount)
+    {
+        $customerHasDiscount = $this->customerHasDiscount($discount);
+
+        if ($customerHasDiscount) {
+            $listMainProduct = explode(',', $discount->main_dms_inv_product_id);
+            $productDiscount = in_array($this->szProductId, $listMainProduct) ? true : false;
+
+            if ($productDiscount) {
+                /** get other product in this nota */
+                $totalNota = $this->getOtherItem()->whereIn('szProductId', $listMainProduct)->sum('decQty');
+                $qtyQuotaNota = $this->attributes['decQty'];
+
+                if ($qtyQuotaNota < $totalNota) {
+                    $totalNota = $this->convertToBox($totalNota, $discount);
+                    if ($totalNota > $discount->getRawOriginal('max_quota')) {
+                        $totalNota = $discount->getRawOriginal('max_quota');
+                    }
+                    
+                    $selectedPackage = [];
+                    foreach ($discount->details as $d) {
+                        if ($totalNota >= $d->getRawOriginal('min_main_qty')) {
+                            $selectedPackage = $d;
+                        }
+                    }
+
+                    if (!empty($selectedPackage)) {
+                        if ('principle' == $discount->type) {
+                            $this->discounts['principle'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
+                            $this->discounts['distributor'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->distributor_amount * $totalNota];
+                        } else {
+                            $this->discounts['internal'][] = ['name' => $discount->name, 'id' => $discount->id, 'amount' => $selectedPackage->principle_amount * $totalNota];
+                        }
+                    }
+
+                    /**  update qty agar sesuai tampilan detailnya */
+                    $this->attributes['decQty'] = $totalNota;
+                }
+
+                //}
+            }
+        }
+    }
+
     private function discountCombo($discount)
     {
         $customerHasDiscount = $this->customerHasDiscount($discount);
@@ -653,7 +706,7 @@ class DmsSdDocdoItem extends Model
     }
 
     private function convertToBox($value, $discount)
-    {
+    {        
         return floor($value / $discount->attributes['conversion_main_dms_inv_product_id']);
     }
 }

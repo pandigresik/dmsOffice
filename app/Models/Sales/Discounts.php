@@ -89,7 +89,7 @@ class Discounts extends Model
 
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    const OPTION_ITEM_JENIS = ['promo', 'bundling', 'combine', 'kontrak', 'combo', 'extension'];
+    const OPTION_ITEM_JENIS = ['promo', 'bundling', 'combine', 'kontrak', 'combo', 'extension', 'combomix'];
     const OPTION_ITEM_SEGMENT = ['customer_segment', 'customer'];
     const OPTION_ITEM_TYPE = ['principle', 'internal'];
 

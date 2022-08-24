@@ -127,7 +127,7 @@ class ShippingCostManual extends Model
 
     public function scopeCanInvoicedExpedition($query)
     {
-        return $query->whereNull('invoiced_expedition');
+        return $query->where('invoiced_expedition',0);
     }
 
     public function scopeCanInvoicedEkspedisi($query, $ekspedisiId, $listDoc = [])
@@ -159,6 +159,11 @@ class ShippingCostManual extends Model
     public function getAmountAttribute($value)
     {
         return intval($value);
+    }
+
+    public function getPriceAttribute($value)
+    {
+        return localNumberFormat($value, 0);
     }
 
     /**

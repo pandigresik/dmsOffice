@@ -64,6 +64,11 @@ class DiscountsRepository extends BaseRepository
             $discountDetails = $input['discount_details'];
             $discountMembers = $input['discount_members'];
             $period = explode('__', $input['period']);
+            /** ambil main_dms_inv_product_id dari detail discount */
+            $input['main_dms_inv_product_id'] = $input['discount_details']['main_dms_inv_product_id'][0];
+            if(isset($input['discount_details']['bundling_dms_inv_product_id'])){
+                $input['bundling_dms_inv_product_id'] = $input['discount_details']['bundling_dms_inv_product_id'][0];
+            }
             $input['start_date'] = $period[0];
             $input['end_date'] = $period[1];
             $input['split'] = $input['split'] ?? 0;
@@ -89,12 +94,16 @@ class DiscountsRepository extends BaseRepository
 
     public function update($input, $id)
     {
-        $this->model->getConnection()->beginTransaction();
-
+        $this->model->getConnection()->beginTransaction();        
         try {
             $discountDetails = $input['discount_details'];
             $discountMembers = $input['discount_members'];
             $period = explode('__', $input['period']);
+            /** ambil main_dms_inv_product_id dari detail discount */
+            $input['main_dms_inv_product_id'] = $input['discount_details']['main_dms_inv_product_id'][0];
+            if(isset($input['discount_details']['bundling_dms_inv_product_id'])){
+                $input['bundling_dms_inv_product_id'] = $input['discount_details']['bundling_dms_inv_product_id'][0];
+            }
             $input['start_date'] = $period[0];
             $input['end_date'] = $period[1];
             $input['split'] = $input['split'] ?? 0;
