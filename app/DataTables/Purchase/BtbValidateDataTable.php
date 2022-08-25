@@ -53,7 +53,9 @@ class BtbValidateDataTable extends DataTable
      */
     public function query(BtbValidate $model)
     {
-        return $model->with(['ekspedisi', 'branch'])->whereInvoiced(0)->newQuery();
+        return $model->with(['ekspedisi', 'branch'])->where(function($q){
+            $q->whereInvoiced(0)->orWhere('invoiced_expedition',0);
+        })->newQuery();
     }
 
     /**
