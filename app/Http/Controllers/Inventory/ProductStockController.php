@@ -153,9 +153,9 @@ class ProductStockController extends AppBaseController
     private function getOptionItems()
     {
         $branch = new DmsSmBranchRepository(app());
-
+        $user = \Auth::user();
         return [
-            'branchItems' => ['' => 'Pilih depo'] + $branch->pluck([], null, null, 'szId', 'szName'),
+            'branchItems' => ['' => 'Pilih depo'] + config('entity.gudangPusat')[$user->entity_id] + $branch->pluck([], null, null, 'szId', 'szName'),
         ];
     }
 }

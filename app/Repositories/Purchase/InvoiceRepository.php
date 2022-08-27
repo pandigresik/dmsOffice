@@ -56,36 +56,54 @@ class InvoiceRepository extends BaseRepository
      */
     public function create($input)
     {
-        $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN['supplier'];
-        if (isset($input['ekspedisi_id'])) {
-            $input['partner_type'] = 'ekspedisi';
-            $input['partner_id'] = $input['ekspedisi_id'];
-            unset($input['ekspedisi_id']);
-            $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN['ekspedisi'];
-        } else {
-            $input['partner_type'] = 'supplier';
-        }
-        $model = $this->model->newInstance($input);
-        $invoiceLine = $input['invoice_line'];
-        $invoiceBkb = $input['invoice_bkb'] ?? [];
-        $model->number = $model->getNextNumber();
-        $model->type = 'in';
-        $model->state = Invoice::DEFAULT_STATE;
-        $model->amount_discount = 0;
-        $model->qty = $invoiceLine ? count($invoiceLine) : 0;
-        $model->reference = $model->external_reference;
-        $model->amount_total = $input['amount'] - $model->getRawOriginal('amount_discount');
-        $model->save();
-        $model->invoiceUsers()->create([
-            'state' => $model->getRawOriginal('state'),
-        ]);
-        $this->setInvoiceLines($invoiceLine, $model);
-        $this->setInvoiceBkb($invoiceBkb, $model);
-        $model->btb()->update([$btbInvoicedColumn => 1]);
-        if ('ekspedisi' == $input['partner_type']) {
-            $model->shippingCost()->update([$btbInvoicedColumn => 1]);
-        }
+        $this->model->getConnection()->beginTransaction();
+        try {
+            $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN['supplier'];
+            if (isset($input['ekspedisi_id'])) {
+                $input['partner_type'] = 'ekspedisi';
+                $input['partner_id'] = $input['ekspedisi_id'];
+                unset($input['ekspedisi_id']);
+                $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN['ekspedisi'];
+            } else {
+                $input['partner_type'] = 'supplier';
+            }
+            $model = $this->model->newInstance($input);
+            $invoiceLine = $input['invoice_line'];
+            $invoiceBkb = $input['invoice_bkb'] ?? [];
+            $model->number = $model->getNextNumber();
+            $model->type = 'in';
+            $model->state = Invoice::DEFAULT_STATE;
+            $model->amount_discount = 0;
+            $model->qty = $invoiceLine ? count($invoiceLine) : 0;
+            $model->reference = $model->external_reference;
+            $model->amount_total = $input['amount'] - $model->getRawOriginal('amount_discount');
+            $model->save();
+            $model->invoiceUsers()->create([
+                'state' => $model->getRawOriginal('state'),
+            ]);
+            $this->setInvoiceLines($invoiceLine, $model);
+            $this->setInvoiceBkb($invoiceBkb, $model);
+            $model->btb()->update([$btbInvoicedColumn => 1]);
+            if ('ekspedisi' == $input['partner_type']) {
+                $model->shippingCost()->update([$btbInvoicedColumn => 1]);
+            }
+            /** pastikan amount pada header = total invoice line */
+            $invoiceLineSum = $model->invoiceLines->sum(function($v){
+                return $v->getRawOriginal('price') * $v->getRawOriginal('qty');
+            });
 
+            if($model->getRawOriginal('amount') == $invoiceLineSum){
+                $this->model->getConnection()->commit();
+            }else{
+                $this->model->getConnection()->rollBack();
+                \Log::error('Nilai amount invoice ('.$model->getRawOriginal('amount').') dan total detail ('.$invoiceLineSum.') tidak sama ');
+            }            
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            $this->model->getConnection()->rollBack();
+
+            return $e;
+        }
         return $model;
     }
 
@@ -175,12 +193,12 @@ class InvoiceRepository extends BaseRepository
     private function setInvoiceBkb($invoiceBkb, $model)
     {
         if (!empty($invoiceBkb)) {
-            $model->invoiceBkb()->forceDelete();            
+            $model->invoiceBkb()->forceDelete();
             foreach ($invoiceBkb as $bkb) {
                 $line = json_decode($bkb, 1);
-                if(isset($line['ID. DOKUMEN'])){
+                if (isset($line['ID. DOKUMEN'])) {
                     $model->invoiceBkb()->create(['references' => $line['ID. DOKUMEN'], 'additional_info' => $line]);
-                }                
+                }
             }
         }
     }

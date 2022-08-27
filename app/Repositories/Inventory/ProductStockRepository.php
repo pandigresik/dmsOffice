@@ -55,6 +55,8 @@ class ProductStockRepository extends BaseRepository
 
     public function generate($data)
     {
+        $user = \Auth::user();
+        $gudangPusat = config('entity.gudangPusat')[$user->entity_id];
         $period = $data['period'];
         $startDate = $period.'-01';
         $endDate = Carbon::createFromFormat('Y-m-d', $startDate)->endOfMonth()->format('Y-m-d');
@@ -62,6 +64,11 @@ class ProductStockRepository extends BaseRepository
         $branch = $data['branch_id'];
         $settingCompany = Setting::pluck('value', 'code');
         $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+
+        $historyTable = 'dms_inv_stockhistory';
+        if (isset($gudangPusat[$branch])) {
+            $historyTable = 'gdpusat.dms_inv_stockhistory';
+        }
 
         $sql = <<<SQL
 select z.*,z.szProductId as product_id, (z.diff_price * z.qty_in_change) as pengurang from (
@@ -73,7 +80,7 @@ select z.*,z.szProductId as product_id, (z.diff_price * z.qty_in_change) as peng
                 end diff_price,
 		case when COALESCE(y.price,0) != COALESCE(current_price.price, 0) 
                 then
-			coalesce((select sum(decQtyOnHand) from dms_inv_stockhistory 
+			coalesce((select sum(decQtyOnHand) from {$historyTable} 
 					where szProductId = x.szProductId
 						and szLocationType = 'WAREHOUSE'
 						and szReportedAsId = '{$branch}'
@@ -93,13 +100,13 @@ select dis.szProductId, dip.szName,
 --         sum(case when dis.szTrnId = 'DMSDocDo' then dis.decQtyOnHand else 0 end) as 'DOCDO',
         sum(case when dis.szTrnId = 'DMSDocStockMorph' then abs(dis.decQtyOnHand) else 0 end) as 'morphing',
         sum(case when dis.szTrnId = 'DMSDocStockTrfBetweenWarehouse' then abs(dis.decQtyOnHand) else 0 end) as 'transfer'
-from dms_inv_stockhistory dis
+from {$historyTable} dis
 join (select dip.szId, dip.szName from dms_inv_product dip where dtmEndDate >= '{$startDate}' ) dip on dip.szId = dis.szProductId 
 where dis.szLocationType = 'WAREHOUSE' and dis.dtmTransaction BETWEEN '{$startDate}' and '{$endDate}' and dis.szReportedAsId = '{$branch}' and dis.szProductId not in ({$kodeGalon})
 group by dis.szProductId, dip.szName
 )x left join (
         -- stock akhir bulan kemarin sebagai stock awal
-	select ps.product_id, ps.price, ps.last_stock from product_stock ps where period = '{$previousPeriod}'
+	select ps.product_id, ps.price, ps.last_stock from product_stock ps where period = '{$previousPeriod}' and branch_id = '{$branch}'
 )y on x.szProductId = y.product_id 
 left join (
 	select ppl.product_id, ppl.dpp_price as price
@@ -110,77 +117,6 @@ left join (
 ) current_price on current_price.product_id = x.szProductId 
 )z
 SQL;
-
-        /*
-        $sql = <<<SQL
-                select  dip.szId,
-                        x.szBranchId,
-                        sum(case when x.jenis = 'MI' then x.qty else 0 end) as 'MI',
-                        sum(case when x.jenis = 'MO' then x.qty else 0 end) as 'MO',
-                        sum(case when x.jenis = 'DI' then x.qty else 0 end) as 'DI',
-                        sum(case when x.jenis = 'DO' then x.qty else 0 end) as 'DO',
-                        sum(case when x.jenis = 'SI' then x.qty else 0 end) as 'SI',
-                        sum(case when x.jenis = 'SO' then x.qty else 0 end) as 'SO'
-                from (
-                select 	did.szBranchId,
-                        didi.szProductId,
-                        sum(didi.decQty) as qty,
-                        'MI' as jenis
-                from dms_inv_docstockinbranch did
-                join dms_inv_docstockinbranchitem didi on didi.szDocId = did.szDocId and didi.szProductId not in ({$kodeGalon})
-                where did.dtmDoc BETWEEN '{$startDate}' and '{$endDate}' and did.szBranchId = '{$branch}'
-                GROUP  by did.szBranchId ,didi.szProductId
-                union all
-                select 	did.szBranchId,
-                        didi.szProductId,
-                        sum(didi.decQty) as qty,
-                        'MO' as jenis
-                from dms_inv_docstockoutbranch did
-                join dms_inv_docstockoutbranchitem didi on didi.szDocId = did.szDocId and didi.szProductId not in ({$kodeGalon})
-                where did.dtmDoc BETWEEN '{$startDate}' and '{$endDate}' and did.szBranchId = '{$branch}'
-                GROUP  by did.szBranchId ,didi.szProductId
-                union all
-                select 	did.szBranchId,
-                        didi.szProductId,
-                        sum(didi.decQty) as qty,
-                        'DI' as jenis
-                from dms_inv_docstockindistribution did
-                join dms_inv_docstockindistributionitem didi on didi.szDocId = did.szDocId and didi.szProductId not in ({$kodeGalon})
-                where did.dtmDoc BETWEEN '{$startDate}' and '{$endDate}' and did.szBranchId = '{$branch}'
-                GROUP  by did.szBranchId ,didi.szProductId
-                union all
-                select 	did.szBranchId,
-                        didi.szProductId,
-                        sum(didi.decQty) as qty,
-                        'DO' as jenis
-                from dms_inv_docstockoutdistribution did
-                join dms_inv_docstockoutdistributionitem didi on didi.szDocId = did.szDocId and didi.szProductId not in ({$kodeGalon})
-                where did.dtmDoc BETWEEN '{$startDate}' and '{$endDate}' and did.szBranchId = '{$branch}'
-                GROUP  by did.szBranchId ,didi.szProductId
-                union all
-                select 	did.szBranchId,
-                        didi.szProductId,
-                        sum(didi.decQty) as qty,
-                        'SO' as jenis
-                from dms_sd_docdo did
-                join dms_sd_docdoitem didi on didi.szDocId = did.szDocId and didi.szProductId not in ({$kodeGalon})
-                where did.dtmDoc BETWEEN '{$startDate}' and '{$endDate}' and did.szBranchId = '{$branch}' and did.szDocStatus = 'Applied'
-                GROUP  by did.szBranchId ,didi.szProductId
-                union all
-                select 	did.szBranchId,
-                        didi.szProductId,
-                        sum(didi.decQty) as qty,
-                        'SI' as jenis
-                from dms_inv_docstockinsupplier did
-                join dms_inv_docstockinsupplieritem didi on didi.szDocId = did.szDocId and didi.szProductId not in ({$kodeGalon})
-                where did.dtmDoc BETWEEN '{$startDate}' and '{$endDate}' and did.szBranchId = '{$branch}' and did.szDocStatus = 'Applied'
-                GROUP  by did.szBranchId ,didi.szProductId
-                )x
-                right join dms_inv_product dip on dip.szId = x.szProductId
-                where dip.dtmEndDate > now()
-                GROUP  by x.szBranchId ,dip.szId
-        SQL;
-        */
         return $this->model->fromQuery($sql);
     }
 
@@ -192,10 +128,10 @@ SQL;
             $period = $input['period'];
             $branchId = $input['branch_id'];
             $history = $input['history'];
-            $pengurang = $input['pengurang'];            
+            $pengurang = $input['pengurang'];
             $this->removePreviousData($period, $branchId);
             $products = DmsInvProduct::where('dtmEndDate', '>=', $period.'-01')->get();
-            $defaultProductStock = [        
+            $defaultProductStock = [
                 'first_stock' => 0,
                 'supplier_in' => 0,
                 'mutation_in' => 0,
@@ -207,41 +143,41 @@ SQL;
                 'transfer' => 0,
                 'substractor' => 0,
                 'cogs' => 0,
-                'last_stock' => 0,                
-                'price' => 0           
+                'last_stock' => 0,
+                'price' => 0
             ];
             $totalCogs = 0;
-            foreach($products as $product){
-                $defaulfData = isset($history[$product->szId]) ? array_merge($defaultProductStock, json_decode($history[$product->szId], 1)) :  $defaultProductStock;
+            foreach ($products as $product) {
+                $defaulfData = isset($history[$product->szId]) ? array_merge($defaultProductStock, json_decode($history[$product->szId], 1)) : $defaultProductStock;
                 $item = new ProductStock($defaulfData);
-                if($item->last_stock < 0){
-                  $item->last_stock = 0;
+                if ($item->last_stock < 0) {
+                    $item->last_stock = 0;
                 }
                 $item->product_id = $product->szId;
-                $item->substractor = $pengurang[$product->szId] ?? 0;                
+                $item->substractor = $pengurang[$product->szId] ?? 0;
                 $item->cogs = $item->cogs - $item->substractor;
-                if($item->cogs < 0){
-                  $item->cogs = 0;
+                if ($item->cogs < 0) {
+                    $item->cogs = 0;
                 }
                 $item->period = $period;
                 $item->branch_id = $branchId;
-                $item->save();                
+                $item->save();
                 $totalCogs += $item->cogs;
             }
             $lastDay = \Carbon\Carbon::createFromFormat('Y-m', $period)->endOfMonth();
             // save to journal account
             JournalAccount::create([
-                'account_id' => 'HPPPT', 
-                'name' => 'HARGA PABRIK', 
-                'debit' => $totalCogs, 
-                'credit' => 0,  
+                'account_id' => 'HPPPT',
+                'name' => 'HARGA PABRIK',
+                'debit' => $totalCogs,
+                'credit' => 0,
                 'balance' => $totalCogs,
-                'date' => $lastDay, 
-                'branch_id' => $branchId, 
-                'description' => 'HPP Pabrik product stock', 
-                'reference' => 'HPPP-'.$period, 
+                'date' => $lastDay,
+                'branch_id' => $branchId,
+                'description' => 'HPP Pabrik product stock',
+                'reference' => 'HPPP-'.$period,
                 'type' => 'JPS'
-            ]);            
+            ]);
             $this->model->getConnection()->commit();
             $this->model->flushCache();
         } catch (\Exception $e) {
@@ -259,5 +195,4 @@ SQL;
         $this->model->wherePeriod($period)->whereBranchId($branchId)->forceDelete();
         JournalAccount::where(['branch_id' => $branchId, 'type' =>'JPS'])->forceDelete();
     }
-        
 }
