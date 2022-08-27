@@ -43,23 +43,17 @@ class HomeController extends Controller
 
     public function tes()
     {
-        // $product = DmsInvProduct::where('iInternalId',6)->with(['productCategories'])->get();
-        // //dd($product->toArray());
-        // dd( [
-        //     'productItem' => $productRepo->allQuery()->disableModelCaching()->with(['dmsInvProduct' => function($q){
-        //         $q->whereHas('productCategoriesProduct')->with(['productCategories']);
-        //         //$q->with(['productCategories']);
-        //     }])->get()->toArray(),
-        // ]);
-
-        // $productPrice = new ProductPriceRepository(app());
-        // $productPrice = new ProductPrice();
-        // $tes = \App\Models\Purchase\BtbValidate::selectRaw('co_reference, sum(qty) - sum(qty_reject) as qty')->whereInvoiced(0)
-        //                 ->disableModelCaching()
-        //                 ->groupBy('co_reference')
-        //                 ->get();
-        // ->pluck('co_reference','co_reference');
-        $tes = \App\Models\Finance\Payment::with(['invoices', 'paymentLines'])->disableModelCaching()->get()->toArray();
-        dd($tes);
+        
+        $invoice = \App\Models\Purchase\Invoice::find(59);
+        $detailSum = $invoice->invoiceLines->sum(function($v){
+            return $v->getRawOriginal('price') * $v->getRawOriginal('qty');
+        });
+        print_r($detailSum);
+        print_r($invoice->getRawOriginal('amount'));
+        if($detailSum == $invoice->getRawOriginal('amount')){
+            echo 'sama';
+        }else {
+            echo 'tidak';
+        }
     }
 }
