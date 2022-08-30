@@ -68,6 +68,7 @@
 @push('scripts')
 <script type="text/javascript">
     $(function () {
+        $('select[name=invoice_id] optgroup').prop('disabled',1)
         $('select[name=invoice_id]').change(function () {
             const _val = $(this).val();
             $('input[name=partner_id]').val('');
@@ -76,6 +77,16 @@
             }
 
         })
+
+        $('select[name=partner_type]').change(function(){            
+            const _val = $(this).val()
+            $('select[name=invoice_id] optgroup').prop('disabled',1)
+            if(!_.isEmpty(_val)){
+                $('select[name=invoice_id] optgroup[label='+_val+']').prop('disabled',0)
+            }
+            $('select[name=invoice_id]').val('')   
+            $('select[name=invoice_id]').trigger('change')
+        });
     })
 </script>
 @endpush

@@ -158,10 +158,13 @@ class DebitCreditNoteController extends AppBaseController
     {
         $invoice = new InvoiceRepository(app());
         $invoiceData = $invoice->with(['partner', 'ekspedisi'])->all(['state' => Invoice::VALIDATE], null, null, ['id', 'number', 'reference', 'partner_id', 'partner_type']);
-        $invoiceItemOptions = $invoiceData->keyBy('id')->toArray();
-
+        $invoiceItemOptions = $invoiceData->keyBy('id')->toArray();        
+        $invoiceItems = $invoiceData->groupBy('partner_type')->map(function($item, $key) {
+            return $item->pluck('full_identity', 'id');
+        });
+        
         return [
-            'invoiceItems' => ['' => __('crud.option.invoice_placeholder')] + $invoiceData->pluck('full_identity', 'id')->toArray(),
+            'invoiceItems' => ['' => __('crud.option.invoice_placeholder')] + $invoiceItems->toArray(),
             'invoiceItemOptions' => $invoiceItemOptions,
             'partnerTypeItems' => array_merge(['' => __('crud.option.invoice_placeholder')], DebitCreditNote::PARTNER_TYPE),
             'typeItems' => ['' => __('crud.option.invoice_placeholder'), 'CN' => 'CN', 'DN' => 'DN'],
