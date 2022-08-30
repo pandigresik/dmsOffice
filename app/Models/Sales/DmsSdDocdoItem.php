@@ -633,7 +633,8 @@ class DmsSdDocdoItem extends Model
 
             if ($productDiscount) {
                 /** get other product in this nota */
-                $totalNota = $this->getOtherItem()->whereIn('szProductId', $listMainProduct)->sum('decQty');
+                $totalNotaObj = $this->getOtherItem()->whereIn('szProductId', $listMainProduct);
+                $totalNota = $totalNotaObj->sum('decQty');
                 $qtyQuotaNota = $this->attributes['decQty'];
 
                 if ($qtyQuotaNota < $totalNota) {
@@ -660,6 +661,16 @@ class DmsSdDocdoItem extends Model
 
                     /**  update qty agar sesuai tampilan detailnya */
                     $this->attributes['decQty'] = $totalNota;
+                    $this->attributes['decDiscPrinciple'] = $totalNotaObj->sum(function($q){
+                          return $q->getRawOriginal('decDiscPrinciple');  
+                    });
+                    $this->attributes['decDiscDistributor'] =  $totalNotaObj->sum(function($q){
+                        return $q->getRawOriginal('decDiscDistributor');  
+                    });
+                    $this->attributes['decDiscInternal'] =  $totalNotaObj->sum(function($q){
+                        return $q->getRawOriginal('decDiscInternal');  
+                    });
+                    $this->syncOriginal();
                 }
 
                 //}
