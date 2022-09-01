@@ -5,6 +5,7 @@ namespace App\Models\Inventory;
 use App\Models\BaseEntity as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Base\DmsSmBranch;
 
 /**
  * @SWG\Definition(
@@ -134,8 +135,7 @@ class ProductStock extends Model
         'price' => 'required',
         'last_stock' => 'required|integer',
         'period' => 'required|string|max:7',
-        'additional_info' => 'nullable|string',
-        ''
+        'additional_info' => 'nullable|string'
     ];
 
     protected $dates = ['deleted_at'];
@@ -204,5 +204,10 @@ class ProductStock extends Model
         }
 
         return $result;
+    }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(DmsSmBranch ::class, 'branch_id', 'szId');
     }
 }

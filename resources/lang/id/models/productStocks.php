@@ -18,6 +18,10 @@ return array (
     'last_stock' => 'Stok Akhir',
     'period' => 'Period',
     'additional_info' => 'Info',
-    'product_name' => 'Nama'
+    'product_name' => 'Nama',
+    'branch_id' => 'Depo',
+    'substractor' => 'Pengurang',
+    'price' => 'Harga',
+    'cogs' => 'HPP'
   ),
 );
