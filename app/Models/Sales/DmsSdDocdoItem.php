@@ -398,14 +398,15 @@ class DmsSdDocdoItem extends Model
 
     private function hitungDiscounts()
     {
-        /** get all discounts active */
+        /** get all discounts active */        
         $discountActive = Discounts::with(['members', 'details'])->whereRaw("'".$this->getBkbDate()."' between start_date and end_date and state = 'A'")->get();
+        
         $this->discounts = ['distributor' => [], 'principle' => [], 'internal' => []];
         if (!$discountActive) {
             return;
         }
 
-        foreach ($discountActive as $da) {
+        foreach ($discountActive as $da) {            
             $this->getDetailDiscounts($da);
         }
 
@@ -423,7 +424,7 @@ class DmsSdDocdoItem extends Model
     }
 
     private function getDetailDiscounts($discount)
-    {
+    {        
         switch ($discount->jenis) {
             case 'kontrak':
                 $this->discountKontrak($discount);
@@ -463,10 +464,10 @@ class DmsSdDocdoItem extends Model
     private function customerHasDiscount($discount)
     {
         $member = $discount->members->first();
-        $tipe = $member->type;
+        $tipe = $member->tipe;
         $listMembers = $discount->members->keyBy('member_id');
         $indexMember = 'customer' == $tipe ? $this->getCustomer()->szId : $this->getCustomer()->szHierarchyId;
-
+        
         return isset($listMembers[$indexMember]) ? true : false;
     }
 
@@ -490,9 +491,9 @@ class DmsSdDocdoItem extends Model
     }
 
     private function discountPromo($discount)
-    {
+    {        
         $customerHasDiscount = $this->customerHasDiscount($discount);
-
+        
         if ($customerHasDiscount) {
             $listMainProduct = explode(',', $discount->main_dms_inv_product_id);
             $productDiscount = in_array($this->szProductId, $listMainProduct) ? true : false;
