@@ -22,11 +22,16 @@ class DiscountRejectController extends AppBaseController
     {
         if ($request->ajax()) {
             $period = explode(' - ', $request->get('period_range'));
-            $sales = $request->get('sales');
+            $sales = $request->get('sales') ?? [];
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $datas = $this->getRepositoryObj()->listSalesReject($startDate, $endDate, $sales);
-            $salesMaster = DmsPiEmployee::whereIn('szId', $sales)->get()->keyBy('szId');
+            if(!empty($sales)){
+                $salesMaster = DmsPiEmployee::where('szDivisionId', 'SALES')->whereIn('szId', $sales)->get()->keyBy('szId');
+            }else{
+                $salesMaster = DmsPiEmployee::where('szDivisionId', 'SALES')->get()->keyBy('szId');
+            }
+            
 
             return view('sales.discount_reject.list_discount')->with('datas', $datas)->with(['startDate' => $startDate, 'endDate' => $endDate, 'salesMaster' => $salesMaster]);
         }

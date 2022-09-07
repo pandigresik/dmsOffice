@@ -248,15 +248,19 @@ class BkbDiscountsRepository extends BaseRepository
             ->get()->groupBy('discount_id');
     }
 
-    public function listSalesReject($startDate, $endDate, $sales)
+    public function listSalesReject($startDate, $endDate, $sales = [])
     {
-        return BkbDiscounts::with(['bkb' => function ($q) {
+        $sql = BkbDiscounts::with(['bkb' => function ($q) {
             $q->with(['customer' => function ($r) {
                 $r->with(['address']);
             }]);
         }, 'product'])
             ->where('selisihPrinciple', '>', 0)
-            ->whereBetween('bkbDate', [$startDate, $endDate])->whereIn('szSalesId', $sales)->get()->groupBy('szSalesId');
+            ->whereBetween('bkbDate', [$startDate, $endDate]);
+        if(!empty($sales)){
+            $sql->whereIn('szSalesId', $sales);
+        }
+        return $sql->get()->groupBy('szSalesId');            
     }
 
     private function buildDataInput($datas, $startDate, $endDate, $branchId)
