@@ -224,17 +224,21 @@ class BkbDiscountsRepository extends BaseRepository
         }, 'product'])->whereBetween('bkbDate', [$startDate, $endDate])->where(['szBranchId' => $branchId])->get()->groupBy('discount_id');
     }
 
-    public function listDiscountRekap($startDate, $endDate)
+    public function listDiscountRekap($startDate, $endDate, $branchId)
     {
-        return BkbDiscountDetail::select(['szBranchId', 'szProductId', 'discount_id'])->selectRaw('sum(principle_amount) as principle_amount, sum(distributor_amount) as distributor_amount')->with(['product'])->whereBetween('bkbDate', [$startDate, $endDate])
+        return BkbDiscountDetail::select(['szBranchId', 'szProductId', 'discount_id'])->selectRaw('sum(principle_amount) as principle_amount, sum(distributor_amount) as distributor_amount')->with(['product'])
+            ->whereBetween('bkbDate', [$startDate, $endDate])
+            ->where(['szBranchId' => $branchId])
             ->with(['depo'])
             ->groupBy(['szBranchId', 'szProductId', 'discount_id'])
             ->get()->groupBy('discount_id');
     }
 
-    public function listDiscountRekapExcel($startDate, $endDate)
+    public function listDiscountRekapExcel($startDate, $endDate, $branchId)
     {
-        return BkbDiscountDetail::select(['szBranchId', 'szDocId', 'szProductId', 'decQty', 'discount_id', 'principle_amount', 'distributor_amount', 'bkbDate'])->with(['product'])->whereBetween('bkbDate', [$startDate, $endDate])
+        return BkbDiscountDetail::select(['szBranchId', 'szDocId', 'szProductId', 'decQty', 'discount_id', 'principle_amount', 'distributor_amount', 'bkbDate'])->with(['product'])
+            ->whereBetween('bkbDate', [$startDate, $endDate])
+            ->where(['szBranchId' => $branchId])
             ->with(['depo', 'promo', 'product', 'bkb' => function ($q) {
                 $q->with(['customer' => function ($r) {
                     $r->with(['address']);

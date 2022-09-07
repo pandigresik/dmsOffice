@@ -83,7 +83,7 @@
                 <tr>
                     <td>{{ $account->code }}</td>                    
                     <td>
-                        <a href="#" data-json='{{ json_encode(["name" => $account->name, "branch" => $branch,"startDate" => $startDate, "endDate" => $endDate]) }}' data-url="{{route('accounting.balance.show', $account->code) }}" onclick="main.popupModal(this,'get');return false">{{ ucwords($account->name) }}</a>
+                        <a href="#" data-json='{{ json_encode(["name" => $account->name, "branch_id" => $branch,"startDate" => $startDate, "endDate" => $endDate]) }}' data-url="{{route('accounting.balance.show', $account->code) }}" onclick="main.popupModal(this,'get');return false">{{ ucwords($account->name) }}</a>
                         <button class="btn"><a href="#" data-json='{{ json_encode(["name" => $account->name,"branch_id" => $branch,"startDate" => $startDate, "endDate" => $endDate, "download_xls" => 1]) }}' data-url="{{route('accounting.balance.show', $account->code) }}" data-tipe="get" onclick="main.redirectUrl(this);return false"><i class="fa fa-download"></i></a></button>
                     </td>
                     @foreach ($branchMaster as $item)

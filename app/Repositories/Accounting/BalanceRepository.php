@@ -60,22 +60,19 @@ class BalanceRepository extends BaseRepository
         ];
     }
 
-    public function detail($startDate, $endDate, $accountCode)
+    public function detail($startDate, $endDate, $accountCode, $branchId)
     {
         $query = JournalAccountDetail::select(['account_id', 'date', 'additional_info'])        
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
-            ->where('account_id', $accountCode)
+            ->where(['account_id' => $accountCode, 'branch_id' => $branchId])
             ->orderBy('date')
         ;
-
-        // if (!empty($branch)) {
-        //     $query->where(['szBranchId' => $branch]);
-        // }
+        
         $data = $query->get();
         return [
             'data' => $data,            
-            'manual' => $this->getManualJournal($startDate, $endDate, $accountCode) 
+            'manual' => $this->getManualJournal($startDate, $endDate, $accountCode, $branchId) 
             // 'saldo' => $this->getSaldoAccount($startDate, $accountCode),
         ];
     }
@@ -112,11 +109,11 @@ class BalanceRepository extends BaseRepository
         return $result;
     }
 
-    private function getManualJournal($startDate, $endDate, $accountCode){
+    private function getManualJournal($startDate, $endDate, $accountCode, $branchId){
         $query = JournalAccount::select(['account_id', 'date', 'branch_id', 'name', 'reference', 'debit', 'credit', 'balance'])        
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
-            ->where('account_id', $accountCode)
+            ->where(['account_id' => $accountCode, 'branch_id' => $branchId])
             ->where('type', 'JM')
             ->orderBy('date')
         ;

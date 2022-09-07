@@ -56,9 +56,10 @@ class BalanceController extends AppBaseController
     {
         $endDate = request('endDate');
         $startDate = request('startDate');
+        $branchId = request('branch_id');
         $name = request('name');  
         $downloadXls = request('download_xls');      
-        $balance = $this->getRepositoryObj()->detail($startDate, $endDate, $id);
+        $balance = $this->getRepositoryObj()->detail($startDate, $endDate, $id, $branchId);
         
         if ($downloadXls) {
             return $this->exportExcelDetail(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
@@ -96,7 +97,7 @@ class BalanceController extends AppBaseController
         $endDate = $data['endDate'];
         $startDate = $data['startDate'];
         $collection = $data['balance'];
-        $name = $data['name'];
+        $name = $data['name'];        
         $accountCode = $data['accountCode'];
 
         $modelEksport = '\\App\Exports\\Template\\Accounting\\BalanceDetailExport';
