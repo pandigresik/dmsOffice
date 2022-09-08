@@ -45,8 +45,8 @@ class DiscountsDataTable extends DataTable
 
             return !empty($listProduct) ? '<div>'.implode('</div><div>', $listProduct->toArray()).'</div>' : '-';
         })->editColumn('bundling_dms_inv_product_id', function ($p) {
-            $listProduct = DmsInvProduct::select('szName')->whereIn('szId', explode(',', $p->bundling_dms_inv_product_id))->get()->map(function ($item) {
-                return $item->szName;
+            $listProduct = DmsInvProduct::select(['szName','szId'])->whereIn('szId', explode(',', $p->bundling_dms_inv_product_id))->get()->map(function ($item) {
+                return $item->szName.' ('.$item->szId.')';
             });
 
             return !empty($listProduct) ? '<div>'.implode('</div><div>', $listProduct->toArray()).'</div>' : '-';
