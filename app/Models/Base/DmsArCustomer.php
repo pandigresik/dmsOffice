@@ -98,17 +98,7 @@ class DmsArCustomer extends Model
     public static $rules = [
         'iId' => 'required|string|max:50',
         'szId' => 'required|string|max:50',
-        'szName' => 'required|string|max:50',
-        // 'szDescription' => 'required|string|max:200',
-        // 'szHierarchyId' => 'required|string|max:200',
-        // 'szHierarchyFull' => 'required|string|max:1000',
-        // 'szIDCard' => 'required|string|max:50',
-        // 'bHasDifferentCollectAddress' => 'required|boolean',
-        // 'szCode' => 'required|string|max:50',
-        // 'szUserCreatedId' => 'required|string|max:20',
-        // 'szUserUpdatedId' => 'required|string|max:20',
-        // 'dtmCreated' => 'required',
-        // 'dtmLastUpdated' => 'required',
+        'szName' => 'required|string|max:50',        
         'szMCOId' => 'required|string|max:50',
     ];
 

@@ -110,11 +110,11 @@ class DiscountsController extends AppBaseController
         $product = new DmsInvProductRepository(app());
         if ('customer' == $typeMember) {
             $customer = new DmsArCustomer();
-            $optionItems['customerItems'] = $customer->whereIn('szId', $listMember)->pluck('szName', 'szId');
+            $optionItems['customerItems'] = $customer->whereIn('szId', $listMember)->selectRaw('szId, concat(szName, \' (\',szId,\')\') as szName')->get()->pluck('szName', 'szId');
         }
 
-        $optionItems['mainProductItems'] = $product->allQuery()->whereIn('szId', explode(',', $discounts->main_dms_inv_product_id))->get()->pluck('szName', 'szId');
-        $optionItems['bundlingProductItems'] = $discounts->bundling_dms_inv_product_id ? $product->allQuery()->whereIn('szId', explode(',', $discounts->bundling_dms_inv_product_id))->get()->pluck('szName', 'szId') : [];
+        $optionItems['mainProductItems'] = $product->allQuery()->whereIn('szId', explode(',', $discounts->main_dms_inv_product_id))->selectRaw('szId, concat(szName, \' (\',szId,\')\') as szName')->get()->pluck('szName', 'szId');
+        $optionItems['bundlingProductItems'] = $discounts->bundling_dms_inv_product_id ? $product->allQuery()->whereIn('szId', explode(',', $discounts->bundling_dms_inv_product_id))->selectRaw('szId, concat(szName, \' (\',szId,\')\') as szName')->get()->pluck('szName', 'szId') : [];
         $optionItems['detailItems'] = $details;
 
         return view('sales.discounts.edit')->with('discounts', $discounts)->with($optionItems);
@@ -182,7 +182,7 @@ class DiscountsController extends AppBaseController
         return [
             'jenisOptionItems' => array_combine(Discounts::OPTION_ITEM_JENIS, Discounts::OPTION_ITEM_JENIS),
             'typeOptionItems' => array_combine(Discounts::OPTION_ITEM_TYPE, Discounts::OPTION_ITEM_TYPE),
-            'segmentCustomerItems' => $segmentCustomer->pluck([], null, null, 'szId', 'szName'),
+            'segmentCustomerItems' => $segmentCustomer->allQuery([], null, null)->selectRaw('szId, concat(szName ,\' ( \',szId,\' )\') as szName')->get()->pluck('szName', 'szId')->toArray(),
             'tipeSegmentCustomerItems' => array_combine(Discounts::OPTION_ITEM_SEGMENT, ['Segment Pelanggan', 'Pelanggan']),
             'mainProductItems' => [],
             'bundlingProductItems' => [],

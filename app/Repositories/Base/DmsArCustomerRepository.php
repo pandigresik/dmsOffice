@@ -54,6 +54,19 @@ class DmsArCustomerRepository extends BaseRepository
         return DmsArCustomer::class;
     }
 
+    public function paginate($perPage, $currentPage = 1, $columns = ['*'], $search = [])
+    {
+        $query = $this->allQuery();
+        if (!empty($search)) {
+            $query->search($search['keyword'], $search['column']);
+        }
+        $dataPaging = $query->simplePaginate($perPage, $columns, 'page', $currentPage);
+        $dataPaging->getCollection()->map(function($item){
+            return ['id' => $item['id'], 'text' => $item['text'] = $item['text'].' ( '.$item['id'].' )'];
+        })->toArray();
+        return $dataPaging;
+    }
+
     public function update($input, $id)
     {
         DB::beginTransaction();

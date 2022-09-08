@@ -13,9 +13,7 @@ class DiscountsDataTable extends DataTable
     /**
      * example mapping filter column to search by keyword, default use %keyword%.
      */
-    private $columnFilterOperator = [
-        //'main_product.szName' => \App\DataTables\FilterClass\RelationContainKeyword::class,
-        //'bundling_product.szName' => \App\DataTables\FilterClass\RelationContainKeyword::class,
+    private $columnFilterOperator = [        
         'type' => \App\DataTables\FilterClass\MatchKeyword::class,
         'jenis' => \App\DataTables\FilterClass\MatchKeyword::class,
     ];
@@ -41,8 +39,8 @@ class DiscountsDataTable extends DataTable
             }
         }
         $dataTable->editColumn('main_dms_inv_product_id', function ($p) {
-            $listProduct = DmsInvProduct::select('szName')->whereIn('szId', explode(',', $p->main_dms_inv_product_id))->get()->map(function ($item) {
-                return $item->szName;
+            $listProduct = DmsInvProduct::select(['szName','szId'])->whereIn('szId', explode(',', $p->main_dms_inv_product_id))->get()->map(function ($item) {
+                return $item->szName.' ('.$item->szId.')';
             });
 
             return !empty($listProduct) ? '<div>'.implode('</div><div>', $listProduct->toArray()).'</div>' : '-';

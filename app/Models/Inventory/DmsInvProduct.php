@@ -87,11 +87,7 @@ class DmsInvProduct extends Model
         'szProductType',
         'szNickName',
         'dtmStartDate',
-        'dtmEndDate',
-        //'szUserCreatedId',
-        // 'szUserUpdatedId',
-        //'dtmCreated',
-        //'dtmLastUpdated',
+        'dtmEndDate',        
     ];
 
     /**
@@ -146,7 +142,7 @@ class DmsInvProduct extends Model
         'dtmCreated' => 'datetime',
         'dtmLastUpdated' => 'datetime',
     ];
-
+    
     public function getFullIdentityAttribute($value)
     {
         return implode(' | ', [$this->attributes['szId'], $this->attributes['szName'], $this->attributes['szUomId']]);
