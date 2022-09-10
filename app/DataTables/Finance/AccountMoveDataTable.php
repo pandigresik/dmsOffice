@@ -120,13 +120,13 @@ class AccountMoveDataTable extends DataTable
      */
     protected function getColumns()
     {
-        $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(DmsSmBranch::pluck('szName', 'szId')->toArray()));
+        $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => ''],['text' => 'PT', 'value' => 'PT']], convertArrayPairValueWithKey(DmsSmBranch::pluck('szName', 'szId')->toArray()));
 
         return [
             'number' => new Column(['title' => __('models/accountMoves.fields.number'), 'data' => 'number', 'searchable' => true, 'elmsearch' => 'text']),
             'date' => new Column(['title' => __('models/accountMoves.fields.date'), 'data' => 'date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'reference' => new Column(['title' => __('models/accountMoves.fields.reference'), 'data' => 'reference', 'searchable' => true, 'elmsearch' => 'text']),
-            'branch_id' => new Column(['title' => __('models/accountMoves.fields.branch_id'), 'name' => 'branch_id', 'data' => 'depo.szName', 'defaultContent' => '-', 'orderable' => false, 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem]),
+            'branch_id' => new Column(['title' => __('models/accountMoves.fields.branch_id'), 'name' => 'branch_id', 'data' => 'depo.szName', 'defaultContent' => 'PT', 'orderable' => false, 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem]),
             //'narration' => new Column(['title' => __('models/accountMoves.fields.narration'), 'data' => 'narration', 'searchable' => true, 'elmsearch' => 'text']),
             //'state' => new Column(['title' => __('models/accountMoves.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text'])
         ];
