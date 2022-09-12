@@ -220,7 +220,9 @@ class BkbDiscountsRepository extends BaseRepository
     public function listDiscount($startDate, $endDate, $branchId)
     {
         return BkbDiscountDetail::with(['bkb' => function ($q) {
-            $q->with(['customer', 'sales']);
+            $q->with(['customer' => function($r){
+                $r->with(['address']);
+            }, 'sales']);
         }, 'product'])->whereBetween('bkbDate', [$startDate, $endDate])->where(['szBranchId' => $branchId])->get()->groupBy('discount_id');
     }
 

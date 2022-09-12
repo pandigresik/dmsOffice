@@ -30,7 +30,7 @@
                 <td>{{ $item->bkb->customer->address->fullAddress ?? '-'  }}</td>
                 <td>{{ $item->szDocId  }}</td>
                 <td>{{ $item->product->szName ?? '-'  }}</td>
-                <td>{{ localNumberFormat($item->decQty) }}</td>
+                <td>{{ $item->decQty }}</td>
                 <td>{{ $item->principle_amount}}</td>
                 <td>{{ $item->distributor_amount}}</td>
             </tr>

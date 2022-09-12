@@ -9,8 +9,9 @@
                 <th rowspan="2">Nama</th>                
                 <th rowspan="2">Alamat</th>
                 <th rowspan="2">No. DO</th>
-                <th rowspan="2">Sales</th>
-                <th rowspan="2">Item Produk</th>                
+                <th rowspan="2">Sales</th>                
+                <th rowspan="2">Item Produk</th>
+                <th rowspan="2">Qty</th>
                 <th colspan="2">Diskon Sistem</th>                
             </tr>
             <tr>
@@ -33,8 +34,9 @@
                     <td>{{ $data->bkb->customer->szName ?? '-' }}</td>                    
                     <td>{{ $data->bkb->customer->address->fullAddress ?? '-' }}</td>
                     <td>{{ $data->szDocId }}</td>
-                    <td>{{ $data->bkb->sales->szName ?? '-' }}</td>                                                        
+                    <td>{{ $data->bkb->sales->szName ?? '-' }}</td>                                                                            
                     <td>{{ $data->product->szName ?? '-'}}</td>                    
+                    <td>{{ localNumberFormat($data->decQty, 0) }}</td>
                     <td class="text-right">{{ localNumberFormat($data->principle_amount, 0) }}</td>
                     <td class="text-right">{{ localNumberFormat($data->distributor_amount, 0) }}</td>                    
                     @php
@@ -50,7 +52,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <th class="text-right" colspan="8">Total</th>
+                <th class="text-right" colspan="9">Total</th>
                 <th class="text-right">{{ localNumberFormat($totalDiskonTivSales,0) }}</th>
                 <th class="text-right">{{ localNumberFormat($totalDiskonDistributorSales,0) }}</th>                
             </tr>
