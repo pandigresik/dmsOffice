@@ -175,7 +175,7 @@ class JournalAccount extends Model
         $branchId = $input['branch_id'];
         $type = $input['type'];
         $sql = <<<SQL
-            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type) , created_at
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at) 
             SELECT szAccountId, account.name, decDebit, decCredit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}' , now()
             FROM dms_cas_cashbalance 
             join account on account.code = dms_cas_cashbalance.szAccountId
