@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Repositories\Inventory;
+namespace App\Repositories\Base;
 
-use App\Models\Inventory\DmsInvProduct;
-use App\Models\Inventory\ProductPrice;
+use App\Models\Base\DmsInvProduct;
+use App\Models\Base\ProductPriceSales;
 use App\Repositories\BaseRepository;
 
 /**
- * Class ProductPriceRepository.
+ * Class ProductPriceSalesRepository.
  *
  * @version November 10, 2021, 9:37 pm UTC
  */
-class ProductPriceRepository extends BaseRepository
+class ProductPriceSalesRepository extends BaseRepository
 {
     /**
      * @var array
@@ -39,7 +39,7 @@ class ProductPriceRepository extends BaseRepository
      */
     public function model()
     {
-        return ProductPrice::class;
+        return ProductPriceSales::class;
     }
 
     public function create($input)
@@ -52,7 +52,7 @@ class ProductPriceRepository extends BaseRepository
             $model->fill($input);
             $model->save();
 
-            $priceLog = new ProductPriceLogRepository(app());
+            $priceLog = new ProductPriceSalesLogRepository(app());
             $priceLog->create($input);
 
             return $model;

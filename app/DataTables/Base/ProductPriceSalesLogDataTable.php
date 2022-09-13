@@ -1,13 +1,13 @@
 <?php
 
-namespace App\DataTables\Inventory;
+namespace App\DataTables\Base;
 
 use App\DataTables\BaseDataTable as DataTable;
-use App\Models\Inventory\ProductPriceLog;
+use App\Models\Base\ProductPriceSalesLog;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class ProductPriceLogDataTable extends DataTable
+class ProductPriceSalesLogDataTable extends DataTable
 {
     private $defaultFilter = [];
     /**
@@ -39,17 +39,17 @@ class ProductPriceLogDataTable extends DataTable
             }
         }
 
-        return $dataTable; //->addColumn('action', 'inventory.product_price_logs.datatables_actions');
+        return $dataTable; //->addColumn('action', 'Base.product_price_logs.datatables_actions');
     }
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\ProductPriceLog $model
+     * @param \App\Models\ProductPriceSalesLog $model
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(ProductPriceLog $model)
+    public function query(ProductPriceSalesLog $model)
     {
         return empty($this->getDefaultFilter()) ? $model->with(['dmsInvProduct', 'createdBy'])->newQuery() : $model->where($this->getDefaultFilter())->with(['dmsInvProduct', 'createdBy'])->newQuery();
     }
@@ -144,13 +144,13 @@ class ProductPriceLogDataTable extends DataTable
     {
         return [
             'product_id' => new Column(['title' => __('models/dmsInvProducts.fields.szId'), 'data' => 'dms_inv_product.szId', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
-            'dms_inv_product_id' => new Column(['title' => __('models/productPriceLogs.fields.dms_inv_product_id'), 'data' => 'dms_inv_product.szName', 'searchable' => false, 'elmsearch' => 'text', 'orderable' => false]),
-            'price' => new Column(['title' => __('models/productPriceLogs.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
-            'start_date' => new Column(['title' => __('models/productPriceLogs.fields.start_date'), 'data' => 'start_date', 'searchable' => false, 'elmsearch' => 'text']),
-            'end_date' => new Column(['title' => __('models/productPriceLogs.fields.end_date'), 'data' => 'end_date', 'defaultContent' => '', 'searchable' => false, 'elmsearch' => 'text']),
+            'dms_inv_product_id' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.dms_inv_product_id'), 'data' => 'dms_inv_product.szName', 'searchable' => false, 'elmsearch' => 'text', 'orderable' => false]),
+            'price' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
+            'start_date' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.start_date'), 'data' => 'start_date', 'searchable' => false, 'elmsearch' => 'text']),
+            'end_date' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.end_date'), 'data' => 'end_date', 'defaultContent' => '', 'searchable' => false, 'elmsearch' => 'text']),
             'product_uom_id' => new Column(['title' => __('models/dmsInvProducts.fields.szUomId'), 'data' => 'dms_inv_product.szUomId', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
-            'created_at' => new Column(['title' => __('models/productPriceLogs.fields.created_at'), 'data' => 'created_at', 'searchable' => false, 'elmsearch' => 'text']),
-            'created_by' => new Column(['title' => __('models/productPriceLogs.fields.created_by'), 'data' => 'created_by.name', 'searchable' => false, 'elmsearch' => 'text']),
+            'created_at' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.created_at'), 'data' => 'created_at', 'searchable' => false, 'elmsearch' => 'text']),
+            'created_by' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.created_by'), 'data' => 'created_by.name', 'searchable' => false, 'elmsearch' => 'text']),
         ];
     }
 

@@ -142,8 +142,8 @@ class JournalAccount extends Model
         $branchId = $input['branch_id'];
         $type = $input['type'];
         $sql = <<<SQL
-            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type) 
-            SELECT szAccountId, account.name, decDebit, decCredit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}' 
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at) 
+            SELECT szAccountId, account.name, decDebit, decCredit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}' , now()
             FROM dms_cas_cashbalance 
             join account on account.code = dms_cas_cashbalance.szAccountId
             join report_setting_account_detail on report_setting_account_detail.account_id = account.id
@@ -153,14 +153,14 @@ class JournalAccount extends Model
             and dtmDoc between '{$startDate}' and '{$endDate}'
             union all 
             -- account cashback
-            SELECT '{$coaCashback}', account.name, decCredit, decDebit, (-1 * decAmount), dtmDoc, szBranchId, szDocId, '{$type}'
+            SELECT '{$coaCashback}', account.name, decCredit, decDebit, (-1 * decAmount), dtmDoc, szBranchId, szDocId, '{$type}', now()
             FROM dms_cas_cashbalance 
             join account on account.code = dms_cas_cashbalance.szAccountId
             where szBranchId = '{$branchId}' and szAccountId = '{$coaBiayaPromosi}'
             and dtmDoc between '{$startDate}' and '{$endDate}'
             union all
             -- account kas ke kas dan jaminan pelanggan untuk GL
-            SELECT account.code, account.name, decCredit, decDebit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}'
+            SELECT account.code, account.name, decCredit, decDebit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}', now()
             FROM dms_cas_cashbalance 
             join account on account.code = dms_cas_cashbalance.szAccountId
             where szBranchId = '{$branchId}' and szAccountId in ('110902','311100')
@@ -175,8 +175,8 @@ class JournalAccount extends Model
         $branchId = $input['branch_id'];
         $type = $input['type'];
         $sql = <<<SQL
-            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type) 
-            SELECT szAccountId, account.name, decDebit, decCredit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}' 
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type) , created_at
+            SELECT szAccountId, account.name, decDebit, decCredit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}' , now()
             FROM dms_cas_cashbalance 
             join account on account.code = dms_cas_cashbalance.szAccountId
             join report_setting_account_detail on report_setting_account_detail.account_id = account.id

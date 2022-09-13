@@ -56,7 +56,7 @@ class BalanceController extends AppBaseController
     {
         $endDate = request('endDate');
         $startDate = request('startDate');
-        $branchId = request('branch_id');
+        $branchId = request('branch_id') ?? [];
         $name = request('name');  
         $downloadXls = request('download_xls');      
         $balance = $this->getRepositoryObj()->detail($startDate, $endDate, $id, $branchId);

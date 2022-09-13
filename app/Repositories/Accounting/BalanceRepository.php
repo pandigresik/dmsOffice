@@ -65,11 +65,12 @@ class BalanceRepository extends BaseRepository
         $query = JournalAccountDetail::select(['account_id', 'date', 'additional_info'])        
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
-            ->where(['account_id' => $accountCode])
-            ->whereIn('branch_id', $branchId)
+            ->where(['account_id' => $accountCode])            
             ->orderBy('date')
         ;
-        
+        if(!empty($branchId)){
+            $query->whereIn('branch_id', $branchId);
+        }
         $data = $query->get();
         return [
             'data' => $data,            
