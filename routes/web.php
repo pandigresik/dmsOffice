@@ -59,8 +59,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('contactCustomers', App\Http\Controllers\Base\ContactCustomerController::class, ['as' => 'base']);
         Route::resource('locationCustomers', App\Http\Controllers\Base\LocationCustomerController::class, ['as' => 'base']);
 
-        Route::resource('productPricesSales', App\Http\Controllers\Base\ProductPriceSalesController::class, ['as' => 'inventory'])->only(['index', 'create', 'edit', 'store']);
-        Route::resource('dmsInvProducts.productPriceSalesLogs', App\Http\Controllers\Base\ProductPriceSalesLogController::class, ['as' => 'inventory'])->only(['index']);
+        Route::resource('productPriceSales', App\Http\Controllers\Base\ProductPriceSalesController::class, ['as' => 'base'])->only(['index', 'create', 'edit', 'store']);
+        Route::resource('dmsInvProducts.productPriceSalesLogs', App\Http\Controllers\Base\ProductPriceSalesLogController::class, ['as' => 'base'])->only(['index']);
     });
 
     Route::group(['prefix' => 'inventory'], function () {

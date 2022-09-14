@@ -14,7 +14,7 @@ class ProductPriceSalesLogDataTable extends DataTable
      * example mapping filter column to search by keyword, default use %keyword%.
      */
     private $columnFilterOperator = [
-        'created_by.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
+        // 'created_by.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
     ];
 
     private $mapColumnSearch = [
@@ -61,22 +61,12 @@ class ProductPriceSalesLogDataTable extends DataTable
      */
     public function html()
     {
-        $buttons = [
-            // [
-            //    'extend' => 'create',
-            //    'className' => 'btn btn-default btn-sm no-corner',
-            //    'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-            // ],
+        $buttons = [            
             [
                 'extend' => 'export',
                 'className' => 'btn btn-default btn-sm no-corner',
                 'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
-            ],
-            // [
-            //    'extend' => 'import',
-            //    'className' => 'btn btn-default btn-sm no-corner',
-            //    'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-            // ],
+            ],            
             [
                 'extend' => 'print',
                 'className' => 'btn btn-default btn-sm no-corner',
@@ -101,7 +91,7 @@ class ProductPriceSalesLogDataTable extends DataTable
             ->parameters([
                 'dom' => '<"row" <"col-md-6"B><"col-md-6 text-right"l>>rtip',
                 'stateSave' => true,
-                'order' => [[6, 'desc']],
+                'order' => [[5, 'desc']],
                 'buttons' => $buttons,
                 'language' => [
                     'url' => url('vendor/datatables/i18n/en-gb.json'),
@@ -142,15 +132,14 @@ class ProductPriceSalesLogDataTable extends DataTable
      */
     protected function getColumns()
     {
-        return [
-            'product_id' => new Column(['title' => __('models/dmsInvProducts.fields.szId'), 'data' => 'dms_inv_product.szId', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
-            'dms_inv_product_id' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.dms_inv_product_id'), 'data' => 'dms_inv_product.szName', 'searchable' => false, 'elmsearch' => 'text', 'orderable' => false]),
-            'price' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
-            'start_date' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.start_date'), 'data' => 'start_date', 'searchable' => false, 'elmsearch' => 'text']),
-            'end_date' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.end_date'), 'data' => 'end_date', 'defaultContent' => '', 'searchable' => false, 'elmsearch' => 'text']),
+        return [            
+            'dms_inv_product_id' => new Column(['title' => __('models/productPriceSalesLogs.fields.dms_inv_product_id'), 'data' => 'dms_inv_product.szName', 'searchable' => false, 'elmsearch' => 'text', 'orderable' => false]),
+            'price' => new Column(['title' => __('models/productPriceSalesLogs.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
+            'start_date' => new Column(['title' => __('models/productPriceSalesLogs.fields.start_date'), 'data' => 'start_date', 'searchable' => false, 'elmsearch' => 'text']),
+            'end_date' => new Column(['title' => __('models/productPriceSalesLogs.fields.end_date'), 'data' => 'end_date', 'defaultContent' => '', 'searchable' => false, 'elmsearch' => 'text']),
             'product_uom_id' => new Column(['title' => __('models/dmsInvProducts.fields.szUomId'), 'data' => 'dms_inv_product.szUomId', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
-            'created_at' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.created_at'), 'data' => 'created_at', 'searchable' => false, 'elmsearch' => 'text']),
-            'created_by' => new Column(['title' => __('models/ProductPriceSalesLogs.fields.created_by'), 'data' => 'created_by.name', 'searchable' => false, 'elmsearch' => 'text']),
+            'created_at' => new Column(['title' => __('models/productPriceSalesLogs.fields.created_at'), 'data' => 'created_at', 'searchable' => false, 'elmsearch' => 'text']),
+            // 'created_by' => new Column(['title' => __('models/productPriceSalesLogs.fields.created_by'), 'data' => 'created_by.name', 'searchable' => false, 'elmsearch' => 'text']),
         ];
     }
 

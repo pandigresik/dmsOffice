@@ -42,7 +42,7 @@ class ProductPriceSalesLog extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-    public $table = 'product_price_log';
+    public $table = 'product_price_sales_log';
 
     public $fillable = [
         'dms_inv_product_id',
@@ -83,7 +83,7 @@ class ProductPriceSalesLog extends Model
      */
     public function dmsInvProduct()
     {
-        return $this->belongsTo(\App\Models\Inventory\DmsInvProduct::class, 'dms_inv_product_id');
+        return $this->belongsTo(\App\Models\Inventory\DmsInvProduct::class, 'dms_inv_product_id', 'szId');
     }
 
     public function getPriceAttribute($value)

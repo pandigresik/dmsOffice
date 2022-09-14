@@ -20,7 +20,7 @@
                                   <a href="{{ route('base.productPriceSales.index') }}" class="btn btn-ghost-light">Back</a>
                              </div>
                              <div class="card-body">
-                                 @include('inventory.product_prices_sales.show_fields')
+                                 @include('base.product_price_sales.show_fields')
                              </div>
                          </div>
                      </div>

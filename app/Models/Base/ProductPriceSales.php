@@ -45,15 +45,12 @@ class ProductPriceSales extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-    public $table = 'product_price';
+    public $table = 'product_price_sales';
 
     public $fillable = [
         'dms_inv_product_id',
-        'price',
-        'dpp_price',
-        'branch_price',
-        'start_date',
-        'product_id',
+        'price',        
+        'start_date'        
     ];
 
     /**
@@ -63,9 +60,7 @@ class ProductPriceSales extends Model
      */
     public static $rules = [
         'dms_inv_product_id' => 'required|string',
-        'price' => 'required|numeric',
-        'dpp_price' => 'required|numeric',
-        'branch_price' => 'required|numeric',
+        'price' => 'required|numeric',        
         'start_date' => 'nullable',
     ];
 
@@ -79,9 +74,7 @@ class ProductPriceSales extends Model
     protected $casts = [
         'id' => 'integer',
         'dms_inv_product_id' => 'string',
-        'price' => 'decimal:2',
-        'dpp_price' => 'decimal:2',
-        'branch_price' => 'decimal:2',
+        'price' => 'decimal:2',        
         'start_date' => 'date',
     ];
 
@@ -94,16 +87,6 @@ class ProductPriceSales extends Model
     }
 
     public function getPriceAttribute($value)
-    {
-        return localNumberFormat($value);
-    }
-
-    public function getDppPriceAttribute($value)
-    {
-        return localNumberFormat($value);
-    }
-
-    public function getBranchPriceAttribute($value)
     {
         return localNumberFormat($value);
     }

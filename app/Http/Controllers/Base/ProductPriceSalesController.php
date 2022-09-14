@@ -27,9 +27,9 @@ class ProductPriceSalesController extends AppBaseController
      *
      * @return Response
      */
-    public function index(ProductPriceSalesDataTable $ProductPriceSalesDataTable)
+    public function index(ProductPriceSalesDataTable $productPriceSalesDataTable)
     {
-        return $ProductPriceSalesDataTable->render('base.product_prices_sales.index');
+        return $productPriceSalesDataTable->render('base.product_price_sales.index');
     }
 
     /**
@@ -39,7 +39,7 @@ class ProductPriceSalesController extends AppBaseController
      */
     public function create()
     {
-        return view('base.product_prices_sales.create')->with($this->getOptionItems());
+        return view('base.product_price_sales.create')->with($this->getOptionItems());
     }
 
     /**
@@ -51,11 +51,11 @@ class ProductPriceSalesController extends AppBaseController
     {
         $input = $request->all();
 
-        $ProductPriceSales = $this->getRepositoryObj()->create($input);
+        $productPriceSales = $this->getRepositoryObj()->create($input);
 
         Flash::success(__('messages.saved', ['model' => __('models/ProductPriceSaless.singular')]));
 
-        return redirect(route('Base.ProductPriceSaless.index'));
+        return redirect(route('base.productPriceSales.index'));
     }
 
     /**
@@ -67,15 +67,15 @@ class ProductPriceSalesController extends AppBaseController
      */
     public function show($id)
     {
-        $ProductPriceSales = $this->getRepositoryObj()->find($id);
+        $productPriceSales = $this->getRepositoryObj()->find($id);
 
-        if (empty($ProductPriceSales)) {
+        if (empty($productPriceSales)) {
             Flash::error(__('models/ProductPriceSaless.singular').' '.__('messages.not_found'));
 
-            return redirect(route('Base.ProductPriceSaless.index'));
+            return redirect(route('base.productPriceSales.index'));
         }
 
-        return view('base.product_prices_sales.show')->with('ProductPriceSales', $ProductPriceSales);
+        return view('base.product_price_sales.show')->with('productPriceSales', $productPriceSales);
     }
 
     /**
@@ -87,15 +87,15 @@ class ProductPriceSalesController extends AppBaseController
      */
     public function edit($id)
     {
-        $ProductPriceSales = $this->getRepositoryObj()->find($id);
+        $productPriceSales = $this->getRepositoryObj()->find($id);
 
-        if (empty($ProductPriceSales)) {
+        if (empty($productPriceSales)) {
             Flash::error(__('messages.not_found', ['model' => __('models/ProductPriceSaless.singular')]));
 
-            return redirect(route('Base.ProductPriceSaless.index'));
+            return redirect(route('base.productPriceSales.index'));
         }
 
-        return view('base.product_prices_sales.edit')->with('ProductPriceSales', $ProductPriceSales)->with($this->getOptionItems());
+        return view('base.product_price_sales.edit')->with('ProductPriceSales', $productPriceSales)->with($this->getOptionItems());
     }
 
     /**
@@ -107,19 +107,19 @@ class ProductPriceSalesController extends AppBaseController
      */
     public function update($id, UpdateProductPriceSalesRequest $request)
     {
-        $ProductPriceSales = $this->getRepositoryObj()->find($id);
+        $productPriceSales = $this->getRepositoryObj()->find($id);
 
-        if (empty($ProductPriceSales)) {
+        if (empty($productPriceSales)) {
             Flash::error(__('messages.not_found', ['model' => __('models/ProductPriceSaless.singular')]));
 
-            return redirect(route('Base.ProductPriceSaless.index'));
+            return redirect(route('base.productPriceSales.index'));
         }
 
-        $ProductPriceSales = $this->getRepositoryObj()->update($request->all(), $id);
+        $productPriceSales = $this->getRepositoryObj()->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/ProductPriceSaless.singular')]));
 
-        return redirect(route('Base.ProductPriceSaless.index'));
+        return redirect(route('base.productPriceSales.index'));
     }
 
     /**
@@ -131,19 +131,19 @@ class ProductPriceSalesController extends AppBaseController
      */
     public function destroy($id)
     {
-        $ProductPriceSales = $this->getRepositoryObj()->find($id);
+        $productPriceSales = $this->getRepositoryObj()->find($id);
 
-        if (empty($ProductPriceSales)) {
+        if (empty($productPriceSales)) {
             Flash::error(__('messages.not_found', ['model' => __('models/ProductPriceSaless.singular')]));
 
-            return redirect(route('Base.ProductPriceSaless.index'));
+            return redirect(route('base.productPriceSales.index'));
         }
 
         $this->getRepositoryObj()->delete($id);
 
         Flash::success(__('messages.deleted', ['model' => __('models/ProductPriceSaless.singular')]));
 
-        return redirect(route('Base.ProductPriceSaless.index'));
+        return redirect(route('base.productPriceSales.index'));
     }
 
     /**
@@ -156,12 +156,11 @@ class ProductPriceSalesController extends AppBaseController
     private function getOptionItems()
     {
         $dmsInvProduct = new DmsInvProductRepository(app());
-        $ProductPriceSalesItem = ProductPriceSales::select(['dms_inv_product_id', 'price', 'dpp_price', 'branch_price', 'start_date'])->get()->keyBy('dms_inv_product_id')->toArray();
+        $productPriceItem = ProductPriceSales::select(['dms_inv_product_id', 'price', 'start_date'])->get()->keyBy('dms_inv_product_id')->toArray();
 
-        return [
-            // 'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->disableModelCaching()->whereHas('productCategoriesProduct')->get()->pluck('szName', 'iInternalId')->toArray(),
-            'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->disableModelCaching()->where('dtmEndDate','>=', \Carbon\Carbon::now()->addMonth(-1))->get()->pluck('szName', 'iInternalId')->toArray(),
-            'ProductPriceSalesItem' => $ProductPriceSalesItem,
+        return [            
+            'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->disableModelCaching()->where('dtmEndDate','>=', \Carbon\Carbon::now()->addMonth(-1))->get()->pluck('szName', 'szId')->toArray(),
+            'productPriceItem' => $productPriceItem,
         ];
     }
 }

@@ -41,7 +41,7 @@ class ProductPriceSalesDataTable extends DataTable
         // $dataTable->editColumn('dms_inv_product_id', function($q){
 
         // });
-        return $dataTable->addColumn('action', 'Base.product_prices_sales.datatables_actions');
+        return $dataTable->addColumn('action', 'base.product_price_sales.datatables_actions');
     }
 
     /**
@@ -74,11 +74,7 @@ class ProductPriceSalesDataTable extends DataTable
                 'className' => 'btn btn-default btn-sm no-corner',
                 'text' => '<i class="fa fa-download"></i> '.__('auth.app.export').'',
             ],
-            // [
-            //     'extend' => 'import',
-            //     'className' => 'btn btn-default btn-sm no-corner',
-            //     'text' => '<i class="fa fa-upload"></i> '.__('auth.app.import').'',
-            // ],
+            
             [
                 'extend' => 'print',
                 'className' => 'btn btn-default btn-sm no-corner',
@@ -123,12 +119,12 @@ class ProductPriceSalesDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'product_id' => new Column(['title' => __('models/dmsInvProducts.fields.szId'), 'data' => 'dms_inv_product.szId', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
-            'dms_inv_product_id' => new Column(['title' => __('models/ProductPriceSaless.fields.dms_inv_product_id'), 'data' => 'dms_inv_product.szName', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
-            'price' => new Column(['title' => __('models/ProductPriceSaless.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
-            'dpp_price' => new Column(['title' => __('models/ProductPriceSaless.fields.dpp_price'), 'data' => 'dpp_price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
-            'branch_price' => new Column(['title' => __('models/ProductPriceSaless.fields.branch_price'), 'data' => 'branch_price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
-            'start_date' => new Column(['title' => __('models/ProductPriceSaless.fields.start_date'), 'data' => 'start_date', 'searchable' => false, 'elmsearch' => 'text']),
+            // 'product_id' => new Column(['title' => __('models/dmsInvProducts.fields.szId'), 'data' => 'dms_inv_product.szId', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
+            'dms_inv_product_id' => new Column(['title' => __('models/productPriceSales.fields.dms_inv_product_id'), 'data' => 'dms_inv_product.szName', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
+            'price' => new Column(['title' => __('models/productPriceSales.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
+            // 'dpp_price' => new Column(['title' => __('models/productPriceSales.fields.dpp_price'), 'data' => 'dpp_price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
+            // 'branch_price' => new Column(['title' => __('models/productPriceSales.fields.branch_price'), 'data' => 'branch_price', 'searchable' => false, 'elmsearch' => 'text', 'class' => 'text-right']),
+            'start_date' => new Column(['title' => __('models/productPriceSales.fields.start_date'), 'data' => 'start_date', 'searchable' => false, 'elmsearch' => 'text']),
             'product_uom_id' => new Column(['title' => __('models/dmsInvProducts.fields.szUomId'), 'data' => 'dms_inv_product.szUomId', 'searchable' => true, 'elmsearch' => 'text', 'orderable' => false]),
         ];
     }

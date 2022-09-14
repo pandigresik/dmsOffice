@@ -18,7 +18,7 @@
                              <a class="pull-right" href="{{ route('base.productPriceSales.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
                          </div>
                          <div class="card-body">
-                             @include('inventory.product_prices_sales.table')
+                             @include('base.product_price_sales.table')
                               <div class="pull-right mr-3">
                                      
                               </div>

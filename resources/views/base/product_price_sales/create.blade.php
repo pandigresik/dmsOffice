@@ -22,7 +22,7 @@
                             </div>
                             <div class="card-body">                                
 
-                                   @include('inventory.product_prices_sales.fields')
+                                   @include('base.product_price_sales.fields')
                                 
                             </div>
                             <div class="card-footer">

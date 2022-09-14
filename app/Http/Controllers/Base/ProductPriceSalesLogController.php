@@ -24,11 +24,11 @@ class ProductPriceSalesLogController extends AppBaseController
      *
      * @return Response
      */
-    public function index(ProductPriceSalesLogDataTable $ProductPriceSalesLogDataTable, Request $request)
+    public function index(ProductPriceSalesLogDataTable $productPriceSalesLogDataTable, Request $request)
     {
-        $dmsInvProduct = $request->route('dmsInvProduct');
+        $dmsInvProduct = $request->route('dmsInvProduct');        
 
-        return $ProductPriceSalesLogDataTable->setDefaultFilter(['dms_inv_product_id' => $dmsInvProduct])->render('Base.product_price_logs.index');
+        return $productPriceSalesLogDataTable->setDefaultFilter(['dms_inv_product_id' => $dmsInvProduct])->render('base.product_price_sales_logs.index');
     }
 
     /**
