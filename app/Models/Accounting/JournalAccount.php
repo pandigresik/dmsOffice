@@ -217,7 +217,7 @@ class JournalAccount extends Model
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             union all
-            -- potongan distributor
+            -- potongan distributor, galon tidak ada potongan 
             select '{$coaPotDistTunai}' as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscDistributor) as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
             from dms_sd_docdo do
@@ -225,9 +225,10 @@ class JournalAccount extends Model
             join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and abs(dip.decDiscDistributor) > 0  and do.bCash = 1
                 and do.szBranchId = '{$branchId}'
-                and do.dtmDoc between '{$startDate}' and '{$endDate}'
+                and do.dtmDoc between '{$startDate}' and '{$endDate}'                
+                and di.szProductId not in ({$kodeGalon})
             union all
-            -- potongan internal
+            -- potongan internal, galon tidak ada potongan
             select '{$coaPotIntTunai}' as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscInternal) as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
             from dms_sd_docdo do
@@ -236,7 +237,8 @@ class JournalAccount extends Model
             where do.szDocStatus = 'Applied' and abs(dip.decDiscInternal) > 0  and do.bCash = 1 
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
-            -- potongan TIV
+                and di.szProductId not in ({$kodeGalon})
+            -- potongan TIV, galon tidak ada potongan
             union all
             select '{$coaPotTivTunai}' as coa,
                 -- do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
@@ -248,7 +250,8 @@ class JournalAccount extends Model
             -- where do.szDocStatus = 'Applied' and do.bCash = 1
              where do.szDocStatus = 'Applied' and do.bCash = 1 and abs(dip.decDiscPrinciple) > 0
                 and do.szBranchId = '{$branchId}'
-                and do.dtmDoc between '{$startDate}' and '{$endDate}'            
+                and do.dtmDoc between '{$startDate}' and '{$endDate}' 
+                and di.szProductId not in ({$kodeGalon})           
             )x 
             join account on account.code = x.coa
             join report_setting_account_detail on report_setting_account_detail.account_id = account.id
@@ -289,7 +292,7 @@ class JournalAccount extends Model
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             union all
-            -- potongan distributor
+            -- potongan distributor, galon tidak ada potongan
             select '{$coaPotDistKredit}' as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscDistributor) as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
             from dms_sd_docdo do
@@ -298,8 +301,9 @@ class JournalAccount extends Model
             where do.szDocStatus = 'Applied' and abs(dip.decDiscDistributor) > 0  and do.bCash = 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
+                and di.szProductId not in ({$kodeGalon})
             union all
-            -- potongan internal
+            -- potongan internal, galon tidak ada potongan
             select '{$coaPotIntKredit}' as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscInternal) as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
             from dms_sd_docdo do
@@ -308,7 +312,8 @@ class JournalAccount extends Model
             where do.szDocStatus = 'Applied' and abs(dip.decDiscInternal) > 0  and do.bCash = 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
-            -- potongan TIV
+                and di.szProductId not in ({$kodeGalon})
+            -- potongan TIV, galon tidak ada potongan
             union all
             select '{$coaPotTivKredit}' as coa,
               --  do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
@@ -321,6 +326,7 @@ class JournalAccount extends Model
             where do.szDocStatus = 'Applied' and do.bCash = 0 and abs(dip.decDiscPrinciple) > 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
+                and di.szProductId not in ({$kodeGalon})                
             )x 
             join account on account.code = x.coa
             join report_setting_account_detail on report_setting_account_detail.account_id = account.id
@@ -347,7 +353,8 @@ class JournalAccount extends Model
 
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
-            select '{$coaPpnKeluaran}' as account_id, name, ({$besarPPN} * debit) as debit, credit,({$besarPPN} * balance) as balance,date, branch_id, reference, type, now()
+            -- select '{$coaPpnKeluaran}' as account_id, name, ({$besarPPN} * debit) as debit, credit,({$besarPPN} * balance) as balance,date, branch_id, reference, type, now()
+            select '{$coaPpnKeluaran}' as account_id, name, debit, credit, balance,date, branch_id, reference, type, now()
             from journal_account 
             where type = '{$type}' and branch_id = '{$branchId}' and date between '{$startDate}' and '{$endDate}'
             and account_id in ('{$coaGalonKredit}','{$coaGalonTunai}')
