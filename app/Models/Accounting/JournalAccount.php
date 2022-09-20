@@ -197,6 +197,10 @@ class JournalAccount extends Model
         $coaPotDistTunai = $settingCompany['coa_pot_dist_tunai'];
         $coaPotIntTunai = $settingCompany['coa_pot_int_tunai'];
         $coaPotTivTunai = $settingCompany['coa_pot_tiv_tunai'];
+        $coaPotGalonDistTunai = $settingCompany['coa_potgal_int_t'];
+        $coaPotGalonIntTunai = $settingCompany['coa_potgal_dist_t'];
+        $coaPotGalonTivTunai = $settingCompany['coa_potgal_tiv_t'];
+
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
@@ -217,8 +221,11 @@ class JournalAccount extends Model
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             union all
-            -- potongan distributor, galon tidak ada potongan 
-            select '{$coaPotDistTunai}' as coa,
+            -- potongan distributor             
+            select case 
+                    when di.szProductId in ({$kodeGalon}) then '{$coaPotGalonDistTunai}'
+                    else '{$coaPotDistTunai}'
+                end as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscDistributor) as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
@@ -226,10 +233,13 @@ class JournalAccount extends Model
             where do.szDocStatus = 'Applied' and abs(dip.decDiscDistributor) > 0  and do.bCash = 1
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'                
-                and di.szProductId not in ({$kodeGalon})
+                -- and di.szProductId not in ({$kodeGalon})
             union all
-            -- potongan internal, galon tidak ada potongan
-            select '{$coaPotIntTunai}' as coa,
+            -- potongan internal
+            select case 
+                    when di.szProductId in ({$kodeGalon}) then '{$coaPotGalonIntTunai}'
+                    else '{$coaPotIntTunai}'
+                end as coa,            
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscInternal) as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
@@ -237,10 +247,13 @@ class JournalAccount extends Model
             where do.szDocStatus = 'Applied' and abs(dip.decDiscInternal) > 0  and do.bCash = 1 
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
-                and di.szProductId not in ({$kodeGalon})
-            -- potongan TIV, galon tidak ada potongan
+                -- and di.szProductId not in ({$kodeGalon})
+            -- potongan TIV
             union all
-            select '{$coaPotTivTunai}' as coa,
+            select case 
+                    when di.szProductId in ({$kodeGalon}) then '{$coaPotGalonTivTunai}'
+                    else '{$coaPotTivTunai}'
+                end as coa,            
                 -- do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
                     do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscPrinciple) as credit, -1 * dip.decDiscPrinciple as amount , do.szDocId 
             from dms_sd_docdo do
@@ -251,7 +264,7 @@ class JournalAccount extends Model
              where do.szDocStatus = 'Applied' and do.bCash = 1 and abs(dip.decDiscPrinciple) > 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}' 
-                and di.szProductId not in ({$kodeGalon})           
+                -- and di.szProductId not in ({$kodeGalon})           
             )x 
             join account on account.code = x.coa
             join report_setting_account_detail on report_setting_account_detail.account_id = account.id
@@ -271,6 +284,9 @@ class JournalAccount extends Model
         $coaPotDistKredit = $settingCompany['coa_pot_dist_kredit'];
         $coaPotIntKredit = $settingCompany['coa_pot_int_kredit'];
         $coaPotTivKredit = $settingCompany['coa_pot_tiv_kredit'];
+        $coaPotGalonDistKredit = $settingCompany['coa_potgal_int_k'];
+        $coaPotGalonIntKredit = $settingCompany['coa_potgal_dist_k'];
+        $coaPotGalonTivKredit = $settingCompany['coa_potgal_tiv_k'];
 
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
@@ -292,8 +308,11 @@ class JournalAccount extends Model
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
             union all
-            -- potongan distributor, galon tidak ada potongan
-            select '{$coaPotDistKredit}' as coa,
+            -- potongan distributor
+            select case 
+                    when di.szProductId in ({$kodeGalon}) then '{$coaPotGalonDistKredit}'
+                    else '{$coaPotDistKredit}'
+                end as coa,            
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscDistributor) as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
@@ -301,10 +320,13 @@ class JournalAccount extends Model
             where do.szDocStatus = 'Applied' and abs(dip.decDiscDistributor) > 0  and do.bCash = 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
-                and di.szProductId not in ({$kodeGalon})
+                -- and di.szProductId not in ({$kodeGalon})
             union all
-            -- potongan internal, galon tidak ada potongan
-            select '{$coaPotIntKredit}' as coa,
+            -- potongan internal
+            select case 
+                    when di.szProductId in ({$kodeGalon}) then '{$coaPotGalonIntKredit}'
+                    else '{$coaPotIntKredit}'
+                end as coa,            
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscInternal) as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
             from dms_sd_docdo do
             join dms_sd_docdoitem di on di.szDocId = do.szDocId
@@ -312,10 +334,13 @@ class JournalAccount extends Model
             where do.szDocStatus = 'Applied' and abs(dip.decDiscInternal) > 0  and do.bCash = 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
-                and di.szProductId not in ({$kodeGalon})
-            -- potongan TIV, galon tidak ada potongan
+                -- and di.szProductId not in ({$kodeGalon})
+            -- potongan TIV
             union all
-            select '{$coaPotTivKredit}' as coa,
+            select case 
+                    when di.szProductId in ({$kodeGalon}) then '{$coaPotGalonTivKredit}'
+                    else '{$coaPotTivKredit}'
+                end as coa,            
               --  do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
                   do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscPrinciple) as credit, -1 * dip.decDiscPrinciple as amount , do.szDocId 
             from dms_sd_docdo do
@@ -326,7 +351,7 @@ class JournalAccount extends Model
             where do.szDocStatus = 'Applied' and do.bCash = 0 and abs(dip.decDiscPrinciple) > 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
-                and di.szProductId not in ({$kodeGalon})                
+                -- and di.szProductId not in ({$kodeGalon})                
             )x 
             join account on account.code = x.coa
             join report_setting_account_detail on report_setting_account_detail.account_id = account.id
@@ -342,6 +367,13 @@ class JournalAccount extends Model
         $settingCompany = Setting::pluck('value', 'code');
         $coaGalonKredit = $settingCompany['coa_galon_kredit'];
         $coaGalonTunai = $settingCompany['coa_galon_tunai'];
+        $coaPotGalonDistTunai = $settingCompany['coa_potgal_int_t'];
+        $coaPotGalonIntTunai = $settingCompany['coa_potgal_dist_t'];
+        $coaPotGalonTivTunai = $settingCompany['coa_potgal_tiv_t'];
+        $coaPotGalonDistKredit = $settingCompany['coa_potgal_int_k'];
+        $coaPotGalonIntKredit = $settingCompany['coa_potgal_dist_k'];
+        $coaPotGalonTivKredit = $settingCompany['coa_potgal_tiv_k'];
+        $coaGalon = implode("','",[$coaGalonKredit, $coaGalonTunai, $coaPotGalonDistTunai, $coaPotGalonIntTunai, $coaPotGalonTivTunai, $coaPotGalonDistKredit, $coaPotGalonIntKredit, $coaPotGalonTivKredit]);
         // $coaPenjualanKredit = $settingCompany["coa_penjualan_kredit"];
         // $coaPenjualanTunai = $settingCompany['coa_penjualan_tunai'];
         $coaPpnKeluaran = $settingCompany['coa_ppn_keluaran'];   // 213001
@@ -353,18 +385,17 @@ class JournalAccount extends Model
 
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
-            -- select '{$coaPpnKeluaran}' as account_id, name, ({$besarPPN} * debit) as debit, credit,({$besarPPN} * balance) as balance,date, branch_id, reference, type, now()
-            select '{$coaPpnKeluaran}' as account_id, name, debit, credit, balance,date, branch_id, reference, type, now()
+            select '{$coaPpnKeluaran}' as account_id, name, ({$besarPPN} * debit) as debit, credit,({$besarPPN} * balance) as balance,date, branch_id, reference, type, now()
             from journal_account 
             where type = '{$type}' and branch_id = '{$branchId}' and date between '{$startDate}' and '{$endDate}'
-            and account_id in ('{$coaGalonKredit}','{$coaGalonTunai}')
+            and account_id in ('{$coaGalon}')
         SQL;
         $this->fromQuery($sql);
 
         $sql = <<<SQL
             update journal_account set debit = debit / {$pembagiPPN}, balance = balance / {$pembagiPPN}
             where type = '{$type}' and branch_id = '{$branchId}' and date between '{$startDate}' and '{$endDate}'
-            and account_id not in ('{$coaGalonKredit}','{$coaGalonTunai}','{$coaPpnKeluaran}')
+            and account_id not in ('{$coaGalon}','{$coaPpnKeluaran}')
         SQL;
         $this->fromQuery($sql);
     }

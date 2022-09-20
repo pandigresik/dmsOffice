@@ -213,7 +213,7 @@
                         <td colspan="2">Laba (Rugi) Bersih Sebelum Pajak</td>                        
                         @foreach ($branchMaster as $item)
                             @php                                
-                                $labaRugiSebelumPajak = $summaryBranch[$item->szId]['LR-01'] + $summaryBranch[$item->szId]['LR-02'] - $summaryBranch[$item->szId]['LR-03'] - $summaryBranch[$item->szId]['LR-04'] + $summaryBranch[$item->szId]['LR-05'] - $summaryBranch[$item->szId]['LR-06'] - $summaryBranch[$item->szId]['LR-07'];
+                                $labaRugiSebelumPajak = $summaryBranch[$item->szId]['LR-01'] + $summaryBranch[$item->szId]['LR-02'] - $summaryBranch[$item->szId]['LR-03'] - $summaryBranch[$item->szId]['LR-04'] + $summaryBranch[$item->szId]['LR-05'] - $summaryBranch[$item->szId]['LR-06'] + $summaryBranch[$item->szId]['LR-07'];
                                 $totalBaris += $labaRugiSebelumPajak;
                             @endphp
                             <td class="text-right">{{ localNumberAccountingFormat( $labaRugiSebelumPajak )  }}</td>
@@ -234,7 +234,7 @@
                         <td colspan="2">Laba (Rugi) Bersih</td>                        
                         @foreach ($branchMaster as $item)
                             @php                                
-                                $labaRugi = $summaryBranch[$item->szId]['LR-01'] + $summaryBranch[$item->szId]['LR-02'] - $summaryBranch[$item->szId]['LR-03'] - $summaryBranch[$item->szId]['LR-04'] + $summaryBranch[$item->szId]['LR-05'] - $summaryBranch[$item->szId]['LR-06'] - $summaryBranch[$item->szId]['LR-07'] - $summaryBranch[$item->szId]['LR-08'];
+                                $labaRugi = $summaryBranch[$item->szId]['LR-01'] + $summaryBranch[$item->szId]['LR-02'] - $summaryBranch[$item->szId]['LR-03'] - $summaryBranch[$item->szId]['LR-04'] + $summaryBranch[$item->szId]['LR-05'] - $summaryBranch[$item->szId]['LR-06'] + $summaryBranch[$item->szId]['LR-07'] - $summaryBranch[$item->szId]['LR-08'];
                                 $totalBaris += $labaRugi;
                             @endphp
                             <td class="text-right">{{ localNumberAccountingFormat( $labaRugi )  }}</td>
