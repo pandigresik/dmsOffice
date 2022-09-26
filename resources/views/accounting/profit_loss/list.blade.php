@@ -4,7 +4,7 @@
         'LR-06' => 'Beban Usaha',
         'LR-07' => 'Pendapatan (Beban) lain-lain',
     ];
-    $plusAccount = ['919900'];
+    $plusAccount = ['919900','910800'];
     $minusAccount = ['929900'];
 @endphp
 <table class="table table-bordered">

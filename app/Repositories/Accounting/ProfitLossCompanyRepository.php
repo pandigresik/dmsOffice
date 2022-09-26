@@ -38,49 +38,68 @@ class ProfitLossCompanyRepository extends BaseRepository
         return JournalAccount::class;
     }
 
+    // public function list($startDate, $endDate)
+    // {
+    //     $listAccount = $this->listAccount();
+    //     $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(balance) as balance')
+    //         ->disableModelCaching()
+    //         ->whereBetween('date', [$startDate, $endDate])
+    //         ->whereIn('account_id', $this->profitLossAccountCode($listAccount))
+    //         ->groupBy('account_id')
+    //         ->get()
+    //         ->keyBy('account_id')
+    //     ;
+
+    //     return [
+    //         'data' => $data,
+    //         'pendapatanUsaha' => $this->totalPendapatanUsaha($startDate, $endDate),
+    //         'hppPabrik' => $this->totalHppPabrik($startDate, $endDate),
+    //         'listAccount' => $listAccount,
+    //     ];
+    // }
+
     public function list($startDate, $endDate)
-    {
-        $listAccount = $this->listAccount();
-        $data = JournalAccount::with(['account'])->selectRaw('account_id, sum(balance) as balance')
+    {                
+        $excludeAccount = ['HPPP'];
+        $listAccount = $this->listAccount($excludeAccount);
+
+        $claimTiv = JournalAccount::with(['account'])->selectRaw('\'919901\' as account_id, abs(sum(balance)) as balance')
             ->disableModelCaching()
-            ->whereBetween('date', [$startDate, $endDate])
-            ->whereIn('account_id', $this->profitLossAccountCode($listAccount))
+            ->whereBetween('date', [$startDate, $endDate])            
+            ->whereIn('account_id', ['411011', '411111'])
             ->groupBy('account_id')
+            // ->groupBy('branch_id')
+        ;
+
+        $data = JournalAccount::with(['account'])
+            //->selectRaw('branch_id, account_id, sum(case when type=\'JM\' then (-1 * balance) else balance end) as balance')
+            ->selectRaw('account_id, sum(balance) as balance')
+            ->disableModelCaching()
+            ->whereBetween('date', [$startDate, $endDate])            
+            ->whereIn('account_id', $this->profitLossAccountCode($listAccount))
+            ->whereNotIn('account_id', $excludeAccount)
+            ->groupBy('account_id')
+            // ->groupBy('branch_id')
+            ->union($claimTiv)
             ->get()
-            ->keyBy('account_id')
+            // ->groupBy('branch_id')
         ;
 
         return [
-            'data' => $data,
-            'pendapatanUsaha' => $this->totalPendapatanUsaha($startDate, $endDate),
-            'hppPabrik' => $this->totalHppPabrik($startDate, $endDate),
+            'data' => $data,            
             'listAccount' => $listAccount,
+            'excludeAccount' => $excludeAccount,
         ];
-    }
+    }    
 
-    private function totalPendapatanUsaha($startDate, $endDate)
+    private function listAccount($excludeAccount)
     {
-        $listAccountPendapatanUsaha = $this->listAccountPendapatanUsaha();
-
-        return JournalAccount::whereBetween('date', [$startDate, $endDate])
-            ->disableModelCaching()
-            ->whereIn('account_id', array_diff($this->profitLossAccountCode($listAccountPendapatanUsaha), ['411011', '411111']))
-            ->sum('balance')
-        ;
-    }
-
-    private function listAccount()
-    {
-        return ReportSettingAccount::with(['details' => function ($q) {
-            $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
+        return ReportSettingAccount::with(['details' => function ($q) use ($excludeAccount) {
+            $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])
+                ->join('account', 'account.id', '=', 'report_setting_account_detail.account_id')
+                ->whereNotIn('report_setting_account_detail.account_id', $excludeAccount)
+            ;
         }])->orderBy('code')->whereGroupType($this->groupCode)->get();
-    }
-
-    private function listAccountPendapatanUsaha()
-    {
-        return ReportSettingAccount::with(['details' => function ($q) {
-            $q->select(['report_setting_account_detail.*', 'account.code', 'account.name'])->join('account', 'account.id', '=', 'report_setting_account_detail.account_id');
-        }])->orderBy('code')->whereIn('code', ['LR-01', 'LR-02', 'LR-05'])->get();
     }
 
     private function profitLossAccountCode($listAccount)
@@ -91,14 +110,5 @@ class ProfitLossCompanyRepository extends BaseRepository
         });
 
         return $result;
-    }
-
-    private function totalHppPabrik($startDate, $endDate)
-    {
-        return JournalAccount::whereBetween('date', [$startDate, $endDate])
-            ->disableModelCaching()
-            ->where('account_id', 'HPPPT')
-            ->sum('balance')
-        ;
-    }
+    }    
 }

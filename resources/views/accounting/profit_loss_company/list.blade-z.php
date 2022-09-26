@@ -1,6 +1,6 @@
 @php
     $headerGroup = [        
-        'LRC-02' => 'Pendapatan (Beban) lain-lain'
+        'LRC-02' => 'Pendapatan (Beban) lain-lain'        
     ];
     $totalGroup = [
         'LRC-01' => 0,
@@ -108,7 +108,7 @@
                     @break
                 @case('LRC-02')
                     @php
-                        $labaSebelumPajak = $pendapatanUsaha - $hppPabrik - $totalGroup['LRC-01']  - $totalGroup['LRC-02'];
+                        $labaSebelumPajak = $pendapatanUsaha - $hppPabrik - $totalGroup['LRC-01']  + $totalGroup['LRC-02'];
                     @endphp
                     <tr>
                         <td colspan="4"></td>
@@ -123,7 +123,7 @@
                     @break
                 @case('LRC-03')
                     @php
-                        $labaSetelahPajak = $pendapatanUsaha - $hppPabrik - $totalGroup['LRC-01']  - $totalGroup['LRC-02'] - $totalGroup['LRC-03'] ;
+                        $labaSetelahPajak = $pendapatanUsaha - $hppPabrik - $totalGroup['LRC-01']  + $totalGroup['LRC-02'] - $totalGroup['LRC-03'] ;
                     @endphp
                     <tr>
                         <td colspan="4"></td>
