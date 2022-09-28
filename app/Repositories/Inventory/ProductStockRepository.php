@@ -72,7 +72,7 @@ class ProductStockRepository extends BaseRepository
 
         $sql = <<<SQL
 select z.*,z.szProductId as product_id, (z.diff_price * z.qty_in_change) as pengurang from (
-        select x.*, y.last_stock as first_stock, COALESCE(y.price, 0) as old_price, COALESCE(current_price.price, 0) as price,  
+        select x.*, coalesce(y.last_stock, 0) as first_stock, COALESCE(y.price, 0) as old_price, COALESCE(current_price.price, 0) as price,  
 	        case when 
 		COALESCE(y.price,0) != COALESCE(current_price.price, 0) 
 		then (select (COALESCE(y.price,0) - COALESCE(current_price.price, 0)))  
