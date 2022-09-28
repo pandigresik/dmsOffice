@@ -224,7 +224,10 @@ class BtbValidate extends Model
     {
         $userId = Auth::id();
         $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');
-        $btbStr = implode("','", $btbs->flatten()->all());
+        $btbStr = implode("','", $btbs->flatten()->all());             
+        // if( (empty($branchId) or in_array($branchId, $gudangPusat)) ){ 
+        //     $whereBranchGdPusat =  !empty($branchId) ? " and dsd.szBranchId = '{$branchId}'" : " and dsd.szBranchId in ('".implode("','", $gudangPusat)."')";          
+            /** dbnya berbeda */
         $sql = <<<SQL
         insert into btb_validate (branch_id,btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price, shipping_cost )
         select z.* from(
@@ -255,6 +258,36 @@ class BtbValidate extends Model
         join dms_inv_product divi on divi.szId = dsdi.szProductId
         -- left join product_price pp on pp.dms_inv_product_id = divi.iInternalId
         where dsd.szDocStatus = 'Applied' and dsd.szDocId in ('{$btbStr}') 
+        -- untuk gudang pusat
+        union all 
+        select
+            dsd.szBranchId,
+            'BTB Supplier' as jenis,
+            dsd.szDocId AS no_btb,
+            dsd.dtmCreated as tgl_btb,
+            dsdi.iId as reference_id,
+            -- dsd.szRefDocId AS sj_pabrik,
+            dsd.szRef1 AS co_reference,            
+            dsdi.szProductId,
+            divi.szName,
+            dsdi.szUomId, 
+            dsd.szRefDocId AS sj_ekspedisi,
+            dsdi.decQty,
+            dsd.szCarrierId,
+            dsd.szWarehouseId,
+            dsd.szVehicle2 as nopol,
+            {$userId} as created_by ,
+            '{$now}' as created_at,
+            dsd.szSupplierId,
+            coalesce((select ppl.price from product_price_log ppl where ppl.product_id = dsdi.szProductId and ppl.start_date <= dsd.dtmDoc and (ppl.end_date is null or ppl.end_date >= dsd.dtmDoc) order by id desc limit 1),0) as price,
+            coalesce(getShippingCost(dsd.szDocId,dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
+        from
+            gdpusat.dms_inv_docstockinsupplier dsd
+        join gdpusat.dms_inv_docstockinsupplieritem dsdi on dsdi.szDocId = dsd.szDocId
+        join gdpusat.dms_inv_product divi on divi.szId = dsdi.szProductId
+        -- left join product_price pp on pp.dms_inv_product_id = divi.iInternalId
+        where dsd.szDocStatus = 'Applied' and dsd.szDocId in ('{$btbStr}') 
+
         )z where z.price > 0
         SQL;
         // DB::statement($sql);
@@ -330,7 +363,47 @@ class BtbValidate extends Model
     private function btbSupplierSql($startDate, $endDate, $branchId)
     {
         $whereBranchId = !empty($branchId) ? " and dsd.szBranchId = '{$branchId}'" : '';
-
+        $user = \Auth::user();
+        $gudangPusat = array_keys(config('entity.gudangPusat')[$user->entity_id]);
+        $sqlGdPusat = '';        
+        if( (empty($branchId) or in_array($branchId, $gudangPusat)) ){ 
+            $whereBranchGdPusat =  !empty($branchId) ? " and dsd.szBranchId = '{$branchId}'" : " and dsd.szBranchId in ('".implode("','", $gudangPusat)."')";          
+            /** dbnya berbeda */
+    $sqlGdPusat = <<<SQL
+            union all
+            select
+            'BTB Supplier' as jenis,
+            dsd.szDocId AS no_btb,
+            dsd.dtmCreated as tgl_btb,
+            dsd.szRefDocId AS sj_pabrik,            
+            divi.szName as product_name,
+            dsdi.decQty as qty,
+            dap.szName as asal,
+            dsd.szRef1 AS co_reference,
+            dsd.szRefDocId AS sj_ekspedisi,
+            dsd.dtmDoc as tgl_sj,
+            dsd.szVehicle2 as nopol,
+            dsd.szStockType as tipe_stok,
+            dsd.szWarehouseId as id_gudang,            
+            wh.szName as nama_gudang,
+            eks.szName as nama_ekspedisi,        
+            dsd.szDocStatus AS szDocStatus,
+            coalesce((select ppl.price from product_price_log ppl where ppl.product_id = dsdi.szProductId and ppl.start_date <= dsd.dtmDoc and (ppl.end_date is null or ppl.end_date >= dsd.dtmDoc) order by id desc limit 1),0) as price,
+            coalesce(getShippingCost(dsd.szDocId, dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
+            -- coalesce((select cost from shippingCost where product_id = dsdi.szProductId and destination_id = dsd.szWarehouseId and origin_id = dsd.szSupplierId limit 1),0) as shipping_cost
+        from
+            gdpusat.dms_inv_docstockinsupplier dsd
+        join gdpusat.dms_inv_docstockinsupplieritem dsdi on dsdi.szDocId = dsd.szDocId
+        join gdpusat.dms_inv_product divi on divi.szId = dsdi.szProductId
+        join gdpusat.dms_inv_warehouse wh on wh.szId = dsd.szWarehouseId 
+        join gdpusat.dms_inv_carrier eks on eks.szId  = dsd.szCarrierId
+        join gdpusat.dms_ap_supplier dap on dap.szId = dsd.szSupplierId 
+        left join btb_validate bv on bv.doc_id = dsd.szDocId and bv.deleted_at is null
+        where dsd.szDocStatus = 'Applied' and bv.reference_id is null        
+            and dsd.dtmCreated between '{$startDate}' and '{$endDate}'
+            {$whereBranchGdPusat}
+SQL;            
+        }
         return <<<SQL
         select
             'BTB Supplier' as jenis,
@@ -363,6 +436,7 @@ class BtbValidate extends Model
         where dsd.szDocStatus = 'Applied' and bv.reference_id is null        
             and dsd.dtmCreated between '{$startDate}' and '{$endDate}'
             {$whereBranchId}            
+        {$sqlGdPusat}
         SQL;
     }
 

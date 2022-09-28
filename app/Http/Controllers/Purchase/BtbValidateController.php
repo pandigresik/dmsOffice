@@ -177,9 +177,9 @@ class BtbValidateController extends AppBaseController
         // $btbItems = (new ListBtbValidate)->canValidate();
         // $btbDataOptions = $btbItems->keyBy('reference_id')->toArray();
         $branch = new DmsSmBranchRepository(app());
-
+        $user = \Auth::user();
         return [
-            'branchItems' => ['' => 'Semua'] + $branch->pluck([], null, null, 'szId', 'szName'),
+            'branchItems' => ['' => 'Semua']+ config('entity.gudangPusat')[$user->entity_id] + $branch->pluck([], null, null, 'szId', 'szName'),
             //'btbItems' => ['' => __('crud.option.btbitems_placeholder')] + $btbItems->pluck('full_identity', 'reference_id')->toArray(),
             //'btbDataOptions' => $btbDataOptions,
         ];

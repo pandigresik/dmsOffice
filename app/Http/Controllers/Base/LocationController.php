@@ -6,9 +6,11 @@ use App\DataTables\Base\LocationDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Base\CreateLocationRequest;
 use App\Http\Requests\Base\UpdateLocationRequest;
+use App\Models\Inventory\DmsInvWarehousePusat;
 use App\Repositories\Base\CityRepository;
 use App\Repositories\Base\DmsApSupplierRepository;
 use App\Repositories\Base\LocationRepository;
+use App\Repositories\Inventory\DmsInvWarehousePusatRepository;
 use App\Repositories\Inventory\DmsInvWarehouseRepository;
 use Flash;
 use Response;
@@ -165,11 +167,12 @@ class LocationController extends AppBaseController
         ];
         $originReference = new DmsApSupplierRepository(app());
         $destinationReference = new DmsInvWarehouseRepository(app());
+        $destinationPusatReference = new DmsInvWarehousePusatRepository(app());
 
         return [
             'cityItems' => ['' => __('crud.option.city_placeholder')] + $city->pluck([], null, null, 'name', 'name'),
             'typeItems' => $typeItems,
-            'referenceItems' => ['' => __('crud.option.reference_placeholder')] + ['origin' => $originReference->pluck([], null, null, 'szId', 'szName')] + ['destination' => $destinationReference->pluck([], null, null, 'szId', 'szName')],
+            'referenceItems' => ['' => __('crud.option.reference_placeholder')] + ['origin' => $originReference->pluck([], null, null, 'szId', 'szName')] + ['destination' => $destinationPusatReference->pluck([], null, null, 'szId', 'szName') + $destinationReference->pluck([], null, null, 'szId', 'szName')],
         ];
     }
 }

@@ -65,7 +65,7 @@
                     <td colspan="4">
                         <div class="row">
                             <div class="col-md-12">
-                                @include($baseViewPath.'.invoice_list',['invoiceLines' => $item->invoiceLines])
+                                @include($baseViewPath.'.invoice_list',['invoiceLines' => $item->invoiceLines, 'invoiceBkb' => $item->invoiceBkb])
                             </div>
                             <div class="col-md-12">
                                 @include($baseViewPath.'.cndn_list',['debitCreditNote' => $item->debitCreditNote])

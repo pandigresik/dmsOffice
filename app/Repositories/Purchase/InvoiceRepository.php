@@ -177,7 +177,7 @@ class InvoiceRepository extends BaseRepository
 
     public function readyPayment()
     {
-        return $this->model->disableModelCaching()->with(['invoiceLines', 'partner', 'debitCreditNote'])->validate()->get();
+        return $this->model->disableModelCaching()->with(['invoiceLines', 'partner', 'debitCreditNote', 'invoiceBkb'])->validate()->get();
     }
 
     private function setInvoiceLines($invoiceLine, $model)

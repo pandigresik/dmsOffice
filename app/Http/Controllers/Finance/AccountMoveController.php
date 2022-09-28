@@ -163,9 +163,9 @@ class AccountMoveController extends AppBaseController
         $accountData = $account->all([], null, null, ['code', 'name']);
         $accountOptionItems = $accountData->keyBy('code')->toArray();
         $branch = new DmsSmBranchRepository(app());
-
+        $user = \Auth::user();
         return [
-            'branchItems' => ['PT' => 'PT'] + $branch->pluck([], null, null, 'szId', 'szName'),
+            'branchItems' => ['PT' => 'PT'] + config('entity.gudangPusat')[$user->entity_id] + $branch->pluck([], null, null, 'szId', 'szName'),
             'accountItems' => ['' => __('crud.option.ekspedisi_placeholder')] + $accountData->pluck('code', 'code')->toArray(),
             'accountOptionItems' => $accountOptionItems,
         ];

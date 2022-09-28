@@ -2,20 +2,31 @@
 <table class="table table-bordered" width="100%">
     <thead>
         <tr>
-            <th>No. Dokumen</th>            
+            <th>No. Dokumen</th>
+            <th>Billing Dok</th>            
             <th>Jumlah</th>
             <th>Harga</th>
             <th>Total</th>
         </tr>
     </thead>
     <tbody>
+        @php
+          $itemBkb = $invoiceBkb->keyBy('references');
+        @endphp
         @foreach($invoiceLines->groupBy('product_name') as $product_name => $products)            
             <tr class="bg-info">
                 <td colspan="4">{!! $product_name !!}</td>
             </tr>
             @foreach ($products as $data)
+                @php                    
+                    $billingDoc = '';
+                    if(isset($itemBkb[$data->doc_id])){
+                        $billingDoc = $itemBkb[$data->doc_id]->additional_info["BILLING DOKUMEN"] ?? '-';
+                    }
+                @endphp
                 <tr>
-                    <td>{{ $data->doc_id }}</td>                        
+                    <td>{{ $data->doc_id }}</td>
+                    <td>{{ $billingDoc }}</td>
                     <td class="text-right">{{ $data->qty }}</td>
                     <td class="text-right">{{ $data->price }}</td>
                     <td class="text-right">{{ $data->amount_total }}</td>
