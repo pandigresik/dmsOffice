@@ -24,6 +24,14 @@ class BtbValidateDataTable extends DataTable
         //'entity.name' => 'entity_id',
     ];
 
+    private $listGudang = [];
+
+    public function __construct()
+    {
+        $user = \Auth::user();
+        $this->listGudang = config('entity.gudangPusat')[$user->entity_id] + DmsSmBranch::pluck('szName', 'szId')->toArray();
+    }
+
     /**
      * Build DataTable class.
      *
@@ -40,7 +48,9 @@ class BtbValidateDataTable extends DataTable
                 $dataTable->filterColumn($column, new $operator($columnSearch));
             }
         }
-
+        $dataTable->editColumn('branch.szName', function ($data) {               
+            return $this->listGudang[$data->branch_id] ?? $data->branch_id;
+        });
         return $dataTable->addColumn('action', 'purchase.btb_validates.datatables_actions');
     }
 
@@ -113,14 +123,13 @@ class BtbValidateDataTable extends DataTable
      * @return array
      */
     protected function getColumns()
-    {
-        $user = \Auth::user();    
-        $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(config('entity.gudangPusat')[$user->entity_id] + DmsSmBranch::pluck('szName', 'szId')->toArray()));
+    {        
+        $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey($this->listGudang));
         // $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(DmsSmBranch::pluck('szName', 'szId')->toArray()));
         $carrierItem = array_merge([['text' => 'Pilih Ekspedisi', 'value' => '']], convertArrayPairValueWithKey(DmsInvCarrier::pluck('szName', 'szId')->toArray()));
 
         return [
-            'branch_id' => new Column(['title' => __('models/btbValidates.fields.branch_id'), 'name' => 'branch_id', 'data' => 'branch.szName', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem, 'multiple' => 'multiple', 'width' => '200px']),
+            'branch_id' => new Column(['title' => __('models/btbValidates.fields.branch_id'), 'name' => 'branch_id', 'data' => 'branch.szName', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem, 'multiple' => 'multiple', 'width' => '200px']),
             'doc_id' => new Column(['title' => __('models/btbValidates.fields.doc_id'), 'data' => 'doc_id', 'searchable' => true, 'elmsearch' => 'text']),
             'co_reference' => new Column(['title' => __('models/btbValidates.fields.co_reference'), 'data' => 'co_reference', 'searchable' => true, 'elmsearch' => 'text']),
             'product_name' => new Column(['title' => __('models/btbValidates.fields.product_name'), 'data' => 'product_name', 'searchable' => true, 'elmsearch' => 'text']),

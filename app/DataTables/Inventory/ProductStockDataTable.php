@@ -144,8 +144,7 @@ class ProductStockDataTable extends DataTable
      */
     protected function getColumns()
     {
-        $user = \Auth::user();    
-        $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(config('entity.gudangPusat')[$user->entity_id] + DmsSmBranch::pluck('szName', 'szId')->toArray()));
+        $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey($this->listGudang));
         return [
             'product_id' => new Column(['title' => __('models/productStocks.fields.product_id'), 'data' => 'product_id', 'searchable' => true, 'elmsearch' => 'text']),
             'product_name' => new Column(['title' => __('models/productStocks.fields.product_name'), 'name' => 'product_name', 'data' => 'product.szName', 'searchable' => false, 'elmsearch' => 'text']),
