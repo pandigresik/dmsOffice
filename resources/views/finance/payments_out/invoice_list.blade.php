@@ -15,7 +15,7 @@
         @endphp
         @foreach($invoiceLines->groupBy('product_name') as $product_name => $products)            
             <tr class="bg-info">
-                <td colspan="4">{!! $product_name !!}</td>
+                <td colspan="5">{!! $product_name !!}</td>
             </tr>
             @foreach ($products as $data)
                 @php                    
@@ -37,7 +37,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="3">Total</td>
+            <td colspan="4">Total</td>
             <td class="text-right">{{ localNumberFormat( $invoiceLines->sum(function($invoice){ return $invoice->getRawOriginal('qty') * $invoice->getRawOriginal('price'); }),2 ) }}</td>
         </tr>
     </tfoot>

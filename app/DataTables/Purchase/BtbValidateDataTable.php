@@ -114,11 +114,13 @@ class BtbValidateDataTable extends DataTable
      */
     protected function getColumns()
     {
-        $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(DmsSmBranch::pluck('szName', 'szId')->toArray()));
+        $user = \Auth::user();    
+        $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(config('entity.gudangPusat')[$user->entity_id] + DmsSmBranch::pluck('szName', 'szId')->toArray()));
+        // $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(DmsSmBranch::pluck('szName', 'szId')->toArray()));
         $carrierItem = array_merge([['text' => 'Pilih Ekspedisi', 'value' => '']], convertArrayPairValueWithKey(DmsInvCarrier::pluck('szName', 'szId')->toArray()));
 
         return [
-            'branch_id' => new Column(['title' => __('models/btbValidates.fields.branch_id'), 'name' => 'branch_id', 'data' => 'branch.szName', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem, 'multiple' => 'multiple', 'width' => '200px']),
+            'branch_id' => new Column(['title' => __('models/btbValidates.fields.branch_id'), 'name' => 'branch_id', 'data' => 'branch.szName', 'defaultContent' => '-', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem, 'multiple' => 'multiple', 'width' => '200px']),
             'doc_id' => new Column(['title' => __('models/btbValidates.fields.doc_id'), 'data' => 'doc_id', 'searchable' => true, 'elmsearch' => 'text']),
             'co_reference' => new Column(['title' => __('models/btbValidates.fields.co_reference'), 'data' => 'co_reference', 'searchable' => true, 'elmsearch' => 'text']),
             'product_name' => new Column(['title' => __('models/btbValidates.fields.product_name'), 'data' => 'product_name', 'searchable' => true, 'elmsearch' => 'text']),
