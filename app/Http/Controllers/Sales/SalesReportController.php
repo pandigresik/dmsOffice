@@ -71,7 +71,7 @@ class SalesReportController extends AppBaseController
         $branch = new DmsSmBranchRepository(app());
         $user = \Auth::user();
         return [
-            'branchItems' => + config('entity.gudangPusat')[$user->entity_id] + $branch->pluck([], null, null, 'szId', 'szName'),
+            'branchItems' => config('entity.gudangPusat')[$user->entity_id] + $branch->pluck([], null, null, 'szId', 'szName'),
             'cashItems' => ['1' => 'Tunai', '0' => 'Tidak Tunai'],
         ];
     }
