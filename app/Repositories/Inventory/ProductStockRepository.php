@@ -90,7 +90,7 @@ select z.*,z.szProductId as product_id, (z.diff_price * z.qty_in_change) as peng
 			else 0 
 		end qty_in_change
 from (
-select dis.szProductId, dip.szName,
+select upper(dis.szProductId) as szProductId, dip.szName,
 	sum(case when dis.szTrnId = 'DMSDocStockInBranch' then dis.decQtyOnHand else 0 end) as 'mutation_in',
         sum(case when dis.szTrnId = 'DMSDocStockOutBranch' then abs(dis.decQtyOnHand) else 0 end) as 'mutation_out',
         sum(case when dis.szTrnId = 'DMSDocStockInDistribution' then dis.decQtyOnHand else 0 end) as 'distribution_in',
@@ -184,7 +184,7 @@ SQL;
             \Log::error($e->getMessage());
             $this->model->getConnection()->rollBack();
 
-            return $e->getMessage();
+            return $e;
         }
 
         return $this->model;

@@ -10,6 +10,7 @@ use App\Models\Inventory\ProductStock;
 use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Inventory\ProductStockRepository;
 use Carbon\Carbon;
+use Exception;
 use Flash;
 use Response;
 
@@ -52,7 +53,10 @@ class ProductStockController extends AppBaseController
     {
         $input = $request->all();
         $productStock = $this->getRepositoryObj()->create($input);
-
+        if($productStock instanceof Exception){
+            return redirect()->back()->withInput()->withErrors(['error', $productStock->getMessage()]);
+        }
+        
         return redirect(route('inventory.productStocks.index'));
     }
 
