@@ -11,6 +11,7 @@ use App\Repositories\Base\DmsApSupplierRepository;
 use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Inventory\DmsInvCarrierRepository;
 use App\Repositories\Purchase\InvoiceRepository;
+use Exception;
 use Flash;
 use Response;
 
@@ -60,7 +61,9 @@ class InvoiceController extends AppBaseController
         $input = $request->all();
 
         $invoice = $this->getRepositoryObj()->create($input);
-
+        if($invoice instanceof Exception){
+            return redirect()->back()->withInput()->withErrors(['error', $invoice->getMessage()]);
+        }
         Flash::success(__('messages.saved', ['model' => __('models/invoices.singular')]));
 
         return redirect(route('purchase.invoices.index'));

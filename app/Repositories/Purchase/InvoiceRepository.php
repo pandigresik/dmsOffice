@@ -5,6 +5,7 @@ namespace App\Repositories\Purchase;
 use App\Models\Purchase\BtbValidate;
 use App\Models\Purchase\Invoice;
 use App\Repositories\BaseRepository;
+use Exception;
 
 /**
  * Class InvoiceRepository.
@@ -96,6 +97,7 @@ class InvoiceRepository extends BaseRepository
                 $this->model->getConnection()->commit();
             }else{
                 $this->model->getConnection()->rollBack();
+                throw new Exception('Nilai amount invoice ('.$model->getRawOriginal('amount').') dan total detail ('.$invoiceLineSum.') tidak sama ');
                 \Log::error('Nilai amount invoice ('.$model->getRawOriginal('amount').') dan total detail ('.$invoiceLineSum.') tidak sama ');
             }            
         } catch (\Exception $e) {
