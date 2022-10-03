@@ -13,7 +13,7 @@
     {!! Form::label('external_reference', __('models/invoices.fields.external_reference').':', ['class' => 'col-md-3
     col-form-label']) !!}
     <div class="col-md-6">
-        {!! Form::text('external_reference', null, ['class' => 'form-control','maxlength' => 255, 'required' =>
+        {!! Form::text('external_reference', null, ['class' => 'form-control','maxlength' => 30, 'required' =>
         'required']) !!}
     </div>
 </div>
