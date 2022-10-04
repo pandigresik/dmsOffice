@@ -88,18 +88,19 @@ class InvoiceRepository extends BaseRepository
             if ('ekspedisi' == $input['partner_type']) {
                 $model->shippingCost()->update([$btbInvoicedColumn => 1]);
             }
-            /** pastikan amount pada header = total invoice line */
-            $invoiceLineSum = $model->invoiceLines->sum(function($v){
-                return $v->getRawOriginal('price') * $v->getRawOriginal('qty');
-            });
+            /** pastikan amount pada header = total invoice line - total BKB */
+            // $invoiceLineSum = $model->invoiceLines->sum(function($v){
+            //     return $v->getRawOriginal('price') * $v->getRawOriginal('qty');
+            // });
 
-            if($model->getRawOriginal('amount') == $invoiceLineSum){
-                $this->model->getConnection()->commit();
-            }else{
-                $this->model->getConnection()->rollBack();
-                throw new Exception('Nilai amount invoice ('.$model->getRawOriginal('amount').') dan total detail ('.$invoiceLineSum.') tidak sama ');
-                \Log::error('Nilai amount invoice ('.$model->getRawOriginal('amount').') dan total detail ('.$invoiceLineSum.') tidak sama ');
-            }            
+            // if($model->getRawOriginal('amount') == $invoiceLineSum){
+            //     $this->model->getConnection()->commit();
+            // }else{
+            //     $this->model->getConnection()->rollBack();
+            //     throw new Exception('Nilai amount invoice ('.$model->getRawOriginal('amount').') dan total detail ('.$invoiceLineSum.') tidak sama ');
+            //     \Log::error('Nilai amount invoice ('.$model->getRawOriginal('amount').') dan total detail ('.$invoiceLineSum.') tidak sama ');
+            // }            
+            $this->model->getConnection()->commit();
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             $this->model->getConnection()->rollBack();
