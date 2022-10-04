@@ -169,13 +169,13 @@ class InvoiceController extends AppBaseController
         $supplier = new DmsApSupplierRepository(app());
         $ekspedisi = new DmsInvCarrierRepository(app());
         $branch = new DmsSmBranchRepository(app());
-
+        $user = \Auth::user();
         // untuk supplier hanya menampilkan TIV saja
         return [
             //    'branchItems' => $branch->pluck([], null, null, 'szId', 'szName'),
             'partnerItem' => ['' => __('crud.option.supplier_placeholder')] + $supplier->all(['szId' => 'TIV'])->pluck('szName', 'szId')->toArray(),
             'ekspedisiItem' => ['' => __('crud.option.ekspedisi_placeholder')] + $ekspedisi->all()->pluck('szName', 'szId')->toArray(),
-            'branchItem' => $branch->all()->pluck('szName', 'szId')->toArray(),
+            'branchItem' => ['' => 'Pilih depo'] + config('entity.gudangPusat')[$user->entity_id] + $branch->pluck([], null, null, 'szId', 'szName'),
         ];
     }
 
