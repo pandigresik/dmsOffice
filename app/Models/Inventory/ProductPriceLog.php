@@ -47,6 +47,8 @@ class ProductPriceLog extends Model
     public $fillable = [
         'dms_inv_product_id',
         'price',
+        'dpp_price',
+        'branch_price',
         'start_date',
         'end_date',
         'product_id',
