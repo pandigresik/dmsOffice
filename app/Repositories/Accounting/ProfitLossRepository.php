@@ -74,7 +74,7 @@ class ProfitLossRepository extends BaseRepository
 
         return [
             'data' => $data,
-            'branchMaster' => DmsSmBranch::whereIn('szId', $branchId)->get()->keyBy('szId'),
+            'branchMaster' => $this->getListBranch($branchId),
             'listAccount' => $listAccount,
             'excludeAccount' => $excludeAccount,
         ];
@@ -131,5 +131,18 @@ class ProfitLossRepository extends BaseRepository
         ;
 
         return $query->get();
+    }
+
+    private function getListBranch($branchId){
+        $user = \Auth::user();
+        $gudangPusat = config('entity.gudangPusat')[$user->entity_id];
+        $result = DmsSmBranch::whereIn('szId', $branchId)->get()->keyBy('szId');
+        foreach($branchId as $branch){
+            if(isset($gudangPusat[$branch])){
+                $result[$branch] = new DmsSmBranch(['szId' => $branch, 'szName' => $gudangPusat[$branch]]);
+            }
+        }
+        
+        return $result;
     }
 }

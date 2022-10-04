@@ -134,18 +134,25 @@ class JournalAccount extends Model
     }
 
     public function jurnalBiaya($input)
-    {
+    {        
         $settingCompany = Setting::pluck('value', 'code');
         $coaCashback = $settingCompany['coa_cashback']; // 829220
         $coaBiayaPromosi = $settingCompany['coa_biaya_promosi']; // 829207
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
+        
+        $user = \Auth::user();
+        $gudangPusat = config('entity.gudangPusat')[$user->entity_id];
+        $dbSource = '';
+        if(isset($gudangPusat[$branchId])){
+            $dbSource = 'gdpusat.';
+        }
         $type = $input['type'];
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at) 
             SELECT szAccountId, account.name, decDebit, decCredit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}' , now()
-            FROM dms_cas_cashbalance 
-            join account on account.code = dms_cas_cashbalance.szAccountId
+            FROM {$dbSource}dms_cas_cashbalance 
+            join account on account.code = {$dbSource}dms_cas_cashbalance.szAccountId
             join report_setting_account_detail on report_setting_account_detail.account_id = account.id
             join report_setting_account on report_setting_account.id = report_setting_account_detail.report_setting_account_id 
                 and report_setting_account.group_type = 'LR' and report_setting_account.code in ('LR-06', 'LR-07')
@@ -154,15 +161,15 @@ class JournalAccount extends Model
             union all 
             -- account cashback
             SELECT '{$coaCashback}', account.name, decCredit, decDebit, (-1 * decAmount), dtmDoc, szBranchId, szDocId, '{$type}', now()
-            FROM dms_cas_cashbalance 
-            join account on account.code = dms_cas_cashbalance.szAccountId
+            FROM {$dbSource}dms_cas_cashbalance 
+            join account on account.code = {$dbSource}dms_cas_cashbalance.szAccountId
             where szBranchId = '{$branchId}' and szAccountId = '{$coaBiayaPromosi}'
             and dtmDoc between '{$startDate}' and '{$endDate}'
             union all
             -- account kas ke kas dan jaminan pelanggan untuk GL
             SELECT account.code, account.name, decCredit, decDebit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}', now()
-            FROM dms_cas_cashbalance 
-            join account on account.code = dms_cas_cashbalance.szAccountId
+            FROM {$dbSource}dms_cas_cashbalance 
+            join account on account.code = {$dbSource}dms_cas_cashbalance.szAccountId
             where szBranchId = '{$branchId}' and szAccountId in ('110902','311100')
             and dtmDoc between '{$startDate}' and '{$endDate}'
         SQL;
@@ -174,11 +181,18 @@ class JournalAccount extends Model
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
+
+        $user = \Auth::user();
+        $gudangPusat = config('entity.gudangPusat')[$user->entity_id];
+        $dbSource = '';
+        if(isset($gudangPusat[$branchId])){
+            $dbSource = 'gdpusat.';
+        }
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at) 
             SELECT szAccountId, account.name, decDebit, decCredit, decAmount, dtmDoc, szBranchId, szDocId, '{$type}' , now()
-            FROM dms_cas_cashbalance 
-            join account on account.code = dms_cas_cashbalance.szAccountId
+            FROM {$dbSource}dms_cas_cashbalance 
+            join account on account.code = {$dbSource}dms_cas_cashbalance.szAccountId
             join report_setting_account_detail on report_setting_account_detail.account_id = account.id
             join report_setting_account on report_setting_account.id = report_setting_account_detail.report_setting_account_id 
                 and report_setting_account.group_type = 'NRC'
@@ -205,6 +219,12 @@ class JournalAccount extends Model
         $branchId = $input['branch_id'];
         $type = $input['type'];
 
+        $user = \Auth::user();
+        $gudangPusat = config('entity.gudangPusat')[$user->entity_id];
+        $dbSource = '';
+        if(isset($gudangPusat[$branchId])){
+            $dbSource = 'gdpusat.';
+        }
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, description, reference, type, created_at) 
             select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (
@@ -214,9 +234,9 @@ class JournalAccount extends Model
                     else {$coaPenjualanTunai}
                 end as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, (abs(dip.decPrice) * di.decQty) as debit, 0 as credit, (dip.decPrice * di.decQty) as amount , do.szDocId 
-            from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId and di.szOrderItemTypeId not in ('PRODSUPP')
-            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            from {$dbSource}dms_sd_docdo do
+            join {$dbSource}dms_sd_docdoitem di on di.szDocId = do.szDocId and di.szOrderItemTypeId not in ('PRODSUPP')
+            join {$dbSource}dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and do.bCash = 1
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
@@ -227,9 +247,9 @@ class JournalAccount extends Model
                     else '{$coaPotDistTunai}'
                 end as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscDistributor) as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
-            from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
-            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            from {$dbSource}dms_sd_docdo do
+            join {$dbSource}dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join {$dbSource}dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and abs(dip.decDiscDistributor) > 0  and do.bCash = 1
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'                
@@ -241,9 +261,9 @@ class JournalAccount extends Model
                     else '{$coaPotIntTunai}'
                 end as coa,            
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscInternal) as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
-            from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
-            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            from {$dbSource}dms_sd_docdo do
+            join {$dbSource}dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join {$dbSource}dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and abs(dip.decDiscInternal) > 0  and do.bCash = 1 
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
@@ -256,9 +276,9 @@ class JournalAccount extends Model
                 end as coa,            
                 -- do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
                     do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscPrinciple) as credit, -1 * dip.decDiscPrinciple as amount , do.szDocId 
-            from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
-            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            from {$dbSource}dms_sd_docdo do
+            join {$dbSource}dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join {$dbSource}dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             -- join bkb_discount_details bkd on bkd.szDocId = do.szDocId and bkd.szProductId = di.szProductId and bkd.szBranchId = '{$branchId}'
             -- where do.szDocStatus = 'Applied' and do.bCash = 1
              where do.szDocStatus = 'Applied' and do.bCash = 1 and abs(dip.decDiscPrinciple) > 0
@@ -291,7 +311,13 @@ class JournalAccount extends Model
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
-
+        
+        $user = \Auth::user();
+        $gudangPusat = config('entity.gudangPusat')[$user->entity_id];
+        $dbSource = '';
+        if(isset($gudangPusat[$branchId])){
+            $dbSource = 'gdpusat.';
+        }
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, description, reference, type, created_at) 
             select x.coa, account.name, debit, credit, amount, dtmDoc, szBranchId, szProductId, szDocId, '{$type}', now() from (
@@ -301,9 +327,9 @@ class JournalAccount extends Model
                     else {$coaPenjualanKredit}
                 end as coa,
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, (abs(dip.decPrice) * di.decQty) as debit, 0 as credit, (dip.decPrice * di.decQty) as amount , do.szDocId 
-            from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId and di.szOrderItemTypeId not in ('PRODSUPP')
-            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            from {$dbSource}dms_sd_docdo do
+            join {$dbSource}dms_sd_docdoitem di on di.szDocId = do.szDocId and di.szOrderItemTypeId not in ('PRODSUPP')
+            join {$dbSource}dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and do.bCash = 0 
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
@@ -314,9 +340,9 @@ class JournalAccount extends Model
                     else '{$coaPotDistKredit}'
                 end as coa,            
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscDistributor) as credit, -1 * dip.decDiscDistributor as amount , do.szDocId 
-            from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
-            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            from {$dbSource}dms_sd_docdo do
+            join {$dbSource}dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join {$dbSource}dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and abs(dip.decDiscDistributor) > 0  and do.bCash = 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
@@ -328,9 +354,9 @@ class JournalAccount extends Model
                     else '{$coaPotIntKredit}'
                 end as coa,            
                 do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscInternal) as credit, -1 * dip.decDiscInternal as amount , do.szDocId 
-            from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
-            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            from {$dbSource}dms_sd_docdo do
+            join {$dbSource}dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join {$dbSource}dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and abs(dip.decDiscInternal) > 0  and do.bCash = 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
@@ -343,9 +369,9 @@ class JournalAccount extends Model
                 end as coa,            
               --  do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, bkd.principle_amount as credit, -1 * bkd.principle_amount as amount , do.szDocId 
                   do.dtmDoc, do.bCash, do.szBranchId, di.szProductId, 0 as debit, abs(dip.decDiscPrinciple) as credit, -1 * dip.decDiscPrinciple as amount , do.szDocId 
-            from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
-            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            from {$dbSource}dms_sd_docdo do
+            join {$dbSource}dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join {$dbSource}dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             -- join bkb_discount_details bkd on bkd.szDocId = do.szDocId and bkd.szProductId = di.szProductId and bkd.szBranchId = '{$branchId}'
             -- where do.szDocStatus = 'Applied' and do.bCash = 0
             where do.szDocStatus = 'Applied' and do.bCash = 0 and abs(dip.decDiscPrinciple) > 0
@@ -410,6 +436,12 @@ class JournalAccount extends Model
         $branchId = $input['branch_id'];
         $type = $input['type'];
 
+        $user = \Auth::user();
+        $gudangPusat = config('entity.gudangPusat')[$user->entity_id];
+        $dbSource = '';
+        if(isset($gudangPusat[$branchId])){
+            $dbSource = 'gdpusat.';
+        }
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, description, reference, type, created_at)             
             select x.coa, account.name, debit , credit , amount , dtmDoc, szBranchId, szProductId, szDocId, '{$type}',now() from (
@@ -428,9 +460,9 @@ class JournalAccount extends Model
                     else di.decQty * coalesce((select ppl.branch_price from product_price_log ppl where ppl.product_id = di.szProductId and ppl.start_date <= do.dtmDoc and (ppl.end_date is null or ppl.end_date >= do.dtmDoc) order by id desc limit 1) - {$marginDpp},0) / {$pembagiPPN}
                 end as amount,        
                 do.szDocId 
-            from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId  and di.szOrderItemTypeId not in ('PRODSUPP')
-            join dms_sd_docdoitemprice dip on dip.szDocId = di.szDocId and dip.intItemNumber = di.intItemNumber
+            from {$dbSource}dms_sd_docdo do
+            join {$dbSource}dms_sd_docdoitem di on di.szDocId = do.szDocId  and di.szOrderItemTypeId not in ('PRODSUPP')
+            join {$dbSource}dms_sd_docdoitemprice dip on dip.szDocId = di.szDocId and dip.intItemNumber = di.intItemNumber
             where do.szDocStatus = 'Applied' and abs(dip.decPrice) > 0
                 and do.szBranchId = '{$branchId}'
                 and do.dtmDoc between '{$startDate}' and '{$endDate}'
