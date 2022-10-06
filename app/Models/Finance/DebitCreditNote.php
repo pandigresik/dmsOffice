@@ -91,7 +91,7 @@ class DebitCreditNote extends Model
     public static $rules = [
         'type' => 'required|string',
         'partner_type' => 'required|string',
-        'partner_id' => 'required|string|max:30',
+        // 'partner_id' => 'required|string|max:30',
         'issue_date' => 'required',
         'reference' => 'nullable|string|max:30',
         'invoice_id' => 'required',

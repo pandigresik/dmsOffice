@@ -42,8 +42,7 @@
     col-form-label']) !!}
     <div class="col-md-9">
         {!! Form::select('invoice_id', $invoiceItems, null, ['class' => 'form-control select2', 'required' =>
-        'required'], $invoiceItemOptions) !!}
-        {!! Form::hidden('partner_id', null) !!}
+        'required']) !!}        
     </div>
 </div>
 
@@ -69,14 +68,14 @@
 <script type="text/javascript">
     $(function () {
         $('select[name=invoice_id] optgroup').prop('disabled',1)
-        $('select[name=invoice_id]').change(function () {
-            const _val = $(this).val();
-            $('input[name=partner_id]').val('');
-            if (!_.isEmpty(_val)) {
-                $('input[name=partner_id]').val($(this).find('option:selected').attr('partner_id'));
-            }
+        // $('select[name=invoice_id]').change(function () {
+        //     const _val = $(this).val();
+        //     $('input[name=partner_id]').val('');
+        //     if (!_.isEmpty(_val)) {
+        //         $('input[name=partner_id]').val($(this).find('option:selected').attr('partner_id'));
+        //     }
 
-        })
+        // })
 
         $('select[name=partner_type]').change(function(){            
             const _val = $(this).val()

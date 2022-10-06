@@ -3,6 +3,7 @@
 namespace App\Repositories\Finance;
 
 use App\Models\Finance\DebitCreditNote;
+use App\Models\Purchase\Invoice;
 use App\Repositories\BaseRepository;
 
 /**
@@ -54,6 +55,9 @@ class DebitCreditNoteRepository extends BaseRepository
     public function create($input)
     {
         $model = $this->model->newInstance($input);
+        $invoiceId = $input['invoice_id'];
+        $invoice = Invoice::find($invoiceId);
+        $model->partner_id = $invoice->partner_id;
         $model->number = $model->getNextNumber($input['type']);
         $model->save();
 
