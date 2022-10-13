@@ -4,7 +4,7 @@
         <div class="card-body card-body pb-0">
             @foreach ($data as $item)
                 <div class="d-flex justify-content-between align-items-start">
-                    <div><a href="{{ $item['url'] }}"> {{ $item['text'] }} </a></div>
+                    <div><a href="{{ $item['url'] }}?partner_type=supplier"> {{ $item['text'] }} </a></div>
                     <div>{{ $item['amount'] }}</div>
                 </div>
             @endforeach

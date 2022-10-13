@@ -178,9 +178,9 @@ class InvoiceRepository extends BaseRepository
         return $this->model->disableModelCaching()->ekspedisiPartner()->selectRaw('count(*) as qty, sum(amount_total) amount')->validate()->first();
     }
 
-    public function readyPayment()
+    public function readyPayment($partnerType)
     {
-        return $this->model->disableModelCaching()->with(['invoiceLines', 'partner', 'debitCreditNote', 'invoiceBkb'])->validate()->get();
+        return $this->model->disableModelCaching()->where(['partner_type' => $partnerType])->with(['invoiceLines', 'partner', 'debitCreditNote', 'invoiceBkb'])->validate()->get();
     }
 
     private function setInvoiceLines($invoiceLine, $model)

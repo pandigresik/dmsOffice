@@ -1,0 +1,24 @@
+SUPPLIER	NAMA DEPO	BULAN	IDCO	TRUCKING	SJ Pabrik	NO.BTB DEPO	TGL. BTB	PRODUK	 QTY 	 TARIF OA 	 SALDO AWAL 	 INV BARU 	TANGGAL	 JUMLAH 	 SALDO 	 NO INVOICE 
+
+select bv.partner_id, 
+		bv.dms_inv_warehouse_id,
+		bv.btb_date as period,
+		bv.co_reference,
+		bv.dms_inv_carrier_id,
+		bv.ref_doc,
+		bv.doc_id as no_btb,
+		bv.btb_date, 
+		bv.product_name,
+		bv.qty,
+		bv.shipping_cost,
+		bv.invoiced_expedition,
+		i.`number` 
+from btb_validate bv 
+left join invoice_line il on il.doc_id  = bv.doc_id  
+left join invoice i on i.id = il.invoice_id and i.`type` = 'in' and i.partner_type = 'ekspedisi'
+
+select * from invoice_line il  i 
+
+select i.*, il.doc_id  from invoice i 
+join invoice_line il on il.invoice_id = i.id 
+where i.partner_type = 'ekspedisi'

@@ -41,8 +41,9 @@ class PaymentController extends AppBaseController
     public function create()
     {
         $validatedInvoice = [];
+        $partnerType = request()->get('partner_type');
         $invoice = new InvoiceRepository(app());
-        $readyPayment = $invoice->readyPayment();
+        $readyPayment = $invoice->readyPayment($partnerType);
         if ($readyPayment) {
             $validatedInvoice = $readyPayment->groupBy('partner_id');
         }
