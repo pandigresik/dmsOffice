@@ -26,7 +26,7 @@ class PaymentOutController extends PaymentController
     public function index(PaymentDataTable $paymentDataTable)
     {
         $paymentDataTable = new PaymentOutDataTable(app());
-
+        // $partnerType = request()->get('partner_type');
         return $paymentDataTable->render($this->baseViewPath.'.index', $this->getOptionItems());
     }
 }
