@@ -7,6 +7,7 @@ use App\Models\Accounting\DmsCasCashbalance;
 use App\Models\Accounting\JournalAccount;
 use App\Models\Accounting\JournalAccountDetail;
 use App\Models\Accounting\ReportSettingAccount;
+use App\Models\Purchase\Invoice;
 use App\Repositories\BaseRepository;
 
 /**
@@ -76,6 +77,22 @@ class BalanceRepository extends BaseRepository
             'data' => $data,            
             'manual' => $this->getManualJournal($startDate, $endDate, $accountCode, $branchId) 
             // 'saldo' => $this->getSaldoAccount($startDate, $accountCode),
+        ];
+    }
+
+    public function detailHutangTIV($startDate, $endDate, $accountCode, $branchId){
+        $sqlBayar = <<<SQL
+        select p.pay_date, i.amount , (select sum(amount) from debit_credit_note where invoice_id = i.id and reference = 'PROGRAM TIV' group by invoice_id ) as klaim_tiv
+        , (select sum(amount) from debit_credit_note where invoice_id = i.id and reference = 'POT HARGA' group by invoice_id ) as pot_harga
+        from invoice i
+        join payment_line pl on pl.invoice_id = i.id
+        join payment p on p.id = pl.payment_id and p.pay_date between '{$startDate}' and '{$endDate}'
+        where i.partner_type = 'supplier' and i.`type` = 'in'        
+SQL;        
+        $pembayaran = $this->model->fromQuery($sqlBayar);
+        return [
+            'invoices' => Invoice::wherePartnerType('supplier')->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['invoiceLines','invoiceBkb'])->get(),
+            'pembayarans' => $pembayaran
         ];
     }
 

@@ -59,13 +59,22 @@ class BalanceController extends AppBaseController
         $branchId = request('branch_id') ?? [];
         $name = request('name');  
         $downloadXls = request('download_xls');      
-        $balance = $this->getRepositoryObj()->detail($startDate, $endDate, $id, $branchId);
-        
-        if ($downloadXls) {
-            return $this->exportExcelDetail(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
-        }
+        if($id == '211001'){
+            $balance = $this->getRepositoryObj()->detailHutangTIV($startDate, $endDate, $id, $branchId);        
+            if ($downloadXls) {
+                return $this->exportExcelDetail(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
+            }
 
-        return view('accounting.balance.show')->with(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
+            return view('accounting.balance.show_hutang_tiv')->with(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
+        }else{
+            $balance = $this->getRepositoryObj()->detail($startDate, $endDate, $id, $branchId);        
+            if ($downloadXls) {
+                return $this->exportExcelDetail(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
+            }
+
+            return view('accounting.balance.show')->with(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
+        }
+        
     }
 
     /**
