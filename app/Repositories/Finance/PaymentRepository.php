@@ -117,7 +117,7 @@ class PaymentRepository extends BaseRepository
                 $lineArr['invoice_id'] = $lineArr['id'];
                 $lineArr['amount_total'] = $lineArr['amount'] + $lineArr['amount_cn_dn'];
                 unset($lineArr['id']);
-                $model->paymentLines()->create($lineArr);
+                $model->paymentLines()->create($lineArr);                
             }
         }
     }

@@ -87,11 +87,30 @@ class BalanceRepository extends BaseRepository
         from invoice i
         join payment_line pl on pl.invoice_id = i.id
         join payment p on p.id = pl.payment_id and p.pay_date between '{$startDate}' and '{$endDate}'
-        where i.partner_type = 'supplier' and i.`type` = 'in'        
+        where i.partner_type = 'supplier' and i.`type` = 'in'
 SQL;        
         $pembayaran = $this->model->fromQuery($sqlBayar);
         return [
-            'invoices' => Invoice::wherePartnerType('supplier')->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['invoiceLines','invoiceBkb'])->get(),
+            'invoices' => Invoice::wherePartnerType('supplier')->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['btb' => function($q){
+                return $q->with(['supplier']);   
+            },'invoiceBkb'])->get(),
+            'pembayarans' => $pembayaran
+        ];
+    }
+
+    public function detailHutangOA($startDate, $endDate, $accountCode, $branchId){
+        $sqlBayar = <<<SQL
+        select p.pay_date, i.amount , i.number, p.reference
+        from invoice i
+        join payment_line pl on pl.invoice_id = i.id
+        join payment p on p.id = pl.payment_id and p.pay_date between '{$startDate}' and '{$endDate}'
+        where i.partner_type = 'ekspedisi' and i.`type` = 'in'
+SQL;        
+        $pembayaran = $this->model->fromQuery($sqlBayar);
+        return [
+            'invoices' => Invoice::wherePartnerType('ekspedisi')->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['btb' => function($q){
+                return $q->with(['supplier','branch','ekspedisi']);
+            }])->get(),
             'pembayarans' => $pembayaran
         ];
     }

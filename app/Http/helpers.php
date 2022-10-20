@@ -3,6 +3,7 @@
 use Jenssegers\Date\Date;
 use Spatie\Menu\Laravel\Html;
 use Spatie\Menu\Laravel\Link;
+use PhpOffice\PhpSpreadsheet\Shared\Date as SharedDateHelper;
 
 if (!function_exists('localFormatDate')) {
     function localFormatDate($value)
@@ -118,5 +119,13 @@ if (!function_exists('generateMenu')) {
                                     </a>')->addParentClass('nav-item'));
             }
         });
+    }
+}
+
+if (!function_exists('phpDate')) {
+    function phpDate($dateValue)
+    {
+        $PHPDateObject = SharedDateHelper::excelToDateTimeObject($dateValue);
+        return $PHPDateObject->format('Y-m-d');
     }
 }

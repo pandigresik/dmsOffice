@@ -66,7 +66,15 @@ class BalanceController extends AppBaseController
             }
 
             return view('accounting.balance.show_hutang_tiv')->with(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
-        }else{
+        }else if($id == '211104'){
+            $balance = $this->getRepositoryObj()->detailHutangOA($startDate, $endDate, $id, $branchId);        
+            if ($downloadXls) {
+                return $this->exportExcelDetail(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
+            }
+
+            return view('accounting.balance.show_hutang_oa')->with(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
+        }        
+        else{
             $balance = $this->getRepositoryObj()->detail($startDate, $endDate, $id, $branchId);        
             if ($downloadXls) {
                 return $this->exportExcelDetail(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);

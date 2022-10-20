@@ -27,7 +27,18 @@ class BalanceDetailExport implements FromView
 
     public function view(): View
     {
-        return view('accounting.balance.show_excel', [
+        $accountCode = $this->getAccountCode();
+        $view = 'accounting.balance.show_excel';
+        switch($accountCode){
+            case '211001':
+                $view = 'accounting.balance.show_hutang_tiv';
+                break;
+            case '211104':
+                $view = 'accounting.balance.show_hutang_oa';
+                break;
+            default:
+        }
+        return view($view, [
             'balance' => $this->collection,
             'startDate' => $this->getStartDate(),
             'endDate' => $this->getEndDate(),

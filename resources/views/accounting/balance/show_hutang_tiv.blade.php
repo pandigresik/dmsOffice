@@ -6,39 +6,44 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($balance['invoices'] as $index => $invoice)                        
+            @forelse($balance['invoices'] as $index => $invoice)
+                @php
+                    $btb = $invoice->btb->keyBy('doc_id');
+                @endphp
                 @foreach ($invoice->invoiceBkb as $item)
-                    @php                        
+                    @php                                                
                         $tmpItem = $item->additional_info;
                         // if($tmpItem["ket"] == 'BKB') continue;
                         // $item->ket =  $tmpItem["ket"];           
                         $billingDoc = $tmpItem["BILLING DOKUMEN"] ?? 'not defined';                        
                         $docId = $tmpItem['ID. DOKUMEN'];
-                        $tglDocId = $tmpItem['TGL ID DOKUMEN'];
+                        $tglDocId = phpDate(intval($tmpItem['TGL ID DOKUMEN']));
                         $depo = $tmpItem['DEPO INPUT BTB'];
                         $productName = $tmpItem['Produk'];
                         $qty = $tmpItem['QTY'];
                         $price = $tmpItem[' HARGA '];
                         $amountTotal = $tmpItem['TOTAL'];
-
-                    @endphp
-                @endforeach
+                        $pelunasan = $invoice->state == 'pay' ? $price * $qty : 0;
+                        $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->updated_at) : '-';
+                        $saldo = $invoice->state == 'pay' ? 0 : $price * $qty ;
+                    @endphp                
             <tr>
                 <td>{{ $billingDoc }}</td>
-                <td></td>
-                <td></td>
+                <td>{{ $btb[$docId]->supplier->szName ?? '-'  }}</td>
+                <td>{{ $btb[$docId]->ref_doc ?? '-'  }}</td>
                 <td>{{ $depo }}</td>
                 <td>{{ $docId }}</td>
                 <td>{{ $tglDocId }}</td>
                 <td>{{ $productName }}</td>
                 <td class="text-right">{{ localNumberFormat($qty, 0) }}</td>
                 <td class="text-right">{{ localNumberFormat($price, 0) }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>                
+                <td class="text-right">{{ localNumberFormat($qty * $price, 0) }}</td>
+                <td>-</td>
+                <td>{{ $tglPelunasan }}</td>
+                <td>{{ localNumberFormat($pelunasan, 0) }}</td>
+                <td>{{ localNumberFormat($saldo, 0) }}</td>
             </tr>
+            @endforeach
             @empty
             <tr>
                 <td colspan=12>Data detail tidak ditemukan</td>
