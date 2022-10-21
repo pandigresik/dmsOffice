@@ -133,7 +133,8 @@ class BtbValidateRepository extends BaseRepository
         $query = $this->model->newQuery();
 
         $model = $query->findOrFail($id);
-
+        JournalAccount::where(['type' => 'JBTB','reference' => $model->doc_id, 'branch_id' => $model->branch_id])->forceDelete();
+        
         return $model->forceDelete();
     }
 }

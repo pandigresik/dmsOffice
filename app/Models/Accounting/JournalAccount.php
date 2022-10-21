@@ -480,9 +480,7 @@ class JournalAccount extends Model
         $coaPersediaanGalon = $settingCompany['coa_sedia_galon'];
         $coaPersediaanNonGalon = $settingCompany['coa_sedia_nogalon'];        
         $coaHutangTIV = $settingCompany['coa_hutang_dagang'];
-        
-        // $coaPenjualanKredit = $settingCompany["coa_penjualan_kredit"];
-        // $coaPenjualanTunai = $settingCompany['coa_penjualan_tunai'];
+            
         $coaPpnMasukan = $settingCompany['coa_ppn_masukan'];   // 213001
         $besarPPN = $settingCompany['ppn_prosentase'];
         $pembagiPPN = $settingCompany['ppn_pembagi'];
