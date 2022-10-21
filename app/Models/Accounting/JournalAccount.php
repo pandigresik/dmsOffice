@@ -474,4 +474,60 @@ class JournalAccount extends Model
         SQL;
         $this->fromQuery($sql);
     }
+
+    public function jurnalHutangBTB($btbs){
+        $settingCompany = Setting::pluck('value', 'code');
+        $coaPersediaanGalon = $settingCompany['coa_sedia_galon'];
+        $coaPersediaanNonGalon = $settingCompany['coa_sedia_nogalon'];        
+        $coaHutangTIV = $settingCompany['coa_hutang_dagang'];
+        
+        // $coaPenjualanKredit = $settingCompany["coa_penjualan_kredit"];
+        // $coaPenjualanTunai = $settingCompany['coa_penjualan_tunai'];
+        $coaPpnMasukan = $settingCompany['coa_ppn_masukan'];   // 213001
+        $besarPPN = $settingCompany['ppn_prosentase'];
+        $pembagiPPN = $settingCompany['ppn_pembagi'];
+        $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+
+        $btbStr = implode("','", $btbs->flatten()->all());
+        /** untuk OA perlu didistinct karena perhitungannya hanya sekali saja */
+        $sql = <<<SQL
+        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        select distinct 825010, 'Biaya Pengangkutan', shipping_cost, 0, shipping_cost, btb_date, branch_id, doc_id, 'JBTB', now()
+        from btb_validate 
+        where doc_id in ('{$btbStr}')  and shipping_cost > 0
+        union all
+        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        select distinct 211104, 'Biaya Pengangkutan', 0,shipping_cost, shipping_cost, btb_date, branch_id, doc_id, 'JBTB', now()
+        from btb_validate 
+        where doc_id in ('{$btbStr}')  and shipping_cost > 0        
+        
+        -- persediaan galon
+        union all
+        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        select '{$coaPersediaanGalon}', 'Persediaan Galon Botol', abs(price * qty), 0, price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
+        from btb_validate 
+        where doc_id in ('{$btbStr}')  and price > 0 and product_id in ({$kodeGalon})
+        -- persediaan non galon
+        union all
+        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        select '{$coaPersediaanNonGalon}', 'Persediaan Non Galon', abs(price * qty / {$pembagiPPN}), 0, price * qty / {$pembagiPPN}, btb_date, branch_id, doc_id, 'JBTB', now()
+        from btb_validate 
+        where doc_id in ('{$btbStr}')  and price > 0 and product_id not in ({$kodeGalon})
+
+        -- ppn masukan
+        union all
+        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        select '{$coaPpnMasukan}', 'PPN Masukan', abs(price * qty * {$besarPPN}), 0, price * qty * {$besarPPN}, btb_date, branch_id, doc_id, 'JBTB', now()
+        from btb_validate 
+        where doc_id in ('{$btbStr}')  and price > 0 and product_id not in ({$kodeGalon})
+
+        -- hutang dagang TIV
+        union all
+        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        select '{$coaHutangTIV}', 'Hutang Dagang TIV', 0, abs(price * qty), price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
+        from btb_validate 
+        where doc_id in ('{$btbStr}')  and price > 0 
+SQL;
+        $this->fromQuery($sql);
+    }
 }

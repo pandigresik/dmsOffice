@@ -4,6 +4,8 @@ namespace App\Models\Purchase;
 
 use App\Models\Base\DmsApSupplier;
 use App\Models\BaseEntity as Model;
+use App\Models\Finance\Payment;
+use App\Models\Finance\PaymentLine;
 use App\Models\Inventory\DmsInvCarrier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -205,6 +207,18 @@ class Invoice extends Model
     {
         return $this->hasOne(DmsInvCarrier::class, 'szId', 'partner_id');
     }
+
+    public function paymentLine()
+    {
+        return $this->hasOne(PaymentLine::class);
+    }
+    
+    public function payment()
+    {
+        return $this->paymentLine()->with('payment');
+    }
+
+
 
     public function getNextNumber()
     {

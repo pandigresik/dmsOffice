@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -14,23 +14,23 @@
                         $depo = $item->branch->szName ?? '-';                        
                         $saldoAwal = $item->shipping_cost ?? 0;
                         $pelunasan = $invoice->state == 'pay' ? $saldoAwal : 0;
-                        $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->updated_at) : '-';
+                        $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->paymentLine->payment->pay_date) : '-';
                         $saldo = $invoice->state == 'pay' ? 0 : $saldoAwal ;
                     @endphp                
             <tr>
                 <td>{{ $supplier }}</td>
                 <td>{{ $ekspedisi  }}</td>
-                <td>{{ $invoice->number  }}</td>
+                <td>{{ $invoice->reference  }}</td>
                 <td>{{ $item->co_reference }}</td>
                 <td>{{ $item->ref_doc }}</td>
                 <td>{{ $depo }}</td>
                 <td>{{ $item->doc_id }}</td>
                 <td>{{ $item->btb_date }}</td>
                 <td>{{ $item->product_name }}</td>
+                <td>{{ $item->qty }}</td>
                 <td>{{ $item->shipping_cost }}</td>
-                <td class="text-right">{{ $saldoAwal }}</td>
-                <td>{{ $item->btb_date }}</td>                
                 <td>-</td>
+                <td class="text-right">{{ $saldoAwal }}</td>                
                 <td>{{ $tglPelunasan }}</td>
                 <td class="text-right">{{ $pelunasan }}</td>
                 <td class="text-right">{{ $saldo }}</td>

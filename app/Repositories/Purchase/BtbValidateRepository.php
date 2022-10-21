@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Purchase;
 
+use App\Models\Accounting\JournalAccount;
 use App\Models\Purchase\BtbValidate;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
@@ -85,11 +86,12 @@ class BtbValidateRepository extends BaseRepository
                     }
                 }
             }
-
+            $journalAccount = new JournalAccount();
+            $journalAccount->jurnalHutangBTB($vc);
             DB::commit();
             // flush cache karena menggunakan from query untuk eksekusi statement insert into
             $this->model->flushCache();
-
+            $journalAccount->flushCache();
             return $model;
         } catch (\Exception $e) {
             DB::rollBack();

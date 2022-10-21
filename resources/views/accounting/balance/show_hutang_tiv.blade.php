@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -24,7 +24,7 @@
                         $price = $tmpItem[' HARGA '];
                         $amountTotal = $tmpItem['TOTAL'];
                         $pelunasan = $invoice->state == 'pay' ? $price * $qty : 0;
-                        $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->updated_at) : '-';
+                        $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->paymentLine->payment->pay_date) : '-';
                         $saldo = $invoice->state == 'pay' ? 0 : $price * $qty ;
                     @endphp                
             <tr>
