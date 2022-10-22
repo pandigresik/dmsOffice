@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Finance\Payment;
 use App\Models\Inventory\DmsInvProduct;
 use App\Models\Inventory\ProductPrice;
 use App\Repositories\Inventory\ProductPriceRepository;
@@ -44,16 +45,9 @@ class HomeController extends Controller
     public function tes()
     {
         
-        $invoice = \App\Models\Purchase\Invoice::find(59);
-        $detailSum = $invoice->invoiceLines->sum(function($v){
-            return $v->getRawOriginal('price') * $v->getRawOriginal('qty');
-        });
-        print_r($detailSum);
-        print_r($invoice->getRawOriginal('amount'));
-        if($detailSum == $invoice->getRawOriginal('amount')){
-            echo 'sama';
-        }else {
-            echo 'tidak';
-        }
+        $payment = Payment::find(1);
+        $invoice = $payment->invoices()->first();
+        echo $invoice->partner_type;
+        
     }
 }
