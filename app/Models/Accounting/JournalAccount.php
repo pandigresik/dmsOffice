@@ -495,7 +495,7 @@ class JournalAccount extends Model
         where doc_id in ('{$btbStr}')  and shipping_cost > 0
         union all
         insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
-        select distinct 211104, 'Biaya Pengangkutan', 0,shipping_cost, shipping_cost, btb_date, branch_id, doc_id, 'JBTB', now()
+        select distinct 211104, 'Hutang ongkos angkut', shipping_cost, 0, shipping_cost, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
         where doc_id in ('{$btbStr}')  and shipping_cost > 0        
         
@@ -522,7 +522,7 @@ class JournalAccount extends Model
         -- hutang dagang TIV
         union all
         insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
-        select '{$coaHutangTIV}', 'Hutang Dagang TIV', 0, abs(price * qty), price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
+        select '{$coaHutangTIV}', 'Hutang Dagang TIV', abs(price * qty), 0, price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
         where doc_id in ('{$btbStr}')  and price > 0 
 SQL;
