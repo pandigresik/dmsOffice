@@ -45,9 +45,9 @@ class HomeController extends Controller
     public function tes()
     {
         
-        $payment = Payment::find(1);
-        $invoice = $payment->invoices()->first();
-        echo $invoice->partner_type;
+        $tes = \App\Models\Accounting\JournalAccount::with(['manual'])->find(787972);
+        
+        dd($tes->manual);
         
     }
 }

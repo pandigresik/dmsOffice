@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('settings', App\Http\Controllers\Base\SettingController::class, ['as' => 'base']);
         //Route::resource('products', App\Http\Controllers\Base\ProductController::class, ['as' => 'base']);
         Route::resource('locations', App\Http\Controllers\Base\LocationController::class, ['as' => 'base']);
+        Route::resource('shippingCostSubsidies', App\Http\Controllers\Base\ShippingCostSubsidyController::class, ["as" => 'base']);
 
         // DMS Table
         Route::resource('dmsSmBranches', App\Http\Controllers\Base\DmsSmBranchController::class, ['as' => 'base']);

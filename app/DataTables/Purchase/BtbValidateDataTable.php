@@ -3,6 +3,7 @@
 namespace App\DataTables\Purchase;
 
 use App\DataTables\BaseDataTable as DataTable;
+use App\Models\Base\DmsApSupplier;
 use App\Models\Base\DmsSmBranch;
 use App\Models\Inventory\DmsInvCarrier;
 use App\Models\Purchase\BtbValidate;
@@ -11,6 +12,13 @@ use Yajra\DataTables\Html\Column;
 
 class BtbValidateDataTable extends DataTable
 {
+    protected $fastExcel = false;
+    protected $exportColumns = [
+        ['data' => 'btb_date', 'title' => 'Tanggal'],
+        ['data' => 'vehicle_number', 'title' => 'Nopol'],
+        ['data' => 'price', 'title' => 'Harga'],
+        ['data' => 'total', 'title' => 'Total'],
+    ];
     /**
      * example mapping filter column to search by keyword, default use %keyword%.
      */
@@ -18,6 +26,7 @@ class BtbValidateDataTable extends DataTable
         'btb_date' => \App\DataTables\FilterClass\BetweenKeyword::class,
         'dms_inv_carrier_id' => \App\DataTables\FilterClass\InKeyword::class,
         'branch_id' => \App\DataTables\FilterClass\InKeyword::class,
+        'partner_id' => \App\DataTables\FilterClass\InKeyword::class,
     ];
 
     private $mapColumnSearch = [
@@ -51,6 +60,9 @@ class BtbValidateDataTable extends DataTable
         $dataTable->editColumn('branch.szName', function ($data) {               
             return $this->listGudang[$data->branch_id] ?? $data->branch_id;
         });
+        $dataTable->editColumn('total', function ($data) {               
+            return $data->getRawOriginal('price') * $data->getRawOriginal('qty');
+        });
         return $dataTable->addColumn('action', 'purchase.btb_validates.datatables_actions');
     }
 
@@ -63,7 +75,7 @@ class BtbValidateDataTable extends DataTable
      */
     public function query(BtbValidate $model)
     {
-        return $model->with(['ekspedisi', 'branch'])->where(function($q){
+        return $model->with(['ekspedisi', 'branch', 'supplier'])->where(function($q){
             $q->whereInvoiced(0)->orWhere('invoiced_expedition',0);
         })->newQuery();
     }
@@ -125,7 +137,7 @@ class BtbValidateDataTable extends DataTable
     protected function getColumns()
     {        
         $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey($this->listGudang));
-        // $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey(DmsSmBranch::pluck('szName', 'szId')->toArray()));
+        $supplierItem = array_merge([['text' => 'Pilih Asal', 'value' => '']], convertArrayPairValueWithKey(DmsApSupplier::pluck('szName', 'szId')->toArray()));
         $carrierItem = array_merge([['text' => 'Pilih Ekspedisi', 'value' => '']], convertArrayPairValueWithKey(DmsInvCarrier::pluck('szName', 'szId')->toArray()));
 
         return [
@@ -135,7 +147,7 @@ class BtbValidateDataTable extends DataTable
             'product_name' => new Column(['title' => __('models/btbValidates.fields.product_name'), 'data' => 'product_name', 'searchable' => true, 'elmsearch' => 'text']),
             // 'uom_id' => new Column(['title' => __('models/btbValidates.fields.uom_id'), 'data' => 'uom_id', 'searchable' => false, 'elmsearch' => 'text']),
             'ref_doc' => new Column(['title' => __('models/btbValidates.fields.ref_doc'), 'data' => 'ref_doc', 'searchable' => true, 'elmsearch' => 'text']),
-            // 'btb_type' => new Column(['title' => __('models/btbValidates.fields.btb_type'), 'data' => 'btb_type', 'searchable' => true, 'elmsearch' => 'text']),
+            'partner_id' => new Column(['title' => __('models/btbValidates.fields.partner_id'),'name' => 'partner_id' ,'data' => 'supplier.szName', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $supplierItem, 'multiple' => 'multiple', 'width' => '200px']),
             'btb_date' => new Column(['title' => __('models/btbValidates.fields.btb_date'), 'data' => 'btb_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'dms_inv_carrier_id' => new Column(['title' => __('models/btbValidates.fields.dmsInvCarrierId'), 'name' => 'dms_inv_carrier_id', 'data' => 'ekspedisi.szName', 'defaultContent' => '', 'orderable' => false, 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $carrierItem, 'multiple' => 'multiple', 'class' => 'ow', 'width' => '230px']),
             'qty' => new Column(['title' => __('models/btbValidates.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
@@ -143,8 +155,7 @@ class BtbValidateDataTable extends DataTable
             'shipping_cost' => new Column(['title' => __('models/btbValidates.fields.shipping_cost'), 'data' => 'shipping_cost', 'searchable' => false, 'elmsearch' => 'text']),
             'description' => new Column(['title' => __('models/btbValidates.fields.description'), 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
         ];
-    }
-
+    }    
     /**
      * Get filename for export.
      *

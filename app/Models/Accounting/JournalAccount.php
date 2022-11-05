@@ -4,8 +4,11 @@ namespace App\Models\Accounting;
 
 use App\Models\Base\Setting;
 use App\Models\BaseEntity as Model;
+use App\Models\Finance\AccountMove;
+use App\Models\Finance\AccountMoveLine;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -74,6 +77,7 @@ class JournalAccount extends Model
         'branch_id',
         'date',
         'name',
+        'description',
         'debit',
         'credit',
         'balance',
@@ -123,6 +127,10 @@ class JournalAccount extends Model
         return $this->belongsTo(Account::class, 'account_id', 'code');
     }
 
+    public function manual(): HasManyThrough
+    {
+        return $this->hasManyThrough(AccountMoveLine::class, AccountMove::class, 'number','account_move_id', 'reference', 'id');
+    }
     /**
      * Get the detail associated with the JournalAccount
      *

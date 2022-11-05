@@ -148,7 +148,8 @@ SQL;
     }
 
     private function getManualJournal($startDate, $endDate, $accountCode, $branchId){
-        $query = JournalAccount::select(['account_id', 'date', 'branch_id', 'name', 'reference', 'debit', 'credit', 'balance'])        
+        $query = JournalAccount::select(['account_id', 'date', 'branch_id', 'name', 'reference', 'debit', 'credit', 'balance', 'description'])        
+            // ->with(['manual'])
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
             ->where(['account_id' => $accountCode])

@@ -23,6 +23,7 @@ return array (
     'shipping_cost' => 'Ongkos Angkut',
     'dmsInvCarrierId' => 'Ekspedisi',
     'dms_inv_carrier_id' => 'Ekspedisi',
-    'description' => 'Keterangan'
+    'description' => 'Keterangan',
+    'partner_id' => 'Asal Muat'
   ),
 );

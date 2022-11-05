@@ -44,6 +44,7 @@ $numberFormat = ['Gaji','Man fee','Gaji SPV','PPN','PPH 23','UPLOAD'];
                 <th>Account</th>
                 <th>Tanggal</th>
                 <th>Reference</th>
+                <th>Keterangan</th>
                 <th>Debit</th>
                 <th>Credit</th>
                 <th>Jumlah</th>
@@ -60,6 +61,7 @@ $numberFormat = ['Gaji','Man fee','Gaji SPV','PPN','PPH 23','UPLOAD'];
                 <td>{{ $account->account_id }}</td>
                 <td>{{ localFormatDate( $account->date ) }}</td>
                 <td>{{ $account->reference }}</td>
+                <td>{{ $account->description }}</td>                
                 <td class="text-right">{{ localNumberAccountingFormat($debit) }}</td>
                 <td class="text-right">{{ localNumberAccountingFormat($credit) }}</td>
                 <td class="text-right">{{ localNumberAccountingFormat($amount) }}</td>

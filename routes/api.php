@@ -22,4 +22,5 @@ Route::group(['prefix' => 'v1'], function () {
     Route::resource('route_trips', Base\RouteTripAPIController::class);
     Route::resource('vehicle_groups', Base\VehicleGroupAPIController::class);
     Route::resource('vehicles', Base\VehicleAPIController::class);
+    Route::resource('shipping_cost_subsidies', Base\ShippingCostSubsidyAPIController::class);
 });
