@@ -44,6 +44,7 @@ class BalanceDetailExport implements FromView
             'endDate' => $this->getEndDate(),
             'name' => $this->getName(),
             'accountCode' => $this->getAccountCode(),
+            'exportExcel' => true
         ]);
     }
 

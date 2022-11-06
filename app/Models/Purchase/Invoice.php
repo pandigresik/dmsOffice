@@ -237,6 +237,11 @@ class Invoice extends Model
         return $query->whereState(self::SUBMIT);
     }
 
+    public function scopeHutang($query)
+    {
+        return $query->where('state', '<>', self::PAY);
+    }
+
     public function scopeValidate($query)
     {
         return $query->whereState(self::VALIDATE);

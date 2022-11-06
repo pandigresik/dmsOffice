@@ -1,3 +1,7 @@
+@php
+    $uniqueBtb = [];
+    $exportExcel = $exportExcel ?? false;
+@endphp
 <div class="">
     <table class="table table-bordered">
         <thead>
@@ -8,11 +12,16 @@
         <tbody>
             @forelse($balance['invoices'] as $index => $invoice)                
                 @foreach ($invoice->btb as $item)
-                    @php                                                                        
+                    @php                         
+                        if(isset($uniqueBtb[$item->doc_id])){
+                            continue;
+                        }
+                        $uniqueBtb[$item->doc_id] = 1;
+
                         $supplier = $item->supplier->szName ?? '-';   
                         $ekspedisi = $item->ekspedisi->szName ?? '-';                        
                         $depo = $item->branch->szName ?? '-';                        
-                        $saldoAwal = $item->shipping_cost ?? 0;
+                        $saldoAwal = $item->getRawOriginal('shipping_cost') ?? 0;
                         $pelunasan = $invoice->state == 'pay' ? $saldoAwal : 0;
                         $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->paymentLine->payment->pay_date) : '-';
                         $saldo = $invoice->state == 'pay' ? 0 : $saldoAwal ;
@@ -27,12 +36,12 @@
                 <td>{{ $item->doc_id }}</td>
                 <td>{{ $item->btb_date }}</td>
                 <td>{{ $item->product_name }}</td>
-                <td>{{ $item->qty }}</td>
-                <td>{{ $item->shipping_cost }}</td>
+                <td>{{ $exportExcel ? $item->getRawOriginal('qty') : $item->qty }}</td>
+                <td>{{ $exportExcel ? $item->getRawOriginal('shipping_cost') :$item->shipping_cost }}</td>
                 <td>-</td>
-                <td class="text-right">{{ $saldoAwal }}</td>                
+                <td class="text-right">{{ $exportExcel ? $saldoAwal : localNumberFormat($saldoAwal, 0) }}</td>                
                 <td>{{ $tglPelunasan }}</td>
-                <td class="text-right">{{ $pelunasan }}</td>
+                <td class="text-right">{{ $exportExcel ? $pelunasan : localNumberFormat($pelunasan, 0) }}</td>
                 <td class="text-right">{{ $saldo }}</td>
             </tr>
             @endforeach

@@ -90,10 +90,11 @@ class BalanceRepository extends BaseRepository
         where i.partner_type = 'supplier' and i.`type` = 'in'
 SQL;        
         $pembayaran = $this->model->fromQuery($sqlBayar);
+        $hutangInvoice = Invoice::supplierPartner()->where('date_invoice','<',$startDate)->hutang()->where(['type' => 'in']);
         return [
-            'invoices' => Invoice::wherePartnerType('supplier')->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['btb' => function($q){
+            'invoices' => Invoice::supplierPartner()->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['btb' => function($q){
                 return $q->with(['supplier']);   
-            },'invoiceBkb', 'payment'])->get(),
+            },'invoiceBkb', 'payment'])->union($hutangInvoice)->get(),
             'pembayarans' => $pembayaran
         ];
     }
@@ -107,10 +108,11 @@ SQL;
         where i.partner_type = 'ekspedisi' and i.`type` = 'in'
 SQL;        
         $pembayaran = $this->model->fromQuery($sqlBayar);
+        $hutangInvoice = Invoice::ekspedisiPartner()->where('date_invoice','<',$startDate)->hutang()->where(['type' => 'in']);
         return [
-            'invoices' => Invoice::wherePartnerType('ekspedisi')->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['btb' => function($q){
+            'invoices' => Invoice::ekspedisiPartner()->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['btb' => function($q){
                 return $q->with(['supplier','branch','ekspedisi']);
-            }, 'payment'])->get(),
+            }, 'payment'])->union($hutangInvoice)->get(),
             'pembayarans' => $pembayaran
         ];
     }
@@ -153,11 +155,13 @@ SQL;
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
             ->where(['account_id' => $accountCode])
-            ->whereIn('branch_id', $branchId)
-            ->where('type', 'JM')
+        //    ->whereIn('branch_id', $branchId)
+        //    ->where('type', 'JM')
             ->orderBy('date')
         ;
-
+        if(!empty($branchId)){
+            $query->whereIn('branch_id', $branchId);
+        }
         return $query->get();
     }
 }

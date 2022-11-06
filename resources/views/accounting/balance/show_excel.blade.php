@@ -37,7 +37,7 @@ $numberFormat = ['Gaji','Man fee','Gaji SPV','PPN','PPH 23','UPLOAD'];
     
     @if (!empty($balance['manual']))
 
-    <caption><h4>Jurnal Manual</h4></caption>
+    <caption><h4>Jurnal</h4></caption>
     <table class="table table-bordered">        
         <thead class="">
             <tr>
@@ -70,6 +70,6 @@ $numberFormat = ['Gaji','Man fee','Gaji SPV','PPN','PPH 23','UPLOAD'];
         </tbody>
     </table>
     @else
-    <div>Data jurnal manual tidak ditemukan</div>
+    <div>Data Jurnal tidak ditemukan</div>
     @endif
 </div>

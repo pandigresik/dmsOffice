@@ -5,6 +5,7 @@ namespace App\DataTables\Purchase;
 use App\DataTables\BaseDataTable as DataTable;
 use App\Models\Base\DmsApSupplier;
 use App\Models\Base\DmsSmBranch;
+use App\Models\Base\Setting;
 use App\Models\Inventory\DmsInvCarrier;
 use App\Models\Purchase\BtbValidate;
 use Yajra\DataTables\EloquentDataTable;
@@ -12,12 +13,24 @@ use Yajra\DataTables\Html\Column;
 
 class BtbValidateDataTable extends DataTable
 {
-    protected $fastExcel = false;
+    protected $fastExcel = false;    
+    private $ppn;
     protected $exportColumns = [
-        ['data' => 'btb_date', 'title' => 'Tanggal'],
+        ['data' => 'branch.szName', 'title' => 'Depo'],
+        ['data' => 'doc_id', 'title' => 'No. BTB'],
+        ['data' => 'co_reference', 'title' => 'Nomer CO'],
+        ['data' => 'product_name', 'title' => 'Nama Barang'],
+        ['data' => 'ref_doc', 'title' => 'SJ Pabrik'],
+        ['data' => 'partner_id', 'title' => 'ID Supplier'],
+        ['data' => 'supplier.szName', 'title' => 'Supplier'],
+        ['data' => 'btb_date', 'title' => 'Tanggal BTB'],
+        ['data' => 'ekspedisi.szName', 'title' => 'Ekspedisi'],               
         ['data' => 'vehicle_number', 'title' => 'Nopol'],
-        ['data' => 'price', 'title' => 'Harga'],
+        ['data' => 'qty_raw', 'title' => 'Qty'],
+        ['data' => 'price_raw', 'title' => 'Harga'],
+        ['data' => 'shipping_cost_raw', 'title' => 'Ongkos Angkut'],
         ['data' => 'total', 'title' => 'Total'],
+        ['data' => 'ppn', 'title' => 'PPN Masukan'],
     ];
     /**
      * example mapping filter column to search by keyword, default use %keyword%.
@@ -39,6 +52,8 @@ class BtbValidateDataTable extends DataTable
     {
         $user = \Auth::user();
         $this->listGudang = config('entity.gudangPusat')[$user->entity_id] + DmsSmBranch::pluck('szName', 'szId')->toArray();
+        $settingCompany = Setting::where(['code' => 'ppn_prosentase'])->pluck('value', 'code');
+        $this->setPpn($settingCompany['ppn_prosentase']);
     }
 
     /**
@@ -62,6 +77,18 @@ class BtbValidateDataTable extends DataTable
         });
         $dataTable->editColumn('total', function ($data) {               
             return $data->getRawOriginal('price') * $data->getRawOriginal('qty');
+        });
+        $dataTable->editColumn('shipping_cost_raw', function ($data) {               
+            return $data->getRawOriginal('shipping_cost');
+        });
+        $dataTable->editColumn('qty_raw', function ($data) {               
+            return $data->getRawOriginal('qty');
+        });
+        $dataTable->editColumn('price_raw', function ($data) {               
+            return $data->getRawOriginal('price');
+        });
+        $dataTable->editColumn('ppn', function ($data) {               
+            return $data->getRawOriginal('price') * $data->getRawOriginal('qty') * $this->getPpn();
         });
         return $dataTable->addColumn('action', 'purchase.btb_validates.datatables_actions');
     }
@@ -164,5 +191,25 @@ class BtbValidateDataTable extends DataTable
     protected function filename()
     {
         return 'btb_validates_datatable_'.time();
+    }
+
+    /**
+     * Get the value of ppn
+     */ 
+    public function getPpn()
+    {
+        return $this->ppn;
+    }
+
+    /**
+     * Set the value of ppn
+     *
+     * @return  self
+     */ 
+    public function setPpn($ppn)
+    {
+        $this->ppn = $ppn;
+
+        return $this;
     }
 }

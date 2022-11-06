@@ -24,6 +24,6 @@ return array (
     'dmsInvCarrierId' => 'Ekspedisi',
     'dms_inv_carrier_id' => 'Ekspedisi',
     'description' => 'Keterangan',
-    'partner_id' => 'Asal Muat'
+    'partner_id' => 'Supplier'
   ),
 );
