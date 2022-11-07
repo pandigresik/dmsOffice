@@ -1,3 +1,6 @@
+@php
+    $exportExcel = $exportExcel ?? false;
+@endphp
 <div class="">
     <table class="table table-bordered">
         <thead>
@@ -35,13 +38,13 @@
                 <td>{{ $docId }}</td>
                 <td>{{ $tglDocId }}</td>
                 <td>{{ $productName }}</td>
-                <td class="text-right">{{ localNumberFormat($qty, 0) }}</td>
-                <td class="text-right">{{ localNumberFormat($price, 0) }}</td>
-                <td class="text-right">{{ localNumberFormat($qty * $price, 0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $qty : localNumberFormat($qty, 0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $price : localNumberFormat($price, 0) }}</td>
+                <td class="text-right">{{ $exportExcel ? ($qty * $price) : localNumberFormat($qty * $price, 0) }}</td>
                 <td>-</td>
                 <td>{{ $tglPelunasan }}</td>
-                <td>{{ localNumberFormat($pelunasan, 0) }}</td>
-                <td>{{ localNumberFormat($saldo, 0) }}</td>
+                <td>{{ $exportExcel ? $pelunasan : localNumberFormat($pelunasan, 0) }}</td>
+                <td>{{ $exportExcel ? $saldo : localNumberFormat($saldo, 0) }}</td>
             </tr>
             @endforeach
             @empty
@@ -63,11 +66,11 @@
             @forelse($balance['pembayarans'] as $index => $account)                        
             <tr>
                 <td>{{ localFormatDate($account['pay_date']) }}</td>
-                <td class="text-right">{{ localNumberFormat($account['amount'], 0) }}</td>
-                <td class="text-right">{{ localNumberFormat(0, 0) }}</td>
-                <td class="text-right">{{ localNumberFormat($account['klaim_tiv'], 0) }}</td>
-                <td class="text-right">{{ localNumberFormat($account['pot_harga'], 0) }}</td>
-                <td class="text-right">{{ localNumberFormat($account['amount'] + $account['klaim_tiv'] + $account['pot_harga'], 0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $account['amount'] : localNumberFormat($account['amount'], 0) }}</td>
+                <td class="text-right">{{ $exportExcel ? 0 : localNumberFormat(0, 0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $account['klaim_tiv'] : localNumberFormat($account['klaim_tiv'], 0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $account['pot_harga'] : localNumberFormat($account['pot_harga'], 0) }}</td>
+                <td class="text-right">{{ $exportExcel ? ($account['amount'] + $account['klaim_tiv'] + $account['pot_harga']) : localNumberFormat($account['amount'] + $account['klaim_tiv'] + $account['pot_harga'], 0) }}</td>
             </tr>
             @empty
             <tr>

@@ -18,6 +18,7 @@ class CreateAccount extends Migration
             $table->string('name', 50);
             $table->string('code', 10);
             $table->string('description', 100)->nullable();
+            $table->boolean('reverse_value')->nullable()->default(0);
             $table->blameable();
             $table->timestamps();
             $table->softDeletes();

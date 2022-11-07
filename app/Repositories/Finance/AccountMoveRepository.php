@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Finance;
 
+use App\Models\Accounting\Account;
 use App\Models\Finance\AccountMove;
 use App\Repositories\BaseRepository;
 
@@ -100,8 +101,11 @@ class AccountMoveRepository extends BaseRepository
     public function postJournalLines($lines, $model)
     {
         if (!empty($lines)) {
+            $listReverseAccount = Account::reverse()->pluck('code', 'code')->toArray();
             $model->journals()->forceDelete();
             foreach ($lines['account_id'] as $key => $line) {
+                $accountId = $lines['account_id'][$key];                
+                $reverseValue = isset($listReverseAccount[$accountId]) ? -1 : 1;
                 $model->journals()->create([
                     'name' => $lines['name'][$key],
                     'date' => $model->getRawOriginal('date'),
@@ -110,7 +114,7 @@ class AccountMoveRepository extends BaseRepository
                     'account_id' => $lines['account_id'][$key],
                     'debit' => $lines['debit'][$key],
                     'credit' => $lines['credit'][$key],
-                    'balance' => $lines['debit'][$key] - $lines['credit'][$key],
+                    'balance' => $reverseValue * ($lines['debit'][$key] - $lines['credit'][$key]),
                     'branch_id' => $model->branch_id ?? null,
                 ]);
             }

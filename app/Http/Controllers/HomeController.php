@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Accounting\Account;
 use App\Models\Finance\Payment;
 use App\Models\Inventory\DmsInvProduct;
 use App\Models\Inventory\ProductPrice;
@@ -45,9 +46,7 @@ class HomeController extends Controller
     public function tes()
     {
         
-        $tes = \App\Models\Accounting\JournalAccount::with(['manual'])->find(787972);
-        
-        dd($tes->manual);
-        
+        $tes = Account::reverse()->pluck('code', 'code')->toArray();
+        dd($tes);
     }
 }

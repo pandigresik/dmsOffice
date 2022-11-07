@@ -48,6 +48,8 @@ class Account extends Model
         'name',
         'code',
         'description',
+        'reverse_value',
+        'has_balance'
     ];
 
     /**
@@ -78,5 +80,9 @@ class Account extends Model
     public function getFullIdentityAttribute($value)
     {
         return $this->attributes['name'].' ( '.$this->attributes['code'].' )';
+    }
+
+    public function scopeReverse($query){
+        return $query->where('reverse_value',1);
     }
 }

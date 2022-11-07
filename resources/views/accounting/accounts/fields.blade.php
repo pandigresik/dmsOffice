@@ -14,6 +14,17 @@
 </div>
 </div>
 
+<!-- reverse_value Field -->
+<div class="form-group row">
+    {!! Form::label('reverse_value', __('models/accounts.fields.reverse_value').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9"> 
+    <label class="checkbox-inline">
+        {!! Form::hidden('reverse_value', 0) !!}
+        {!! Form::checkbox('reverse_value', '1', null) !!}
+    </label>
+</div>
+</div>
+
 <!-- Description Field -->
 <div class="form-group row">
     {!! Form::label('description', __('models/accounts.fields.description').':', ['class' => 'col-md-3 col-form-label']) !!}

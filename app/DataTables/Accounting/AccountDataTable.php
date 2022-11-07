@@ -121,6 +121,7 @@ class AccountDataTable extends DataTable
         return [
             'name' => new Column(['title' => __('models/accounts.fields.name'), 'data' => 'name', 'searchable' => true, 'elmsearch' => 'text']),
             'code' => new Column(['title' => __('models/accounts.fields.code'), 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
+            'reverse_value' => new Column(['title' => __('models/accounts.fields.reverse_value'), 'data' => 'reverse_value', 'searchable' => true, 'elmsearch' => 'text']),
             'description' => new Column(['title' => __('models/accounts.fields.description'), 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
         ];
     }
