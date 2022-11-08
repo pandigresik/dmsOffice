@@ -501,35 +501,27 @@ class JournalAccount extends Model
         select distinct 825010, 'Biaya Pengangkutan', shipping_cost, 0, shipping_cost, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
         where doc_id in ('{$btbStr}')  and shipping_cost > 0
-        union all
-        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        union all        
         select distinct 211104, 'Hutang ongkos angkut', shipping_cost, 0, shipping_cost, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
-        where doc_id in ('{$btbStr}')  and shipping_cost > 0        
-        
+        where doc_id in ('{$btbStr}')  and shipping_cost > 0                
         -- persediaan galon
-        union all
-        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        union all        
         select '{$coaPersediaanGalon}', 'Persediaan Galon Botol', abs(price * qty), 0, price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
         where doc_id in ('{$btbStr}')  and price > 0 and product_id in ({$kodeGalon})
         -- persediaan non galon
-        union all
-        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        union all        
         select '{$coaPersediaanNonGalon}', 'Persediaan Non Galon', abs(price * qty / {$pembagiPPN}), 0, price * qty / {$pembagiPPN}, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
         where doc_id in ('{$btbStr}')  and price > 0 and product_id not in ({$kodeGalon})
-
         -- ppn masukan
-        union all
-        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        union all        
         select '{$coaPpnMasukan}', 'PPN Masukan', abs(price * qty * {$besarPPN}), 0, price * qty * {$besarPPN}, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
         where doc_id in ('{$btbStr}')  and price > 0 and product_id not in ({$kodeGalon})
-
         -- hutang dagang TIV
-        union all
-        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        union all        
         select '{$coaHutangTIV}', 'Hutang Dagang TIV', abs(price * qty), 0, price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
         where doc_id in ('{$btbStr}')  and price > 0 

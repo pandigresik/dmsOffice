@@ -225,9 +225,7 @@ class BtbValidate extends Model
         $userId = Auth::id();
         $now = (\Carbon\Carbon::now())->format('Y-m-d H:i:s');
         $btbStr = implode("','", $btbs->flatten()->all());             
-        // if( (empty($branchId) or in_array($branchId, $gudangPusat)) ){ 
-        //     $whereBranchGdPusat =  !empty($branchId) ? " and dsd.szBranchId = '{$branchId}'" : " and dsd.szBranchId in ('".implode("','", $gudangPusat)."')";          
-            /** dbnya berbeda */
+        
         $sql = <<<SQL
         insert into btb_validate (branch_id,btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price, shipping_cost )
         select z.* from(
@@ -290,6 +288,21 @@ class BtbValidate extends Model
 
         )z where z.price > 0
         SQL;
+        // DB::statement($sql);
+        $this->fromQuery($sql);
+    }
+
+    public function insertSubsidiOA($btbs)
+    {        
+        $btbStr = implode("','", $btbs->flatten()->all());             
+        
+        $sql = <<<SQL
+        insert into btb_shipping_cost_subsidies (doc_id, amount, created_by, created_at)
+        select bv.doc_id, scs.amount * bv.qty, bv.created_by, bv.created_at  
+        from btb_validate bv 
+        join shipping_cost_subsidies scs on scs.product_id = bv.product_id and scs.origin_plant_id = bv.partner_id 
+        where bv.doc_id in ('{$btbStr}')
+SQL;
         // DB::statement($sql);
         $this->fromQuery($sql);
     }

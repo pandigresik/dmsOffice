@@ -77,7 +77,7 @@ class BtbValidateRepository extends BaseRepository
                     switch ($key) {
                         case 'BTB Supplier':
                             $model = $this->model->insertBtbSupplier($vc);
-
+                            $this->model->insertSubsidiOA($vc);
                             break;
                         case 'BTB Distribusi':
                             $model = $this->model->insertBtbDistribusi($vc);
@@ -87,7 +87,7 @@ class BtbValidateRepository extends BaseRepository
                 }
             }
             $journalAccount = new JournalAccount();
-            $journalAccount->jurnalHutangBTB($vc);
+            $journalAccount->jurnalHutangBTB($vc);            
             DB::commit();
             // flush cache karena menggunakan from query untuk eksekusi statement insert into
             $this->model->flushCache();
