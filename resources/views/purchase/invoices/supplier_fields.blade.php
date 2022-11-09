@@ -74,6 +74,9 @@
             <li class="nav-item" data-href="#bkb-itemlist"><a class="nav-link active" data-toggle="tab" href="#bkb-itemlist"
                     role="tab" aria-controls="bkb-itemlist" aria-selected="false">List BKB</a>
             </li>
+            <li class="nav-item" data-href="#oa-itemlist"><a class="nav-link" data-toggle="tab" href="#oa-itemlist"
+                role="tab" aria-controls="oa-itemlist" aria-selected="false">List Subsidi OA</a>
+            </li>
             <li class="nav-item" data-href="#btb-itemlist"><a class="nav-link" data-toggle="tab"
                     href="#btb-itemlist" role="tab" aria-controls="btb-itemlist" aria-selected="true">List BTB</a>
             </li>            
@@ -90,8 +93,16 @@
                     <div class="col-md-12 table-responsive bkb-lines">
 
                     </div>
+                </div>                
+            </div>
+            <div class="tab-pane" id="oa-itemlist" role="tabpanel">
+                <div class="col-md-6 col-offset-md-3 mb-2">
+                    <button type='button' class='btn btn-primary'                        
+                        onclick="main.getContentView('{{ route('listSubsidiOA') }}',{},'#div-oalines')">List Subsidi OA</button>
                 </div>
-                
+                <div id="div-oalines" class="col-md-6 table-responsive oa-lines">
+
+                </div>
             </div>
             <div class="tab-pane" id="btb-itemlist" role="tabpanel">
                 <div class="col-md-6 col-offset-md-3 mb-2">

@@ -18,7 +18,8 @@
 <script src="/vendor/js-xlsx/xlsx.full.min.js"></script>
 <script type="text/javascript">
     let _totalBkb = 0
-    function updateAmount(elm){
+    let _totalSubsidiOA = 0
+    function updateAmount(elm){        
         const _form = $(elm).closest('form')        
         const _table = $(elm).find('table')
         if(_table.length){
@@ -31,9 +32,19 @@
                 })
             }
             _amount += _totalBkb
+            _amount -= _totalSubsidiOA            
             _form.find('.amount').val(_amount)
             _form.find('.amount').trigger('change')
         }
+    }
+
+    function updateSubsidiOA(elm){
+        const _tbody = $(elm).closest('tbody')
+        _totalSubsidiOA = 0
+        _tbody.find(':checkbox:checked').each(function(){
+            _totalSubsidiOA += parseFloat($(this).data('amount'))
+        })
+        updateAmount($('#btb-itemlist>.invoice-lines'))
     }
 
     function addListDoc(elm){

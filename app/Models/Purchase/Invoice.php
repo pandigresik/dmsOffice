@@ -169,6 +169,11 @@ class Invoice extends Model
         return $this->hasMany(\App\Models\Purchase\InvoiceBkb::class, 'invoice_id');
     }
 
+    public function subsidiOa()
+    {
+        return $this->hasMany(\App\Models\Purchase\InvoiceSubsidi::class, 'invoice_id');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

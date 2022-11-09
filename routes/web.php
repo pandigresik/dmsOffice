@@ -125,8 +125,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'purchase'], function () {
         Route::resource('btbValidates', App\Http\Controllers\Purchase\BtbValidateController::class, ['as' => 'purchase']);
+        Route::get('invoices/listSubsidiOA', [App\Http\Controllers\Purchase\InvoiceController::class, 'listSubsidiOA'])->name('listSubsidiOA');
         Route::resource('invoices', App\Http\Controllers\Purchase\InvoiceSubmitController::class, ['as' => 'purchase']);
         Route::get('invoices/downloadInvoiceBkb/{invoiceId}', [App\Http\Controllers\Purchase\InvoiceController::class, 'downloadBkb'])->name('downloadInvoiceBkb');
+        
         Route::resource('invoiceLines', App\Http\Controllers\Purchase\InvoiceLineController::class, ['as' => 'purchase']);
         Route::resource('invoiceValidates', App\Http\Controllers\Purchase\InvoiceValidateController::class, ['as' => 'purchase']);
     });

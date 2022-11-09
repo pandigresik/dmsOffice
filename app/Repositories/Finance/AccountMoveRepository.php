@@ -106,15 +106,17 @@ class AccountMoveRepository extends BaseRepository
             foreach ($lines['account_id'] as $key => $line) {
                 $accountId = $lines['account_id'][$key];                
                 $reverseValue = isset($listReverseAccount[$accountId]) ? -1 : 1;
+                $debit = empty($lines['debit'][$key]) ? 0 : $lines['debit'][$key];
+                $credit = empty($lines['credit'][$key]) ? 0 : $lines['credit'][$key];
                 $model->journals()->create([
                     'name' => $lines['name'][$key],
                     'date' => $model->getRawOriginal('date'),
                     'reference' => $model->number,
                     'description' => $lines['description'][$key],
                     'account_id' => $lines['account_id'][$key],
-                    'debit' => $lines['debit'][$key],
-                    'credit' => $lines['credit'][$key],
-                    'balance' => $reverseValue * ($lines['debit'][$key] - $lines['credit'][$key]),
+                    'debit' => $debit,
+                    'credit' => $credit,
+                    'balance' => $reverseValue * ($debit - $credit),
                     'branch_id' => $model->branch_id ?? null,
                 ]);
             }
@@ -126,13 +128,15 @@ class AccountMoveRepository extends BaseRepository
         if (!empty($lines)) {
             $model->lines()->forceDelete();
             foreach ($lines['account_id'] as $key => $line) {
+                $debit = empty($lines['debit'][$key]) ? 0 : $lines['debit'][$key];
+                $credit = empty($lines['credit'][$key]) ? 0 : $lines['credit'][$key];
                 $model->lines()->create([
                     'name' => $lines['name'][$key],
                     'description' => $lines['description'][$key],
                     'account_id' => $lines['account_id'][$key],
-                    'debit' => $lines['debit'][$key],
-                    'credit' => $lines['credit'][$key],
-                    'balance' => $lines['debit'][$key] - $lines['credit'][$key],
+                    'debit' => $debit,
+                    'credit' => $credit,
+                    'balance' => $debit - $credit
                 ]);
             }
         }

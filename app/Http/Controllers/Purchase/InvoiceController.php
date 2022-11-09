@@ -6,7 +6,7 @@ use App\DataTables\Purchase\InvoiceDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateInvoiceRequest;
 use App\Http\Requests\Purchase\UpdateInvoiceRequest;
-use App\Models\Purchase\InvoiceBkb;
+use App\Models\Purchase\BtbShippingCostSubsidy;
 use App\Repositories\Base\DmsApSupplierRepository;
 use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Inventory\DmsInvCarrierRepository;
@@ -185,5 +185,10 @@ class InvoiceController extends AppBaseController
         $fileName = 'invoice_bkb_'.$invoiceId;
 
         return (new $modelEksport($invoiceId))->download($fileName.'.xls');
+    }
+
+    public function listSubsidiOA(){
+        $availableOA = BtbShippingCostSubsidy::available()->get();
+        return view('purchase.invoices.subsidi_oa')->with('datas', $availableOA);
     }
 }

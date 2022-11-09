@@ -2,8 +2,10 @@
 
 namespace App\Repositories\Purchase;
 
+use App\Models\Purchase\BtbShippingCostSubsidy;
 use App\Models\Purchase\BtbValidate;
 use App\Models\Purchase\Invoice;
+use App\Models\Purchase\InvoiceSubsidi;
 use App\Repositories\BaseRepository;
 use Exception;
 
@@ -71,6 +73,7 @@ class InvoiceRepository extends BaseRepository
             $model = $this->model->newInstance($input);
             $invoiceLine = $input['invoice_line'];
             $invoiceBkb = $input['invoice_bkb'] ?? [];
+            $subsidiOA = $input['subsidi_oa'] ?? [];
             $model->number = $model->getNextNumber();
             $model->type = 'in';
             $model->state = Invoice::DEFAULT_STATE;
@@ -84,6 +87,7 @@ class InvoiceRepository extends BaseRepository
             ]);
             $this->setInvoiceLines($invoiceLine, $model);
             $this->setInvoiceBkb($invoiceBkb, $model);
+            $this->setSubsidiOA($subsidiOA, $model);
             $model->btb()->update([$btbInvoicedColumn => 1]);
             if ('ekspedisi' == $input['partner_type']) {
                 $model->shippingCost()->update([$btbInvoicedColumn => 1]);
@@ -112,14 +116,22 @@ class InvoiceRepository extends BaseRepository
 
     public function update($input, $id)
     {
-        $invoiceLine = $input['invoice_line'];
-        $invoiceBkb = $input['invoice_bkb'] ?? [];
-        $model = parent::update($input, $id);
-        $this->setInvoiceLines($invoiceLine, $model);
-        $this->setInvoiceBkb($invoiceBkb, $model);
-        $model->invoiceUsers()->create([
-            'state' => $model->getRawOriginal('state'),
-        ]);
+        $this->model->getConnection()->beginTransaction();
+        try{
+            $invoiceLine = $input['invoice_line'];
+            $invoiceBkb = $input['invoice_bkb'] ?? [];
+            $model = parent::update($input, $id);
+            $this->setInvoiceLines($invoiceLine, $model);
+            $this->setInvoiceBkb($invoiceBkb, $model);
+            $model->invoiceUsers()->create([
+                'state' => $model->getRawOriginal('state'),
+            ]);
+            $this->model->getConnection()->commit();
+        }catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            $this->model->getConnection()->rollBack();
+            return $e;
+        }        
 
         return $model;
     }
@@ -143,19 +155,32 @@ class InvoiceRepository extends BaseRepository
      */
     public function delete($id)
     {
-        $query = $this->model->newQuery();
+        $this->model->getConnection()->beginTransaction();
+        try{
+            $query = $this->model->newQuery();
 
-        $model = $query->findOrFail($id);
-        $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN[$model->getRawOriginal('partner_type')];
-        $model->btb()->update([$btbInvoicedColumn => 0]);
-        if ('ekspedisi' == $model->getRawOriginal('partner_type')) {
-            $model->shippingCost()->update([$btbInvoicedColumn => 0]);
+            $model = $query->findOrFail($id);
+            $btbInvoicedColumn = BtbValidate::INVOICE_TYPE_COLUMN[$model->getRawOriginal('partner_type')];
+            $model->btb()->update([$btbInvoicedColumn => 0]);
+            if ('ekspedisi' == $model->getRawOriginal('partner_type')) {
+                $model->shippingCost()->update([$btbInvoicedColumn => 0]);
+            }
+            $subsidiOA = InvoiceSubsidi::where(['invoice_id' => $id])->get()->pluck('subsidi_oa_id', 'subsidi_oa_id')->toArray();
+            BtbShippingCostSubsidy::whereIn('id', array_keys($subsidiOA))->update(['invoiced', 0]);
+            $model->invoiceLines()->forceDelete();
+            $model->invoiceBkb()->forceDelete();
+            $model->invoiceUsers()->forceDelete();
+            $model->subsidiOa()->forceDelete();
+            $model->forceDelete();
+            $this->model->getConnection()->commit();
+
+        }catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            $this->model->getConnection()->rollBack();
+            return $e;
         }
-        $model->invoiceLines()->forceDelete();
-        $model->invoiceBkb()->forceDelete();
-        $model->invoiceUsers()->forceDelete();
-
-        return $model->forceDelete();
+        
+        return true;
     }
 
     public function billSubmit()
@@ -203,6 +228,17 @@ class InvoiceRepository extends BaseRepository
                     $model->invoiceBkb()->create(['references' => $line['ID. DOKUMEN'], 'additional_info' => $line]);
                 }
             }
+        }
+    }
+
+    private function setSubsidiOA($subsidiOA, $model)
+    {
+        if (!empty($subsidiOA)) {
+            $model->subsidiOa()->forceDelete();
+            foreach ($subsidiOA as $id => $oa) {
+                $model->subsidiOa()->create(['amount' => $oa, 'subsidi_oa_id' => $id]);
+            }
+            BtbShippingCostSubsidy::whereIn('id', array_keys($subsidiOA))->update(['invoiced', 1]);
         }
     }
 }
