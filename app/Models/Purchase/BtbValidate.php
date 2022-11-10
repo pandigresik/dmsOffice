@@ -233,7 +233,7 @@ class BtbValidate extends Model
             dsd.szBranchId,
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
-            dsd.dtmCreated as tgl_btb,
+            dsd.dtmDoc as tgl_btb,
             dsdi.iId as reference_id,
             -- dsd.szRefDocId AS sj_pabrik,
             dsd.szRef1 AS co_reference,            
@@ -249,7 +249,7 @@ class BtbValidate extends Model
             '{$now}' as created_at,
             dsd.szSupplierId,
             coalesce((select ppl.price from product_price_log ppl where ppl.product_id = dsdi.szProductId and ppl.start_date <= dsd.dtmDoc and (ppl.end_date is null or ppl.end_date >= dsd.dtmDoc) order by id desc limit 1),0) as price,
-            coalesce(getShippingCost(dsd.szDocId,dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
+            coalesce(getShippingCost(dsd.szDocId,dsd.dtmDoc, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
         from
             dms_inv_docstockinsupplier dsd
         join dms_inv_docstockinsupplieritem dsdi on dsdi.szDocId = dsd.szDocId
@@ -262,7 +262,7 @@ class BtbValidate extends Model
             dsd.szBranchId,
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
-            dsd.dtmCreated as tgl_btb,
+            dsd.dtmDoc as tgl_btb,
             dsdi.iId as reference_id,
             -- dsd.szRefDocId AS sj_pabrik,
             dsd.szRef1 AS co_reference,            
@@ -278,7 +278,7 @@ class BtbValidate extends Model
             '{$now}' as created_at,
             dsd.szSupplierId,
             coalesce((select ppl.price from product_price_log ppl where ppl.product_id = dsdi.szProductId and ppl.start_date <= dsd.dtmDoc and (ppl.end_date is null or ppl.end_date >= dsd.dtmDoc) order by id desc limit 1),0) as price,
-            coalesce(getShippingCost(dsd.szDocId,dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
+            coalesce(getShippingCost(dsd.szDocId,dsd.dtmDoc, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
         from
             gdpusat.dms_inv_docstockinsupplier dsd
         join gdpusat.dms_inv_docstockinsupplieritem dsdi on dsdi.szDocId = dsd.szDocId
@@ -318,7 +318,7 @@ SQL;
             dsd.szBranchId,
             'BTB Distribusi' as jenis,
             dsd.szDocId AS no_btb,
-            dsd.dtmCreated as tgl_btb,
+            dsd.dtmDoc as tgl_btb,
             dsdi.iId as reference_id,
             -- dsd.szBkbReferensi AS sj_pabrik,
             dsd.szDoReferensi AS co_reference,
@@ -356,7 +356,7 @@ SQL;
         $ekspedisi = $input['dms_inv_carrier_id'];
         $warehouse = $btb->dms_inv_warehouse_id;
         $product = $btb->product_id;
-        // select coalesce(getShippingCost(dsd.szDocId,dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
+        // select coalesce(getShippingCost(dsd.szDocId,dsd.dtmDoc, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
         $sql = <<<SQL
             select coalesce(getShippingCost('{$docId}','{$btbDate}', '{$ekspedisi}', '{$supplier}' , '{$warehouse}', '{$product}'),0) as shipping_cost
             -- select ( tep.price + tep.origin_additional_price + tep.destination_additional_price ) as shippingCost from trip t
@@ -387,7 +387,7 @@ SQL;
             select
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
-            dsd.dtmCreated as tgl_btb,
+            dsd.dtmDoc as tgl_btb,
             dsd.szRefDocId AS sj_pabrik,            
             divi.szName as product_name,
             dsdi.decQty as qty,
@@ -402,7 +402,7 @@ SQL;
             eks.szName as nama_ekspedisi,        
             dsd.szDocStatus AS szDocStatus,
             coalesce((select ppl.price from product_price_log ppl where ppl.product_id = dsdi.szProductId and ppl.start_date <= dsd.dtmDoc and (ppl.end_date is null or ppl.end_date >= dsd.dtmDoc) order by id desc limit 1),0) as price,
-            coalesce(getShippingCost(dsd.szDocId, dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
+            coalesce(getShippingCost(dsd.szDocId, dsd.dtmDoc, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
             -- coalesce((select cost from shippingCost where product_id = dsdi.szProductId and destination_id = dsd.szWarehouseId and origin_id = dsd.szSupplierId limit 1),0) as shipping_cost
         from
             gdpusat.dms_inv_docstockinsupplier dsd
@@ -413,7 +413,7 @@ SQL;
         join gdpusat.dms_ap_supplier dap on dap.szId = dsd.szSupplierId 
         left join btb_validate bv on bv.doc_id = dsd.szDocId and bv.deleted_at is null
         where dsd.szDocStatus = 'Applied' and bv.reference_id is null        
-            and dsd.dtmCreated between '{$startDate}' and '{$endDate}'
+            and dsd.dtmDoc between '{$startDate}' and '{$endDate}'
             {$whereBranchGdPusat}
 SQL;            
         }
@@ -421,7 +421,7 @@ SQL;
         select
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
-            dsd.dtmCreated as tgl_btb,
+            dsd.dtmDoc as tgl_btb,
             dsd.szRefDocId AS sj_pabrik,            
             divi.szName as product_name,
             dsdi.decQty as qty,
@@ -436,7 +436,7 @@ SQL;
             eks.szName as nama_ekspedisi,        
             dsd.szDocStatus AS szDocStatus,
             coalesce((select ppl.price from product_price_log ppl where ppl.product_id = dsdi.szProductId and ppl.start_date <= dsd.dtmDoc and (ppl.end_date is null or ppl.end_date >= dsd.dtmDoc) order by id desc limit 1),0) as price,
-            coalesce(getShippingCost(dsd.szDocId, dsd.dtmCreated, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
+            coalesce(getShippingCost(dsd.szDocId, dsd.dtmDoc, dsd.szCarrierId, dsd.szSupplierId , dsd.szWarehouseId, dsdi.szProductId),0) as shipping_cost
             -- coalesce((select cost from shippingCost where product_id = dsdi.szProductId and destination_id = dsd.szWarehouseId and origin_id = dsd.szSupplierId limit 1),0) as shipping_cost
         from
             dms_inv_docstockinsupplier dsd
@@ -447,7 +447,7 @@ SQL;
         join dms_ap_supplier dap on dap.szId = dsd.szSupplierId 
         left join btb_validate bv on bv.doc_id = dsd.szDocId and bv.deleted_at is null
         where dsd.szDocStatus = 'Applied' and bv.reference_id is null        
-            and dsd.dtmCreated between '{$startDate}' and '{$endDate}'
+            and dsd.dtmDoc between '{$startDate}' and '{$endDate}'
             {$whereBranchId}            
         {$sqlGdPusat}
         SQL;
@@ -461,7 +461,7 @@ SQL;
         select
             'BTB Distribusi' as jenis,
             dsd.szDocId AS no_btb,
-            dsd.dtmCreated as tgl_btb,
+            dsd.dtmDoc as tgl_btb,
             dsd.szBkbReferensi AS sj_pabrik,
             divi.szName as product_name,
             '-' as id_asal,
@@ -484,7 +484,7 @@ SQL;
         join dms_inv_vehicle eks on eks.szId  = dsd.szVehicleId 
         left join btb_validate bv on bv.doc_id = dsd.szDocId and bv.deleted_at is null
         where dsd.szDocStatus = 'Applied' and bv.reference_id is null        
-        and dsd.dtmCreated between '{$startDate}' and '{$endDate}'
+        and dsd.dtmDoc between '{$startDate}' and '{$endDate}'
         {$whereBranchId}
         SQL;
     }

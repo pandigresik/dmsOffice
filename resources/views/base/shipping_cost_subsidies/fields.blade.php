@@ -18,6 +18,6 @@
 <div class="form-group row mb-3">
     {!! Form::label('amount', __('models/shippingCostSubsidies.fields.amount').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('amount', null, ['class' => 'form-control inputmask', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer')),'required' => 'required']) !!}
+    {!! Form::text('amount', null, ['class' => 'form-control inputmask', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.decimal')),'required' => 'required']) !!}
 </div>
 </div>

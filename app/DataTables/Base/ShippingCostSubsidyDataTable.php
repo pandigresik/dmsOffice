@@ -117,7 +117,7 @@ class ShippingCostSubsidyDataTable extends DataTable
         return [
             'product_id' => new Column(['title' => __('models/shippingCostSubsidies.fields.product_id'),'name' => 'product_id', 'data' => 'product.szName', 'searchable' => true, 'elmsearch' => 'text']),
             'origin_plant_id' => new Column(['title' => __('models/shippingCostSubsidies.fields.origin_plant_id'),'name' => 'origin_plant_id', 'data' => 'origin.szName', 'searchable' => true, 'elmsearch' => 'text']),
-            'amount' => new Column(['title' => __('models/shippingCostSubsidies.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => true, 'elmsearch' => 'text'])
+            'amount' => new Column(['title' => __('models/shippingCostSubsidies.fields.amount'),'name' => 'amount', 'data' => 'amount', 'searchable' => true, 'elmsearch' => 'text', 'className' => 'text-right'])
         ];
     }
 

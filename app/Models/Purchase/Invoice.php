@@ -262,6 +262,14 @@ class Invoice extends Model
         return $query->wherePartnerType(self::EKSPEDISI);
     }
 
+    public function scopeBayarPeriode($query, $startDate, $endDate)
+    {
+        return $query->join('payment_line','invoice.id','=','payment_line.invoice_id')
+                    ->join('payment', 'payment.id', '=', 'payment_line.payment_id')
+                    ->whereBetween('pay_date',[$startDate, $endDate]);   
+            ;
+    }
+
     public function getQtyAttribute($value)
     {
         return localNumberFormat($value, 0);

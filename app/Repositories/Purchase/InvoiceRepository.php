@@ -165,8 +165,10 @@ class InvoiceRepository extends BaseRepository
             if ('ekspedisi' == $model->getRawOriginal('partner_type')) {
                 $model->shippingCost()->update([$btbInvoicedColumn => 0]);
             }
-            $subsidiOA = InvoiceSubsidi::where(['invoice_id' => $id])->get()->pluck('subsidi_oa_id', 'subsidi_oa_id')->toArray();
-            BtbShippingCostSubsidy::whereIn('id', array_keys($subsidiOA))->update(['invoiced', 0]);
+            // $subsidiOA = InvoiceSubsidi::where(['invoice_id' => $id])->get()->pluck('subsidi_oa_id', 'subsidi_oa_id')->toArray();            
+            BtbShippingCostSubsidy::whereIn('id', function($q) use ($id){
+                return $q->select(['id'])->from('invoice_subsidi')->where(['invoice_id' => $id]);
+            })->update(['invoiced' => 0]);
             $model->invoiceLines()->forceDelete();
             $model->invoiceBkb()->forceDelete();
             $model->invoiceUsers()->forceDelete();
@@ -238,7 +240,7 @@ class InvoiceRepository extends BaseRepository
             foreach ($subsidiOA as $id => $oa) {
                 $model->subsidiOa()->create(['amount' => $oa, 'subsidi_oa_id' => $id]);
             }
-            BtbShippingCostSubsidy::whereIn('id', array_keys($subsidiOA))->update(['invoiced', 1]);
+            BtbShippingCostSubsidy::whereIn('id', array_keys($subsidiOA))->update(['invoiced' => 1]);
         }
     }
 }

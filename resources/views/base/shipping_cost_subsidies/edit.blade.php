@@ -11,7 +11,7 @@
     @endpush
     <div class="container-fluid">
          <div class="animated fadeIn">
-             @include('common.errors')
+            @include('coreui-templates::common.errors')
              <div class="row">
                  <div class="col-lg-12">
                     {!! Form::model($shippingCostSubsidy, ['route' => ['base.shippingCostSubsidies.update', $shippingCostSubsidy->id], 'method' => 'patch']) !!}  

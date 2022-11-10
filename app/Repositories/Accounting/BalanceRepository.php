@@ -91,10 +91,11 @@ class BalanceRepository extends BaseRepository
 SQL;        
         $pembayaran = $this->model->fromQuery($sqlBayar);
         $hutangInvoice = Invoice::supplierPartner()->where('date_invoice','<',$startDate)->hutang()->where(['type' => 'in']);
+        $invoiceBayarBulanIni = Invoice::select(['invoice.*'])->supplierPartner()->where('date_invoice','<',$startDate)->bayarPeriode($startDate, $endDate);
         return [
             'invoices' => Invoice::supplierPartner()->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['btb' => function($q){
                 return $q->with(['supplier']);   
-            },'invoiceBkb', 'payment'])->union($hutangInvoice)->get(),
+            },'invoiceBkb', 'payment'])->union($invoiceBayarBulanIni)->union($hutangInvoice)->get(),
             'pembayarans' => $pembayaran
         ];
     }
@@ -108,11 +109,12 @@ SQL;
         where i.partner_type = 'ekspedisi' and i.`type` = 'in'
 SQL;        
         $pembayaran = $this->model->fromQuery($sqlBayar);
-        $hutangInvoice = Invoice::ekspedisiPartner()->where('date_invoice','<',$startDate)->hutang()->where(['type' => 'in']);
+        $hutangInvoice = Invoice::select(['invoice.*'])->ekspedisiPartner()->where('date_invoice','<',$startDate)->hutang()->where(['type' => 'in']);
+        $invoiceBayarBulanIni = Invoice::select(['invoice.*'])->ekspedisiPartner()->where('date_invoice','<',$startDate)->bayarPeriode($startDate, $endDate);
         return [
             'invoices' => Invoice::ekspedisiPartner()->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['btb' => function($q){
                 return $q->with(['supplier','branch','ekspedisi']);
-            }, 'payment'])->union($hutangInvoice)->get(),
+            }, 'payment'])->union($invoiceBayarBulanIni)->union($hutangInvoice)->get(),
             'pembayarans' => $pembayaran
         ];
     }

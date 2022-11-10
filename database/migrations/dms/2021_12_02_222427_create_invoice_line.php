@@ -20,7 +20,7 @@ class CreateInvoiceLine extends Migration
             $table->string('reference_id', 50);
             $table->string('product_id', 50);
             $table->string('product_name', 70);
-            $table->string('uom_id', 50);            
+            $table->string('uom_id', 150);            
             $table->integer('qty',false, true);
             $table->decimal('price', 15, 2);
             $table->blameable();
