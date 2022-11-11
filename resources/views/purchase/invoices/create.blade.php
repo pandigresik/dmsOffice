@@ -77,8 +77,10 @@
         }
         let _json = $(elm).data('json')
         let _listBtb = []
-        _listBkb.each(function(item, obj){            
-            _listBtb.push(obj.getAttribute('data-btb'))
+        _listBkb.each(function(item, obj){        
+            if(obj.getAttribute('data-btb') != 'null'){
+                _listBtb.push(obj.getAttribute('data-btb'))
+            }            
         })
                             
         _json.listbtb = _listBtb
