@@ -46,7 +46,7 @@ class HomeController extends Controller
     public function tes()
     {
         
-        $tes = Account::reverse()->pluck('code', 'code')->toArray();
+        $tes = Payment::find(1);
         dd($tes);
     }
 }

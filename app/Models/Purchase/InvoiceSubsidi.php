@@ -78,4 +78,9 @@ class InvoiceSubsidi extends Model
     {
         return $this->belongsTo(\App\Models\Purchase\Invoice::class, 'invoice_id');
     }
+
+    public function subsidi()
+    {
+        return $this->belongsTo(\App\Models\Purchase\BtbShippingCostSubsidy::class, 'subsidi_oa_id');
+    }
 }

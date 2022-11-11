@@ -157,7 +157,7 @@ SQL;
                 $item->substractor = $pengurang[$product->szId] ?? 0;
                 $item->cogs = $item->cogs - $item->substractor;
                 if ($item->cogs < 0) {
-                    $item->cogs = 0;
+                    $item->cogs = abs($item->cogs);
                 }
                 $item->period = $period;
                 $item->branch_id = $branchId;

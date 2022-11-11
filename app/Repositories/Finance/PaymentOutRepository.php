@@ -35,7 +35,7 @@ class PaymentOutRepository extends PaymentRepository
                 case 'ekspedisi':
                     $this->generateJurnalPaymentEkspedisi($model->getRawOriginal('amount'), $paydate, $reference);
                     break;
-                default:
+                default:                    
                     $this->generateJurnalPaymentSupplier($model->getRawOriginal('amount'), $paydate, $reference);
             }
             $this->model->getConnection()->commit();

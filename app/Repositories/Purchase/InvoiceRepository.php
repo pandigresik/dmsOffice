@@ -207,7 +207,9 @@ class InvoiceRepository extends BaseRepository
 
     public function readyPayment($partnerType)
     {
-        return $this->model->disableModelCaching()->where(['partner_type' => $partnerType])->with(['invoiceLines', 'partner', 'debitCreditNote', 'invoiceBkb'])->validate()->get();
+        return $this->model->disableModelCaching()->where(['partner_type' => $partnerType])->with(['invoiceLines', 'partner', 'debitCreditNote', 'invoiceBkb', 'subsidiOa' => function($r){
+            return $r->with(['subsidi']);
+        }])->validate()->get();
     }
 
     private function setInvoiceLines($invoiceLine, $model)

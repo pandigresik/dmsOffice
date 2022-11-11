@@ -15,7 +15,7 @@ class AddPriceProductStock extends Migration
             $table->decimal('price', 8, 2, true);
             $table->integer('transfer', false, true);
             $table->string('branch_id', 50)->nullable();
-            $table->decimal('substractor', 15, 0, true);
+            $table->decimal('substractor', 15, 0, false);
             $table->decimal('cogs', 15, 0, true);
         });
     }

@@ -40,12 +40,21 @@
         @endphp
         @foreach($invoiceLines->groupBy('billingDoc') as $billing_doc => $products)            
             <tr class="bg-info">
-                <td colspan="5">{!! $billing_doc !!}</td>
+                @if ($partnerType == 'ekspedisi')
+                <td colspan="5">{{ $external_reference }}</td>
+                    @else
+                        <td colspan="5">{!! $billing_doc !!}</td>
+                    @endif                
             </tr>
             @foreach ($products as $data)                
                 <tr>
                     <td>{{ $data->doc_id }}</td>
-                    <td>{{ $data->product_name }}</td>
+                    @if ($partnerType == 'ekspedisi')
+                        <td>{!! $data->product_name !!}</td>
+                    @else
+                        <td>{{ $data->product_name }}</td>    
+                    @endif
+                    
                     <td class="text-right">{{ $data->qty }}</td>
                     <td class="text-right">{{ $data->price }}</td>
                     <td class="text-right">{{ $data->amount_total }}</td>

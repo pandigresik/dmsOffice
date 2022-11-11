@@ -8,7 +8,7 @@
         'required']) !!}
         </td>
         <td>
-            {!! Form::text('account_move_line[description][]', $item->description ?? '', ['class' => 'form-control','maxlength' => 256, 'required' =>
+            {!! Form::text('account_move_line[description][]', $item->description ?? '', ['class' => 'form-control','maxlength' => 255, 'required' =>
         'required']) !!}
         </td>
         <td>

@@ -48,7 +48,7 @@ class PaymentController extends AppBaseController
             $validatedInvoice = $readyPayment->groupBy('partner_id');
         }
 
-        return view($this->baseViewPath.'.create')->with('invoices', $validatedInvoice)->with($this->getOptionItems());
+        return view($this->baseViewPath.'.create')->with(['partnerType' => $partnerType, 'invoices' => $validatedInvoice])->with($this->getOptionItems());
     }
 
     /**

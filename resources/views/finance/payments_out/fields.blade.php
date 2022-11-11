@@ -65,11 +65,16 @@
                     <td colspan="4">
                         <div class="row">
                             <div class="col-md-12">
-                                @include($baseViewPath.'.invoice_list',['invoiceLines' => $item->invoiceLines, 'invoiceBkb' => $item->invoiceBkb])
+                                @include($baseViewPath.'.invoice_list',['external_reference' => $item->reference,'invoiceLines' => $item->invoiceLines, 'invoiceBkb' => $item->invoiceBkb, 'partnerType' => $partnerType])
                             </div>
                             <div class="col-md-12">
                                 @include($baseViewPath.'.cndn_list',['debitCreditNote' => $item->debitCreditNote])
                             </div>
+                            @if ($partnerType == 'supplier' && !$item->subsidiOa->isEmpty()) 
+                            <div class="col-md-12">
+                                @include($baseViewPath.'.subsidioa_list',['subsidiOa' => $item->subsidiOa])
+                            </div>
+                            @endif
                         </div>
                     </td>
                 </tr>
