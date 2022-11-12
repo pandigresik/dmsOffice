@@ -44,7 +44,7 @@
     {!! Form::label('amount', __('models/invoices.fields.amount').':', ['class' => 'col-md-3 col-form-label']) !!}
     <div class="col-md-6">
         {!! Form::text('amount', null, ['class' => 'form-control inputmask amount', 'readonly' => 'readonly','required'
-        => 'required', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.integer'))]) !!}
+        => 'required', 'data-unmask' => 1, 'data-optionmask' => json_encode(config('local.number.decimal'))]) !!}
     </div>
 </div>
 <hr>

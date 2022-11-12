@@ -49,9 +49,10 @@ class InvoiceLineController extends AppBaseController
         $endDate = $request->get('endDate');
         $listdoc = $request->get('listdoc') ?? [];
         $listbtb = $request->get('listbtb') ?? [];
-
+        
         $btbObj = BtbValidate::whereBetween('btb_date', [$startDate, $endDate]);
         if (!empty($branchId)) {
+            \Log::error($branchId);
             $btbObj->whereIn('branch_id', $branchId);
         }
         if (!empty($listbtb)) {

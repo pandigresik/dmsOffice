@@ -32,9 +32,10 @@
                 })
             }
             _amount += _totalBkb
-            _amount -= _totalSubsidiOA            
-            _form.find('.amount').val(_amount)
-            _form.find('.amount').trigger('change')
+            _amount -= _totalSubsidiOA                        
+            // _form.find('.amount').val(_amount)
+            _form.find('.amount').val(Inputmask.format(_amount,{alias:'numeric', 'digit': 2, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
+            // _form.find('.amount').trigger('change')
         }
     }
 
@@ -126,7 +127,7 @@
                         _btbVal = _tmp['ket'] == 'BTB' ? _tmp['ID. DOKUMEN'] : null
                         _table.push(`
                             <tr>
-                                <td><input type="hidden" data-btb='${_btbVal}' name="invoice_bkb[]" value='${JSON.stringify(_tmp)}'>${_tmp['DEPO INPUT BTB']}</td>
+                                <td><input type="hidden" data-btb='${_btbVal}' name="invoice_bkb[]" value='${JSON.stringify(_tmp).replace("'","")}'>${_tmp['DEPO INPUT BTB']}</td>
                                 <td>${_tmp['ket'] ?? ''}</td>                                				  	  	  
                                 <td>${_tmp['ID. DOKUMEN'] ?? ''}</td>
                                 <td>${_tmp['TGL ID DOKUMEN'] ?? ''}</td>
