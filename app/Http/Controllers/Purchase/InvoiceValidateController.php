@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Purchase;
 use App\DataTables\Purchase\InvoiceDataTable;
 use App\DataTables\Purchase\InvoiceSubmitDataTable;
 use App\Http\Requests\Purchase\UpdateInvoiceRequest;
+use App\Models\Purchase\Invoice;
 use App\Repositories\Purchase\InvoiceRepository;
 use Flash;
 use Response;
@@ -40,7 +41,9 @@ class InvoiceValidateController extends InvoiceController
      */
     public function edit($id)
     {
-        $invoice = $this->getRepositoryObj()->find($id);
+        $invoice = Invoice::with(['invoiceLines' => function($q){
+            return $q->with(['btb']);
+        }])->find($id);
 
         if (empty($invoice)) {
             Flash::error(__('messages.not_found', ['model' => __('models/invoices.singular')]));

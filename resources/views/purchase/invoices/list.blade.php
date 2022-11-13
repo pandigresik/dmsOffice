@@ -18,7 +18,7 @@
                 @foreach ($products as $data)
                     <tr>                
                         <td>{{ localFormatDate($data->btb_date) }}</td>
-                        <td>{{ $data->co_reference }}</td>
+                        <td>{{ $data->btb->co_reference }}</td>
                         <td>{{ $data->doc_id }}</td>                                        
                         <td class="text-right">{{ $data->qty }}</td>
                         <td class="text-right">{{ $data->price }}</td>                                          
