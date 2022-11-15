@@ -39,6 +39,8 @@ class InvoiceDataTable extends DataTable
         }
         if ($this->withUpdate) {
             $dataTable->addColumn('action', 'purchase.invoices.datatables_actions');
+        }else{
+            $dataTable->addColumn('action', 'purchase.invoices.view_datatables_actions');
         }
         $dataTable->editColumn('partner.szName', function ($q) {
             return !empty($q->partner->szName) ? $q->partner->szName : $q->ekspedisi->szName;
@@ -112,10 +114,9 @@ class InvoiceDataTable extends DataTable
                 'orderCellsTop' => true,
             ])
         ;
-        if ($this->withUpdate) {
-            $builder->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')]);
-        }
-
+        
+        $builder->addAction(['width' => '120px', 'printable' => false, 'title' => __('crud.action')]);
+        
         return $builder;
     }
 

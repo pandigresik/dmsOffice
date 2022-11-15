@@ -14,7 +14,7 @@ class InvoiceValidateController extends InvoiceController
 {
     /** @var InvoiceRepository */
     protected $repository;
-
+    private $justView = false;
     public function __construct()
     {
         $this->repository = InvoiceRepository::class;
@@ -51,7 +51,13 @@ class InvoiceValidateController extends InvoiceController
             return redirect(route('purchase.invoiceValidates.index'));
         }
 
-        return view('purchase.invoice_validates.edit')->with('invoice', $invoice)->with($this->getOptionItems());
+        return view('purchase.invoice_validates.edit')->with(['invoice' => $invoice, 'justView' => $this->justView])->with($this->getOptionItems());
+    }
+
+    public function show($id)
+    {
+        $this->justView = true;
+        return $this->edit($id);
     }
 
     /**

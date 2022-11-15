@@ -26,13 +26,15 @@
 
                               
                             </div>
+                          @if (!$justView)
                           <div class="card-footer">
-                          <!-- Submit Field -->
-                            <div class="form-group col-sm-12">
-                                {!! Form::submit(__('crud.validate'), ['class' => 'btn btn-primary']) !!}
-                                <a href="{{ route('purchase.invoiceValidates.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
-                            </div>
-                          </div>                            
+                            <!-- Submit Field -->
+                              <div class="form-group col-sm-12">
+                                  {!! Form::submit(__('crud.validate'), ['class' => 'btn btn-primary']) !!}
+                                  <a href="{{ route('purchase.invoiceValidates.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
+                              </div>
+                            </div>    
+                          @endif                          
                       </div>                    
                     {!! Form::close() !!}  
                     </div>                    

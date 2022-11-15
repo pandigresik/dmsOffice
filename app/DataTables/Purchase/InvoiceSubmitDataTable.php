@@ -28,22 +28,7 @@ class InvoiceSubmitDataTable extends InvoiceDataTable
      */
     public function html()
     {
-        $buttons = [
-            // [
-            //    'extend' => 'create',
-            //    'className' => 'btn btn-default btn-sm no-corner',
-            //    'text' => '<i class="fa fa-plus"></i> ' .__('auth.app.create').''
-            // ],
-            // [
-            //    'extend' => 'export',
-            //    'className' => 'btn btn-default btn-sm no-corner',
-            //    'text' => '<i class="fa fa-download"></i> ' .__('auth.app.export').''
-            // ],
-            // [
-            //    'extend' => 'import',
-            //    'className' => 'btn btn-default btn-sm no-corner',
-            //    'text' => '<i class="fa fa-upload"></i> ' .__('auth.app.import').''
-            // ],
+        $buttons = [            
             [
                 'extend' => 'print',
                 'className' => 'btn btn-default btn-sm no-corner',
