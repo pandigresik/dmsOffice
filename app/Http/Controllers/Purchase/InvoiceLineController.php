@@ -69,7 +69,7 @@ class InvoiceLineController extends AppBaseController
                 $queryShippingCostManual->whereIn('destination_branch_id', $branchId);
             }
             $shippingCostManual = $queryShippingCostManual->get();
-            $btbValidated = $btbObj->canInvoicedEkspedisi($partnerId, $listdoc)->get()->groupBy('doc_id');
+            $btbValidated = $btbObj->canInvoicedEkspedisi($partnerId, $listdoc)->where('shipping_cost', '>', 0)->get()->groupBy('doc_id');
         }
 
         return view('purchase.invoice_lines.create')->with(['datas' => $btbValidated, 'shippingCostManual' => $shippingCostManual, 'type' => $type]);

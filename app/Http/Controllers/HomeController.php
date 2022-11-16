@@ -6,6 +6,7 @@ use App\Models\Accounting\Account;
 use App\Models\Finance\Payment;
 use App\Models\Inventory\DmsInvProduct;
 use App\Models\Inventory\ProductPrice;
+use App\Models\Purchase\BtbValidate;
 use App\Repositories\Inventory\ProductPriceRepository;
 
 class HomeController extends Controller
@@ -46,7 +47,9 @@ class HomeController extends Controller
     public function tes()
     {
         
-        $tes = Payment::find(1);
+        $tes = BtbValidate::whereHas('invoiceEkspedisi', function($q){
+            return $q->whereHas('payment');
+        })->first();
         dd($tes);
     }
 }

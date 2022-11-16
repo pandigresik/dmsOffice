@@ -10,26 +10,37 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($balance['invoices'] as $index => $invoice)                
-                @foreach ($invoice->btb as $item)
-                    @php                         
+            @forelse($balance['invoices'] as $index => $item)            
+                
+                    @php                                                 
                         if(isset($uniqueBtb[$item->doc_id])){
                             continue;
-                        }
+                        }                        
                         $uniqueBtb[$item->doc_id] = 1;
-
+                        $invoice = $item->invoiceEkspedisi;
                         $supplier = $item->supplier->szName ?? '-';   
                         $ekspedisi = $item->ekspedisi->szName ?? '-';                        
                         $depo = $item->branch->szName ?? '-';                        
                         $saldoAwal = $item->getRawOriginal('shipping_cost') ?? 0;
-                        $pelunasan = $invoice->state == 'pay' ? $saldoAwal : 0;
-                        $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->paymentLine->payment->pay_date) : '-';
-                        $saldo = $invoice->state == 'pay' ? 0 : $saldoAwal ;
+                        $pelunasan = 0;
+                        $tglPelunasan =  '-';
+                        $saldo = $saldoAwal ;
+                        
+                        if($saldoAwal <= 0){
+                            continue;
+                        } 
+
+                        if($invoice){
+                            $pelunasan = $invoice->state == 'pay' ? $saldoAwal : 0;
+                            $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->paymentLine->payment->pay_date) : '-';
+                            $saldo = $invoice->state == 'pay' ? 0 : $saldoAwal ;
+                        }
+                        
                     @endphp                
             <tr>
                 <td>{{ $supplier }}</td>
                 <td>{{ $ekspedisi  }}</td>
-                <td>{{ $invoice->reference  }}</td>
+                <td>{{ $invoice->reference ?? ''  }}</td>
                 <td>{{ $item->co_reference }}</td>
                 <td>{{ $item->ref_doc }}</td>
                 <td>{{ $depo }}</td>
@@ -42,9 +53,9 @@
                 <td class="text-right">{{ $exportExcel ? $saldoAwal : localNumberFormat($saldoAwal, 0) }}</td>                
                 <td>{{ $tglPelunasan }}</td>
                 <td class="text-right">{{ $exportExcel ? $pelunasan : localNumberFormat($pelunasan, 0) }}</td>
-                <td class="text-right">{{ $saldo }}</td>
+                <td class="text-right">{{ $exportExcel ? $saldo : localNumberFormat($saldo, 0) }}</td>                
             </tr>
-            @endforeach
+            
             @empty
             <tr>
                 <td colspan=12>Data detail tidak ditemukan</td>

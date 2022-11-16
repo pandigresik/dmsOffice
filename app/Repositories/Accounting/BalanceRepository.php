@@ -7,6 +7,7 @@ use App\Models\Accounting\DmsCasCashbalance;
 use App\Models\Accounting\JournalAccount;
 use App\Models\Accounting\JournalAccountDetail;
 use App\Models\Accounting\ReportSettingAccount;
+use App\Models\Purchase\BtbValidate;
 use App\Models\Purchase\Invoice;
 use App\Repositories\BaseRepository;
 
@@ -109,12 +110,24 @@ SQL;
         where i.partner_type = 'ekspedisi' and i.`type` = 'in'
 SQL;        
         $pembayaran = $this->model->fromQuery($sqlBayar);
-        $hutangInvoice = Invoice::select(['invoice.*'])->ekspedisiPartner()->where('date_invoice','<',$startDate)->hutang()->where(['type' => 'in']);
-        $invoiceBayarBulanIni = Invoice::select(['invoice.*'])->ekspedisiPartner()->where('date_invoice','<',$startDate)->bayarPeriode($startDate, $endDate);
+        $hutangInvoice = BtbValidate::whereDoesntHave('invoiceEkspedisi', function($q) {
+            return $q->whereState('pay');
+        })->where('btb_date','<',$startDate);
+        $invoiceBayarBulanIni = BtbValidate::whereHas('invoiceEkspedisi', function($q) use ($startDate, $endDate) {
+            return $q->whereHas('paymentLine', function($r) use ($startDate, $endDate){
+                return $r->whereHas('payment', function($s) use ($startDate, $endDate){
+                    return $s->whereBetween('pay_date',[$startDate, $endDate]);
+                });                
+            });
+        })->where('btb_date','<',$startDate);
+        
         return [
-            'invoices' => Invoice::ekspedisiPartner()->whereBetween('date_invoice',[$startDate, $endDate])->where(['type' => 'in'])->with(['btb' => function($q){
-                return $q->with(['supplier','branch','ekspedisi']);
-            }, 'payment'])->union($invoiceBayarBulanIni)->union($hutangInvoice)->get(),
+            'invoices' => BtbValidate::whereBetween('btb_date',[$startDate, $endDate])->with(['invoiceEkspedisi' => function ($q){
+                return $q->with('payment');
+            },'supplier','branch','ekspedisi'])
+            ->where('shipping_cost','>',0)
+            ->union($invoiceBayarBulanIni)
+            ->union($hutangInvoice)->get(),
             'pembayarans' => $pembayaran
         ];
     }

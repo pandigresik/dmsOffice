@@ -8,6 +8,7 @@ use App\Models\BaseEntity as Model;
 use App\Models\Inventory\DmsInvCarrier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
@@ -204,19 +205,33 @@ class BtbValidate extends Model
     {
         return $this->belongsTo(DmsSmBranch ::class, 'branch_id', 'szId');
     }
+    // dapatkan semua btb yang dianggap sebagai hutang OA
+    public function hutangOA($startDate, $endDate){
+        
+    }
+
+    public function invoiceEkspedisi(): HasOneThrough
+    {
+        return $this->hasOneThrough(Invoice::class, InvoiceLine::class, 'doc_id', 'id', 'doc_id','invoice_id')->where(['partner_type' => 'ekspedisi']);
+    }
+
+    public function invoiceSupplier(): HasOneThrough
+    {
+        return $this->hasOneThrough(Invoice::class, InvoiceLine::class, 'doc_id', 'id', 'doc_id','invoice_id')->where(['partner_type' => 'supplier']);
+    }
 
     public function updateEkspedisi($id, $input)
     {
-        //$listBtb = $this->where(['doc_id' => $input['doc_id']])->get();
+        $listBtb = $this->where(['doc_id' => $input['doc_id']])->get();
         // $ongkir = $this->getOngkir($listBtb[0], $input);
-        $model = $this->find($id);
+        // $model = $this->find($id);
         $ongkir = $input['shipping_cost'];
-        //foreach ($listBtb as $model) {
+        foreach ($listBtb as $model) {
             $model->shipping_cost = $ongkir;
             $model->dms_inv_carrier_id = $input['dms_inv_carrier_id'];
             $model->description = $input['description'];
             $model->save();
-        //}
+        }
 
         return $model;
     }
