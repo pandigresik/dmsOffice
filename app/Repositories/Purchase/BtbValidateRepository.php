@@ -108,7 +108,39 @@ class BtbValidateRepository extends BaseRepository
         try {
             $this->model->getConnection()->commit();
             $model = $this->model->updateEkspedisi($id, $input);
-
+            $journal = JournalAccount::whereIn('account_id', ['825010', '211104'])->where(['reference' => $model->doc_id, 'type' => 'JBTB'])->get();
+            if($journal->isEmpty()){
+                JournalAccount::create([
+                    'account_id' => 825010,
+                    'branch_id' => $model->branch_id,
+                    'date' => $model->getRawOriginal('btb_date'),
+                    'name' => 'Biaya Pengangkutan',
+                    'debit' => $model->getRawOriginal('shipping_cost'),
+                    'credit' => 0,
+                    'balance' => $model->getRawOriginal('shipping_cost'),
+                    'reference' => $model->doc_id,
+                    'type' => 'JBTB',
+                    'state' => 'posted',
+                ]);
+                JournalAccount::create([
+                    'account_id' => 211104,
+                    'branch_id' => $model->branch_id,
+                    'date' => $model->getRawOriginal('btb_date'),
+                    'name' => 'Hutang ongkos angkut',
+                    'debit' => $model->getRawOriginal('shipping_cost'),
+                    'credit' => 0,
+                    'balance' => $model->getRawOriginal('shipping_cost'),
+                    'reference' => $model->doc_id,
+                    'type' => 'JBTB',
+                    'state' => 'posted',
+                ]);
+            }else{
+                foreach($journal as $j){
+                    $j->debit = $model->getRawOriginal('shipping_cost');
+                    $j->balance = $model->getRawOriginal('shipping_cost');
+                    $j->save();
+                }
+            }
             // flush cache karena menggunakan from query untuk eksekusi statement insert into
             $this->model->flushCache();
 

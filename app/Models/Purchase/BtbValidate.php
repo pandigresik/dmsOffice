@@ -207,15 +207,16 @@ class BtbValidate extends Model
 
     public function updateEkspedisi($id, $input)
     {
-        $listBtb = $this->where(['doc_id' => $input['doc_id']])->get();
+        //$listBtb = $this->where(['doc_id' => $input['doc_id']])->get();
         // $ongkir = $this->getOngkir($listBtb[0], $input);
+        $model = $this->find($id);
         $ongkir = $input['shipping_cost'];
-        foreach ($listBtb as $model) {
+        //foreach ($listBtb as $model) {
             $model->shipping_cost = $ongkir;
             $model->dms_inv_carrier_id = $input['dms_inv_carrier_id'];
             $model->description = $input['description'];
             $model->save();
-        }
+        //}
 
         return $model;
     }

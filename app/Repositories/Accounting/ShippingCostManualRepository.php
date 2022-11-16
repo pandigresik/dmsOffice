@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Accounting;
 
+use App\Models\Accounting\JournalAccount;
 use App\Models\Accounting\ShippingCostManual;
 use App\Models\Accounting\ShippingCostManualDetail;
 use App\Repositories\BaseRepository;
@@ -61,6 +62,7 @@ class ShippingCostManualRepository extends BaseRepository
             $model = $this->model->newInstance($input);
             $model->number = $model->getNextNumber();
             $model->save();
+            $this->generateJournal($model);
             $this->createDetail($details, $model);
 
             $this->model->getConnection()->commit();
@@ -81,7 +83,7 @@ class ShippingCostManualRepository extends BaseRepository
         try {
             $details = $input['details'];
             $model = parent::update($input, $id);
-
+            $this->updateJournal($model);
             $this->removeDetail($model);
             $this->createDetail($details, $model);
 
@@ -101,8 +103,9 @@ class ShippingCostManualRepository extends BaseRepository
         $query = $this->model->newQuery();
 
         $model = $query->findOrFail($id);
+        $this->deleteJournal($model);
         $model->details()->forceDelete();
-
+        
         return $model->forceDelete();
     }
 
@@ -116,5 +119,39 @@ class ShippingCostManualRepository extends BaseRepository
         foreach ($details as $k => $r) {
             $model->details()->create($r);
         }
+    }
+    private function updateJournal($model){
+        JournalAccount::where(['reference' => $model->number, 'type' => 'JOAM'])->update(['date' => $model->getRawOriginal('date'),'debit' => $model->getRawOriginal('amount'),'balance' => $model->getRawOriginal('amount')]);
+    }
+
+    private function deleteJournal($model){
+        JournalAccount::where(['reference' => $model->number, 'type' => 'JOAM'])->forceDelete();
+    }
+
+    private function generateJournal($model){
+        JournalAccount::create([
+            'account_id' => 825010,
+            'branch_id' => $model->destination_branch_id,
+            'date' => $model->getRawOriginal('date'),
+            'name' => 'Biaya Pengangkutan',
+            'debit' => $model->getRawOriginal('amount'),
+            'credit' => 0,
+            'balance' => $model->getRawOriginal('amount'),
+            'reference' => $model->number,
+            'type' => 'JOAM',
+            'state' => 'posted',
+        ]);
+        JournalAccount::create([
+            'account_id' => 211104,
+            'branch_id' => $model->destination_branch_id,
+            'date' => $model->getRawOriginal('date'),
+            'name' => 'Hutang ongkos angkut',
+            'debit' => $model->getRawOriginal('amount'),
+            'credit' => 0,
+            'balance' => $model->getRawOriginal('amount'),
+            'reference' => $model->number,
+            'type' => 'JOAM',
+            'state' => 'posted',
+        ]);
     }
 }
