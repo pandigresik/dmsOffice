@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Accounting\Account;
+use App\Models\Accounting\ShippingCostManual;
 use App\Models\Finance\Payment;
 use App\Models\Inventory\DmsInvProduct;
 use App\Models\Inventory\ProductPrice;
@@ -46,10 +47,12 @@ class HomeController extends Controller
 
     public function tes()
     {
-        
-        $tes = BtbValidate::whereHas('invoiceEkspedisi', function($q){
-            return $q->whereHas('payment');
-        })->first();
-        dd($tes);
+        $startDate = '2022-07-01';
+        $endDate = '2022-07-31';
+        $hutangOaManuals = ShippingCostManual::doesntHave('invoiceEkspedisi')->where('date', '<', $startDate);
+        $oaManuals = ShippingCostManual::whereBetween('date',[$startDate, $endDate])
+            ->union($hutangOaManuals)
+            ->get();
+        dd($oaManuals);
     }
 }

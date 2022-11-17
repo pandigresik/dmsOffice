@@ -11,7 +11,7 @@
         <tbody>
             @forelse($balance['invoices'] as $index => $invoice)
                 @php
-                    $btb = $invoice->btb->keyBy('doc_id');
+                    $btb = $invoice->btb->keyBy('doc_id');                    
                 @endphp
                 @foreach ($invoice->invoiceBkb as $item)
                     @php                                                

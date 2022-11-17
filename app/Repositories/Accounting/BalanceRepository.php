@@ -7,6 +7,7 @@ use App\Models\Accounting\DmsCasCashbalance;
 use App\Models\Accounting\JournalAccount;
 use App\Models\Accounting\JournalAccountDetail;
 use App\Models\Accounting\ReportSettingAccount;
+use App\Models\Accounting\ShippingCostManual;
 use App\Models\Purchase\BtbValidate;
 use App\Models\Purchase\Invoice;
 use App\Repositories\BaseRepository;
@@ -120,7 +121,13 @@ SQL;
                 });                
             });
         })->where('btb_date','<',$startDate);
-        
+        $hutangOaManuals = ShippingCostManual::doesntHave('invoiceEkspedisi')->where('date', '<', $startDate);
+        $oaManuals = ShippingCostManual::whereBetween('date',[$startDate, $endDate])
+            ->union($hutangOaManuals)
+            ->with(['invoiceEkspedisi' => function ($q){
+                return $q->with('payment');
+            },'originBranch','destinationBranch','ekspedisi'])
+            ->get();
         return [
             'invoices' => BtbValidate::whereBetween('btb_date',[$startDate, $endDate])->with(['invoiceEkspedisi' => function ($q){
                 return $q->with('payment');
@@ -128,7 +135,8 @@ SQL;
             ->where('shipping_cost','>',0)
             ->union($invoiceBayarBulanIni)
             ->union($hutangInvoice)->get(),
-            'pembayarans' => $pembayaran
+            'pembayarans' => $pembayaran,
+            'oamanuals' => $oaManuals 
         ];
     }
 

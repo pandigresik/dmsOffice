@@ -5,8 +5,11 @@ namespace App\Models\Accounting;
 use App\Models\Base\DmsSmBranch;
 use App\Models\BaseEntity as Model;
 use App\Models\Inventory\DmsInvCarrier;
+use App\Models\Purchase\Invoice;
+use App\Models\Purchase\InvoiceLine;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -137,6 +140,11 @@ class ShippingCostManual extends Model
         }
 
         return $query->canInvoicedExpedition()->whereCarrierId($ekspedisiId)->whereNotIn('number', $listDoc);
+    }
+
+    public function invoiceEkspedisi(): HasOneThrough
+    {        
+        return $this->hasOneThrough(Invoice::class, InvoiceLine::class, 'doc_id', 'id', 'number','invoice_id');
     }
 
     public function getNextNumber()

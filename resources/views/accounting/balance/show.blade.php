@@ -2,7 +2,7 @@
 $header = [];
 $numberFormat = ['Gaji','Man fee','Gaji SPV','PPN','PPH 23','UPLOAD'];
 @endphp
-<div class="table-responsive">
+<div>
     <table class="table table-bordered">
         <tbody>
             @forelse($balance['data'] as $index => $account)

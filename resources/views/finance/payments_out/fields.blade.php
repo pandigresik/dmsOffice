@@ -102,7 +102,8 @@
             _tdTotal = _tr.find('td.invoice_total')
             _total += _tdTotal.data('amount')
         })
-        $('input[name=amount]').val(_total)
+        $('input[name=amount]').val(Inputmask.format(_total,{alias:'numeric', 'digit': 2, 'autoGroup': true, 'groupSeparator': '.', 'radixPoint' : ','}))
+        // $('input[name=amount]').val(_total)
         $('input[name=amount]').trigger('blur')
     }
 </script>
