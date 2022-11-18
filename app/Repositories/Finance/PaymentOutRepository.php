@@ -35,8 +35,17 @@ class PaymentOutRepository extends PaymentRepository
                 case 'ekspedisi':
                     $this->generateJurnalPaymentEkspedisi($model->getRawOriginal('amount'), $paydate, $reference);
                     break;
-                default:                    
-                    $this->generateJurnalPaymentSupplier($model->getRawOriginal('amount'), $paydate, $reference);
+                default:                 
+                    $payment = $model->with(['invoices' => function($q){
+                        return $q->with(['invoiceLines']);
+                    }])->find($id);
+            
+                    $totalInvoiceLine = $payment->invoices->sum(function($item){
+                        return $item->invoiceLines->sum(function($r){
+                            return $r->getRawOriginal('qty') * $r->getRawOriginal('price');
+                        });
+                    });                   
+                    $this->generateJurnalPaymentSupplier($totalInvoiceLine, $model->getRawOriginal('amount'), $paydate, $reference);
             }
             $this->model->getConnection()->commit();
             return $model;
@@ -51,15 +60,15 @@ class PaymentOutRepository extends PaymentRepository
     137	Hutang dagang tiv	211001
     192	Hutang ongkos angkut	211104
     */
-    private function generateJurnalPaymentSupplier($amount, $paydate, $reference){
+    private function generateJurnalPaymentSupplier($totalInvoiceLine, $amount, $paydate, $reference){
         JournalAccount::create([
             'account_id' => 211001,
             'branch_id' => 'PT',
             'date' => $paydate,
             'name' => 'Hutang dagang tiv',
             'debit' => 0,
-            'credit' => $amount,
-            'balance' => -1 * $amount,
+            'credit' => $totalInvoiceLine,
+            'balance' => -1 * $totalInvoiceLine,
             'reference' => $reference,
             'type' => 'JPAY',
             'state' => 'posted',

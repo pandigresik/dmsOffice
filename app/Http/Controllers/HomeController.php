@@ -47,12 +47,15 @@ class HomeController extends Controller
 
     public function tes()
     {
-        $startDate = '2022-07-01';
-        $endDate = '2022-07-31';
-        $hutangOaManuals = ShippingCostManual::doesntHave('invoiceEkspedisi')->where('date', '<', $startDate);
-        $oaManuals = ShippingCostManual::whereBetween('date',[$startDate, $endDate])
-            ->union($hutangOaManuals)
-            ->get();
-        dd($oaManuals);
+        $tes = Payment::with(['invoices' => function($q){
+            return $q->with(['invoiceLines']);
+        }])->find(55);
+
+        $total = $tes->invoices->sum(function($item){
+            return $item->invoiceLines->sum(function($r){
+                return $r->getRawOriginal('qty') * $r->getRawOriginal('price');
+            });
+        });
+        echo number_format($total);
     }
 }

@@ -84,8 +84,9 @@ class BalanceRepository extends BaseRepository
 
     public function detailHutangTIV($startDate, $endDate, $accountCode, $branchId){
         $sqlBayar = <<<SQL
-        select p.pay_date, i.amount , (select sum(amount) from debit_credit_note where invoice_id = i.id and reference = 'PROGRAM TIV' group by invoice_id ) as klaim_tiv
-        , (select sum(amount) from debit_credit_note where invoice_id = i.id and reference = 'POT HARGA' group by invoice_id ) as pot_harga
+        select p.pay_date, i.amount 
+        , coalesce((select sum(amount) from debit_credit_note where invoice_id = i.id and reference = 'PROGRAM TIV' group by invoice_id ),0) as klaim_tiv
+        , (coalesce((select sum(amount) from invoice_subsidi where invoice_id = i.id),0) + coalesce((select sum(amount) from debit_credit_note where invoice_id = i.id and reference = 'POT HARGA' group by invoice_id ),0)) as pot_harga
         from invoice i
         join payment_line pl on pl.invoice_id = i.id
         join payment p on p.id = pl.payment_id and p.pay_date between '{$startDate}' and '{$endDate}'
