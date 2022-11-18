@@ -144,7 +144,7 @@ class ShippingCostManual extends Model
 
     public function invoiceEkspedisi(): HasOneThrough
     {        
-        return $this->hasOneThrough(Invoice::class, InvoiceLine::class, 'doc_id', 'id', 'number','invoice_id');
+        return $this->hasOneThrough(Invoice::class, InvoiceLine::class, 'doc_id', 'id', 'do_references','invoice_id');
     }
 
     public function getNextNumber()
