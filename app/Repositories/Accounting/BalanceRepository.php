@@ -123,8 +123,12 @@ SQL;
             });
         })->where('btb_date','<',$startDate);
         $hutangOaManuals = ShippingCostManual::doesntHave('invoiceEkspedisi')->where('date', '<', $startDate);
+        $hutangOaDibayarBulanIni = ShippingCostManual::whereHas('invoiceEkspedisi', function($q) use ($startDate, $endDate){
+            return $q->bayarPeriode($startDate, $endDate);
+        })->where('date', '<', $startDate);
         $oaManuals = ShippingCostManual::whereBetween('date',[$startDate, $endDate])
             ->union($hutangOaManuals)
+            ->union($hutangOaDibayarBulanIni)
             ->with(['invoiceEkspedisi' => function ($q){
                 return $q->with('payment');
             },'originBranch','destinationBranch','ekspedisi'])
