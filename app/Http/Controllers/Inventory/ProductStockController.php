@@ -6,7 +6,6 @@ use App\DataTables\Inventory\ProductStockDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Inventory\CreateProductStockRequest;
 use App\Http\Requests\Inventory\UpdateProductStockRequest;
-use App\Models\Inventory\ProductStock;
 use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Inventory\ProductStockRepository;
 use Carbon\Carbon;

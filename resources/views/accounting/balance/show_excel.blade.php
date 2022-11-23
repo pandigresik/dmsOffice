@@ -51,6 +51,15 @@ $numberFormat = ['Gaji','Man fee','Gaji SPV','PPN','PPH 23','UPLOAD'];
             </tr>
         </thead>
         <tbody>
+            <tr>
+                <td></td>
+                <td>Saldo Awal</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-right">{{ $balance['saldo']->amount ?? 0 }}</td>
+            </tr>
             @foreach($balance['manual'] as $index => $account)
             @php
             $debit = $account->debit ?? 0;

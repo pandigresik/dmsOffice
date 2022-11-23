@@ -77,8 +77,8 @@ class BalanceRepository extends BaseRepository
         $data = $query->get();
         return [
             'data' => $data,            
-            'manual' => $this->getManualJournal($startDate, $endDate, $accountCode, $branchId) 
-            // 'saldo' => $this->getSaldoAccount($startDate, $accountCode),
+            'manual' => $this->getManualJournal($startDate, $endDate, $accountCode, $branchId),
+            'saldo' => $this->getSaldoAccount($startDate, $accountCode),
         ];
     }
 
