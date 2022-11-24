@@ -71,26 +71,42 @@
                             $pelunasan = $invoice->state == 'pay' ? $saldoAwal : 0;
                             $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->paymentLine->payment->pay_date) : '-';
                             $saldo = $invoice->state == 'pay' ? 0 : $saldoAwal ;
-                        }                        
-                    @endphp                
-            <tr>
-                <td>{{ $supplier }}</td>
-                <td>{{ $ekspedisi  }}</td>
-                <td>{{ $invoice->reference ?? ''  }}</td>
-                <td>{{ $item->co_references }}</td>
-                <td>{{ $item->do_references }}</td>
-                <td>{{ $depo }}</td>
-                <td>{{ $item->number }}</td>
-                <td>{{ $item->date }}</td>
-                <td>{{ $item->product_name ?? '-' }}</td>
-                <td>-</td>
-                <td>{{ $exportExcel ? $item->getRawOriginal('amount') : localNumberFormat($item->amount, 0) }}</td>
-                <td>-</td>
-                <td class="text-right">{{ $exportExcel ? $saldoAwal : localNumberFormat($saldoAwal, 0) }}</td>                
-                <td>{{ $tglPelunasan }}</td>
-                <td class="text-right">{{ $exportExcel ? $pelunasan : localNumberFormat($pelunasan, 0) }}</td>
-                <td class="text-right">{{ $exportExcel ? $saldo : localNumberFormat($saldo, 0) }}</td>                
-            </tr> 
+                        }
+                        $loopDetail = 0;                        
+                    @endphp
+                 @foreach ($item->details as $detail)
+                 
+                    @php
+                        if ($loopDetail){
+                            $saldo = 0;
+                            $saldoAwal = 0;
+                            $pelunasan = 0;
+                            $item->amount = 0;
+                            $item->syncOriginal();
+                        }
+                        $loopDetail = 1;
+                        
+                    @endphp
+                 
+                 <tr>
+                    <td>{{ $supplier }}</td>
+                    <td>{{ $ekspedisi  }}</td>
+                    <td>{{ $invoice->reference ?? ''  }}</td>
+                    <td>{{ $item->co_references }}</td>
+                    <td>{{ $item->sj_references }}</td>
+                    <td>{{ $depo }}</td>
+                    <td>{{ $item->do_references }}</td>
+                    <td>{{ $item->date }}</td>
+                    <td>{{ $detail->product->szName }}</td>
+                    <td>{{ $detail->quantity }}</td>
+                    <td>{{ $exportExcel ? $item->getRawOriginal('amount') : localNumberFormat($item->amount, 0) }}</td>
+                    <td>-</td>
+                    <td class="text-right">{{ $exportExcel ? $saldoAwal : localNumberFormat($saldoAwal, 0) }}</td>                
+                    <td>{{ $tglPelunasan }}</td>
+                    <td class="text-right">{{ $exportExcel ? $pelunasan : localNumberFormat($pelunasan, 0) }}</td>
+                    <td class="text-right">{{ $exportExcel ? $saldo : localNumberFormat($saldo, 0) }}</td>                
+                </tr> 
+                @endforeach                               
             @empty           
             @endforelse
         </tbody>

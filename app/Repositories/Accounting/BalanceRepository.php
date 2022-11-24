@@ -131,7 +131,9 @@ SQL;
             ->union($hutangOaDibayarBulanIni)
             ->with(['invoiceEkspedisi' => function ($q){
                 return $q->with('payment');
-            },'originBranch','destinationBranch','ekspedisi'])
+            },'originBranch','destinationBranch','ekspedisi', 'details' => function($r){
+                return $r->with(['product']);
+            }])
             ->get();
         return [
             'invoices' => BtbValidate::whereBetween('btb_date',[$startDate, $endDate])->with(['invoiceEkspedisi' => function ($q){
