@@ -25,7 +25,7 @@ $jualTotal = 0;
         </tr>
     </thead>
     <tbody>
-        @foreach ($collection as $item)
+        @foreach ($datas as $item)
         @if ($item->isEmptyTransaction())
         @continue
         @endif

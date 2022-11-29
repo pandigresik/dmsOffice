@@ -15,9 +15,7 @@
                 @endphp
                 @foreach ($invoice->invoiceBkb as $item)
                     @php                                                
-                        $tmpItem = $item->additional_info;
-                        // if($tmpItem["ket"] == 'BKB') continue;
-                        // $item->ket =  $tmpItem["ket"];           
+                        $tmpItem = $item->additional_info;                            
                         $billingDoc = $tmpItem["BILLING DOKUMEN"] ?? 'not defined';                        
                         $docId = $tmpItem['ID. DOKUMEN'];
                         $tglDocId = phpDate(intval($tmpItem['TGL ID DOKUMEN']));
@@ -26,9 +24,13 @@
                         $qty = $tmpItem['QTY'];
                         $price = $tmpItem[' HARGA '];
                         $amountTotal = $tmpItem['TOTAL'];
-                        $pelunasan = $invoice->state == 'pay' ? $price * $qty : 0;
+                        $cost = $price * $qty;
+                        $saldoAwal = $tglDocId < $startDate ? $cost : 0;
+                        $newInvoice = $tglDocId < $startDate ? 0 : $cost; 
+                        $pelunasan = $invoice->state == 'pay' ? $cost : 0;
                         $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->paymentLine->payment->pay_date) : '-';
-                        $saldo = $invoice->state == 'pay' ? 0 : $price * $qty ;
+                        $saldo = $invoice->state == 'pay' ? 0 : $cost ;
+                        
                     @endphp                
             <tr>
                 <td>{{ $billingDoc }}</td>
@@ -40,8 +42,8 @@
                 <td>{{ $productName }}</td>
                 <td class="text-right">{{ $exportExcel ? $qty : localNumberFormat($qty, 0) }}</td>
                 <td class="text-right">{{ $exportExcel ? $price : localNumberFormat($price, 0) }}</td>
-                <td class="text-right">{{ $exportExcel ? ($qty * $price) : localNumberFormat($qty * $price, 0) }}</td>
-                <td>-</td>
+                <td class="text-right">{{ $exportExcel ? ($saldoAwal) : localNumberFormat($saldoAwal, 0) }}</td>
+                <td class="text-right">{{ $exportExcel ? ($newInvoice) : localNumberFormat($newInvoice, 0) }}</td>
                 <td>{{ $tglPelunasan }}</td>
                 <td>{{ $exportExcel ? $pelunasan : localNumberFormat($pelunasan, 0) }}</td>
                 <td>{{ $exportExcel ? $saldo : localNumberFormat($saldo, 0) }}</td>

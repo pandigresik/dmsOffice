@@ -19,20 +19,22 @@
                         $invoice = $item->invoiceEkspedisi;
                         $supplier = $item->supplier->szName ?? '-';   
                         $ekspedisi = $item->ekspedisi->szName ?? '-';                        
-                        $depo = $item->branch->szName ?? '-';                        
-                        $saldoAwal = $item->getRawOriginal('shipping_cost') ?? 0;
+                        $depo = $item->branch->szName ?? '-';                    
+                        $shippingCost = $item->getRawOriginal('shipping_cost') ?? 0;    
+                        $saldoAwal = $item->getRawOriginal('btb_date') < $startDate ? $shippingCost : 0;
+                        $newInvoice = $item->getRawOriginal('btb_date') < $startDate ? 0 : $shippingCost;
                         $pelunasan = 0;
                         $tglPelunasan =  '-';
-                        $saldo = $saldoAwal ;
+                        $saldo = $shippingCost ;
                         
-                        if($saldoAwal <= 0){
+                        if($shippingCost <= 0){
                             continue;
                         } 
 
                         if($invoice){
-                            $pelunasan = $invoice->state == 'pay' ? $saldoAwal : 0;
+                            $pelunasan = $invoice->state == 'pay' ? $shippingCost : 0;
                             $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->paymentLine->payment->pay_date) : '-';
-                            $saldo = $invoice->state == 'pay' ? 0 : $saldoAwal ;
+                            $saldo = $invoice->state == 'pay' ? 0 : $shippingCost ;
                         }                        
                     @endphp                
             <tr>
@@ -47,8 +49,8 @@
                 <td>{{ $item->product_name }}</td>
                 <td>{{ $exportExcel ? $item->getRawOriginal('qty') : $item->qty }}</td>
                 <td>{{ $exportExcel ? $item->getRawOriginal('shipping_cost') :$item->shipping_cost }}</td>
-                <td>-</td>
-                <td class="text-right">{{ $exportExcel ? $saldoAwal : localNumberFormat($saldoAwal, 0) }}</td>                
+                <td class="text-right">{{ $exportExcel ? $saldoAwal : localNumberFormat($saldoAwal, 0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $newInvoice : localNumberFormat($newInvoice, 0) }}</td>
                 <td>{{ $tglPelunasan }}</td>
                 <td class="text-right">{{ $exportExcel ? $pelunasan : localNumberFormat($pelunasan, 0) }}</td>
                 <td class="text-right">{{ $exportExcel ? $saldo : localNumberFormat($saldo, 0) }}</td>                
@@ -61,16 +63,18 @@
                         $invoice = $item->invoiceEkspedisi;
                         $supplier = $item->originBranch->szName ?? '-';
                         $ekspedisi = $item->ekspedisi->szName ?? '-';                        
-                        $depo = $item->destinationBranch->szName ?? '-';                        
-                        $saldoAwal = $item->getRawOriginal('amount') ?? 0;
+                        $depo = $item->destinationBranch->szName ?? '-';                                                
+                        $shippingCost = $item->getRawOriginal('amount') ?? 0;    
+                        $saldoAwal = $item->getRawOriginal('date') < $startDate ? $shippingCost : 0;
+                        $newInvoice = $item->getRawOriginal('date') < $startDate ? 0 : $shippingCost;
                         $pelunasan = 0;
                         $tglPelunasan =  '-';
-                        $saldo = $saldoAwal ;                        
+                        $saldo = $shippingCost ;                        
 
                         if($invoice){
-                            $pelunasan = $invoice->state == 'pay' ? $saldoAwal : 0;
+                            $pelunasan = $invoice->state == 'pay' ? $shippingCost : 0;
                             $tglPelunasan = $invoice->state == 'pay' ? localFormatDate($invoice->paymentLine->payment->pay_date) : '-';
-                            $saldo = $invoice->state == 'pay' ? 0 : $saldoAwal ;
+                            $saldo = $invoice->state == 'pay' ? 0 : $shippingCost ;
                         }
                         $loopDetail = 0;                        
                     @endphp
@@ -79,6 +83,8 @@
                     @php
                         if ($loopDetail){
                             $saldo = 0;
+                            $shippingCost = 0;
+                            $newInvoice = 0;
                             $saldoAwal = 0;
                             $pelunasan = 0;
                             $item->amount = 0;
@@ -100,8 +106,8 @@
                     <td>{{ $detail->product->szName }}</td>
                     <td>{{ $detail->quantity }}</td>
                     <td>{{ $exportExcel ? $item->getRawOriginal('amount') : localNumberFormat($item->amount, 0) }}</td>
-                    <td>-</td>
                     <td class="text-right">{{ $exportExcel ? $saldoAwal : localNumberFormat($saldoAwal, 0) }}</td>                
+                    <td class="text-right">{{ $exportExcel ? $newInvoice : localNumberFormat($newInvoice, 0) }}</td>                
                     <td>{{ $tglPelunasan }}</td>
                     <td class="text-right">{{ $exportExcel ? $pelunasan : localNumberFormat($pelunasan, 0) }}</td>
                     <td class="text-right">{{ $exportExcel ? $saldo : localNumberFormat($saldo, 0) }}</td>                

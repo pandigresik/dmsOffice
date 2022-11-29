@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            {!! Form::label('period', __('models/productStocks.fields.period').':', ['class' =>
+                            {!! Form::label('product', 'Product:', ['class' =>
                             'col-md-3 col-form-label']) !!}
                             <div class="col-md-9">
                                 {!! Form::select('product[]', [], null, array_merge(['class' => 'form-control select2', 'multiple' => 'multiple', 
@@ -42,7 +42,7 @@
                         </div>
 
                         <div class="form-group row">
-                            {!! Form::label('period', __('models/productStocks.fields.period').':', ['class' =>
+                            {!! Form::label('branch_id', __('models/productStocks.fields.branch_id').':', ['class' =>
                             'col-md-3 col-form-label']) !!}
                             <div class="col-md-9">
                                 {!! Form::select('branch_id', $branchItems, null, ['class' => 'form-control select2',
@@ -50,15 +50,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-9">
+                            <div class="col-md-9 offset-3">
                                 {!! Form::button(__('crud.show'), ['class' => 'btn btn-success',
                                 'data-target' => '#listproductmutation', 'data-url' =>
-                                route('inventory.productStocks.show', 1), 'data-json' => '{}', 'data-ref' =>
-                                'input[name=period],select[name=branch_id]' ,'onclick' =>
-                                'main.loadDetailPage(this,\'get\', function(){
-                                main.initInputmask($(\'#listproductmutation\'))
-                                })', 'type'
-                                => 'button']) !!}
+                                route('inventory.valuasiInventory.index'), 'data-json' => '{}', 'data-ref' =>
+                                'input[name=period],select[name="product[]"],select[name=branch_id]' ,'onclick' =>
+                                'main.loadDetailPage(this,\'get\')', 'type' => 'button']) !!}
                             </div>
                         </div>
                     </div>

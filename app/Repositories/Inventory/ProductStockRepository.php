@@ -53,6 +53,73 @@ class ProductStockRepository extends BaseRepository
         return ProductStock::class;
     }
 
+    public function list($startDate, $endDate, $branch, $product)
+    {
+        $user = \Auth::user();
+        $gudangPusat = config('entity.gudangPusat')[$user->entity_id];        
+        $previousPeriod = Carbon::createFromFormat('Y-m-d', $startDate->format('Y-m-d'))->subMonth()->format('Y-m');        
+        $settingCompany = Setting::pluck('value', 'code');
+        $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+        $whereProductStr = '';
+        if(!empty($product)){
+            $whereProductStr = ' and dis.szProductId in ('.implode("','", $product).')';
+        }
+        $historyTable = 'dms_inv_stockhistory';
+        if (isset($gudangPusat[$branch])) {
+            $historyTable = 'gdpusat.dms_inv_stockhistory';
+        }
+
+        $sql = <<<SQL
+select z.*,z.szProductId as product_id, (z.diff_price * z.qty_in_change) as pengurang from (
+        select x.*, coalesce(y.last_stock, 0) as first_stock, COALESCE(y.price, 0) as old_price, COALESCE(current_price.price, 0) as price,  
+	        case when 
+		COALESCE(y.price,0) != COALESCE(current_price.price, 0) 
+		then (select (COALESCE(y.price,0) - COALESCE(current_price.price, 0)))  
+                else 0 
+                end diff_price,
+		case when COALESCE(y.price,0) != COALESCE(current_price.price, 0) 
+                then
+			coalesce((select sum(decQtyOnHand) from {$historyTable} 
+					where szProductId = x.szProductId
+						and szLocationType = 'WAREHOUSE'
+						and szReportedAsId = '{$branch}'
+						and szTrnId in ('DMSDocStockInBranch','DMSDocStockInDistribution','DMSDocStockInSupplier') 
+						and dtmTransaction between '{$startDate}' and (select max(start_date) from product_price_log where product_id = x.szProductId and start_date <= '{$endDate}') )
+                                ,0)			 
+			else 0 
+		end qty_in_change
+from (
+select upper(dis.szProductId) as szProductId, dip.szName,
+	sum(case when dis.szTrnId = 'DMSDocStockInBranch' then dis.decQtyOnHand else 0 end) as 'mutation_in',
+        sum(case when dis.szTrnId = 'DMSDocStockOutBranch' then abs(dis.decQtyOnHand) else 0 end) as 'mutation_out',
+        sum(case when dis.szTrnId = 'DMSDocStockInDistribution' then dis.decQtyOnHand else 0 end) as 'distribution_in',
+        sum(case when dis.szTrnId = 'DMSDocStockOutDistribution' then abs(dis.decQtyOnHand) else 0 end) as 'distribution_out',
+        sum(case when dis.szTrnId = 'DMSDocStockInSupplier' then dis.decQtyOnHand else 0 end) as 'supplier_in',
+        sum(case when dis.szTrnId = 'DMSDocStockOutSupplier' then abs(dis.decQtyOnHand) else 0 end) as 'supplier_out',
+--         sum(case when dis.szTrnId = 'DMSDocDo' then dis.decQtyOnHand else 0 end) as 'DOCDO',
+        sum(case when dis.szTrnId = 'DMSDocStockMorph' then abs(dis.decQtyOnHand) else 0 end) as 'morphing',
+        sum(case when dis.szTrnId = 'DMSDocStockTrfBetweenWarehouse' then abs(dis.decQtyOnHand) else 0 end) as 'transfer'
+from {$historyTable} dis
+join (select dip.szId, dip.szName from dms_inv_product dip where dtmEndDate >= '{$startDate}' ) dip on dip.szId = dis.szProductId 
+where dis.szLocationType = 'WAREHOUSE' and dis.dtmTransaction BETWEEN '{$startDate}' and '{$endDate}' and dis.szReportedAsId = '{$branch}' 
+    and dis.szProductId not in ({$kodeGalon}) {$whereProductStr}
+group by dis.szProductId, dip.szName
+)x left join (
+        -- stock akhir bulan kemarin sebagai stock awal
+	select ps.product_id, ps.price, ps.last_stock from product_stock ps where period = '{$previousPeriod}' and branch_id = '{$branch}'
+)y on x.szProductId = y.product_id 
+left join (
+	select ppl.product_id, ppl.dpp_price as price
+	from product_price_log ppl 
+	join ( 
+	select max(id) as id from product_price_log ppl where ppl.start_date <= '{$endDate}' and ( end_date is null or end_date >= '{$endDate}' ) group by product_id
+	) last_id on last_id.id = ppl.id
+) current_price on current_price.product_id = x.szProductId 
+)z
+SQL;
+        return $this->model->fromQuery($sql);
+    }
+
     public function generate($data)
     {
         $user = \Auth::user();
