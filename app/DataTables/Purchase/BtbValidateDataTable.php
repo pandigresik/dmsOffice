@@ -30,7 +30,7 @@ class BtbValidateDataTable extends DataTable
         ['data' => 'price_raw', 'title' => 'Harga'],
         ['data' => 'shipping_cost_raw', 'title' => 'Ongkos Angkut'],
         ['data' => 'total', 'title' => 'Total'],
-        ['data' => 'ppn', 'title' => 'PPN Masukan'],
+        // ['data' => 'ppn', 'title' => 'PPN Masukan'],
     ];
     /**
      * example mapping filter column to search by keyword, default use %keyword%.
@@ -52,8 +52,8 @@ class BtbValidateDataTable extends DataTable
     {
         $user = \Auth::user();
         $this->listGudang = config('entity.gudangPusat')[$user->entity_id] + DmsSmBranch::pluck('szName', 'szId')->toArray();
-        $settingCompany = Setting::where(['code' => 'ppn_prosentase'])->pluck('value', 'code');
-        $this->setPpn($settingCompany['ppn_prosentase']);
+        // $settingCompany = Setting::where(['code' => 'ppn_prosentase'])->pluck('value', 'code');
+        // $this->setPpn($settingCompany['ppn_prosentase']);
     }
 
     /**
@@ -87,9 +87,9 @@ class BtbValidateDataTable extends DataTable
         $dataTable->editColumn('price_raw', function ($data) {               
             return $data->getRawOriginal('price');
         });
-        $dataTable->editColumn('ppn', function ($data) {               
-            return $data->getRawOriginal('price') * $data->getRawOriginal('qty') * $this->getPpn();
-        });
+        // $dataTable->editColumn('ppn', function ($data) {               
+        //     return $data->getRawOriginal('price') * $data->getRawOriginal('qty') * $this->getPpn();
+        // });
         return $dataTable->addColumn('action', 'purchase.btb_validates.datatables_actions');
     }
 

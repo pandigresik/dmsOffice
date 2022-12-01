@@ -3,82 +3,76 @@ $hppTotal = 0;
 $pengurangTotal = 0;
 $jualTotal = 0;
 @endphp
-<table class="table table-bordered">
+<table class="table table-bordered text-center">
     <thead>
         <tr>
-            <th>Product</th>
-            <th>Stock Awal</th>
-            <th>MI</th>
-            <th>DI</th>
-            <th>SI</th>
-            <th>MO</th>
-            <th>DO</th>
-            <th>SO</th>
-            <th>Morphing</th>
-            <th>Transfer</th>
-            <th>Stock Akhir</th>
-            <th>Harga</th>
-            <th>Total <br>(DO - DI)</th>
-            <th>Info</th>
-            <th style="width:40px">Pengurang</th>
-            <th>HPP</th>
+            <th rowspan="2">Jenis Produk</th>
+            <th colspan="2">Saldo Awal</th>
+            <th colspan="2">Masuk</th>
+            <th colspan="2">Keluar</th>
+            <th colspan="2">Saldo</th>            
+        </tr>
+        <tr>
+            <th>Qty</th>
+            <th>Nilai</th>
+            <th>Qty</th>
+            <th>Nilai</th>
+            <th>Qty</th>
+            <th>Nilai</th>
+            <th>Qty</th>
+            <th>Nilai</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($datas as $item)
+    @php
+        $totalSaldoAwalQty = $totalSaldoAwalVal = $totalMasukQty = $totalMasukVal = $totalKeluarQty = $totalKeluarVal = $totalSaldoAkhirQty = $totalSaldoAkhirVal = 0;
+    @endphp
+    @foreach ($datas as $item)
         @if ($item->isEmptyTransaction())
-        @continue
+            @continue
         @endif
         @php
-        $saldoAwal = $item->first_stock;
-        $saldoAkhir = ($saldoAwal + $item->mutation_in + $item->distribution_in + $item->supplier_in ) - ( $item->mutation_out + $item->distribution_out + $item->supplier_out );
-        $currentPrice = $item->price;
-        $pengurang = $item->substractor ?? 0;
-        // $amountOut = ($item->distribution_out + $item->mutation_out + $item->supplier_out) * $currentPrice;
-        $amountOut = ($item->distribution_out - $item->distribution_in) * $currentPrice;
-        $hpp = $amountOut - $pengurang;
-        $hppTotal += $hpp;
-        $jualTotal += $amountOut;
-        $item->cogs = $hpp;
-        $item->last_stock = $saldoAkhir;
-        $item->additional_info = $item->additional_info ?? '<div class="badge bg-info">qty_in_change :
-            '.$item->qty_in_change.'</div>
-        <div class="badge bg-warning">diff_price :'.localNumberFormat($item->distribution_inff_price,0).'</div>';
+        $saldoAwalQty = $item->first_stock;
+        $saldoAwalVal = $item->first_stock * $item->old_price;         
+        $masukQty = ($item->mutation_in + $item->distribution_in + $item->supplier_in );           
+        $masukVal = ($masukQty * $item->price)- $item->pengurang;
+        $keluarQty = ( $item->mutation_out + $item->distribution_out + $item->supplier_out );
+        $keluarVal = $keluarQty * $item->price;
+        $saldoAkhirQty = $saldoAwalQty + $masukQty - $keluarQty;
+        $saldoAkhirVal = $saldoAwalVal + $masukVal - $keluarVal; 
+        $totalSaldoAwalQty += $saldoAwalQty; 
+        $totalSaldoAwalVal += $saldoAwalVal;
+        $totalMasukQty += $masukQty;
+        $totalMasukVal += $masukVal;
+        $totalKeluarQty += $keluarQty;
+        $totalKeluarVal += $keluarVal;
+        $totalSaldoAkhirQty += $saldoAkhirQty;
+        $totalSaldoAkhirVal += $saldoAkhirVal;
         @endphp
-        <tr>
-            <td>
-                <input type="hidden" name="history[{{ $item->product_id }}]" value="{{ $item->toJson() }}">
-                {{ $item->szName }} - ( {{ $item->product_id }} )
-            </td>
-            <td class="text-right">{{ localNumberFormat($saldoAwal , 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($item->mutation_in, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($item->distribution_in, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($item->supplier_in, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($item->mutation_out, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($item->distribution_out, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($item->supplier_out, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($item->morphing, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($item->transfer, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($saldoAkhir, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($currentPrice, 0) }}</td>
-            <td class="text-right">{{ localNumberFormat($amountOut, 0) }}</td>
-            <td style="width:40px">{!! $item->additional_info !!}</td>
-            <td style="min-width:110px;padding:16px 4px" class="text-right pengurang">
-            <input type="text" onchange="updateCogs(this)" name="pengurang[{{ $item->product_id }}]"
-                    class="form-control form-control-sm inputmask" data-unmask="1"
-                    data-optionmask="{{ json_encode(config('local.number.integer')) }}"
-                    value="{{ localNumberFormat($pengurang, 0) }}" style="padding-left:2px" /></td>
-            <td class="text-right cogs">{{ localNumberFormat($hpp, 0) }}</td>
+        <tr>            
+            <td>{{ $item->szName }}</td>
+            <td class="text-right">{{ localNumberFormat($saldoAwalQty , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($saldoAwalVal , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($masukQty , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($masukVal , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($keluarQty , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($keluarVal , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($saldoAkhirQty , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($saldoAkhirVal , 0) }}</td>
         </tr>
         @endforeach
     </tbody>
     <tfoot>
         <tr>
-            <th colspan="12"></th>
-            <th class="text-right originalcogs">{{ localNumberFormat($jualTotal, 2) }}</th>
             <th></th>
-            <th class="text-right pengurang">{{ localNumberFormat($pengurangTotal, 2) }}</th>
-            <th class="text-right cogs">{{ localNumberFormat($hppTotal, 2) }}</th>
+            <td class="text-right">{{ localNumberFormat($totalSaldoAwalQty , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($totalSaldoAwalVal , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($totalMasukQty , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($totalMasukVal , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($totalKeluarQty , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($totalKeluarVal , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($totalSaldoAkhirQty , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($totalSaldoAkhirVal , 0) }}</td>
         </tr>
     </tfoot>
 </table>
