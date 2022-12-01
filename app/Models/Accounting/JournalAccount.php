@@ -493,6 +493,7 @@ class JournalAccount extends Model
         $besarPPN = $settingCompany['ppn_prosentase'];
         $pembagiPPN = $settingCompany['ppn_pembagi'];
         $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+        $productNonPPnMasukan = "'".implode("','", explode(',', $settingCompany['product_non_ppn']))."'";
 
         $btbStr = implode("','", $btbs->flatten()->all());
         /** untuk OA perlu didistinct karena perhitungannya hanya sekali saja */
@@ -517,9 +518,9 @@ class JournalAccount extends Model
         where doc_id in ('{$btbStr}')  and price > 0 and product_id not in ({$kodeGalon})
         -- ppn masukan
         union all        
-        select '{$coaPpnMasukan}', 'PPN Masukan', abs(price * qty * {$besarPPN}), 0, price * qty * {$besarPPN}, btb_date, branch_id, doc_id, 'JBTB', now()
+        select '{$coaPpnMasukan}', 'PPN Masukan', abs((price / {$pembagiPPN}) * qty * {$besarPPN}), 0, (price / {$pembagiPPN}) * qty * {$besarPPN}, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
-        where doc_id in ('{$btbStr}')  and price > 0 and product_id not in ({$kodeGalon})
+        where doc_id in ('{$btbStr}')  and price > 0 and product_id not in ({$productNonPPnMasukan})
         -- hutang dagang TIV
         union all        
         select '{$coaHutangTIV}', 'Hutang Dagang TIV', abs(price * qty), 0, price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
