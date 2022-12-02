@@ -58,7 +58,7 @@ class Setting extends Model
     public static $rules = [
         'code' => 'required|string|max:20',
         'description' => 'nullable|string|max:100',
-        'value' => 'required|string|max:50',
+        'value' => 'required|string|max:100',
     ];
 
     protected $dates = ['deleted_at'];
