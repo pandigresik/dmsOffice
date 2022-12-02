@@ -87,7 +87,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('tripEkspedisis', App\Http\Controllers\Inventory\TripEkspedisiController::class, ['as' => 'inventory']);
 
         Route::resource('productStocks', App\Http\Controllers\Inventory\ProductStockController::class, ["as" => 'inventory']);
-        Route::resource('valuasiInventory', App\Http\Controllers\Inventory\ValuasiInventoryController::class, ["as" => 'inventory'])->only(['index']);
+        Route::resource('valuasiInventory', App\Http\Controllers\Inventory\ValuasiInventoryController::class, ["as" => 'inventory'])->only(['index', 'show']);
 
         // master discount
         Route::resource('masterDiscounts', App\Http\Controllers\Inventory\MasterDiscountController::class, ['as' => 'inventory']);

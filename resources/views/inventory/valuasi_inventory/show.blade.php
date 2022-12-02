@@ -1,30 +1,41 @@
-@extends('layouts.app')
-
-@section('content')
-     @push('breadcrumb')
-        <ol class="breadcrumb border-0 m-0">
-            <li class="breadcrumb-item">
-                <a href="{{ route('inventory.productStocks.index') }}">@lang('models/productStocks.singular')</a>
-            </li>
-            <li class="breadcrumb-item active">@lang('crud.detail')</li>
-        </ol>
-     @endpush
-     <div class="container-fluid">
-          <div class="animated fadeIn">
-                 @include('coreui-templates::common.errors')
-                 <div class="row">
-                     <div class="col-lg-12">
-                         <div class="card">
-                             <div class="card-header">
-                                 <strong>@lang('crud.detail')</strong>
-                                  <a href="{{ route('inventory.productStocks.index') }}" class="btn btn-ghost-light">Back</a>
-                             </div>
-                             <div class="card-body">
-                                 @include('inventory.product_stocks.show_fields')
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-          </div>
-    </div>
-@endsection
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th rowspan="2">Tanggal</th>
+            <th rowspan="2">No. Sumber Data</th>
+            <th rowspan="2">Sumber Data</th>
+            <th colspan="3">Masuk</th>
+            <th colspan="3">Keluar</th>
+            <th colspan="3">Saldo</th>
+        </tr>
+        <tr>
+            <th>Qty</th>
+            <th>Harga</th>
+            <th>Total</th>
+            <th>Qty</th>
+            <th>Harga</th>
+            <th>Total</th>
+            <th>Qty</th>
+            <th>Harga</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>        
+        @foreach ($detail as $item)
+            <tr>
+                <td>{{ localFormatDate($item->dtmTransaction) }}</td>
+                <td>{{ $item->sZDocId }}</td>
+                <td>{{ $item->szTrnId }}</td>
+                <td>{{ $item->decQtyOnHand }}</td>
+                <td>{{ $item->price }}</td>
+                <td>{{ $item->decQtyOnHand * $item->price }}</td>
+                <td>{{ $item->decQtyOnHand }}</td>
+                <td>{{ $item->price }}</td>
+                <td>{{ $item->decQtyOnHand * $item->price }}</td>
+                <td>{{ $item->decQtyOnHand }}</td>
+                <td>{{ $item->price }}</td>
+                <td>{{ $item->decQtyOnHand * $item->price }}</td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>

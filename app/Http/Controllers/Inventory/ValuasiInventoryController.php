@@ -22,14 +22,14 @@ class ValuasiInventoryController extends AppBaseController
     {
         if ($request->ajax()) {            
             $period = generatePeriodFromString($request->get('period'));
-            $branchId = $request->get('branch_id') ?? [];
+            $branchId = $request->get('branch_id');
             $startDate = $period['startDate'];
             $endDate = $period['endDate'];
             $product = $request->get('product') ?? [];
             $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId, $product);
             
             return view('inventory.valuasi_inventory.list')                
-                ->with(['datas' => $datas, 'startDate' => $startDate, 'endDate' => $endDate, 'branch' => $branchId]);
+                ->with(['datas' => $datas, 'startDate' => $startDate->format('Y-m-d'), 'endDate' => $endDate->format('Y-m-d'), 'branch' => $branchId]);
         }
 
         // $downloadXls = $request->get('download_xls');
@@ -47,6 +47,30 @@ class ValuasiInventoryController extends AppBaseController
         return view('inventory.valuasi_inventory.index')->with($this->getOptionItems());
     }
     
+    /**
+     * Display detail the specified GeneralLedger.
+     *
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function show($id)
+    {
+        $endDate = request('endDate');
+        $startDate = request('startDate');
+        $branchId = request('branch_id') ?? [];
+        $productId = request('product_id');  
+        $downloadXls = request('download_xls');      
+        
+        $detail = $this->getRepositoryObj()->detail($startDate, $endDate, $branchId, $productId);        
+        if ($downloadXls) {
+            // return $this->exportExcelDetail(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
+        }
+
+        return view('inventory.valuasi_inventory.show')->with(['detail' => $detail, 'startDate' => $startDate, 'endDate' => $endDate,  'productId' => $productId]);
+        
+        
+    }
 
     /**
      * Provide options item based on relationship model ProfitLoss from storage.

@@ -53,6 +53,33 @@ class ProductStockRepository extends BaseRepository
         return ProductStock::class;
     }
 
+    public function detail($startDate, $endDate, $branch, $product)
+    {
+        $user = \Auth::user();
+        $gudangPusat = config('entity.gudangPusat')[$user->entity_id];        
+        $previousPeriod = Carbon::createFromFormat('Y-m-d', $startDate)->subMonth()->format('Y-m');                
+        
+        $historyTable = 'dms_inv_stockhistory';
+        if (isset($gudangPusat[$branch])) {
+            $historyTable = 'gdpusat.dms_inv_stockhistory';
+        }
+
+        $sql = <<<SQL
+select dis.dtmTransaction, dis.decQtyOnHand, dis.sZDocId
+	,upper(dis.szProductId) as szProductId, dip.szName, dis.szTrnId	
+	,coalesce (
+	(select dpp_price from product_price_log ppl where ppl.start_date <= dtmTransaction and ( end_date is null or end_date >= dtmTransaction ) and product_id = dis.szProductId),0) as price
+from {$historyTable} dis
+join (select dip.szId, dip.szName from dms_inv_product dip where dtmEndDate >= '{$startDate}' ) dip on dip.szId = dis.szProductId 
+where dis.szLocationType = 'WAREHOUSE' 
+and dis.dtmTransaction BETWEEN '{$startDate}' and '{$endDate}' 
+and dis.szReportedAsId = '{$branch}' 
+and dis.szProductId = '{$product}'
+
+SQL;
+        return $this->model->fromQuery($sql);
+    }
+
     public function list($startDate, $endDate, $branch, $product)
     {
         $user = \Auth::user();
