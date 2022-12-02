@@ -18,6 +18,6 @@
 <div class="form-group row">
     {!! Form::label('value', __('models/settings.fields.value').':', ['class' => 'col-md-3 col-form-label']) !!}
 <div class="col-md-9"> 
-    {!! Form::text('value', null, ['class' => 'form-control','maxlength' => 50,'maxlength' => 50, 'required' => 'required']) !!}
+    {!! Form::text('value', null, ['class' => 'form-control','maxlength' => 100, 'required' => 'required']) !!}
 </div>
 </div>
