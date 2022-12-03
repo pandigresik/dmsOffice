@@ -63,6 +63,11 @@ class ProductStockRepository extends BaseRepository
         if (isset($gudangPusat[$branch])) {
             $historyTable = 'gdpusat.dms_inv_stockhistory';
         }
+        $sqlSaldoAwal = <<<SQL
+        select ps.product_id, ps.price, ps.last_stock as qty, ps.cogs
+        from product_stock ps 
+        where period = '{$previousPeriod}' and branch_id = '{$branch}' and ps.product_id = '{$product}'
+SQL;
 
         $sql = <<<SQL
 select dis.dtmTransaction, dis.decQtyOnHand, dis.sZDocId
@@ -77,7 +82,10 @@ and dis.szReportedAsId = '{$branch}'
 and dis.szProductId = '{$product}'
 
 SQL;
-        return $this->model->fromQuery($sql);
+        return [
+            'detail' => $this->model->fromQuery($sql),
+            'saldoAwal' => $this->model->fromQuery($sqlSaldoAwal),
+        ];
     }
 
     public function list($startDate, $endDate, $branch, $product)

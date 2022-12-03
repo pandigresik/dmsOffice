@@ -62,12 +62,12 @@ class ValuasiInventoryController extends AppBaseController
         $productId = request('product_id');  
         $downloadXls = request('download_xls');      
         
-        $detail = $this->getRepositoryObj()->detail($startDate, $endDate, $branchId, $productId);        
+        $detailSaldo = $this->getRepositoryObj()->detail($startDate, $endDate, $branchId, $productId);        
         if ($downloadXls) {
             // return $this->exportExcelDetail(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
         }
 
-        return view('inventory.valuasi_inventory.show')->with(['detail' => $detail, 'startDate' => $startDate, 'endDate' => $endDate,  'productId' => $productId]);
+        return view('inventory.valuasi_inventory.show')->with(['saldoAwal' => $detailSaldo['saldoAwal'],'detail' => $detailSaldo['detail'], 'startDate' => $startDate, 'endDate' => $endDate,  'productId' => $productId]);
         
         
     }
