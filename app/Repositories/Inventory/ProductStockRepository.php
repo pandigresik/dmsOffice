@@ -92,12 +92,12 @@ SQL;
     {
         $user = \Auth::user();
         $gudangPusat = config('entity.gudangPusat')[$user->entity_id];        
-        $previousPeriod = Carbon::createFromFormat('Y-m-d', $startDate->format('Y-m-d'))->subMonth()->format('Y-m');        
+        $previousPeriod = Carbon::createFromFormat('Y-m-d', $startDate)->subMonth()->format('Y-m');        
         $settingCompany = Setting::pluck('value', 'code');
         $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
         $whereProductStr = '';
         if(!empty($product)){
-            $whereProductStr = ' and dis.szProductId in ('.implode("','", $product).')';
+            $whereProductStr = ' and dis.szProductId in (\''.implode("','", $product).'\')';
         }
         $historyTable = 'dms_inv_stockhistory';
         if (isset($gudangPusat[$branch])) {
@@ -106,7 +106,7 @@ SQL;
 
         $sql = <<<SQL
 select z.*,z.szProductId as product_id, (z.diff_price * z.qty_in_change) as pengurang from (
-        select x.*, coalesce(y.last_stock, 0) as first_stock, COALESCE(y.price, 0) as old_price, COALESCE(current_price.price, 0) as price,  
+        select x.*, coalesce(y.last_stock, 0) as first_stock, coalesce(y.cogs, 0) as first_stock_val, COALESCE(y.price, 0) as old_price, COALESCE(current_price.price, 0) as price,  
 	        case when 
 		COALESCE(y.price,0) != COALESCE(current_price.price, 0) 
 		then (select (COALESCE(y.price,0) - COALESCE(current_price.price, 0)))  
@@ -141,7 +141,7 @@ where dis.szLocationType = 'WAREHOUSE' and dis.dtmTransaction BETWEEN '{$startDa
 group by dis.szProductId, dip.szName
 )x left join (
         -- stock akhir bulan kemarin sebagai stock awal
-	select ps.product_id, ps.price, ps.last_stock from product_stock ps where period = '{$previousPeriod}' and branch_id = '{$branch}'
+	select ps.product_id, ps.price, ps.last_stock, ps.cogs from product_stock ps where period = '{$previousPeriod}' and branch_id = '{$branch}'
 )y on x.szProductId = y.product_id 
 left join (
 	select ppl.product_id, ppl.dpp_price as price

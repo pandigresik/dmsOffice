@@ -33,7 +33,8 @@ $jualTotal = 0;
         @endif
         @php
         $saldoAwalQty = $item->first_stock;
-        $saldoAwalVal = $item->first_stock * $item->old_price;         
+        // $saldoAwalVal = $item->first_stock * $item->old_price;         
+        $saldoAwalVal = $item->first_stock_val;
         $masukQty = ($item->mutation_in + $item->distribution_in + $item->supplier_in );           
         $masukVal = ($masukQty * $item->price)- $item->pengurang;
         $keluarQty = ( $item->mutation_out + $item->distribution_out + $item->supplier_out );
@@ -52,7 +53,7 @@ $jualTotal = 0;
         <tr>            
             <td>                
                 <a href="#" data-json='{{ json_encode(["product_id" => $item->szProductId, "branch_id" => $branch,"startDate" => $startDate, "endDate" => $endDate]) }}' data-url="{{route('inventory.valuasiInventory.show', $item->szProductId) }}" onclick="main.popupModal(this,'get');return false">{{ $item->szName }}</a>
-                <button class="btn"><a href="#" data-json='{{ json_encode(["product_id" => $item->szProductId, "branch_id" => $item->szReportedAsId,"startDate" => $startDate, "endDate" => $endDate, "download_xls" => 1, "version" => rand()]) }}' data-url="{{route('inventory.valuasiInventory.show', $item->szProductId) }}" data-tipe="get" onclick="main.redirectUrl(this);return false"><i class="fa fa-download"></i></a></button> 
+                <button class="btn"><a href="#" data-json='{{ json_encode(["product_id" => $item->szProductId, "branch_id" => $branch,"startDate" => $startDate, "endDate" => $endDate, "download_xls" => 1, "version" => rand()]) }}' data-url="{{route('inventory.valuasiInventory.show', $item->szProductId) }}" data-tipe="get" onclick="main.redirectUrl(this);return false"><i class="fa fa-download"></i></a></button> 
             </td>
             <td class="text-right">{{ localNumberFormat($saldoAwalQty , 0) }}</td>
             <td class="text-right">{{ localNumberFormat($saldoAwalVal , 0) }}</td>

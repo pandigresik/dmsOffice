@@ -26,7 +26,7 @@ class ValuasiInventoryController extends AppBaseController
             $startDate = $period['startDate'];
             $endDate = $period['endDate'];
             $product = $request->get('product') ?? [];
-            $datas = $this->getRepositoryObj()->list($startDate, $endDate, $branchId, $product);
+            $datas = $this->getRepositoryObj()->list($startDate->format('Y-m-d'), $endDate->format('Y-m-d'), $branchId, $product);
             
             return view('inventory.valuasi_inventory.list')                
                 ->with(['datas' => $datas, 'startDate' => $startDate->format('Y-m-d'), 'endDate' => $endDate->format('Y-m-d'), 'branch' => $branchId]);
@@ -64,10 +64,10 @@ class ValuasiInventoryController extends AppBaseController
         
         $detailSaldo = $this->getRepositoryObj()->detail($startDate, $endDate, $branchId, $productId);        
         if ($downloadXls) {
-            // return $this->exportExcelDetail(['balance' => $balance, 'startDate' => $startDate, 'endDate' => $endDate, 'name' => $name, 'accountCode' => $id]);
+            return $this->exportExcelDetail(['saldoAwal' => $detailSaldo['saldoAwal'],'detail' => $detailSaldo['detail'], 'startDate' => $startDate, 'endDate' => $endDate,  'productId' => $productId]);
         }
 
-        return view('inventory.valuasi_inventory.show')->with(['saldoAwal' => $detailSaldo['saldoAwal'],'detail' => $detailSaldo['detail'], 'startDate' => $startDate, 'endDate' => $endDate,  'productId' => $productId]);
+        return view('inventory.valuasi_inventory.show')->with(['saldoAwal' => $detailSaldo['saldoAwal'],'detail' => $detailSaldo['detail'], 'startDate' => $startDate, 'endDate' => $endDate,  'productId' => $productId, 'exportExcel' => 0]);
         
         
     }
@@ -86,6 +86,21 @@ class ValuasiInventoryController extends AppBaseController
         return [
             'branchItems' => config('entity.gudangPusat')[$user->entity_id] + $branch->pluck([], null, null, 'szId', 'szName'),            
         ];
+    }
+
+    private function exportExcelDetail($data)
+    {
+        $endDate = $data['endDate'];
+        $startDate = $data['startDate'];
+        $collection = $data['detail'];
+        $saldoAwal = $data['saldoAwal'];            
+
+        $modelEksport = '\\App\Exports\\Template\\Inventory\\ValuasiInventoryDetailExport';
+        $fileName = 'valuasi_inventory_'.$endDate;
+
+        return (new $modelEksport($collection))
+            ->setSaldoAwal($saldoAwal)            
+            ->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }
         
 }

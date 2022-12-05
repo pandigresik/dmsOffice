@@ -34,61 +34,64 @@
             
             $saldoAkhirQty = $saldoAwalQty;
             $saldoAkhirVal = $saldoAwalVal;
+            $totalMasukQty = $saldoAwalQty;
+            $totalMasukVal = $saldoAwalVal;
         @endphp
         <tr>
             <td></td>
             <td></td>
             <td>Saldo Awal</td>
-            <td class="text-right">{{ localNumberFormat($saldoAwalQty, 0)}}</td>
-            <td class="text-right">{{ localNumberFormat($saldoAwalPrice, 0)}}</td>
-            <td class="text-right">{{ localNumberFormat($saldoAwalVal, 0)}}</td>
+            <td class="text-right">{{ $exportExcel ? $saldoAwalQty : localNumberFormat($saldoAwalQty, 0) }}</td>
+            <td class="text-right">{{ $exportExcel ? $saldoAwalPrice : localNumberFormat($saldoAwalPrice, 0)}}</td>
+            <td class="text-right">{{ $exportExcel ? $saldoAwalVal : localNumberFormat($saldoAwalVal, 0)}}</td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right">{{ localNumberFormat($saldoAwalVal, 0)}}</td>
+            <td class="text-right">{{ $exportExcel ? $saldoAwalVal : localNumberFormat($saldoAwalVal, 0)}}</td>
         </tr>
         @foreach ($detail as $item)
             @php
                 $masukQty = in_array($item->szTrnId, ['DMSDocStockInBranch','DMSDocStockInDistribution','DMSDocStockInSupplier']) ? $item->decQtyOnHand : 0;
                 $keluarQty = in_array($item->szTrnId, ['DMSDocStockOutBranch','DMSDocStockOutDistribution','DMSDocStockOutSupplier']) ? $item->decQtyOnHand : 0;
-                
+                $masukVal = $masukQty * $item->price;
+                $keluarVal = $keluarQty * $item->price;
                 $totalMasukQty += $masukQty; 
                 $totalMasukVal += $masukQty * $item->price;
                 $totalKeluarQty += $keluarQty;
                 $totalKeluarVal += $keluarQty * $item->price;
-                $saldoAkhirQty += $totalMasukQty + $totalKeluarQty;
-                $saldoAkhirVal += $totalMasukVal + $totalKeluarVal;
+                $saldoAkhirQty += ($masukQty + $keluarQty);
+                $saldoAkhirVal += ($masukVal + $keluarVal);
             @endphp            
             <tr>
                 <td>{{ localFormatDate($item->dtmTransaction) }}</td>
                 <td>{{ $item->sZDocId }}</td>
                 <td>{{ $item->szTrnId }}</td>
-                <td class="text-right">{{ localNumberFormat($masukQty,0) }}</td>
-                <td class="text-right">{{ localNumberFormat($item->price,0) }}</td>
-                <td class="text-right">{{ localNumberFormat($masukQty * $item->price,0) }}</td>
-                <td class="text-right">{{ localNumberFormat($keluarQty,0) }}</td>
-                <td class="text-right">{{ localNumberFormat($item->price,0) }}</td>
-                <td class="text-right">{{ localNumberFormat($keluarQty * $item->price,0) }}</td>
-                <td class="text-right">{{ localNumberFormat($saldoAkhirQty,0) }}</td>
-                <td class="text-right">{{ localNumberFormat($item->price,0) }}</td>
-                <td class="text-right">{{ localNumberFormat($saldoAkhirVal,0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $masukQty : localNumberFormat($masukQty,0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $item->price : localNumberFormat($item->price,0) }}</td>
+                <td class="text-right">{{ $exportExcel ? ($masukQty * $item->price) : localNumberFormat($masukQty * $item->price,0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $keluarQty : localNumberFormat($keluarQty,0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $item->price : localNumberFormat($item->price,0) }}</td>
+                <td class="text-right">{{ $exportExcel ? ($keluarQty * $item->price) : localNumberFormat($keluarQty * $item->price,0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $saldoAkhirQty : localNumberFormat($saldoAkhirQty,0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $item->price : localNumberFormat($item->price,0) }}</td>
+                <td class="text-right">{{ $exportExcel ? $saldoAkhirVal : localNumberFormat($saldoAkhirVal,0) }}</td>
             </tr>
         @endforeach
     </tbody>
     <tfoot>
         <tr>
             <th colspan="3"></th>
-            <th class="text-right">{{ localNumberFormat($totalMasukQty,0) }}</th>
+            <th class="text-right">{{ $exportExcel ? $totalMasukQty : localNumberFormat($totalMasukQty,0) }}</th>
             <th></th>
-            <th class="text-right">{{ localNumberFormat($totalMasukVal,0) }}</th>
-            <th class="text-right">{{ localNumberFormat($totalKeluarQty,0) }}</th>
+            <th class="text-right">{{ $exportExcel ? $totalMasukVal : localNumberFormat($totalMasukVal,0) }}</th>
+            <th class="text-right">{{ $exportExcel ? $totalKeluarQty : localNumberFormat($totalKeluarQty,0) }}</th>
             <th></th>
-            <th class="text-right">{{ localNumberFormat($totalKeluarVal,0) }}</th>
-            <th class="text-right">{{ localNumberFormat($saldoAkhirQty,0) }}</th>
+            <th class="text-right">{{ $exportExcel ? $totalKeluarVal : localNumberFormat($totalKeluarVal,0) }}</th>
+            <th class="text-right">{{ $exportExcel ? $saldoAkhirQty : localNumberFormat($saldoAkhirQty,0) }}</th>
             <th></th>
-            <th class="text-right">{{ $saldoAkhirVal }}</th>
+            <th class="text-right">{{ $exportExcel ? $saldoAkhirVal : localNumberFormat($saldoAkhirVal,0) }}</th>
         </tr>
     </tfoot>
 </table>
