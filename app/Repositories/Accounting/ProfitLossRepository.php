@@ -52,7 +52,7 @@ class ProfitLossRepository extends BaseRepository
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
             ->whereIn('branch_id', $branchId)
-            ->whereIn('account_id', ['411011', '411111'])
+            ->whereIn('account_id', ['411011', '411111', '411016','411116'])
             // ->groupBy('account_id')
             ->groupBy('branch_id')
         ;
