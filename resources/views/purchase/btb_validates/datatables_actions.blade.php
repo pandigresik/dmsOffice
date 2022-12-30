@@ -9,6 +9,6 @@
         'class' => 'btn btn-ghost-danger',
         'onclick' => "return confirm('Are you sure?')"
     ]) !!}    
-    @endif    
+    @endif
 </div>
 {!! Form::close() !!}
