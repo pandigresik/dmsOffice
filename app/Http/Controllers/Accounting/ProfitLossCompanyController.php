@@ -34,7 +34,7 @@ class ProfitLossCompanyController extends AppBaseController
 
         $downloadXls = $request->get('download_xls');
         if ($downloadXls) {
-            $period = explode(' - ', $request->get('ref'));
+            $period = explode(' - ', $request->get('period_range'));
 
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
@@ -61,8 +61,8 @@ class ProfitLossCompanyController extends AppBaseController
 
     private function exportExcel($startDate, $endDate, $collection)
     {
-        $modelEksport = '\\App\Exports\\Template\\Sales\\RekapDiscountsExport';
-        $fileName = 'rekap_discount_'.$startDate.'_'.$endDate;
+        $modelEksport = '\\App\Exports\\Template\\Accounting\\ProfitLossCompanyExport';
+        $fileName = 'profit_loss_company'.$startDate.'_'.$endDate;
 
         return (new $modelEksport($collection))->setStartDate($startDate)->setEndDate($endDate)->download($fileName.'.xls');
     }
