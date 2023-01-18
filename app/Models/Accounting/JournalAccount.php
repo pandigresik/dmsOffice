@@ -533,12 +533,12 @@ class JournalAccount extends Model
         from btb_shipping_cost_subsidies bs
         join btb_validate bv on bv.doc_id = bs.doc_id 
         where bs.doc_in in ('{$btbStr}')
-        union all
-        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
-        select distinct 910300, 'Pendapatan Subsidi Oa', bs.amount, 0, bs.amount, bv.btb_date, bv.branch_id, bv.doc_id, 'JBTB', now()
-        from btb_shipping_cost_subsidies bs
-        join btb_validate bv on bv.doc_id = bs.doc_id 
-        where bs.doc_in in ('{$btbStr}')
+        -- union all
+        -- insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        -- select distinct 910300, 'Pendapatan Subsidi Oa', bs.amount, 0, bs.amount, bv.btb_date, bv.branch_id, bv.doc_id, 'JBTB', now()
+        -- from btb_shipping_cost_subsidies bs
+        -- join btb_validate bv on bv.doc_id = bs.doc_id 
+        -- where bs.doc_in in ('{$btbStr}')
 SQL;
         $this->fromQuery($sql);
     }
