@@ -37,22 +37,29 @@ class PaymentOutRepository extends PaymentRepository
                     break;
                 default:                 
                     $payment = $model->with(['invoices' => function($q){
-                        return $q->with(['invoiceLines']);
+                        return $q->with(['invoiceLines', 'subsidiOa' => function($r){
+                            return $r->with(['subsidi']);
+                        }]);
                     }])->find($id);
             
                     $totalInvoiceLine = $payment->invoices->sum(function($item){
                         return $item->invoiceLines->sum(function($r){
                             return $r->getRawOriginal('qty') * $r->getRawOriginal('price');
                         });
-                    });
-                    
-                    $totalSubsidiOa = $payment->invoices->sum(function($item){
-                        return $item->subsidiOa->sum(function($r){
-                            return $r->getRawOriginal('amount');
-                        });
-                    });
+                    });                                    
 
-                    $this->generateJurnalPaymentSupplier($totalInvoiceLine, $model->getRawOriginal('amount'), $paydate, $reference, $totalSubsidiOa);
+                    $listSubsidiOa = [];
+                    $payment->invoices->each(function($item) use (&$listSubsidiOa) {
+                        return $item->subsidiOa->each(function($soa) use (&$listSubsidiOa) {
+                            $branch = explode('-',$soa->subsidi->doc_id)[0];
+                            if(!isset($listSubsidiOa[$branch])){
+                                $listSubsidiOa[$branch] = [];
+                            }
+                            $listSubsidiOa[$branch][] = $soa->subsidi->getRawOriginal('amount');
+                        });
+                    });                    
+
+                    $this->generateJurnalPaymentSupplier($totalInvoiceLine, $model->getRawOriginal('amount'), $paydate, $reference, $listSubsidiOa);
             }
             $this->model->getConnection()->commit();
             return $model;
@@ -68,7 +75,7 @@ class PaymentOutRepository extends PaymentRepository
     192	Hutang ongkos angkut	211104
     825010 Biaya Pengangkutan
     */
-    private function generateJurnalPaymentSupplier($totalInvoiceLine, $amount, $paydate, $reference, $totalSubsidiOa){
+    private function generateJurnalPaymentSupplier($totalInvoiceLine, $amount, $paydate, $reference, $listSubsidiOa){
         JournalAccount::create([
             'account_id' => 211001,
             'branch_id' => 'PT',
@@ -95,19 +102,23 @@ class PaymentOutRepository extends PaymentRepository
             'state' => 'posted',
         ]);
 
-        if(!empty($totalSubsidiOa)){
-            JournalAccount::create([
-                'account_id' => 825010,
-                'branch_id' => 'PT',
-                'date' => $paydate,
-                'name' => 'Biaya Pengangkutan',
-                'debit' => 0,
-                'credit' => $totalSubsidiOa,
-                'balance' => -1 * $totalSubsidiOa,
-                'reference' => $reference,
-                'type' => 'JPAY',
-                'state' => 'posted',
-            ]); 
+        if(!empty($listSubsidiOa)){
+            foreach($listSubsidiOa as $branch => $oas){
+                foreach($oas as $oa){                    
+                    JournalAccount::create([
+                        'account_id' => 825010,
+                        'branch_id' => $branch,
+                        'date' => $paydate,
+                        'name' => 'Biaya Pengangkutan',
+                        'debit' => 0,
+                        'credit' => $oa,
+                        'balance' => -1 * $oa,
+                        'reference' => $reference,
+                        'type' => 'JPAY',
+                        'state' => 'posted',
+                    ]);
+                }
+            }             
         }
     }
 

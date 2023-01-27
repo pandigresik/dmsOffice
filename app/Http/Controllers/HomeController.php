@@ -48,14 +48,24 @@ class HomeController extends Controller
     public function tes()
     {
         $tes = Payment::with(['invoices' => function($q){
-            return $q->with(['invoiceLines']);
-        }])->find(55);
-
-        $total = $tes->invoices->sum(function($item){
-            return $item->invoiceLines->sum(function($r){
-                return $r->getRawOriginal('qty') * $r->getRawOriginal('price');
+            return $q->with(['invoiceLines', 'subsidiOa' => function($r){
+                return $r->with(['subsidi']);
+            }]);
+        }])->find(57);
+        $listSubsidi = [];
+        $tes->invoices->each(function($item) use (&$listSubsidi) {
+            return $item->subsidiOa->each(function($soa) use (&$listSubsidi) {
+                $branch = explode('-',$soa->subsidi->doc_id)[0];
+                if(!isset($listSubsidi[$branch])){
+                    $listSubsidi[$branch] = [];
+                }
+                $listSubsidi[$branch][] = $soa->subsidi->getRawOriginal('amount');
             });
         });
-        echo number_format($total);
+        foreach($listSubsidi as $branch => $oas){
+            foreach($oas as $oa){
+                echo $branch.' -- '.$oa.' <br>';
+            }
+        }
     }
 }
