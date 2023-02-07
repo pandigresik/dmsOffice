@@ -78,4 +78,14 @@ class BtbShippingCostSubsidy extends Model
     public function scopeAvailable($query){
         return $query->where('invoiced',0);
     }
+
+    /**
+     * Get the btb that owns the BtbShippingCostSubsidy
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function btb()
+    {
+        return $this->belongsTo(BtbValidate::class , 'doc_id', 'doc_id');
+    }
 }
