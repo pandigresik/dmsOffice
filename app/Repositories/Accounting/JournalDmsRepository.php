@@ -67,7 +67,9 @@ class JournalDmsRepository extends BaseRepository
                 break;
                 case 'NRC':
                     $this->model->jurnalNeraca($input);
-
+                break;
+                case 'NGL':
+                    $this->model->jurnalNeracaNonGL($input);
                 break;
                 case 'XLS_SCR':
                 case 'XLS_SLR':

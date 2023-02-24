@@ -206,6 +206,39 @@ class JournalAccount extends Model
                 and report_setting_account.group_type = 'NRC'
             where szBranchId = '{$branchId}'             
             and dtmDoc between '{$startDate}' and '{$endDate}'            
+            and szAccountId not in ('130120')
+        SQL;
+        $this->fromQuery($sql);
+    }
+
+    public function jurnalNeracaNonGL($input)
+    {
+        list($startDate, $endDate) = explode('__', $input['period_range']);
+        $branchId = $input['branch_id'];
+        $type = $input['type'];
+
+        $user = \Auth::user();
+        $gudangPusat = config('entity.gudangPusat')[$user->entity_id];
+        $dbSource = '';
+        if(isset($gudangPusat[$branchId])){
+            $dbSource = 'gdpusat.';
+        }
+        $sql = <<<SQL
+            insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at, description) 
+            select '130120','Piutang Dagang Kredit ',sum(SISA_INVOICE) as debit, 0,sum(SISA_INVOICE) as balance, '{$endDate}',x.szBranchId,'-','{$type}' , now(), 'sisa invoice'  from (
+                SELECT
+                A.decRemain - (SELECT IFNULL(SUM(A1.decAmount), 0) FROM dms_ar_arhistory AS A1 WHERE A1.szInvoiceId = A.szDocId AND A1.szTrnId <> 'INV' AND A1.dtmDoc >= '{$endDate}') AS 'SISA_INVOICE'                  
+                , c.szBranchId
+                FROM
+                {$dbSource}DMS_AR_ArInvoice AS A  
+                 JOIN {$dbSource}dms_sd_docinvoice AS c ON c.szDocId = a.szDocId
+                WHERE
+                A.bCash = 0
+                AND a.dtmDoc < '{$endDate}'                
+                AND c.szBranchId = '{$branchId}'     
+                AND CASE WHEN (A.decRemain - (SELECT IFNULL(SUM(A1.decAmount), 0) FROM {$dbSource}dms_ar_arhistory AS A1 WHERE A1.szInvoiceId = A.szDocId AND A1.szTrnId <> 'INV' AND A1.dtmDoc >= '{$endDate}')) = 0 THEN '1' ELSE '0' END = 0
+                
+                )x group by x.szBranchId                        
         SQL;
         $this->fromQuery($sql);
     }
