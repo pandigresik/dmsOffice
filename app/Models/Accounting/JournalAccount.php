@@ -223,9 +223,15 @@ class JournalAccount extends Model
         if(isset($gudangPusat[$branchId])){
             $dbSource = 'gdpusat.';
         }
+        $accountCode = '130120';
+        $saldoAwal = AccountBalance::whereBalanceDate($startDate)
+            ->where('code', $accountCode)
+            ->first();
+        $saldoPiutang = $saldoAwal->getRawOriginal('amount') ?? 0;          
+
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at, description) 
-            select '130120','Piutang Dagang Kredit ',sum(SISA_INVOICE) as debit, 0,sum(SISA_INVOICE) as balance, '{$endDate}',x.szBranchId,'-','{$type}' , now(), 'sisa invoice'  from (
+            select '130120','Piutang Dagang Kredit ',if(sum(SISA_INVOICE) > {$saldoPiutang}, 0, sum(SISA_INVOICE)) as debit,if(sum(SISA_INVOICE) < {$saldoPiutang}, sum(SISA_INVOICE), 0) as credit,sum(SISA_INVOICE) - {$saldoPiutang} as balance, '{$endDate}',x.szBranchId,'-','{$type}' , now(), 'sisa invoice'  from (
                 SELECT
                 A.decRemain - (SELECT IFNULL(SUM(A1.decAmount), 0) FROM dms_ar_arhistory AS A1 WHERE A1.szInvoiceId = A.szDocId AND A1.szTrnId <> 'INV' AND A1.dtmDoc >= '{$endDate}') AS 'SISA_INVOICE'                  
                 , c.szBranchId
