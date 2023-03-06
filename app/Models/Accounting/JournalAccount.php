@@ -249,9 +249,9 @@ class JournalAccount extends Model
                 )x group by x.szBranchId
                 union all
                 select '130130', 'Piutang TIV', 0 as debit, abs(dip.decDiscPrinciple) as credit,  dip.decDiscPrinciple as balance , do.dtmDoc, do.szBranchId, do.szDocId,'{$type}' , now(), 'Piutang TIV Discount Principle'
-            from dms_sd_docdo do
-            join dms_sd_docdoitem di on di.szDocId = do.szDocId
-            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            from {$dbSource}dms_sd_docdo do
+            join {$dbSource}dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join {$dbSource}dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
             -- join bkb_discount_details bkd on bkd.szDocId = do.szDocId and bkd.szProductId = di.szProductId and bkd.szBranchId = '{$branchId}'
             -- where do.szDocStatus = 'Applied' and do.bCash = 0
             where do.szDocStatus = 'Applied' and abs(dip.decDiscPrinciple) > 0
