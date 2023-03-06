@@ -223,15 +223,17 @@ class JournalAccount extends Model
         if(isset($gudangPusat[$branchId])){
             $dbSource = 'gdpusat.';
         }
+        // gak bisa pakai cara saldo ini, karena saldo itu per account tapi tidak per depo
         $accountCode = '130120';
         $saldoAwal = AccountBalance::whereBalanceDate($startDate)
             ->where('code', $accountCode)
             ->first();
-        $saldoPiutang = $saldoAwal->getRawOriginal('amount') ?? 0;          
+        // $saldoPiutang = $saldoAwal->getRawOriginal('amount') ?? 0;          
+        $saldoPiutang = 0;
 
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at, description) 
-            select '130120','Piutang Dagang Kredit ',if(sum(SISA_INVOICE) > {$saldoPiutang}, 0, sum(SISA_INVOICE)) as debit,if(sum(SISA_INVOICE) < {$saldoPiutang}, sum(SISA_INVOICE), 0) as credit,sum(SISA_INVOICE) - {$saldoPiutang} as balance, '{$endDate}',x.szBranchId,'-','{$type}' , now(), 'sisa invoice'  from (
+            select '130120','Piutang Dagang Kredit ', sum(SISA_INVOICE) as debit, 0 as credit,sum(SISA_INVOICE) as balance, '{$endDate}',x.szBranchId,'-','{$type}' , now(), 'sisa invoice'  from (
                 SELECT
                 A.decRemain - (SELECT IFNULL(SUM(A1.decAmount), 0) FROM dms_ar_arhistory AS A1 WHERE A1.szInvoiceId = A.szDocId AND A1.szTrnId <> 'INV' AND A1.dtmDoc >= '{$endDate}') AS 'SISA_INVOICE'                  
                 , c.szBranchId
@@ -244,8 +246,18 @@ class JournalAccount extends Model
                 AND c.szBranchId = '{$branchId}'     
                 AND CASE WHEN (A.decRemain - (SELECT IFNULL(SUM(A1.decAmount), 0) FROM {$dbSource}dms_ar_arhistory AS A1 WHERE A1.szInvoiceId = A.szDocId AND A1.szTrnId <> 'INV' AND A1.dtmDoc >= '{$endDate}')) = 0 THEN '1' ELSE '0' END = 0
                 
-                )x group by x.szBranchId                        
-        SQL;
+                )x group by x.szBranchId
+                union all
+                select '130130', 'Piutang TIV', 0 as debit, abs(dip.decDiscPrinciple) as credit,  dip.decDiscPrinciple as balance , do.dtmDoc, do.szBranchId, do.szDocId,'{$type}' , now(), 'Piutang TIV Discount Principle'
+            from dms_sd_docdo do
+            join dms_sd_docdoitem di on di.szDocId = do.szDocId
+            join dms_sd_docdoitemprice dip on dip.szDocId = do.szDocId and dip.intItemNumber = di.intItemNumber
+            -- join bkb_discount_details bkd on bkd.szDocId = do.szDocId and bkd.szProductId = di.szProductId and bkd.szBranchId = '{$branchId}'
+            -- where do.szDocStatus = 'Applied' and do.bCash = 0
+            where do.szDocStatus = 'Applied' and abs(dip.decDiscPrinciple) > 0
+            and do.szBranchId = '{$branchId}'
+            and do.dtmDoc between '{$startDate}' and '{$endDate}'
+SQL;
         $this->fromQuery($sql);
     }
 
