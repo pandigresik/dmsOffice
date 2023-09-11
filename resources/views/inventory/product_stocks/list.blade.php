@@ -32,6 +32,7 @@ $jualTotal = 0;
         @php
         $saldoAwal = $item->first_stock;
         $saldoAkhir = ($saldoAwal + $item->mutation_in + $item->distribution_in + $item->supplier_in ) - ( $item->mutation_out + $item->distribution_out + $item->supplier_out );
+        $saldoAkhir += $item->morphing;
         $currentPrice = $item->price;
         $pengurang = $item->substractor ?? 0;
         // $amountOut = ($item->distribution_out + $item->mutation_out + $item->supplier_out) * $currentPrice;
