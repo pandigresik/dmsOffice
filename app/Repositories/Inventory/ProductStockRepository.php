@@ -132,7 +132,7 @@ select upper(dis.szProductId) as szProductId, dip.szName,
         sum(case when dis.szTrnId = 'DMSDocStockInSupplier' then dis.decQtyOnHand else 0 end) as 'supplier_in',
         sum(case when dis.szTrnId = 'DMSDocStockOutSupplier' then abs(dis.decQtyOnHand) else 0 end) as 'supplier_out',
 --         sum(case when dis.szTrnId = 'DMSDocDo' then dis.decQtyOnHand else 0 end) as 'DOCDO',
-        sum(case when dis.szTrnId = 'DMSDocStockMorph' then abs(dis.decQtyOnHand) else 0 end) as 'morphing',
+        sum(case when dis.szTrnId = 'DMSDocStockMorph' then dis.decQtyOnHand else 0 end) as 'morphing',
         sum(case when dis.szTrnId = 'DMSDocStockTrfBetweenWarehouse' then abs(dis.decQtyOnHand) else 0 end) as 'transfer'
 from {$historyTable} dis
 join (select dip.szId, dip.szName from dms_inv_product dip where dtmEndDate >= '{$startDate}' ) dip on dip.szId = dis.szProductId 
@@ -200,7 +200,7 @@ select upper(dis.szProductId) as szProductId, dip.szName,
         sum(case when dis.szTrnId = 'DMSDocStockInSupplier' then dis.decQtyOnHand else 0 end) as 'supplier_in',
         sum(case when dis.szTrnId = 'DMSDocStockOutSupplier' then abs(dis.decQtyOnHand) else 0 end) as 'supplier_out',
 --         sum(case when dis.szTrnId = 'DMSDocDo' then dis.decQtyOnHand else 0 end) as 'DOCDO',
-        sum(case when dis.szTrnId = 'DMSDocStockMorph' then abs(dis.decQtyOnHand) else 0 end) as 'morphing',
+        sum(case when dis.szTrnId = 'DMSDocStockMorph' then dis.decQtyOnHand else 0 end) as 'morphing',
         sum(case when dis.szTrnId = 'DMSDocStockTrfBetweenWarehouse' then abs(dis.decQtyOnHand) else 0 end) as 'transfer'
 from {$historyTable} dis
 join (select dip.szId, dip.szName from dms_inv_product dip where dtmEndDate >= '{$startDate}' ) dip on dip.szId = dis.szProductId 

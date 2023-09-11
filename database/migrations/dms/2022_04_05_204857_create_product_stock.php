@@ -23,7 +23,7 @@ class CreateProductStock extends Migration
             $table->integer('supplier_out', false, true);
             $table->integer('mutation_out', false, true);
             $table->integer('distribution_out', false, true);
-            $table->integer('morphing', false, true);
+            $table->integer('morphing', false, false);
             $table->integer('last_stock', false, true);
             $table->string('period',7);
             $table->text('additional_info')->nullable();
