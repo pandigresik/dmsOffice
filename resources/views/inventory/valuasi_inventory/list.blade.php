@@ -10,9 +10,12 @@ $jualTotal = 0;
             <th colspan="2">Saldo Awal</th>
             <th colspan="2">Masuk</th>
             <th colspan="2">Keluar</th>
+            <th colspan="2">Morphing</th>
             <th colspan="2">Saldo</th>            
         </tr>
         <tr>
+            <th>Qty</th>
+            <th>Nilai</th>
             <th>Qty</th>
             <th>Nilai</th>
             <th>Qty</th>
@@ -25,7 +28,7 @@ $jualTotal = 0;
     </thead>
     <tbody>
     @php
-        $totalSaldoAwalQty = $totalSaldoAwalVal = $totalMasukQty = $totalMasukVal = $totalKeluarQty = $totalKeluarVal = $totalSaldoAkhirQty = $totalSaldoAkhirVal = 0;
+        $totalSaldoAwalQty = $totalSaldoAwalVal = $totalMasukQty = $totalMasukVal = $totalKeluarQty = $totalKeluarVal = $totalSaldoAkhirQty = $totalSaldoAkhirVal = $totalMorphingQty = $totalMorphingVal = 0;
     @endphp
     @foreach ($datas as $item)
         @if ($item->isEmptyTransaction())
@@ -37,10 +40,12 @@ $jualTotal = 0;
         $saldoAwalVal = $item->first_stock_val;
         $masukQty = ($item->mutation_in + $item->distribution_in + $item->supplier_in );           
         $masukVal = ($masukQty * $item->price)- $item->pengurang;
-        $keluarQty = ( $item->mutation_out + $item->distribution_out + $item->supplier_out );
+        $keluarQty = ( $item->mutation_out + $item->distribution_out + $item->supplier_out );        
         $keluarVal = $keluarQty * $item->price;
-        $saldoAkhirQty = $saldoAwalQty + $masukQty - $keluarQty;
-        $saldoAkhirVal = $saldoAwalVal + $masukVal - $keluarVal; 
+        $morphingQty = $item->morphing;
+        $morphingVal = $item->morphing * $item->price;
+        $saldoAkhirQty = $saldoAwalQty + $masukQty - $keluarQty + $morphingQty;
+        $saldoAkhirVal = $saldoAwalVal + $masukVal - $keluarVal + $morphingVal; 
         $totalSaldoAwalQty += $saldoAwalQty; 
         $totalSaldoAwalVal += $saldoAwalVal;
         $totalMasukQty += $masukQty;
@@ -49,6 +54,8 @@ $jualTotal = 0;
         $totalKeluarVal += $keluarVal;
         $totalSaldoAkhirQty += $saldoAkhirQty;
         $totalSaldoAkhirVal += $saldoAkhirVal;
+        $totalMorphingQty += $morphingQty;
+        $totalMorphingVal += $morphingVal;
         @endphp
         <tr>            
             <td>                
@@ -61,6 +68,8 @@ $jualTotal = 0;
             <td class="text-right">{{ localNumberFormat($masukVal , 0) }}</td>
             <td class="text-right">{{ localNumberFormat($keluarQty , 0) }}</td>
             <td class="text-right">{{ localNumberFormat($keluarVal , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($morphingQty , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($morphingVal , 0) }}</td>
             <td class="text-right">{{ localNumberFormat($saldoAkhirQty , 0) }}</td>
             <td class="text-right">{{ localNumberFormat($saldoAkhirVal , 0) }}</td>
         </tr>
@@ -75,6 +84,8 @@ $jualTotal = 0;
             <td class="text-right">{{ localNumberFormat($totalMasukVal , 0) }}</td>
             <td class="text-right">{{ localNumberFormat($totalKeluarQty , 0) }}</td>
             <td class="text-right">{{ localNumberFormat($totalKeluarVal , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($totalMorphingQty , 0) }}</td>
+            <td class="text-right">{{ localNumberFormat($totalMorphingVal , 0) }}</td>
             <td class="text-right">{{ localNumberFormat($totalSaldoAkhirQty , 0) }}</td>
             <td class="text-right">{{ localNumberFormat($totalSaldoAkhirVal , 0) }}</td>
         </tr>
