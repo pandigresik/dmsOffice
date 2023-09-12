@@ -104,7 +104,7 @@
             <th class="text-right">{{ $exportExcel ? $totalKeluarQty : localNumberFormat($totalKeluarQty,0) }}</th>
             <th></th>
             <th class="text-right">{{ $exportExcel ? $totalKeluarVal : localNumberFormat($totalKeluarVal,0) }}</th>
-            <th class="text-right">{{ $exportExcel ? $saldoAkhirQty : localNumberFormat($saldoAkhirQty,0) }}</th>
+            <th class="text-right">{{ $exportExcel ? $totalMorphingQty : localNumberFormat($totalMorphingQty,0) }}</th>
             <th></th>
             <th class="text-right">{{ $exportExcel ? $totalMorphingVal : localNumberFormat($totalMorphingVal,0) }}</th>
             <th class="text-right">{{ $exportExcel ? $saldoAkhirQty : localNumberFormat($saldoAkhirQty,0) }}</th>
