@@ -50,23 +50,29 @@ class ProductStockDataTable extends DataTable
         $dataTable->editColumn('branch_id', function ($data) {               
             return $this->listGudang[$data->branch_id] ?? $data->branch_id;
         })->editColumn('first_stock', function($data){
-            return !empty($data->first_stock) ? $data->first_stock : '0';
+            return !empty($data->first_stock) ? localNumberFormat($data->first_stock,0) : '0';
         })->editColumn('supplier_in', function($data){
-            return !empty($data->supplier_in) ? $data->supplier_in : '0';
+            return !empty($data->supplier_in) ? localNumberFormat($data->supplier_in,0) : '0';
         })->editColumn('mutation_in', function($data){
-            return !empty($data->mutation_in) ? $data->mutation_in : '0';
+            return !empty($data->mutation_in) ? localNumberFormat($data->mutation_in,0) : '0';
         })->editColumn('distribution_in', function($data){
-            return !empty($data->distribution_in) ? $data->distribution_in : '0';
+            return !empty($data->distribution_in) ? localNumberFormat($data->distribution_in,0) : '0';
         })->editColumn('supplier_out', function($data){
-            return !empty($data->supplier_out) ? $data->supplier_out : '0';
+            return !empty($data->supplier_out) ? localNumberFormat($data->supplier_out,0) : '0';
         })->editColumn('mutation_out', function($data){
-            return !empty($data->mutation_out) ? $data->mutation_out :  '0';
+            return !empty($data->mutation_out) ? localNumberFormat($data->mutation_out,0) :  '0';
         })->editColumn('distribution_out', function($data){
-            return !empty($data->distribution_out) ? $data->distribution_out : '0';
+            return !empty($data->distribution_out) ? localNumberFormat($data->distribution_out,0) : '0';
         })->editColumn('morphing', function($data){
-            return !empty($data->morphing) ? $data->morphing : '0';
+            return !empty($data->morphing) ? localNumberFormat($data->morphing,0) : '0';
         })->editColumn('last_stock', function($data){
-            return !empty($data->last_stock) ? $data->last_stock : '0';
+            return !empty($data->last_stock) ? localNumberFormat($data->last_stock,0) : '0';
+        })->editColumn('price', function($data){
+            return !empty($data->price) ? localNumberFormat($data->price,0) : '0';
+        })->editColumn('substractor', function($data){
+            return !empty($data->substractor) ? localNumberFormat($data->substractor,0) : '0';
+        })->editColumn('cogs', function($data){
+            return !empty($data->cogs) ? localNumberFormat($data->cogs,0) : '0';
         })->escapeColumns([]);
         return $dataTable->addColumn('action', 'inventory.product_stocks.datatables_actions');
     }

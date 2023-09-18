@@ -6,8 +6,6 @@ use App\DataTables\Purchase\BtbValidateDataTable;
 use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\Purchase\CreateBtbValidateRequest;
 use App\Http\Requests\Purchase\UpdateBtbValidateRequest;
-use App\Models\Purchase\BtbValidate;
-use App\Models\Purchase\ListBtbValidate;
 use App\Repositories\Base\DmsSmBranchRepository;
 use App\Repositories\Inventory\DmsInvCarrierRepository;
 use App\Repositories\Purchase\BtbValidateRepository;
