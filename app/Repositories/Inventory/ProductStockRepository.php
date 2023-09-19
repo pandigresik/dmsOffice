@@ -94,7 +94,8 @@ SQL;
         $gudangPusat = config('entity.gudangPusat')[$user->entity_id];        
         $previousPeriod = Carbon::createFromFormat('Y-m-d', $startDate)->subMonth()->format('Y-m');        
         $settingCompany = Setting::pluck('value', 'code');
-        $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+        // $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+        $kodeGalon = '';
         $whereProductStr = '';
         if(!empty($product)){
             $whereProductStr = ' and dis.szProductId in (\''.implode("','", $product).'\')';
@@ -165,8 +166,8 @@ SQL;
         $previousPeriod = Carbon::createFromFormat('Y-m-d', $startDate)->subMonth()->format('Y-m');
         $branch = $data['branch_id'];
         $settingCompany = Setting::pluck('value', 'code');
-        $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
-
+        // $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+        $kodeGalon = '';
         $historyTable = 'dms_inv_stockhistory';
         if (isset($gudangPusat[$branch])) {
             $historyTable = 'gdpusat.dms_inv_stockhistory';
