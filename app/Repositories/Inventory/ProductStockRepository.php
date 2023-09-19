@@ -94,8 +94,7 @@ SQL;
         $gudangPusat = config('entity.gudangPusat')[$user->entity_id];        
         $previousPeriod = Carbon::createFromFormat('Y-m-d', $startDate)->subMonth()->format('Y-m');        
         $settingCompany = Setting::pluck('value', 'code');
-        // $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
-        $kodeGalon = '';
+        $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
         $whereProductStr = '';
         if(!empty($product)){
             $whereProductStr = ' and dis.szProductId in (\''.implode("','", $product).'\')';
@@ -138,7 +137,8 @@ select upper(dis.szProductId) as szProductId, dip.szName,
 from {$historyTable} dis
 join (select dip.szId, dip.szName from dms_inv_product dip where dtmEndDate >= '{$startDate}' ) dip on dip.szId = dis.szProductId 
 where dis.szLocationType = 'WAREHOUSE' and dis.dtmTransaction BETWEEN '{$startDate}' and '{$endDate}' and dis.szReportedAsId = '{$branch}' 
-    and dis.szProductId not in ({$kodeGalon}) {$whereProductStr}
+    -- and dis.szProductId not in ({$kodeGalon}) 
+    {$whereProductStr}
 group by dis.szProductId, dip.szName
 )x left join (
         -- stock akhir bulan kemarin sebagai stock awal
@@ -166,8 +166,8 @@ SQL;
         $previousPeriod = Carbon::createFromFormat('Y-m-d', $startDate)->subMonth()->format('Y-m');
         $branch = $data['branch_id'];
         $settingCompany = Setting::pluck('value', 'code');
-        // $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
-        $kodeGalon = '';
+        $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
+        
         $historyTable = 'dms_inv_stockhistory';
         if (isset($gudangPusat[$branch])) {
             $historyTable = 'gdpusat.dms_inv_stockhistory';
@@ -205,7 +205,7 @@ select upper(dis.szProductId) as szProductId, dip.szName,
         sum(case when dis.szTrnId = 'DMSDocStockTrfBetweenWarehouse' then abs(dis.decQtyOnHand) else 0 end) as 'transfer'
 from {$historyTable} dis
 join (select dip.szId, dip.szName from dms_inv_product dip where dtmEndDate >= '{$startDate}' ) dip on dip.szId = dis.szProductId 
-where dis.szLocationType = 'WAREHOUSE' and dis.dtmTransaction BETWEEN '{$startDate}' and '{$endDate}' and dis.szReportedAsId = '{$branch}' and dis.szProductId not in ({$kodeGalon})
+where dis.szLocationType = 'WAREHOUSE' and dis.dtmTransaction BETWEEN '{$startDate}' and '{$endDate}' and dis.szReportedAsId = '{$branch}' -- and dis.szProductId not in ({$kodeGalon})
 group by dis.szProductId, dip.szName
 )x left join (
         -- stock akhir bulan kemarin sebagai stock awal
