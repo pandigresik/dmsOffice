@@ -32,7 +32,7 @@
                         {!! Form::label('type', __('models/journalDms.fields.type').':', ['class' => 'col-md-3
                         col-form-label']) !!}
                         <div class="col-md-9">
-                            {!! Form::select('type', $typeUploadItems, null, ['class' => 'form-control select2', 'required' =>
+                            {!! Form::select('type_id_excel', $typeUploadItems, null, ['class' => 'form-control select2', 'required' =>
                             'required', 'data-placeholder' => 'Pilih tipe']) !!}
                         </div>
                     </div>

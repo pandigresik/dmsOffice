@@ -67,8 +67,8 @@ class JournalDmsController extends AppBaseController
         $branch = new DmsSmBranchRepository(app());
         $user = \Auth::user();
         return [
-            'branchItems' => ['' => 'Pilih depo', 'PT' => 'PT'] + config('entity.gudangPusat')[$user->entity_id] + $branch->pluck([], null, null, 'szId', 'szName'),
-            'typeItems' => ['' => 'Pilih tipe'] + ['JBL' => 'Pembelian', 'JPK' => 'Penjualan Kredit', 'JPT' => 'Penjualan Tunai', 'JBY' => 'Beban Biaya', 'NRC' => 'Neraca', 'NGL' => 'Neraca Non GL'],
+            'branchItems' => config('entity.gudangPusat')[$user->entity_id] + $branch->pluck([], null, null, 'szId', 'szName'),
+            'typeItems' => ['JBL' => 'Pembelian', 'JPK' => 'Penjualan Kredit', 'JPT' => 'Penjualan Tunai', 'JBY' => 'Beban Biaya', 'NRC' => 'Neraca', 'NGL' => 'Neraca Non GL'],
             'typeUploadItems' => ['' => 'Pilih tipe'] + ['XLS_SCR' => 'Keamanan dan Kebersihan', 'XLS_SLR' => 'Gaji dan Tunjangan', 'XLS_INS' => 'Insentif', 'XLS_AFL' => 'Afiliasi'],
         ];
     }

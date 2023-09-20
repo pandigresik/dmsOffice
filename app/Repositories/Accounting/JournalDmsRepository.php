@@ -40,46 +40,53 @@ class JournalDmsRepository extends BaseRepository
     public function create($input)
     {
         $input['branch_id'] = $input['branch_id'] ?? $input['branch_id_excel'];
+        $input['type'] = $input['type'] ?? $input['type_id_excel'];
         $this->model->getConnection()->beginTransaction();
-
+        $loopBranch = is_array($input['branch_id']) ? $input['branch_id'] : [$input['branch_id']];
+        $loopType = is_array($input['type']) ? $input['type'] : [$input['type']];
         try {
             $this->removePreviousData($input);
-            $type = $input['type'];
+            foreach($loopBranch as $branch){
+                foreach($loopType as $type){
+                    $input['type'] = $type;
+                    $input['branch_id'] = $branch;
 
-            switch ($type) {
-                case 'JBY':
-                    $this->model->jurnalBiaya($input);
-
-                break;
-                case 'JPT':
-                    $this->model->jurnalPenjualanTunai($input);
-                    $this->model->jurnalPPNKeluaran($input);
-
-                break;
-                case 'JPK':
-                    $this->model->jurnalPenjualanKredit($input);
-                    $this->model->jurnalPPNKeluaran($input);
-
-                break;
-                case 'JBL':
-                    $this->model->jurnalPembelian($input);
-
-                break;
-                case 'NRC':
-                    $this->model->jurnalNeraca($input);
-                break;
-                case 'NGL':
-                    $this->model->jurnalNeracaNonGL($input);
-                break;
-                case 'XLS_SCR':
-                case 'XLS_SLR':
-                case 'XLS_INS':
-                case 'XLS_AFL':
-                    $this->uploadExcelJournal($input);
-                
-                break;
-                default:
-            }
+                    switch ($type) {
+                        case 'JBY':
+                            $this->model->jurnalBiaya($input);
+        
+                        break;
+                        case 'JPT':
+                            $this->model->jurnalPenjualanTunai($input);
+                            $this->model->jurnalPPNKeluaran($input);
+        
+                        break;
+                        case 'JPK':
+                            $this->model->jurnalPenjualanKredit($input);
+                            $this->model->jurnalPPNKeluaran($input);
+        
+                        break;
+                        case 'JBL':
+                            $this->model->jurnalPembelian($input);
+        
+                        break;
+                        case 'NRC':
+                            $this->model->jurnalNeraca($input);
+                        break;
+                        case 'NGL':
+                            $this->model->jurnalNeracaNonGL($input);
+                        break;
+                        case 'XLS_SCR':
+                        case 'XLS_SLR':
+                        case 'XLS_INS':
+                        case 'XLS_AFL':
+                            $this->uploadExcelJournal($input);
+                        
+                        break;
+                        default:
+                    }
+                }
+            }                        
             $this->model->getConnection()->commit();
             $this->model->flushCache();
         } catch (\Exception $e) {
@@ -97,7 +104,7 @@ class JournalDmsRepository extends BaseRepository
         list($startDate, $endDate) = explode('__', $input['period_range']);
         $branchId = $input['branch_id'];
         $type = $input['type'];
-        JournalAccount::whereBetween('date', [$startDate, $endDate])->where(['branch_id' => $branchId, 'type' => $type])->forceDelete();
+        JournalAccount::whereBetween('date', [$startDate, $endDate])->whereIn('branch_id' ,$branchId)->whereIn('type', $type)->forceDelete();
     }
 
     private function uploadExcelJournal($input){
