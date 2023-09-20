@@ -4,6 +4,7 @@ namespace App\Repositories\Inventory;
 
 use App\Models\Inventory\DmsInvProduct;
 use App\Models\Inventory\ProductPrice;
+use App\Models\Inventory\ProductPriceLog;
 use App\Repositories\BaseRepository;
 
 /**
@@ -51,10 +52,11 @@ class ProductPriceRepository extends BaseRepository
             $input['product_id'] = $product->szId;
             $model->fill($input);
             $model->save();
+            $model->flushCache();
 
             $priceLog = new ProductPriceLogRepository(app());
             $priceLog->create($input);
-
+            (new ProductPriceLog)->flushCache();
             return $model;
         });
     }

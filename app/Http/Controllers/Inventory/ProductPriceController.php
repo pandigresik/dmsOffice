@@ -160,7 +160,7 @@ class ProductPriceController extends AppBaseController
 
         return [
             // 'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->disableModelCaching()->whereHas('productCategoriesProduct')->get()->pluck('szName', 'iInternalId')->toArray(),
-            'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->disableModelCaching()->where('dtmEndDate','>=', \Carbon\Carbon::now()->addMonth(-1))->get()->pluck('szName', 'iInternalId')->toArray(),
+            'dmsInvProductItems' => ['' => __('crud.option.dmsInvProduct_placeholder')] + $dmsInvProduct->allQuery()->disableModelCaching()->where('dtmEndDate','>=', \Carbon\Carbon::now()->addMonth(-1))->get()->pluck('full_identity', 'iInternalId')->toArray(),
             'productPriceItem' => $productPriceItem,
         ];
     }
