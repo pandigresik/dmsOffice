@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Column;
 
 class AccountBalanceDataTable extends DataTable
 {
+    protected $fastExcel = false;
     /**
      * example mapping filter column to search by keyword, default use %keyword%.
      */
@@ -120,7 +121,7 @@ class AccountBalanceDataTable extends DataTable
         return [
             'balance_date' => new Column(['title' => __('models/accountBalances.fields.balance_date'), 'data' => 'balance_date', 'searchable' => true, 'elmsearch' => 'daterange']),
             'code' => new Column(['title' => __('models/accountBalances.fields.code'), 'data' => 'code', 'searchable' => true, 'elmsearch' => 'text']),
-            'name' => new Column(['title' => __('models/accountBalances.fields.name'), 'data' => 'account.name', 'searchable' => true, 'elmsearch' => 'text']),
+            'name' => new Column(['title' => __('models/accountBalances.fields.name'), 'data' => 'account.name', 'defaultContent' => '-','searchable' => true, 'elmsearch' => 'text']),
             'amount' => new Column(['title' => __('models/accountBalances.fields.amount'), 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'text']),
         ];
     }
