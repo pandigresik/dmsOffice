@@ -102,7 +102,7 @@ class AccountBalance extends Model
                 , '{$balanceDate}' as balance_date
                 , now()
             FROM account ac
-            where ac.has_balance = 1
+            where ac.has_balance = 1 and ac.deleted_at is null
             union all
             Select 'SAAK' as code , '{$cashFlowBalance}' as amount, '{$balanceDate}' as balance_date, now()
             union all 
@@ -111,7 +111,7 @@ class AccountBalance extends Model
                 , '{$balanceDate}' as balance_date
                 , now()
             FROM account ac
-            where ac.code in ('kas_kecil','kas_besar','giro')            
+            where ac.code in ('kas_kecil','kas_besar','giro') and ac.deleted_at is null           
         SQL;
         $this->fromQuery($sql);
     }
