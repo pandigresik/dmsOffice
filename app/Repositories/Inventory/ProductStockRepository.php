@@ -234,6 +234,9 @@ SQL;
             $pengurang = $input['pengurang'];
             $this->removePreviousData($period, $branchId);
             $products = DmsInvProduct::where('dtmEndDate', '>=', $period.'-01')->get();
+            // cari stok bulan sebelumnya yang nilai last_stock > 0
+            $bulanKemarin = \Carbon\Carbon::createFromFormat('Y-m', $period)->subMonth()->format('Y-m');
+            $stockBulanKemarin = ProductStock::select(['last_stock', 'product_id', 'price', 'cogs'])->where(['period' => $bulanKemarin, 'branch_id' => $branchId])->where('last_stock', '>', 0)->get()->keyBy('product_id');
             $defaultProductStock = [
                 'first_stock' => 0,
                 'supplier_in' => 0,
@@ -252,6 +255,15 @@ SQL;
             $totalCogs = 0;
             foreach ($products as $product) {
                 $defaulfData = isset($history[$product->szId]) ? array_merge($defaultProductStock, json_decode($history[$product->szId], 1)) : $defaultProductStock;
+                if (! isset($history[$product->szId])) {
+                    if (isset($stockBulanKemarin[$product->szId])) {
+                        $defaulfData['first_stock'] = $stockBulanKemarin[$product->szId]->last_stock;
+                        $defaulfData['last_stock'] = $stockBulanKemarin[$product->szId]->last_stock;
+                        $defaulfData['price'] = $stockBulanKemarin[$product->szId]->price;
+                        $defaulfData['cogs'] = $stockBulanKemarin[$product->szId]->cogs;
+                    }                    
+                }
+                
                 $item = new ProductStock($defaulfData);
                 if ($item->last_stock < 0) {
                     $item->last_stock = 0;
@@ -266,7 +278,8 @@ SQL;
                 $item->branch_id = $branchId;
                 $item->save();
                 $totalCogs += $item->cogs;
-            }
+            }            
+            
             $lastDay = \Carbon\Carbon::createFromFormat('Y-m', $period)->endOfMonth();
             // save to journal account
             JournalAccount::create([
