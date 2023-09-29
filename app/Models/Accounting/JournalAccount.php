@@ -233,20 +233,21 @@ class JournalAccount extends Model
 
         $sql = <<<SQL
             insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at, description) 
-            select '130120','Piutang Dagang Kredit ', sum(SISA_INVOICE) as debit, 0 as credit,sum(SISA_INVOICE) as balance, '{$endDate}',x.szBranchId,'-','{$type}' , now(), 'sisa invoice'  from (
+            select '130120','Piutang Dagang Kredit ', sum(SISA_INVOICE) as debit, 0 as credit,sum(SISA_INVOICE) as balance, '{$endDate}',x.szBranchId,x.szName,'{$type}' , now(), 'sisa invoice'  from (
                 SELECT
                 A.decRemain - (SELECT IFNULL(SUM(A1.decAmount), 0) FROM dms_ar_arhistory AS A1 WHERE A1.szInvoiceId = A.szDocId AND A1.szTrnId <> 'INV' AND A1.dtmDoc >= '{$endDate}') AS 'SISA_INVOICE'                  
-                , c.szBranchId
+                , c.szBranchId, d.szName
                 FROM
                 {$dbSource}DMS_AR_ArInvoice AS A  
                  JOIN {$dbSource}dms_sd_docinvoice AS c ON c.szDocId = a.szDocId
+                 join dms_sm_branch as d on d.szId = c.szBranchId
                 WHERE
                 A.bCash = 0
                 AND a.dtmDoc < '{$endDate}'                
                 AND c.szBranchId = '{$branchId}'     
                 AND CASE WHEN (A.decRemain - (SELECT IFNULL(SUM(A1.decAmount), 0) FROM {$dbSource}dms_ar_arhistory AS A1 WHERE A1.szInvoiceId = A.szDocId AND A1.szTrnId <> 'INV' AND A1.dtmDoc >= '{$endDate}')) = 0 THEN '1' ELSE '0' END = 0
                 
-                )x group by x.szBranchId
+                )x group by x.szBranchId, x.szName
                 union all
                 select '130130', 'Piutang TIV', 0 as debit, abs(dip.decDiscPrinciple) as credit,  dip.decDiscPrinciple as balance , do.dtmDoc, do.szBranchId, do.szDocId,'{$type}' , now(), 'Piutang TIV Discount Principle'
             from {$dbSource}dms_sd_docdo do
