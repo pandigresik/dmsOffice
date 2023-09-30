@@ -9,6 +9,7 @@ return array (
     'name' => 'Name',
     'code' => 'Code',
     'reverse_value' => 'Reverse',
+    'has_balance' => 'Ada Saldo',
     'description' => 'Description',
   ),
 );

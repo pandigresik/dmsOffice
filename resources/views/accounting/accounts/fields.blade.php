@@ -25,6 +25,17 @@
 </div>
 </div>
 
+<!-- reverse_value Field -->
+<div class="form-group row">
+    {!! Form::label('has_balance', __('models/accounts.fields.has_balance').':', ['class' => 'col-md-3 col-form-label']) !!}
+<div class="col-md-9"> 
+    <label class="checkbox-inline">
+        {!! Form::hidden('has_balance', 0) !!}
+        {!! Form::checkbox('has_balance', '1', null) !!}
+    </label>
+</div>
+</div>
+
 <!-- Description Field -->
 <div class="form-group row">
     {!! Form::label('description', __('models/accounts.fields.description').':', ['class' => 'col-md-3 col-form-label']) !!}
