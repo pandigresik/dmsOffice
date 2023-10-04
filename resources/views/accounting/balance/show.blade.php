@@ -64,7 +64,8 @@ $numberFormat = ['Gaji','Man fee','Gaji SPV','PPN','PPH 23','UPLOAD'];
             @php
             $debit = $account->debit ?? 0;
             $credit = $account->credit ?? 0;
-            $amount = $account->balance ?? 0;
+            // $amount = $account->balance ?? 0;
+            $amount = $debit - $credit;
             @endphp
             <tr>
                 <td>{{ $account->account_id }}</td>

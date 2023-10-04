@@ -49,7 +49,8 @@ class BalanceRepository extends BaseRepository
         $listReverseAccount = ['311110', '211102'];
         $listAccount = $this->listAccount();
         $data = JournalAccount::with(['account'])
-            ->selectRaw('account_id, sum(case when account_id in (\''.implode("','" ,$listReverseAccount).'\') then -1 * balance else balance end) as balance')
+            // ->selectRaw('account_id, sum(case when account_id in (\''.implode("','" ,$listReverseAccount).'\') then -1 * balance else balance end) as balance')
+            ->selectRaw('account_id, sum(debit) - sum(credit) as balance')
             ->disableModelCaching()
             ->whereBetween('date', [$startDate, $endDate])
             ->whereIn('account_id', $this->balanceAccountCode($listAccount))
