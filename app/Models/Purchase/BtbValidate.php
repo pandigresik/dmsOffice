@@ -156,7 +156,7 @@ class BtbValidate extends Model
             $this->btbSupplierSql($startDate, $endDate, $branchId),
             // $this->btbDistribusiSql($startDate, $endDate, $branchId),
         ]);
-
+        
         return $this->fromQuery($sql);
     }
 
@@ -245,7 +245,7 @@ class BtbValidate extends Model
         $sql = <<<SQL
         insert into btb_validate (branch_id,btb_type, doc_id, btb_date, reference_id ,  co_reference, product_id, product_name, uom_id,ref_doc, qty, dms_inv_carrier_id, dms_inv_warehouse_id, vehicle_number ,created_by, created_at, partner_id, price, shipping_cost )
         select z.* from(
-        select
+        select distinct
             dsd.szBranchId,
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
@@ -274,7 +274,7 @@ class BtbValidate extends Model
         where dsd.szDocStatus = 'Applied' and dsd.szDocId in ('{$btbStr}') 
         -- untuk gudang pusat
         union all 
-        select
+        select distinct
             dsd.szBranchId,
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
@@ -400,7 +400,7 @@ SQL;
             /** dbnya berbeda */
     $sqlGdPusat = <<<SQL
             union all
-            select
+            select distinct
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
             dsd.dtmDoc as tgl_btb,
@@ -434,7 +434,7 @@ SQL;
 SQL;            
         }
         return <<<SQL
-        select
+        select distinct
             'BTB Supplier' as jenis,
             dsd.szDocId AS no_btb,
             dsd.dtmDoc as tgl_btb,
