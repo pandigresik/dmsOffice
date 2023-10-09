@@ -188,6 +188,7 @@ class InvoiceController extends AppBaseController
 
     public function listSubsidiOA(){
         $availableOA = BtbShippingCostSubsidy::with(['btb'])->available()->get();
+        
         return view('purchase.invoices.subsidi_oa')->with('datas', $availableOA);
     }
 }

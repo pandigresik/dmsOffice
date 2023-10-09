@@ -32,7 +32,7 @@ trait CacheModelTrait
     // Saat invalidate, kita akan hapus semua cache berdasarkan tag
     protected function invalidateCache()
     {
-        \Log::error('invalidate '.$this->getTag());
+        // \Log::error('invalidate '.$this->getTag());
         \Cache::tags($this->getTag())->flush();
         //\Cache::prefixs($this->getTag())->flush();
     }

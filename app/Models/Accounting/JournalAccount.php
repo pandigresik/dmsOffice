@@ -580,8 +580,7 @@ SQL;
         from btb_validate 
         where doc_id in ('{$btbStr}')  and price > 0
         -- subsidi OA 
-        union all
-        insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
+        union all        
         select distinct 140302, 'Subsidi OA', bs.amount, 0, bs.amount, bv.btb_date, bv.branch_id, bv.doc_id, 'JBTB', now()
         from btb_shipping_cost_subsidies bs
         join btb_validate bv on bv.doc_id = bs.doc_id 

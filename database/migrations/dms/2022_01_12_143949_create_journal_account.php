@@ -21,8 +21,8 @@ class CreateJournalAccount extends Migration
             $table->string('name', 100);
             $table->string('description', 255)->nullable();
             $table->string('reference', 255)->nullable();
-            $table->decimal('debit', 15, 2, true);
-            $table->decimal('credit', 15, 2, true);
+            $table->decimal('debit', 15, 2, false);
+            $table->decimal('credit', 15, 2, false);
             $table->decimal('balance', 15, 2, false);
             $table->string('state', 15)->nullable()->default('posted');
             $table->blameable();

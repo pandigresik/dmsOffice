@@ -187,7 +187,7 @@ class MenusController extends AppBaseController
 
             $listRoute[$route->uri] = $route->uri;
         }
-        \Log::error(json_encode($route));
+        // \Log::error(json_encode($route));
 
         return $listRoute;
     }
