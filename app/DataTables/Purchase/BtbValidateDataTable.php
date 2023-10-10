@@ -40,6 +40,7 @@ class BtbValidateDataTable extends DataTable
         'dms_inv_carrier_id' => \App\DataTables\FilterClass\InKeyword::class,
         'branch_id' => \App\DataTables\FilterClass\InKeyword::class,
         'partner_id' => \App\DataTables\FilterClass\InKeyword::class,
+        'shipping_cost' => \App\DataTables\FilterClass\BiggerNolKeyword::class,
     ];
 
     private $mapColumnSearch = [
@@ -166,7 +167,7 @@ class BtbValidateDataTable extends DataTable
         $branchItem = array_merge([['text' => 'Pilih Depo', 'value' => '']], convertArrayPairValueWithKey($this->listGudang));
         $supplierItem = array_merge([['text' => 'Pilih Asal', 'value' => '']], convertArrayPairValueWithKey(DmsApSupplier::pluck('szName', 'szId')->toArray()));
         $carrierItem = array_merge([['text' => 'Pilih Ekspedisi', 'value' => '']], convertArrayPairValueWithKey(DmsInvCarrier::pluck('szName', 'szId')->toArray()));
-
+        $shippingCostCategoryItem = [['text' => 'Pilih OA', 'value' => ''], ['text' => '<= 0', 'value' => '0'], ['text' => '> 0', 'value' => '1']];
         return [
             'branch_id' => new Column(['title' => __('models/btbValidates.fields.branch_id'), 'name' => 'branch_id', 'data' => 'branch.szName', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $branchItem, 'multiple' => 'multiple', 'width' => '200px']),
             'doc_id' => new Column(['title' => __('models/btbValidates.fields.doc_id'), 'data' => 'doc_id', 'searchable' => true, 'elmsearch' => 'text']),
@@ -179,7 +180,7 @@ class BtbValidateDataTable extends DataTable
             'dms_inv_carrier_id' => new Column(['title' => __('models/btbValidates.fields.dmsInvCarrierId'), 'name' => 'dms_inv_carrier_id', 'data' => 'ekspedisi.szName', 'defaultContent' => '', 'orderable' => false, 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $carrierItem, 'multiple' => 'multiple', 'class' => 'ow', 'width' => '230px']),
             'qty' => new Column(['title' => __('models/btbValidates.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
             'price' => new Column(['title' => __('models/btbValidates.fields.price'), 'data' => 'price', 'searchable' => false, 'elmsearch' => 'text']),
-            'shipping_cost' => new Column(['title' => __('models/btbValidates.fields.shipping_cost'), 'data' => 'shipping_cost', 'searchable' => false, 'elmsearch' => 'text']),
+            'shipping_cost' => new Column(['title' => __('models/btbValidates.fields.shipping_cost'), 'data' => 'shipping_cost', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $shippingCostCategoryItem]),
             'description' => new Column(['title' => __('models/btbValidates.fields.description'), 'data' => 'description', 'searchable' => true, 'elmsearch' => 'text']),
         ];
     }    
