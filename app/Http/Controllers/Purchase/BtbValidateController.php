@@ -47,7 +47,7 @@ class BtbValidateController extends AppBaseController
             $startDate = createLocalFormatDate($period[0])->format('Y-m-d');
             $endDate = createLocalFormatDate($period[1])->format('Y-m-d');
             $datas = $this->getRepositoryObj()->mustValidate($startDate, $endDate, $branchId);
-
+            
             return view('purchase.btb_validates.list')->with('datas', $datas);
         }
 

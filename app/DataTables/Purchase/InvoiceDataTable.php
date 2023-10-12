@@ -15,6 +15,7 @@ class InvoiceDataTable extends DataTable
      */
     private $columnFilterOperator = [
         'partner.name' => \App\DataTables\FilterClass\RelationMatchKeyword::class,
+        'state' =>  \App\DataTables\FilterClass\MatchKeyword::class,
     ];
 
     private $mapColumnSearch = [
@@ -40,7 +41,9 @@ class InvoiceDataTable extends DataTable
         if ($this->withUpdate) {
             $dataTable->addColumn('action', 'purchase.invoices.datatables_actions');
         }else{
-            $dataTable->addColumn('action', 'purchase.invoices.view_datatables_actions');
+            $dataTable->addColumn('action', function($q) {
+                return view('purchase.invoices.view_datatables_actions', ['item' => $q]);
+            });
         }
         $dataTable->editColumn('partner.szName', function ($q) {
             return !empty($q->partner->szName) ? $q->partner->szName : $q->ekspedisi->szName;
@@ -127,6 +130,7 @@ class InvoiceDataTable extends DataTable
      */
     protected function getColumns()
     {
+        $stateItem = [['text' => 'Pilih state', 'value' => ''],['text' => 'Submit', 'value' => 'submit'],['text' => 'Validate', 'value' => 'validate'],['text' => 'Pay', 'value' => 'pay']];
         return [
             'number' => new Column(['title' => __('models/invoices.fields.number'), 'data' => 'number', 'searchable' => true, 'elmsearch' => 'text']),
             // 'type' => new Column(['title' => __('models/invoices.fields.type'), 'data' => 'type', 'searchable' => true, 'elmsearch' => 'text']),
@@ -135,7 +139,7 @@ class InvoiceDataTable extends DataTable
             'qty' => new Column(['title' => __('models/invoices.fields.qty'), 'data' => 'qty', 'searchable' => false, 'elmsearch' => 'text']),
             'amount' => new Column(['title' => __('models/invoices.fields.amount'), 'data' => 'amount', 'searchable' => false, 'elmsearch' => 'text']),
             'amount_discount' => new Column(['title' => __('models/invoices.fields.amount_discount'), 'data' => 'amount_discount', 'searchable' => false, 'elmsearch' => 'text']),
-            'state' => new Column(['title' => __('models/invoices.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'text']),
+            'state' => new Column(['title' => __('models/invoices.fields.state'), 'data' => 'state', 'searchable' => true, 'elmsearch' => 'dropdown', 'listItem' => $stateItem]),
             'date_invoice' => new Column(['title' => __('models/invoices.fields.date_invoice'), 'data' => 'date_invoice', 'searchable' => true, 'elmsearch' => 'text']),
             'date_due' => new Column(['title' => __('models/invoices.fields.date_due'), 'data' => 'date_due', 'searchable' => true, 'elmsearch' => 'text']),
             'partner_id' => new Column(['title' => __('models/invoices.fields.partner_id'), 'data' => 'partner.szName', 'defaultContent' => '', 'searchable' => true, 'elmsearch' => 'text']),
