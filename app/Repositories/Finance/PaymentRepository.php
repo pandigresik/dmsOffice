@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Finance;
 
+use App\Models\Accounting\JournalAccount;
 use App\Models\Finance\Payment;
 use App\Models\Purchase\Invoice;
 use App\Repositories\BaseRepository;
@@ -87,6 +88,8 @@ class PaymentRepository extends BaseRepository
         $query = $this->model->newQuery();
 
         $model = $query->findOrFail($id);
+        // hapus journal account juga
+        JournalAccount::where(['reference' => $model->number, 'type' => 'JPAY'])->delete();
         $model->invoices()->update(['state' => Invoice::VALIDATE]);
         $model->paymentLines()->forceDelete();
 
