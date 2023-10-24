@@ -167,7 +167,7 @@ class InvoiceRepository extends BaseRepository
             }
             // $subsidiOA = InvoiceSubsidi::where(['invoice_id' => $id])->get()->pluck('subsidi_oa_id', 'subsidi_oa_id')->toArray();            
             BtbShippingCostSubsidy::whereIn('id', function($q) use ($id){
-                return $q->select(['id'])->from('invoice_subsidi')->where(['invoice_id' => $id]);
+                return $q->select(['subsidi_oa_id'])->from('invoice_subsidi')->where(['invoice_id' => $id]);
             })->update(['invoiced' => 0]);
             $model->invoiceLines()->forceDelete();
             $model->invoiceBkb()->forceDelete();
