@@ -173,6 +173,7 @@ class InvoiceRepository extends BaseRepository
             $model->invoiceBkb()->forceDelete();
             $model->invoiceUsers()->forceDelete();
             $model->subsidiOa()->forceDelete();
+            $model->debitCreditNote()->forceDelete();
             $model->forceDelete();
             $this->model->getConnection()->commit();
 
