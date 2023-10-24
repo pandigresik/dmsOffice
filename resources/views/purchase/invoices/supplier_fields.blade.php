@@ -107,7 +107,7 @@
             <div class="tab-pane" id="btb-itemlist" role="tabpanel">
                 <div class="col-md-6 col-offset-md-3 mb-2">
                     <button type='button' class='btn btn-primary btn-add-items'
-                        data-url='{{ route('purchase.invoiceLines.create') }}'
+                        data-url='{{ route('purchase.invoiceLines.create-list') }}'
                         onclick='showListBtb(this)'>Add
                         BTB</button>
                 </div>

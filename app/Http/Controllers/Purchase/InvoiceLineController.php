@@ -34,6 +34,9 @@ class InvoiceLineController extends AppBaseController
         return $invoiceLineDataTable->render('purchase.invoice_lines.index');
     }
 
+    public function createList(Request $request){
+        return $this->create($request);
+    }
     /**
      * Show list btb validate to be invoiced.
      *

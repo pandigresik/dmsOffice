@@ -131,6 +131,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('invoices/downloadInvoiceBkb/{invoiceId}', [App\Http\Controllers\Purchase\InvoiceController::class, 'downloadBkb'])->name('downloadInvoiceBkb');
         
         Route::resource('invoiceLines', App\Http\Controllers\Purchase\InvoiceLineController::class, ['as' => 'purchase']);
+        Route::post('invoiceLines/createList', [App\Http\Controllers\Purchase\InvoiceLineController::class, 'createList'])->name('purchase.invoiceLines.create-list');
         Route::resource('invoiceValidates', App\Http\Controllers\Purchase\InvoiceValidateController::class, ['as' => 'purchase']);
     });
 

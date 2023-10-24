@@ -89,7 +89,7 @@
         
         addListDoc(elm)
         main.setButtonCaller(elm)
-        main.popupModal(elm,"get")
+        main.popupModal(elm,"post")
     }
     function removeLine(elm){
         const _invoiceLine = $(elm).closest('div.invoice-lines')
