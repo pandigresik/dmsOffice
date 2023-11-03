@@ -536,7 +536,7 @@ SQL;
         $this->fromQuery($sql);
     }
 
-    public function jurnalHutangBTB($btbs){
+    public function jurnalHutangBTB($input){
         $settingCompany = Setting::pluck('value', 'code');
         $coaPersediaanGalon = $settingCompany['coa_sedia_galon'];
         $coaPersediaanNonGalon = $settingCompany['coa_sedia_nogalon'];        
@@ -548,50 +548,48 @@ SQL;
         $kodeGalon = "'".implode("','", explode(',', $settingCompany['kode_galon']))."'";
         $productNonPPnMasukan = "'".implode("','", explode(',', $settingCompany['product_non_ppn']))."'";
 
-        $btbStr = implode("','", $btbs->flatten()->all());
+        list($startDate, $endDate) = explode('__', $input['period_range']);
+        $branchId = $input['branch_id'];        
+
+        // $btbStr = implode("','", $btbs->flatten()->all());
         /** untuk OA perlu didistinct karena perhitungannya hanya sekali saja */
         $sql = <<<SQL
         insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
         select distinct 825010, 'Biaya Pengangkutan', shipping_cost, 0, shipping_cost, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
-        where doc_id in ('{$btbStr}')  and shipping_cost > 0
+        where btb_date between '{$startDate}' and '{$endDate}' and branch_id = '{$branchId}' and shipping_cost > 0
         union all        
         select distinct 211104, 'Hutang ongkos angkut', shipping_cost, 0, shipping_cost, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
-        where doc_id in ('{$btbStr}')  and shipping_cost > 0                
+        where btb_date between '{$startDate}' and '{$endDate}' and branch_id = '{$branchId}' and shipping_cost > 0                
         -- persediaan galon
         union all        
-        select '{$coaPersediaanGalon}', 'Persediaan Galon Botol', abs(price * qty), 0, price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
+        select '{$coaPersediaanGalon}', 'Persediaan Galon Botol', price * qty, 0, price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
-        where doc_id in ('{$btbStr}')  and price > 0 and product_id in ({$kodeGalon})
+        where btb_date between '{$startDate}' and '{$endDate}' and branch_id = '{$branchId}'  and price > 0 and product_id in ({$kodeGalon})
         -- persediaan non galon
         union all        
-        select '{$coaPersediaanNonGalon}', 'Persediaan Non Galon', abs(price * qty / {$pembagiPPN}), 0, price * qty / {$pembagiPPN}, btb_date, branch_id, doc_id, 'JBTB', now()
+        select '{$coaPersediaanNonGalon}', 'Persediaan Non Galon', price * qty / {$pembagiPPN}, 0, price * qty / {$pembagiPPN}, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
-        where doc_id in ('{$btbStr}')  and price > 0 and product_id not in ({$kodeGalon})
+        where btb_date between '{$startDate}' and '{$endDate}' and branch_id = '{$branchId}'  and price > 0 and product_id not in ({$kodeGalon})
         -- ppn masukan
         union all        
-        select '{$coaPpnMasukan}', 'PPN Masukan', abs((price / {$pembagiPPN}) * qty * {$besarPPN}), 0, (price / {$pembagiPPN}) * qty * {$besarPPN}, btb_date, branch_id, doc_id, 'JBTB', now()
+        select '{$coaPpnMasukan}', 'PPN Masukan', (price / {$pembagiPPN}) * qty * {$besarPPN}, 0, (price / {$pembagiPPN}) * qty * {$besarPPN}, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
-        where doc_id in ('{$btbStr}')  and price > 0 and product_id not in ({$productNonPPnMasukan})
+        where btb_date between '{$startDate}' and '{$endDate}' and branch_id = '{$branchId}'  and price > 0 and product_id not in ({$productNonPPnMasukan})
         -- hutang dagang TIV
         union all        
-        select '{$coaHutangTIV}', 'Hutang Dagang TIV', abs(price * qty), 0, price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
+        select '{$coaHutangTIV}', 'Hutang Dagang TIV', price * qty, 0, price * qty, btb_date, branch_id, doc_id, 'JBTB', now()
         from btb_validate 
-        where doc_id in ('{$btbStr}')  and price > 0
+        where btb_date between '{$startDate}' and '{$endDate}' and branch_id = '{$branchId}' and price > 0
         -- subsidi OA 
         union all        
         select distinct 140302, 'Subsidi OA', bs.amount, 0, bs.amount, bv.btb_date, bv.branch_id, bv.doc_id, 'JBTB', now()
         from btb_shipping_cost_subsidies bs
         join btb_validate bv on bv.doc_id = bs.doc_id 
-        where bs.doc_in in ('{$btbStr}')
-        -- union all
-        -- insert into journal_account (account_id, name, debit, credit, balance,date, branch_id, reference, type, created_at)
-        -- select distinct 910300, 'Pendapatan Subsidi Oa', bs.amount, 0, bs.amount, bv.btb_date, bv.branch_id, bv.doc_id, 'JBTB', now()
-        -- from btb_shipping_cost_subsidies bs
-        -- join btb_validate bv on bv.doc_id = bs.doc_id 
-        -- where bs.doc_in in ('{$btbStr}')
+        where btb_date between '{$startDate}' and '{$endDate}' and branch_id = '{$branchId}'        
 SQL;
+        
         $this->fromQuery($sql);
     }
 }

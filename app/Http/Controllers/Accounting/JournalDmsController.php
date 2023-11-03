@@ -68,7 +68,7 @@ class JournalDmsController extends AppBaseController
         $user = \Auth::user();
         return [
             'branchItems' => config('entity.gudangPusat')[$user->entity_id] + $branch->pluck([], null, null, 'szId', 'szName'),
-            'typeItems' => ['JBL' => 'Pembelian', 'JPK' => 'Penjualan Kredit', 'JPT' => 'Penjualan Tunai', 'JBY' => 'Beban Biaya', 'NRC' => 'Neraca', 'NGL' => 'Neraca Non GL'],
+            'typeItems' => ['JBL' => 'Pembelian', 'JPK' => 'Penjualan Kredit', 'JPT' => 'Penjualan Tunai', 'JBY' => 'Beban Biaya', 'NRC' => 'Neraca', 'NGL' => 'Neraca Non GL', 'JBTB' => 'Jurnal BTB'],
             'typeUploadItems' => ['' => 'Pilih tipe'] + ['XLS_SCR' => 'Keamanan dan Kebersihan', 'XLS_SLR' => 'Gaji dan Tunjangan', 'XLS_INS' => 'Insentif', 'XLS_AFL' => 'Afiliasi'],
         ];
     }

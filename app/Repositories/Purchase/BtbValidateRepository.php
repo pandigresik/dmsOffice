@@ -86,12 +86,13 @@ class BtbValidateRepository extends BaseRepository
                     }
                 }
             }
-            $journalAccount = new JournalAccount();
-            $journalAccount->jurnalHutangBTB($vc);            
+            // pindahkan ke jurnal manual DMS, agar tidak dobel
+            // $journalAccount = new JournalAccount();
+            // $journalAccount->jurnalHutangBTB($vc);            
             DB::commit();
             // flush cache karena menggunakan from query untuk eksekusi statement insert into
             $this->model->flushCache();
-            $journalAccount->flushCache();
+            // $journalAccount->flushCache();
             return $model;
         } catch (\Exception $e) {
             DB::rollBack();
